@@ -6,7 +6,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<li>{{ link_to('', 'Phorum', 'class': 'brand') }}</li>
+			{{ link_to('', 'Phorum', 'class': 'brand') }}
 			<div class="nav-collapse">
 
 				<ul class="nav pull-left">

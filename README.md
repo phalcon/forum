@@ -11,6 +11,13 @@ Please write us if you have any feedback.
 
 Thanks.
 
+Requirements
+------------
+This application uses Github as authentication system, you need a client id and secret id
+set in the configuration (app/config/config.php)
+
+The Http extension is also required
+
 NOTE
 ----
 The master branch will always contain the latest stable version. If you wish
@@ -33,4 +40,8 @@ To run this application on your machine, you need at least:
 Then you'll need to create the database and initialize schema:
 
     echo 'CREATE DATABASE forum' | mysql -u root
-    cat schemas/forum.sql | mysql -u root forum 
+    cat schemas/forum.sql | mysql -u root forum
+
+License
+-------
+Phorum is open-sourced software licensed under the New BSD License.
