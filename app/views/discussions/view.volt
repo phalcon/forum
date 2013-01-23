@@ -2,8 +2,6 @@
 
 {% set currentUser = session.get('identity') %}
 
-{% cache "post" ~ post.id %}
-
 <div class="view-discussion">
 	<p>
 		<h1>{{ post.title|e }}</h1>
@@ -41,8 +39,8 @@
 					<div class="posts-buttons">
 						<a name="C{{ reply.id }}" href="#C{{ reply.id }}"><i class="icon-globe" title="Permalink"></i></a>
 						{% if reply.users_id == currentUser %}
-							{{ link_to('post/discussion/edit/' ~ reply.id, '<i class="icon-edit" title="Edit"></i>') }}
-							{{ link_to('post/discussion/delete/' ~ reply.id, '<i class="icon-remove" title="Delete"></i>') }}
+							<i class="icon-edit" title="Edit" data-id="{{ reply.id }}"></i>
+							<i class="icon-remove" title="Delete" data-id="{{ reply.id }}"></i>
 						{% endif %}
 					</div>
 
@@ -79,11 +77,12 @@
 				</form>
 			</td>
 		{% else %}
-			<td colspan="2" align="right">
-				<div align="left">
+			<td></td>
+			<td>
+				<div align="pulll-eft">
 					{{ link_to('', 'Back to discussions') }}
 				</div>
-				<div align="right">
+				<div align="pull-right">
 					{{ link_to('login/oauth/authorize', 'Log In to Comment', 'class': 'btn btn-info') }}
 				</div>
 			</td>
@@ -95,6 +94,6 @@
 
     {{ javascript_include("js/forum.js") }}
 
-    <script type="text/javascript">Forum.highlight();</script>
+    <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 </div>
-{% endcache %}
+

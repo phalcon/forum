@@ -17,14 +17,10 @@
 
 					{% if activity.type == 'U' %}
 					has joined the forum
-					{% else %}
-					{% if activity.type == 'P' %}
+					{% elseif activity.type == 'P' %}
 					has posted {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-					{% else %}
-					{% if activity.type == 'C' %}
+					{% elseif activity.type == 'C' %}
 					has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-					{% endif %}
-					{% endif %}
 					{% endif %}
 
 					<span class="date">{{ date('M d/Y H:i', activity.created_at) }}</span>

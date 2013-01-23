@@ -1,6 +1,8 @@
 
 var Forum = {
 
+	_uri: '',
+
 	_shMain: false,
 
 	_shCss: false,
@@ -9,6 +11,9 @@ var Forum = {
 
 	_shDocument: 0,
 
+	/**
+	 * Starts the highlighters
+	 */
 	getSh: function(type, code)
 	{
 		var start = false;
@@ -39,6 +44,7 @@ var Forum = {
 				type = 'sql';
 				break;
 			default:
+				type = null;
 				pre_code = '<pre class="sh_sourceCode">';
 				break;
 		}
@@ -62,23 +68,28 @@ var Forum = {
 			start = true;
 		}
 
-		if (typeof Forum._sh[type] === "undefined") {
-			var script = document.createElement('script');
-			script.type = "text/javascript";
-			script.src = "http://phalconphp.com/sh/lang/sh_" + type + ".min.js"
-			document.body.appendChild(script);
-			Forum._shDocument++;
-			Forum._sh[type] = true;
+		if (type !== null) {
+			if (typeof Forum._sh[type] === "undefined") {
+				var script = document.createElement('script');
+				script.type = "text/javascript";
+				script.src = "http://phalconphp.com/sh/lang/sh_" + type + ".min.js"
+				document.body.appendChild(script);
+				Forum._shDocument++;
+				Forum._sh[type] = true;
+			}
 		}
 
 		return pre_code + code + '</pre>';
 	},
 
+	/**
+	 * Highlights texts enclosed into triple backticks
+	 */
 	highlight: function()
 	{
 		$('div.post-content').each(function(position, element){
 			for (var i=0; i <= 10; i++) {
-				var matches = /```([a-z]+)([^`]+)```/gm.exec(element.innerHTML);
+				var matches = /```([a-z]+)([^`]+)```(<br>|\n)?/gm.exec(element.innerHTML);
 				if (matches === null) {
 					break;
 				}
@@ -93,9 +104,107 @@ var Forum = {
 		}
 	},
 
-	editComment: function()
+	makeCommentEditable: function(response)
+	{
+		if (response.status == 'OK') {
+
+			var form = document.createElement('FORM');
+			form.method = 'POST';
+			form.action = Forum._uri + 'reply/update';
+
+			var textarea = document.createElement('TEXTAREA');
+			textarea.name = 'content';
+			textarea.rows = 7;
+			textarea.value = response.comment;
+			form.appendChild(textarea);
+
+			var hidden = document.createElement('INPUT');
+			hidden.name = 'id';
+			hidden.type = 'hidden';
+			hidden.value = response.id;
+			form.appendChild(hidden);
+
+			var cancel = document.createElement('INPUT');
+			cancel.type = 'button';
+			cancel.className = 'btn btn-small pull-left';
+			cancel.value = 'Cancel';
+			$(cancel).bind('click', { form: form, element: this}, Forum.cancelEditing);
+			form.appendChild(cancel);
+
+			var submit = document.createElement('INPUT');
+			submit.type = 'submit';
+			submit.className = 'btn btn-success btn-small pull-right';
+			submit.value = 'Update Comment';
+			form.appendChild(submit);
+
+			this.hide();
+
+			this.parent().append(form);
+		}
+	},
+
+	cancelEditing: function(event)
+	{
+		//Are you sure you want to delete this?
+		var element = $(event.data.element);
+		var form = $(event.data.form);
+
+		element.show();
+		form.remove();
+	},
+
+	completeDeleteComment: function()
 	{
 
+	},
+
+	deleteComment: function(event)
+	{
+		if (confirm('Are you sure you want to delete this?')) {
+			var element = $(event.data.element);
+			window.location = Forum._uri + 'reply/delete/' + element.data('id');
+		}
+	},
+
+	/**
+	 * Converts the post-comment div into an editable textarea
+	 */
+	editComment: function(event)
+	{
+		var element = $(event.data.element);
+
+		var content = $('div.post-content', element.parents()[3]);
+
+		if (content.is(':visible')) {
+			$.ajax({
+				dataType: 'json',
+				url: Forum._uri + 'reply/' + element.data('id'),
+				context: content,
+			}).done(Forum.makeCommentEditable);
+		}
+	},
+
+	/**
+	 * Add callbacks to edit/delete buttons
+	 */
+	addCallbacks: function()
+	{
+		$('i.icon-edit').each(function(position, element){
+			$(element).bind('click', {element: element}, Forum.editComment);
+		});
+		$('i.icon-remove').each(function(position, element){
+			$(element).bind('click', {element: element}, Forum.deleteComment);
+		});
+	},
+
+	/**
+	 * Initializes the view (highlighters, callbacks, etc)
+	 */
+	initializeView: function(uri)
+	{
+		Forum._uri = uri;
+		Forum.highlight();
+		Forum.addCallbacks();
 	}
 
 };

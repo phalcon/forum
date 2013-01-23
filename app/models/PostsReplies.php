@@ -20,6 +20,9 @@ class PostsReplies extends Model
 		$this->addBehavior(new Timestampable(array(
 			'beforeCreate' => array(
 				'field' => 'created_at'
+			),
+			'beforeUpdate' => array(
+				'field' => 'modified_at'
 			)
         )));
 	}

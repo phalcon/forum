@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-//require '../../pretty-exceptions/loader.php';
+require '../../pretty-exceptions/loader.php';
 
 /**
  * Read the configuration

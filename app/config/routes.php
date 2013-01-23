@@ -27,14 +27,19 @@ $router->add('/post/discussion', array(
 	'action' => 'create'
 ));
 
-$router->add('/reply/edit', array(
-	'controller' => 'discussions',
-	'action' => 'editReply'
+$router->add('/reply/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'get'
+));
+
+$router->add('/reply/update', array(
+	'controller' => 'replies',
+	'action' => 'update'
 ));
 
 $router->add('/reply/delete/{id:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'deleteReply'
+	'controller' => 'replies',
+	'action' => 'delete'
 ));
 
 $router->add('/discussion/{id:[0-9]+}/{slug}', array(

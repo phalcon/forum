@@ -6,7 +6,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<a class="brand" href="#">Forum</a>
+			<li>{{ link_to('', 'Phorum', 'class': 'brand') }}</li>
 			<div class="nav-collapse">
 
 				<ul class="nav pull-left">

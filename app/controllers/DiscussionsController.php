@@ -281,9 +281,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				} else {
 					Tag::resetInput();
 				}
-
-				//Remove the cache
-				$this->view->getCache()->delete('post' . $post->id);
 			}
 		}
 

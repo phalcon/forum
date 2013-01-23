@@ -22,7 +22,7 @@ class Activities extends Model
 			'beforeCreate' => array(
 				'field' => 'created_at'
 			)
-        )));
+		)));
 	}
 
 }
