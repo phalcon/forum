@@ -25,7 +25,15 @@ class Users
 
 	public function getName()
 	{
-		return $this->_response['name'];
+		if ($this->_response['name']) {
+			return $this->_response['name'];
+		}
+		return $this->_response['login'];
+	}
+
+	public function getEmail()
+	{
+		return $this->_response['email'];
 	}
 
 	public function getLogin()

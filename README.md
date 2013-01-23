@@ -1,5 +1,5 @@
-Phorum
-======
+Phosphorum
+==========
 
 Phalcon PHP is a web framework delivered as a C extension providing high
 performance and lower resource consumption.
@@ -44,4 +44,4 @@ Then you'll need to create the database and initialize schema:
 
 License
 -------
-Phorum is open-sourced software licensed under the New BSD License.
+Phosphorum is open-sourced software licensed under the New BSD License.

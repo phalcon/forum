@@ -4,7 +4,8 @@ namespace Forum\Controllers;
 
 use Forum\Github\OAuth,
 	Forum\Github\Users as GithubUsers,
-	Forum\Models\Users as ForumUsers;
+	Forum\Models\Users as ForumUsers,
+	Phalcon\Mvc\Model;
 
 class SessionController extends \Phalcon\Mvc\Controller
 {
@@ -44,6 +45,9 @@ class SessionController extends \Phalcon\Mvc\Controller
 				return $this->indexRedirect();
 			}
 
+			/**
+			 * Edit/Create the user
+			 */
 			$user = ForumUsers::findFirstByAccessToken($response['access_token']);
 			if ($user == false) {
 				$user = new ForumUsers();
@@ -51,8 +55,12 @@ class SessionController extends \Phalcon\Mvc\Controller
 				$user->access_token = $response['access_token'];
 			}
 
+			/**
+			 * Update the user information
+			 */
 			$user->name = $githubUser->getName();
 			$user->login = $githubUser->getLogin();
+			$user->email = $githubUser->getEmail();
 			$user->gravatar_id = $githubUser->getGravatarId();
 
 			if (!$user->save()) {
@@ -62,11 +70,18 @@ class SessionController extends \Phalcon\Mvc\Controller
 				}
 			}
 
+			/**
+			 * Set the data in session
+			 */
 			$this->session->set('identity', $user->id);
 			$this->session->set('identity-name', $user->name);
 			$this->session->set('identity-gravatar', $user->gravatar_id);
 
-			$this->flashSession->success('Welcome back '.$user->name);
+			if ($user->getOperationMade() == Model::OP_CREATE) {
+				$this->flashSession->success('Welcome '.$user->name);
+			} else {
+				$this->flashSession->success('Welcome back '.$user->name);
+			}
 			return $this->indexRedirect();
 		}
 

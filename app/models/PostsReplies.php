@@ -7,6 +7,19 @@ use Phalcon\Mvc\Model,
 
 class PostsReplies extends Model
 {
+
+	public $id;
+
+	public $posts_id;
+
+	public $users_id;
+
+	public $content;
+
+	public $created_at;
+
+	public $modified_at;
+
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Forum\Models\Posts', 'id', array(

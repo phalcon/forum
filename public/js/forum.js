@@ -88,14 +88,19 @@ var Forum = {
 	highlight: function()
 	{
 		$('div.post-content').each(function(position, element){
-			for (var i=0; i <= 10; i++) {
+
+			//Replace Code
+			while (true) {
 				var matches = /```([a-z]+)([^`]+)```(<br>|\n)?/gm.exec(element.innerHTML);
-				if (matches === null) {
+				if (!matches) {
 					break;
 				}
 				var code = Forum.getSh(matches[1], matches[2].replace(new RegExp('<br>', 'g'), ""));
 				element.innerHTML = element.innerHTML.replace(matches[0], code);
 			}
+
+			//Replace URLs
+			element.innerHTML = element.innerHTML.replace(/[a-z]+:\/\/[\S]+/g, '<a href="$&" target="_new">$&</a>');
 		});
 		if (Forum._shDocument > 0) {
 			window.setTimeout(function(){
@@ -109,6 +114,7 @@ var Forum = {
 		if (response.status == 'OK') {
 
 			var form = document.createElement('FORM');
+			form.className = 'edit-form';
 			form.method = 'POST';
 			form.action = Forum._uri + 'reply/update';
 
@@ -189,10 +195,10 @@ var Forum = {
 	 */
 	addCallbacks: function()
 	{
-		$('i.icon-edit').each(function(position, element){
+		$('i.reply-edit').each(function(position, element){
 			$(element).bind('click', {element: element}, Forum.editComment);
 		});
-		$('i.icon-remove').each(function(position, element){
+		$('i.reply-remove').each(function(position, element){
 			$(element).bind('click', {element: element}, Forum.deleteComment);
 		});
 	},

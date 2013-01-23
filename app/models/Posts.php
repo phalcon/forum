@@ -20,6 +20,12 @@ class Posts extends Model
 
 	public $content;
 
+	public $created_at;
+
+	public $number_views;
+
+	public $number_replies;
+
 	public function beforeValidationOnCreate()
 	{
 		$this->number_views = 0;

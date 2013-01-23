@@ -17,6 +17,7 @@
 	</ul>
 </div>
 
+{% if posts|length %}
 <table class="list-posts">
 {% for post in posts %}
 	<tr>
@@ -33,7 +34,6 @@
 				<p>
 					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
 				</p>
-
 				<p>
 					<div class="pull-left">
 						<span class="date">{{ date('M d/Y', post.created_at) }}</span>
@@ -59,10 +59,14 @@
 	</div>
 {% endif %}
 
-{% if total_posts['0'] > 30 %}
+{% if totalPosts['0'] > 30 %}
 	<div class="pagination next">
   		<ul>
 			<li>{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
 		</ul>
 	</div>
+{% endif %}
+
+{% else %}
+	<div>There are no posts here</div>
 {% endif %}

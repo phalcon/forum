@@ -7,11 +7,16 @@ use Forum\Models\Posts,
 	Forum\Models\PostsReplies,
 	Forum\Models\Categories,
 	Forum\Models\Activities,
+	Forum\Models\Users,
 	Phalcon\Tag;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
 
+	/**
+	 * This method prepares the queries to be executed in each list of posts
+	 * The returned builders are used as base in the search, tagged list and index lists
+	 */
 	protected function prepareQueries()
 	{
 
@@ -91,7 +96,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->posts = $itemBuilder->getQuery()
 			->execute($params);
 
-		$this->view->total_posts = $totalBuilder
+		$this->view->totalPosts = $totalBuilder
 			->getQuery()
 			->setUniqueRow(true)
 			->execute($params);
@@ -135,13 +140,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			return $this->response->redirect();
 		}
 
-		$total_posts = $totalBuilder
+		$totalPosts = $totalBuilder
 			->getQuery()
 			->setUniqueRow(true)
 			->execute(array($categoryId));
 
 		$this->view->posts = $posts;
-		$this->view->total_posts = $total_posts;
+		$this->view->totalPosts = $totalPosts;
 		$this->view->currentOrder = null;
 		$this->view->offset = $offset;
 		$this->view->paginatorUri = 'category/' . $category->id . '/' . $category->slug;
@@ -204,6 +209,71 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->categories = Categories::find(array(
 			'order' => 'name'
 		));
+	}
+
+	/**
+	 * This shows the create post form and also store the related post
+	 */
+	public function editAction($id)
+	{
+
+		$usersId = $this->session->get('identity');
+		if (!$usersId) {
+			$this->flashSession->error('You must be logged first');
+			return $this->response->redirect();
+		}
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirst(array(
+			"id = ?0 AND users_id = ?1",
+			"bind" => array($id, $usersId)
+		));
+		if (!$post) {
+			$this->flashSession->error('The discussion does not exist');
+			return $this->response->redirect();
+		}
+
+		if ($this->request->isPost()) {
+
+			$title = $this->request->getPost('title', 'trim');
+			$content = $this->request->getPost('content');
+
+			$post->categories_id = $this->request->getPost('categoryId');
+			$post->title = $title;
+			$post->slug = Tag::friendlyTitle($title);
+			$post->content = $content;
+
+			if ($post->save()) {
+
+				/**
+				 * Refresh sidebar
+				 */
+				$this->view->getCache()->delete('sidebar');
+
+				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
+			}
+
+			foreach ($post->getMessages() as $message) {
+				$this->flash->error($message);
+			}
+
+		} else {
+
+			Tag::displayTo('id', $post->id);
+			Tag::displayTo('title', $post->title);
+			Tag::displayTo('content', $post->content);
+			Tag::displayTo('categoryId', $post->categories_id);
+		}
+
+		\Phalcon\Tag::setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
+
+		$this->view->categories = Categories::find(array(
+			'order' => 'name'
+		));
+
+		$this->view->post = $post;
 	}
 
 	/**
@@ -284,7 +354,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			}
 		}
 
-		\Phalcon\Tag::setTitle($post->title . ' - Discussion');
+		/**
+		 * Set the post name as title - escaping it first
+		 */
+		\Phalcon\Tag::setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
 		$this->view->post = $post;
 	}
@@ -305,11 +378,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		\Phalcon\Tag::setTitle('Recent Activity');
 	}
 
-	public function userAction()
-	{
-
-	}
-
+	/**
+	 * Perform the search of posts only searching in the title
+	 */
 	public function searchAction()
 	{
 
@@ -334,17 +405,47 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			return $this->response->redirect();
 		}
 
-		$total_posts = $totalBuilder
+		$totalPosts = $totalBuilder
 			->getQuery()
 			->setUniqueRow(true)
 			->execute(array($queryTerms));
 
 		$this->view->posts = $posts;
-		$this->view->total_posts = $total_posts;
+		$this->view->totalPosts = $totalPosts;
 		$this->view->currentOrder = null;
 		$this->view->offset = 0;
 		$this->view->paginatorUri = 'search';
+	}
 
+	/**
+	 * Shows the user profile
+	 */
+	public function userAction($id)
+	{
+		$user = Users::findFirstById($id);
+		if (!$user) {
+			$this->flashSession->error('The user does not exist');
+			return $this->response->redirect();
+		}
+
+		$this->view->user = $user;
+
+		$this->view->numberPosts = Posts::count(array(
+			'users_id = ?0',
+			'bind' => array($id)
+		));
+
+		$this->view->numberReplies = PostsReplies::count(array(
+			'users_id = ?0',
+			'bind' => array($id)
+		));
+
+		$this->view->activities = Activities::find(array(
+			'users_id = ?0',
+			'bind' => array($id),
+			'order' => 'created_at DESC',
+			'limit' => 15
+		));
 	}
 
 }

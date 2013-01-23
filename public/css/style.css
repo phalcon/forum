@@ -93,6 +93,11 @@ div.view-discussion div.post-content {
 	background: #fbfbfc;
 	border: 1px solid #e1e1e8;
 	padding: 10px;
+	margin-bottom: 10px;
+}
+
+div.view-discussion form.edit-form {
+	margin-bottom: 10px;
 }
 
 div.view-discussion td.small {
@@ -197,3 +202,30 @@ div.next {
 div.prev {
 	float: left;
 }
+
+div.user-profile h1 {
+	margin: 0px;
+	padding: 0px;
+}
+
+div.user-profile table {
+	width: 75%;
+}
+
+div.user-profile td.small {
+	width: 80px;
+}
+
+div.user-profile img {
+	padding-right: 10px;
+}
+
+div.user-profile .nav {
+	width: 100%;
+}
+
+div.user-profile div.activity {
+	border: none;
+	border-bottom: 1px solid #ddd;
+}
+

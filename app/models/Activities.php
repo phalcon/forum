@@ -8,6 +8,16 @@ use Phalcon\Mvc\Model,
 class Activities extends Model
 {
 
+	public $id;
+
+	public $users_id;
+
+	public $type;
+
+	public $posts_id;
+
+	public $created_at;
+
 	public function initialize()
 	{
 		$this->belongsTo('users_id', 'Forum\Models\Users', 'id', array(

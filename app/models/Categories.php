@@ -7,9 +7,12 @@ use Phalcon\Mvc\Model;
 class Categories extends Model
 {
 
-	public function initialize()
-	{
+	public $id;
 
-	}
+	public $name;
+
+	public $slug;
+
+	public $number_posts;
 
 }
