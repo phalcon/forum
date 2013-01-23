@@ -1,0 +1,199 @@
+body {
+	margin-bottom: 0px;
+}
+
+div.sidebar {
+	text-align: center;
+}
+
+div.sidebar ul {
+	padding-left: 10px;
+	padding-top: 10px;
+	width: 90%;
+}
+
+.sidebar .nav > li {
+	float: none;
+	text-align: left;
+}
+
+.sidebar .nav > li .number-posts {
+	float: right;
+}
+
+div.navbar-inner {
+	height: 30px;
+}
+
+div.navbar-inner input {
+	margin-top: 5px;
+}
+
+div.sidebar .btn-large {
+	width: 80%;
+}
+
+h1 {
+	font-size: 22px;
+	line-height: 24px;
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+div.start-discussion {
+	text-align: center;
+	padding-left: 10px;
+}
+
+div.start-discussion input,
+div.start-discussion textarea,
+div.start-discussion select,
+div.view-discussion textarea {
+	width: 98%;
+}
+
+div.start-discussion h1,
+div.view-discussion h1 {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 25px;
+}
+
+div.hot-discussions {
+	padding-left: 40px;
+	text-align: center;
+}
+
+div.view-discussion img {
+	width: 48px;
+	height: 48px;
+	background: #fbfbfc;
+}
+
+div.view-discussion div.post-header {
+	border: 1px solid #ddd;
+	padding: 5px;
+	font-size: 12px;
+	color: #717171;
+}
+
+div.view-discussion div.posts-buttons {
+	float: right;
+}
+
+div.view-discussion div.posts-buttons i {
+	cursor: pointer;
+}
+
+div.view-discussion div.post-header span {
+	font-weight: bold;
+}
+
+div.view-discussion div.post-content {
+	background: #fbfbfc;
+	border: 1px solid #e1e1e8;
+	padding: 10px;
+}
+
+div.view-discussion td.small {
+	width: 50px;
+	text-align: center;
+	padding: 5px;
+}
+
+div.view-discussion td.small a {
+	font-size: 12px;
+	line-height: 14px;
+}
+
+div.hot-discussions span.number-comments,
+div.hot-discussions span.date {
+	color: #999999;
+	font-size: 11px;
+	margin-right: 40px;
+}
+
+div.hot-discussions span.author {
+	font-size: 11px;
+}
+
+table.list-posts {
+	width: 99%;
+}
+
+table.list-posts td {
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+}
+
+table.list-posts td.number {
+	width: 35px;
+}
+
+table.list-posts td .big-number {
+	font-size: 18px;
+}
+
+table.list-posts td.no-replies,
+table.list-posts td.no-views {
+	color: #D14;
+}
+
+div.hot-discussions p {
+	margin: 0px;
+}
+
+#footer {
+	background: none repeat scroll 0 0 #252525;
+	clear: both;
+	color: #FAFAFA;
+	display: block;
+	margin-top: 50px;
+	padding: 50px 10px 50px;
+}
+
+#footer td.tweets {
+	width: 40%;
+	padding-right: 60px;
+}
+
+#footer a {
+	color: #d3ebe3;
+}
+
+#footer label {
+	color: #FFFFFF;
+	font-size: 13px;
+	text-transform: uppercase;
+}
+
+#footer td.subscribe, #footer td.social {
+	line-height: 22px;
+}
+
+#footer input[type="submit"] {
+	background: #0B683C;
+	padding: 5px;
+	color: #fafafa;
+	border: none;
+	border-radius: 5px;
+}
+
+#footer table.footer-table {
+	width: 800px;
+}
+
+div.activity {
+	padding: 5px;
+	padding-top: 15px;
+	height: 40px;
+	border: 1px solid #ddd;
+}
+
+div.next {
+	float: right;
+}
+
+div.prev {
+	float: left;
+}

@@ -1,0 +1,146 @@
+<?php
+
+/**
+ * The URL component is used to generate all kind of urls in the application
+ */
+$di->set('url', function() use ($config) {
+	$url = new \Phalcon\Mvc\Url();
+	$url->setBaseUri($config->application->baseUri);
+	return $url;
+}, true);
+
+/**
+ * Setting up volt
+ */
+$di->set('volt', function($view, $di) {
+
+	$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+
+	$volt->setOptions(array(
+		"compiledPath" => "../app/cache/volt/"
+	));
+
+	return $volt;
+}, true);
+
+/**
+ * Setting up the view component
+ */
+$di->set('view', function() use ($config) {
+
+	$view = new \Phalcon\Mvc\View();
+
+	$view->setViewsDir($config->application->viewsDir);
+
+	$view->registerEngines(array(
+		".volt" => 'volt'
+	));
+
+	return $view;
+}, true);
+
+/**
+ * Database connection is created based in the parameters defined in the configuration file
+ */
+$di->set('db', function() use ($config) {
+
+	/*$eventsManager = new Phalcon\Events\Manager();
+
+	$logger = new \Phalcon\Logger\Adapter\File("../app/logs/db.log");
+
+	//Listen all the database events
+	$eventsManager->attach('db', function($event, $connection) use ($logger) {
+	    if ($event->getType() == 'beforeQuery') {
+	        $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+	    }
+	});*/
+
+	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+		"host" => $config->database->host,
+		"username" => $config->database->username,
+		"password" => $config->database->password,
+		"dbname" => $config->database->name
+	));
+
+	//Assign the eventsManager to the db adapter instance
+	//$connection->setEventsManager($eventsManager);
+
+	return $connection;
+});
+
+/**
+ * If the configuration specify the use of metadata adapter use it or use memory otherwise
+ */
+$di->set('modelsMetadata', function() use ($config) {
+	if (isset($config->models->metadata)) {
+		$metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\'.$config->models->metadata->adapter;
+		return new $metadataAdapter();
+	}
+	return new \Phalcon\Mvc\Model\Metadata\Memory();
+}, true);
+
+/**
+ * Start the session the first time some component request the session service
+ */
+$di->set('session', function() {
+	$session = new \Phalcon\Session\Adapter\Files();
+	$session->start();
+	return $session;
+}, true);
+
+/**
+ * Router
+ */
+$di->set('router', function() {
+	return include "../app/config/routes.php";
+}, true);
+
+/**
+ * Register the configuration itself as a service
+ */
+$di->set('config', $config);
+
+/**
+ * Register the flash service with the Twitter Bootstrap classes
+ */
+$di->set('flash', function() {
+	return new Phalcon\Flash\Direct(array(
+		'error' => 'alert alert-error',
+		'success' => 'alert alert-success',
+		'notice' => 'alert alert-info',
+	));
+});
+
+/**
+ * Register the session flash service with the Twitter Bootstrap classes
+ */
+$di->set('flashSession', function() {
+	return new Phalcon\Flash\Session(array(
+		'error' => 'alert alert-error',
+		'success' => 'alert alert-success',
+		'notice' => 'alert alert-info',
+	));
+});
+
+$di->set('dispatcher', function() {
+	$dispatcher = new Phalcon\Mvc\Dispatcher();
+	$dispatcher->setDefaultNamespace('Forum\Controllers');
+	return $dispatcher;
+});
+
+/**
+ * View cache
+ */
+$di->set('viewCache', function() {
+
+    //Cache data for one day by default
+    $frontCache = new \Phalcon\Cache\Frontend\Output(array(
+        "lifetime" => 2592000
+    ));
+
+    //Memcached connection settings
+    return new \Phalcon\Cache\Backend\File($frontCache, array(
+        "cacheDir" => "../app/cache/views/",
+        "prefix" => "cache-"
+    ));
+});
