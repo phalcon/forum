@@ -124,7 +124,7 @@ $di->set('flashSession', function() {
 
 $di->set('dispatcher', function() {
 	$dispatcher = new Phalcon\Mvc\Dispatcher();
-	$dispatcher->setDefaultNamespace('Forum\Controllers');
+	$dispatcher->setDefaultNamespace('Phosphorum\Controllers');
 	return $dispatcher;
 });
 
@@ -140,7 +140,7 @@ $di->set('viewCache', function() {
 
     //Memcached connection settings
     return new \Phalcon\Cache\Backend\File($frontCache, array(
-        "cacheDir" => "../app/cache/views/",
+        "cacheDir" => __DIR__ . "/../cache/views/",
         "prefix" => "cache-"
     ));
 });

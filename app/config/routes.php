@@ -87,4 +87,9 @@ $router->add('/search', array(
 	'action' => 'search'
 ));
 
+$router->add('/settings', array(
+	'controller' => 'discussions',
+	'action' => 'settings'
+));
+
 return $router;

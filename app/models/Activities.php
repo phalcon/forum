@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Models;
+namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model,
 	Phalcon\Mvc\Model\Behavior\Timestampable;
@@ -20,11 +20,11 @@ class Activities extends Model
 
 	public function initialize()
 	{
-		$this->belongsTo('users_id', 'Forum\Models\Users', 'id', array(
+		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
 			'alias' => 'user'
 		));
 
-		$this->belongsTo('posts_id', 'Forum\Models\Posts', 'id', array(
+		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(
 			'alias' => 'post'
 		));
 

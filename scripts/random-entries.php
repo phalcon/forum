@@ -1,39 +1,16 @@
 <?php
 
 /**
- * This script generates random posts
+ * This scripts generates random posts
  */
 
-error_reporting(E_ALL);
-
-/**
- * Read the configuration
- */
-$config = include __DIR__ . "/../app/config/config.php";
-
-$loader = new \Phalcon\Loader();
-
-/**
- * Include the loader
- */
-require __DIR__ . "/../app/config/loader.php";
-
-$loader->register();
-
-/**
- * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
- */
-$di = new \Phalcon\DI\FactoryDefault();
-
-/**
- * Include the application services
- */
-require __DIR__ . "/../app/config/services.php";
+require 'cli-bootstrap.php';
 
 $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-?!"·$%/()=[]´ç+*\`\'#';
 $n = strlen($characters);
 
-function generateRandomString($length, $characters, $n) {
+function generateRandomString($length, $characters, $n)
+{
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, $n - 1)];

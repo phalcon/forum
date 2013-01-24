@@ -1,9 +1,9 @@
 <?php
 
-namespace Forum\Controllers;
+namespace Phosphorum\Controllers;
 
-use Forum\Models\Posts,
-	Forum\Models\PostsReplies,
+use Phosphorum\Models\Posts,
+	Phosphorum\Models\PostsReplies,
 	Phalcon\Http\Response;
 
 class RepliesController extends \Phalcon\Mvc\Controller

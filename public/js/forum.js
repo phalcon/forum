@@ -1,4 +1,7 @@
 
+/**
+ * Forum
+ */
 var Forum = {
 
 	_uri: '',
@@ -149,6 +152,9 @@ var Forum = {
 		}
 	},
 
+	/**
+	 * Cancels the comment editing
+	 */
 	cancelEditing: function(event)
 	{
 		//Are you sure you want to delete this?
@@ -159,11 +165,9 @@ var Forum = {
 		form.remove();
 	},
 
-	completeDeleteComment: function()
-	{
-
-	},
-
+	/**
+	 * Deletes a comment
+	 */
 	deleteComment: function(event)
 	{
 		if (confirm('Are you sure you want to delete this?')) {

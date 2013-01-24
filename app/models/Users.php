@@ -1,8 +1,8 @@
 <?php
 
-namespace Forum\Models;
+namespace Phosphorum\Models;
 
-use Forum\Models\Activities,
+use Phosphorum\Models\Activities,
 	Phalcon\Mvc\Model,
 	Phalcon\Mvc\Model\Behavior\Timestampable;
 
@@ -25,6 +25,10 @@ class Users extends Model
 
 	public $modified_at;
 
+	public $notifications;
+
+	public $timezone;
+
 	public function initialize()
 	{
 		$this->addBehavior(new Timestampable(array(
@@ -35,6 +39,12 @@ class Users extends Model
 				'field' => 'modified_at'
 			)
         )));
+	}
+
+	public function beforeCreate()
+	{
+		$this->notifications = 'P';
+		$this->timezone = 'Europe/London';
 	}
 
 	public function afterCreate()

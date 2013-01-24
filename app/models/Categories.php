@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Models;
+namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
 

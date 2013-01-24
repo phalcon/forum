@@ -13,6 +13,7 @@
 					<li>{{ link_to('', 'Discussions') }}</li>
 					<li>{{ link_to('activity', 'Activity') }}</li>
 					{% if session.get('identity') %}
+					<li>{{ link_to('settings', 'Settings') }}</li>
 					<li>{{ link_to('logout', 'Logout') }}</li>
 					{% endif %}
 				</ul>

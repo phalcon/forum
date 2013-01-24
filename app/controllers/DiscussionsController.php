@@ -1,17 +1,25 @@
 <?php
 
-namespace Forum\Controllers;
+namespace Phosphorum\Controllers;
 
-use Forum\Models\Posts,
-	Forum\Models\PostsViews,
-	Forum\Models\PostsReplies,
-	Forum\Models\Categories,
-	Forum\Models\Activities,
-	Forum\Models\Users,
+use Phosphorum\Models\Posts,
+	Phosphorum\Models\PostsViews,
+	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\Categories,
+	Phosphorum\Models\Activities,
+	Phosphorum\Models\Users,
 	Phalcon\Tag;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
+
+	public function initialize()
+	{
+		$timezone = $this->session->get('identity-timezone');
+		if ($timezone) {
+			date_default_timezone_set($timezone);
+		}
+	}
 
 	/**
 	 * This method prepares the queries to be executed in each list of posts
@@ -22,10 +30,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$itemBuilder = $this->modelsManager->createBuilder()
 			->from(array(
-				'p' => 'Forum\Models\Posts'
+				'p' => 'Phosphorum\Models\Posts'
 			))
-			->join('Forum\Models\Users', null, 'u')
-			->join('Forum\Models\Categories', null, 'c')
+			->join('Phosphorum\Models\Users', null, 'u')
+			->join('Phosphorum\Models\Categories', null, 'c')
 			->orderBy('p.created_at DESC');
 
 		$totalBuilder = clone $itemBuilder;
@@ -164,18 +172,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			return $this->response->redirect();
 		}
 
-		\Phalcon\Tag::setTitle('Start a Discussion');
+		Tag::setTitle('Start a Discussion');
 
 		if ($this->request->isPost()) {
 
 			$title = $this->request->getPost('title', 'trim');
-
-			/**
-			 * Create a posts-views logging the ipaddress where the post was created
-			 * This avoids that the same session counts as post view
-			 */
-			$postView = new PostsViews();
-			$postView->ipaddress = $this->request->getClientAddress();
 
 			$post = new Posts();
 			$post->users_id = $usersId;
@@ -183,7 +184,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->title = $title;
 			$post->slug = Tag::friendlyTitle($title);
 			$post->content = $this->request->getPost('content');
-			$post->views = $postView;
 
 			if ($post->save()) {
 
@@ -191,12 +191,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 * Refresh sidebar
 				 */
 				$this->view->getCache()->delete('sidebar');
-
-				/**
-				 * Update the total of posts related to a category
-				 */
-				$post->category->number_posts++;
-				$post->category->save();
 
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
@@ -267,7 +261,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			Tag::displayTo('categoryId', $post->categories_id);
 		}
 
-		\Phalcon\Tag::setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
+		Tag::setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
 
 		$this->view->categories = Categories::find(array(
 			'order' => 'name'
@@ -314,7 +308,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$postView->post = $post;
 				$postView->ipaddress = $ipAddress;
 				if (!$postView->save()) {
-					var_dump($postView->getMessages());
+					foreach ($postView->getMessages() as $message) {
+						$this->flash->error($message);
+					}
 				}
 			}
 		} else {
@@ -347,7 +343,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$postReply->content = $content;
 
 				if (!$postReply->save()) {
-					var_dump($postReply->getMessages());
+					foreach ($postReply->getMessages() as $message) {
+						$this->flash->error($message);
+					}
 				} else {
 					Tag::resetInput();
 				}
@@ -357,7 +355,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		/**
 		 * Set the post name as title - escaping it first
 		 */
-		\Phalcon\Tag::setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
+		Tag::setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
 		$this->view->post = $post;
 	}
@@ -375,7 +373,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => array('number' => 30, 'offset' => 0)
 		));
 
-		\Phalcon\Tag::setTitle('Recent Activity');
+		Tag::setTitle('Recent Activity');
 	}
 
 	/**
@@ -448,4 +446,38 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		));
 	}
 
+	public function settingsAction()
+	{
+
+		$usersId = $this->session->get('identity');
+		if (!$usersId) {
+			$this->flashSession->error('You must be logged first');
+			return $this->response->redirect();
+		}
+
+		$user = Users::findFirstById($usersId);
+		if (!$user) {
+			$this->flashSession->error('The user does not exist');
+			return $this->response->redirect();
+		}
+
+		if ($this->request->isPost()) {
+			$user->timezone = $this->request->getPost('timezone');
+			$user->notifications = $this->request->getPost('notifications');
+			if ($user->save()) {
+				$this->session->get('timezone', $user->timezone);
+				$this->flashSession->success('Settings were successfully updated');
+				return $this->response->redirect();
+			}
+		} else {
+			Tag::displayTo('timezone', $user->timezone);
+			Tag::displayTo('notifications', $user->notifications);
+		}
+
+		Tag::setTitle('My Settings');
+		Tag::setAutoEscape(false);
+
+		$this->view->user = $user;
+		$this->view->timezones = require '../app/config/timezones.php';
+	}
 }

@@ -92,8 +92,8 @@
 		</tr>
 	</table>
 
+	{# include jquery and forum highlight scripts #}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-
     {{ javascript_include("js/forum.js") }}
 
     <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>

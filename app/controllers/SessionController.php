@@ -1,10 +1,10 @@
 <?php
 
-namespace Forum\Controllers;
+namespace Phosphorum\Controllers;
 
-use Forum\Github\OAuth,
-	Forum\Github\Users as GithubUsers,
-	Forum\Models\Users as ForumUsers,
+use Phosphorum\Github\OAuth,
+	Phosphorum\Github\Users as GithubUsers,
+	Phosphorum\Models\Users as ForumUsers,
 	Phalcon\Mvc\Model;
 
 class SessionController extends \Phalcon\Mvc\Controller
@@ -71,17 +71,19 @@ class SessionController extends \Phalcon\Mvc\Controller
 			}
 
 			/**
-			 * Set the data in session
+			 * Store the user data in session
 			 */
 			$this->session->set('identity', $user->id);
 			$this->session->set('identity-name', $user->name);
 			$this->session->set('identity-gravatar', $user->gravatar_id);
+			$this->session->set('identity-timezone', $user->timezone);
 
 			if ($user->getOperationMade() == Model::OP_CREATE) {
 				$this->flashSession->success('Welcome '.$user->name);
 			} else {
 				$this->flashSession->success('Welcome back '.$user->name);
 			}
+
 			return $this->indexRedirect();
 		}
 

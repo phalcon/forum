@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Controllers;
+namespace Phosphorum\Controllers;
 
 class IndexController extends \Phalcon\Mvc\Controller
 {

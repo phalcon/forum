@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Github;
+namespace Phosphorum\Github;
 
 class OAuth extends \Phalcon\DI\Injectable
 {
@@ -9,7 +9,7 @@ class OAuth extends \Phalcon\DI\Injectable
 
 	protected $_endPointAccessToken = 'https://github.com/login/oauth/access_token';
 
-	protected $_redirectUriAuthorize = 'http://forum.phalconphp.com/login/oauth/access_token';
+	protected $_redirectUriAuthorize = 'http://forum.phalconphp.com/forum/login/oauth/access_token';
 
 	protected $_clientId;
 

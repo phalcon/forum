@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Models;
+namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
 
@@ -15,7 +15,7 @@ class PostsViews extends Model
 
 	public function initialize()
 	{
-		$this->belongsTo('posts_id', 'Forum\Models\Posts', 'id', array(
+		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(
 			'alias' => 'post'
 		));
 	}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum\Github;
+namespace Phosphorum\Github;
 
 class Users
 {

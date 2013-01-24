@@ -4,7 +4,8 @@
  * We're a registering a set of directories taken from the configuration file
  */
 $loader->registerNamespaces(array(
-	'Forum\Controllers' => $config->application->controllersDir,
-	'Forum\Models' => $config->application->modelsDir,
-	'Forum\Github' => $config->application->libraryDir . '/Github',
+	'Phosphorum\Models' => $config->application->modelsDir,
+	'Phosphorum\Controllers' => $config->application->controllersDir,
+	'Phosphorum\Github' => $config->application->libraryDir . '/Github',
+	'Phosphorum\Amazon' => $config->application->libraryDir . '/Amazon',
 ));

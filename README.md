@@ -16,7 +16,8 @@ Requirements
 This application uses Github as authentication system, you need a client id and secret id
 set in the configuration (app/config/config.php)
 
-The Http extension is also required
+* Http extension (pecl.php.net/package/pecl_http)
+* Curl extension (http://php.net/manual/en/book.curl.php)
 
 NOTE
 ----
