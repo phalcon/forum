@@ -227,5 +227,10 @@ div.user-profile .nav {
 div.user-profile div.activity {
 	border: none;
 	border-bottom: 1px solid #ddd;
+	height: 30px;
+}
+
+div.user-profile select {
+	width: auto;
 }
 

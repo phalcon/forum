@@ -23,6 +23,11 @@ return new \Phalcon\Config(array(
 	),
 	'github' => array(
 		'clientId' => '',
-		'clientSecret' => ''
+		'clientSecret' => '',
+		'redirectUri' => 'http://forum.phalconphp.com/forum/login/oauth/access_token'
+	),
+	'amazon' => array(
+		'AWSAccessKeyId' => '',
+		'AWSSecretKey' => ''
 	)
 ));

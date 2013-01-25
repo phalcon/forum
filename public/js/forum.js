@@ -103,7 +103,7 @@ var Forum = {
 			}
 
 			//Replace URLs
-			element.innerHTML = element.innerHTML.replace(/[a-z]+:\/\/[\S]+/g, '<a href="$&" target="_new">$&</a>');
+			element.innerHTML = element.innerHTML.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&" target="_new">$&</a>');
 		});
 		if (Forum._shDocument > 0) {
 			window.setTimeout(function(){

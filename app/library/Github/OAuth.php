@@ -9,7 +9,9 @@ class OAuth extends \Phalcon\DI\Injectable
 
 	protected $_endPointAccessToken = 'https://github.com/login/oauth/access_token';
 
-	protected $_redirectUriAuthorize = 'http://forum.phalconphp.com/forum/login/oauth/access_token';
+	protected $_redirectUriAuthorize;
+
+	protected $_baseUri;
 
 	protected $_clientId;
 
@@ -19,6 +21,7 @@ class OAuth extends \Phalcon\DI\Injectable
 
 	public function __construct($config)
 	{
+		$this->_redirectUriAuthorize = $config->redirectUri;
 		$this->_clientId = $config->clientId;
 		$this->_clientSecret = $config->clientSecret;
 	}
@@ -29,7 +32,8 @@ class OAuth extends \Phalcon\DI\Injectable
 		$url = $this->_endPointAuthorize.
 			'?client_id='.$this->_clientId.
 			'&redirect_uri='.$this->_redirectUriAuthorize.
-			'&state='.$this->security->getToken();
+			'&state='.$this->security->getToken().
+			'&scope=user:email';
 		$this->response->redirect($url, true);
 	}
 
