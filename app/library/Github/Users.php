@@ -5,16 +5,24 @@ namespace Phosphorum\Github;
 class Users
 {
 
-	protected $_endPoint = 'https://api.github.com/user';
+	protected $_endPoint = 'https://api.github.com';
+
+	protected $_accessToken;
 
 	public function __construct($accessToken)
 	{
+		$this->_accessToken = $accessToken;
+		$this->_response = $this->request('/user');
+	}
+
+	public function request($method)
+	{
 		try {
-			$transport = new \HttpRequest($this->_endPoint.'?access_token='.$accessToken);
+			$transport = new \HttpRequest($this->_endPoint.$method.'?access_token='.$this->_accessToken);
 			$transport->send();
-			$this->_response = json_decode($transport->getResponseBody(), true);
+			return json_decode($transport->getResponseBody(), true);
 		} catch (\HttpInvalidParamException $e) {
-			$this->_response = null;
+			return null;
 		}
 	}
 
@@ -33,7 +41,16 @@ class Users
 
 	public function getEmail()
 	{
-		return $this->_response['email'];
+		if ($this->_response['email']) {
+			return $this->_response['email'];
+		}
+
+		$emails = $this->request('/user/emails');
+		if (count($emails)){
+			return $emails[0];
+		}
+
+		return null;
 	}
 
 	public function getLogin()

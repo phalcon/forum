@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{{ get_title() }}
+		<title>{{ get_title(false) }} - Phalcon Framework</title>
 		{{ stylesheet_link("bootstrap/css/bootstrap.min.css") }}
 		{{ stylesheet_link("css/style.css") }}
 	</head>
