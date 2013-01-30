@@ -7,7 +7,7 @@ require 'cli-bootstrap.php';
 require '../vendor/AWSSDKforPHP/sdk.class.php';
 require '../vendor/Swift/Swift.php';
 
-class SendSpoolTask
+class SendSpoolTask extends Phalcon\DI\Injectable
 {
 
 	protected $_amazonSes;
@@ -44,6 +44,16 @@ class SendSpoolTask
 		return $response->body;
 	}
 
+	private function _prerify($text)
+	{
+		if (preg_match_all('#```([a-z]+)(.+)```([\n\r]+)?#m', $text, $matches, PREG_SET_ORDER)) {
+			foreach ($matches as $match) {
+				$text = str_replace($match[0], '<pre>' . $match[2] . '</pre>', $text);
+			}
+		}
+		return $text;
+	}
+
 	public function run()
 	{
 		foreach (Phosphorum\Models\Notifications::find('sent = "N"') as $notification) {
@@ -53,30 +63,32 @@ class SendSpoolTask
 
 			if ($user->email && $user->notifications != 'N') {
 
-				$message = new Swift_Message('[Phalcon Forum] ' . $post->title);
+				$message = new Swift_Message('[Phalcon Forum] ' . $this->escaper->escapeHtml($post->title));
 				$message->setTo(new Swift_Address($user->email, $user->name));
 
 				if ($notification->type == 'P') {
-
-					$htmlContent = nl2br($post->content);
-					$textContent = $post->content;
-
+					$escapedContent = $this->escaper->escapeHtml($post->content);
 					$message->setFrom(new Swift_Address('phosphorum@phalconphp.com', $post->user->name));
-
 				} else {
-
 					$reply = $notification->reply;
-
-					$htmlContent = nl2br($reply->content);
-					$textContent = $reply->content;
-
+					$escapedContent = $this->escaper->escapeHtml($reply->content);
 					$message->setFrom(new Swift_Address('phosphorum@phalconphp.com', $reply->user->name));
 				}
 
-				$htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">'.
-				'&mdash;<br>View the complete thread on '.
-				PHP_EOL.'<a href="http://forum.phalconphp.com/discussion/' .$post->id. '/' . $post->slug . '">Phosphorum</a>. '.
-				PHP_EOL.'Change your preferences <a href="http://forum.phalconphp.com/settings">here</a>';
+				$prerifiedContent = $this->_prerify($escapedContent);
+				$htmlContent = nl2br($prerifiedContent);
+
+				$textContent = $escapedContent;
+
+				$htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
+				if ($notification->type == 'P') {
+					$htmlContent .= '&mdash;<br>View the complete thread on '.
+					PHP_EOL.'<a href="http://forum.phalconphp.com/discussion/' .$post->id. '/' . $post->slug . '">Phosphorum</a>. ';
+				} else {
+					$htmlContent .= '&mdash;<br>View the complete thread on '.
+					PHP_EOL.'<a href="http://forum.phalconphp.com/discussion/' .$post->id. '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
+				}
+				$htmlContent .= PHP_EOL.'Change your preferences <a href="http://forum.phalconphp.com/settings">here</a>';
 
 				$bodyMessage = new Swift_Message_Part($htmlContent, 'text/html');
 				$bodyMessage->setCharset('UTF-8');

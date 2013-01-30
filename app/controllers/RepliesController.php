@@ -14,6 +14,11 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$this->view->disable();
 	}
 
+	/**
+	 * Returs the raw comment as it as edited
+	 *
+	 * @param int $id
+	 */
 	public function getAction($id)
 	{
 
@@ -39,6 +44,9 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		return $response;
 	}
 
+	/**
+	 * Updates a reply
+	 */
 	public function updateAction()
 	{
 
@@ -65,10 +73,14 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			$postReply->save();
 		}
 
-		return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
-
+		return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug . '#C' . $postReply->id);
 	}
 
+	/**
+	 * Deletes a reply
+	 *
+	 * @param int $id
+	 */
 	public function deleteAction($id)
 	{
 
@@ -93,7 +105,8 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			}
 		}
 
-		return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
+		$response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
+		return $response;
 	}
 
 }

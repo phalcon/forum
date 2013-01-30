@@ -92,19 +92,25 @@ var Forum = {
 	{
 		$('div.post-content').each(function(position, element){
 
+			var html = element.innerHTML;
+
 			//Replace Code
 			while (true) {
-				var matches = /```([a-z]+)([^`]+)```(<br>|\n)?/gm.exec(element.innerHTML);
+				var matches = /```([a-z]+)([^`]+)```(<br>|\n)?/gm.exec(html);
 				if (!matches) {
 					break;
 				}
 				var code = Forum.getSh(matches[1], matches[2].replace(new RegExp('<br>', 'g'), ""));
-				element.innerHTML = element.innerHTML.replace(matches[0], code);
+				html = html.replace(matches[0], code);
 			}
 
 			//Replace URLs
-			element.innerHTML = element.innerHTML.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&" target="_new">$&</a>');
+			html = html.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&" target="_new">$&</a>');
+
+			//Re-Update the HTML
+			element.innerHTML = html;
 		});
+
 		if (Forum._shDocument > 0) {
 			window.setTimeout(function(){
 				sh_highlightDocument();
@@ -141,9 +147,13 @@ var Forum = {
 			form.appendChild(cancel);
 
 			var submit = document.createElement('INPUT');
-			submit.type = 'submit';
+			submit.type = 'buttom';
 			submit.className = 'btn btn-success btn-small pull-right';
 			submit.value = 'Update Comment';
+			$(submit).bind('click', { form: form }, function(event) {
+				this.disabled = true;
+				event.data.form.submit();
+			});
 			form.appendChild(submit);
 
 			this.hide();

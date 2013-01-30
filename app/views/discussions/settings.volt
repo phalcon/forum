@@ -31,6 +31,9 @@
 							]) }}
 						</p>
 						<p>
+							<a href="https://en.gravatar.com/">Change your avatar at Gravatar</a>
+						</p>
+						<p>
 							<input type="submit" class="btn btn-success" value="Save"/>
 						</p>
 					</form>

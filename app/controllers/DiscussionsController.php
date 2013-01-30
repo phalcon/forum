@@ -272,6 +272,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 	/**
 	 * Displays a post and its comments
+	 *
+	 * @param int $id
+	 * @param string $slug
 	 */
 	public function viewAction($id, $slug)
 	{
@@ -324,9 +327,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				return $this->response->redirect();
 			}
 
-			$content = $this->request->getPost('content');
-
-			if (trim($content)) {
+			$content = $this->request->getPost('content', 'trim');
+			if ($content) {
 
 				$usersId = $this->session->get('identity');
 
@@ -342,12 +344,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$postReply->users_id = $usersId;
 				$postReply->content = $content;
 
-				if (!$postReply->save()) {
-					foreach ($postReply->getMessages() as $message) {
-						$this->flash->error($message);
-					}
-				} else {
-					Tag::resetInput();
+				if ($postReply->save()) {
+					return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug . '#C' . $postReply->id);
+				}
+
+				foreach ($postReply->getMessages() as $message) {
+					$this->flash->error($message);
 				}
 			}
 		}
