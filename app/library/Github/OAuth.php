@@ -78,7 +78,12 @@ class OAuth extends \Phalcon\DI\Injectable
 
 		} catch (HttpInvalidParamException $e) {
 			return false;
+		} catch (HttpRequestException $e) {
+			return false;
+		} catch (Exception $e) {
+			return false;
 		}
+		
 	}
 
 	public function getTransport()
