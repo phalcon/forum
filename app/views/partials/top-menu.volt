@@ -8,20 +8,18 @@
 			</a>
 			{{ link_to('', 'Phosphorum', 'class': 'brand') }}
 			<div class="nav-collapse">
-
-				<ul class="nav pull-left">
+				<ul class="nav">
 					<li>{{ link_to('', 'Discussions') }}</li>
 					<li>{{ link_to('activity', 'Activity') }}</li>
 					{% if session.get('identity') %}
 					<li>{{ link_to('settings', 'Settings') }}</li>
 					<li>{{ link_to('logout', 'Logout') }}</li>
 					{% endif %}
-				</ul>
-
-				<ul class="nav pull-right">
-					<form class="form-inline" action="{{ url('search') }}" method="get">
-						<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
-					</form>
+					<li>
+						<form class="form-inline" action="{{ url('search') }}" method="get">
+							<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
+						</form>
+					</li>
 				</ul>
 			</div>
 		</div>

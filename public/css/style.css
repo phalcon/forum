@@ -27,6 +27,7 @@ div.navbar-inner {
 
 div.navbar-inner input {
 	margin-top: 5px;
+	float: right;
 }
 
 div.sidebar .btn-large {
@@ -57,6 +58,30 @@ div.view-discussion h1 {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	padding-left: 25px;
+}
+
+div.view-discussion ul.preview-nav {
+	margin-bottom: 7px;
+}
+
+div.view-discussion ul.preview-nav a {
+	color: #717171;
+}
+
+div.view-discussion div#preview-box {
+	border: 1px solid #ddd;
+	margin: 5px;
+	padding: 5px;
+}
+
+div.view-discussion a.help {
+	color: #717171;
+	font-size: 0.9em;
+}
+
+div.view-discussion pre.sh_sourceCode {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 div.hot-discussions {
@@ -122,8 +147,9 @@ div.hot-discussions span.author {
 	font-size: 11px;
 }
 
+table.view-list-posts,
 table.list-posts {
-	width: 99%;
+	width: 100%;
 }
 
 table.list-posts td {
@@ -170,10 +196,13 @@ div.hot-discussions p {
 	color: #FFFFFF;
 	font-size: 13px;
 	text-transform: uppercase;
+	margin-bottom: 0px;
 }
 
-#footer td.subscribe, #footer td.social {
+#footer div.subscribe,
+#footer div.social {
 	line-height: 22px;
+	text-align: left;
 }
 
 #footer input[type="submit"] {
@@ -182,10 +211,6 @@ div.hot-discussions p {
 	color: #fafafa;
 	border: none;
 	border-radius: 5px;
-}
-
-#footer table.footer-table {
-	width: 800px;
 }
 
 div.activity {
@@ -234,3 +259,91 @@ div.user-profile select {
 	width: auto;
 }
 
+span.version {
+	float: right;
+	font-size: 11px;
+}
+
+table.view-list-posts {
+	width: 95%;
+}
+
+@media (max-width: 767px) {
+	body {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+	div.hot-discussions {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	div.sidebar {
+		padding-top: 7px;
+		text-align: center;
+	}
+	div.view-discussion td.small {
+		width: 24px;
+	}
+	div.view-discussion td.small img {
+		width: 24px;
+		height: 24px;
+	}
+	div.view-discussion div.post-header,
+	div.view-discussion div.post-header span,
+	div.view-discussion div.post-header a {
+		font-size: 11px;
+	}
+	ul.nav-tabs a {
+		font-size: 12px;
+		padding: 5px;
+	}
+	div.start-discussion h1,
+	div.view-discussion h1 {
+		padding-left: 0px;
+	}
+	div.navbar-inner input {
+		width: 80%;
+		float: auto;
+		margin-top: 0px;
+		margin-bottom: 5px;
+	}
+	div.navbar-inner form {
+		margin: 0px;
+		text-align: center;
+	}
+	div.remove-image img {
+		display: hidden;
+	}
+	div.view-discussion ul.preview-nav {
+		width: 100%;
+	}
+	ul.nav-tabs {
+		width: 100%;
+	}
+	div.sidebar ul {
+		width: 95%;
+	}
+	#footer div.social a,
+	#footer div.social label {
+		font-size: 12px;
+	}
+}
+
+div.collapse {
+	background-color: #fafafa;
+	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+	background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+	background-repeat: repeat-x;
+	border: 1px solid #d4d4d4;
+		-webkit-border-radius: 4px;
+		 -moz-border-radius: 4px;
+			  border-radius: 4px;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
+	*zoom: 1;
+	-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+		 -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+			  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+}

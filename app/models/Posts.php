@@ -22,6 +22,8 @@ class Posts extends Model
 
 	public $created_at;
 
+	public $modified_at;
+
 	public $number_views;
 
 	public $number_replies;
@@ -47,11 +49,6 @@ class Posts extends Model
 			'alias' => 'views'
 		));
 
-		$this->addBehavior(new Timestampable(array(
-			'beforeCreate' => array(
-				'field' => 'created_at'
-			)
-		)));
 	}
 
 	public function beforeValidationOnCreate()
@@ -69,6 +66,7 @@ class Posts extends Model
 		$postView = new PostsViews();
 		$postView->ipaddress = $this->getDI()->getRequest()->getClientAddress();
 		$this->views = $postView;
+		$this->created_at = time();
 	}
 
 	public function afterCreate()

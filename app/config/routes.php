@@ -2,9 +2,34 @@
 
 $router = new Phalcon\Mvc\Router(false);
 
-$router->add('/', array(
+$router->add('/help', array(
 	'controller' => 'discussions',
-	'action' => 'index'
+	'action' => 'help'
+));
+
+$router->add('/search', array(
+	'controller' => 'discussions',
+	'action' => 'search'
+));
+
+$router->add('/settings', array(
+	'controller' => 'discussions',
+	'action' => 'settings'
+));
+
+$router->add('/login/oauth/authorize', array(
+	'controller' => 'session',
+	'action' => 'authorize'
+));
+
+$router->add('/login/oauth/access_token', array(
+	'controller' => 'session',
+	'action' => 'accessToken'
+));
+
+$router->add('/logout', array(
+	'controller' => 'session',
+	'action' => 'logout'
 ));
 
 $router->add('/discussions/{order:[a-z]+}', array(
@@ -42,21 +67,6 @@ $router->add('/activity', array(
 	'action' => 'activity'
 ));
 
-$router->add('/login/oauth/authorize', array(
-	'controller' => 'session',
-	'action' => 'authorize'
-));
-
-$router->add('/login/oauth/access_token', array(
-	'controller' => 'session',
-	'action' => 'accessToken'
-));
-
-$router->add('/logout', array(
-	'controller' => 'session',
-	'action' => 'logout'
-));
-
 $router->add('/post/discussion', array(
 	'controller' => 'discussions',
 	'action' => 'create'
@@ -82,14 +92,9 @@ $router->add('/reply/delete/{id:[0-9]+}', array(
 	'action' => 'delete'
 ));
 
-$router->add('/search', array(
+$router->add('/', array(
 	'controller' => 'discussions',
-	'action' => 'search'
-));
-
-$router->add('/settings', array(
-	'controller' => 'discussions',
-	'action' => 'settings'
+	'action' => 'index'
 ));
 
 return $router;

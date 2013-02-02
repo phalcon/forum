@@ -1,6 +1,6 @@
 
-{{ partial('partials/top-menu') }}
+{% include 'partials/top-menu.volt' %}
 
 {{ content() }}
 
-{{ partial('partials/footer') }}
+{% include 'partials/footer.volt' %}

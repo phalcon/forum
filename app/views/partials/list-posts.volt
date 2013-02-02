@@ -2,6 +2,7 @@
 	<ul class="nav nav-tabs">
 		{% set orders = [
 			'new': 'All discussions',
+			'hot': 'Hot',
 			'unanswered': 'Unanswered',
 			'my': 'My discussions'
 		] %}
@@ -12,12 +13,13 @@
 				<li>
 			{% endif %}
 				{{ link_to('discussions/' ~ order, label) }}
-			<li>
+			</li>
 		{% endfor %}
 	</ul>
 </div>
 
 {% if posts|length %}
+<div class="row">
 <table class="list-posts">
 {% for post in posts %}
 	<tr>
@@ -51,6 +53,9 @@
 {% endfor %}
 </table>
 
+</div>
+<div class="row">
+
 {% if offset > 0 %}
 	<div class="pagination prev">
   		<ul>
@@ -66,6 +71,8 @@
 		</ul>
 	</div>
 {% endif %}
+
+</div>
 
 {% else %}
 	<div>There are no posts here</div>

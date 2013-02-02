@@ -8,10 +8,10 @@
 
 	<div class="row-fluid">
 		<div class="span8">
-			{{ partial('partials/list-posts') }}
+			{% include 'partials/list-posts.volt' %}
 		</div>
 		<div class="span4">
-			{{ partial('partials/sidebar') }}
+			{% include 'partials/sidebar.volt' %}
 		</div>
 	</div>
 </div>

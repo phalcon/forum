@@ -76,14 +76,12 @@ class OAuth extends \Phalcon\DI\Injectable
 
 			return json_decode($transport->getResponseBody(), true);
 
-		} catch (HttpInvalidParamException $e) {
+		} catch (\HttpInvalidParamException $e) {
 			return false;
-		} catch (HttpRequestException $e) {
-			return false;
-		} catch (Exception $e) {
+		} catch (\HttpRequestException $e) {
 			return false;
 		}
-		
+
 	}
 
 	public function getTransport()

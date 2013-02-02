@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span1">
+		<div class="span1 remove-image">
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
 		</div>
 		<div class="span9">
@@ -26,10 +26,10 @@
 			  </p>
 
 			  <p>
-			  	<div align="left">
+			  	<div class="pull-left">
 					{{ link_to('', 'Back to discussions') }}
 				</div>
-			  	<div align="right">
+			  	<div class="pull-right">
 					<button type="submit" class="btn btn-success">Submit Discussion</button>
 				</div>
 			  </p>

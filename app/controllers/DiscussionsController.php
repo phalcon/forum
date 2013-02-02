@@ -13,6 +13,9 @@ use Phosphorum\Models\Posts,
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
 
+	/**
+	 * This initializes the timezone in each request
+	 */
 	public function initialize()
 	{
 		$timezone = $this->session->get('identity-timezone');
@@ -81,6 +84,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 */
 		$params = null;
 		switch ($order) {
+			case 'hot':
+				Tag::setTitle('Hot Discussions');
+				$userId = $this->session->get('identity');
+				$itemBuilder->orderBy('p.modified_at DESC');
+				$totalBuilder->orderBy('p.modified_at DESC');
+				break;
 			case 'my':
 				Tag::setTitle('My Discussions');
 				$userId = $this->session->get('identity');
@@ -337,6 +346,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 */
 				if ($post->users_id != $usersId) {
 					$post->number_replies++;
+					$post->modified_at = time();
 				}
 
 				$postReply = new PostsReplies();
@@ -420,9 +430,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	/**
 	 * Shows the user profile
 	 */
-	public function userAction($id)
+	public function userAction($id, $username)
 	{
-		$user = Users::findFirstById($id);
+		if ($id) {
+			$user = Users::findFirstById($id);
+		} else {
+			$user = Users::findFirstByLogin($username);
+		}
+
 		if (!$user) {
 			$this->flashSession->error('The user does not exist');
 			return $this->response->redirect();
@@ -432,12 +447,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->numberPosts = Posts::count(array(
 			'users_id = ?0',
-			'bind' => array($id)
+			'bind' => array($user->id)
 		));
 
 		$this->view->numberReplies = PostsReplies::count(array(
 			'users_id = ?0',
-			'bind' => array($id)
+			'bind' => array($user->id)
 		));
 
 		$this->view->activities = Activities::find(array(
@@ -446,6 +461,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'order' => 'created_at DESC',
 			'limit' => 15
 		));
+
+		Tag::setTitle('Profile');
 	}
 
 	public function settingsAction()
@@ -481,5 +498,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->user = $user;
 		$this->view->timezones = require '../app/config/timezones.php';
+	}
+
+	public function helpAction()
+	{
+
 	}
 }

@@ -63,14 +63,16 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 
 			if ($user->email && $user->notifications != 'N') {
 
-				$message = new Swift_Message('[Phalcon Forum] ' . $this->escaper->escapeHtml($post->title));
+				$message = new Swift_Message('[Phalcon Forum] ' . $post->title);
 				$message->setTo(new Swift_Address($user->email, $user->name));
 
 				if ($notification->type == 'P') {
+					$originalContent = $post->content;
 					$escapedContent = $this->escaper->escapeHtml($post->content);
 					$message->setFrom(new Swift_Address('phosphorum@phalconphp.com', $post->user->name));
 				} else {
 					$reply = $notification->reply;
+					$originalContent = $reply->content;
 					$escapedContent = $this->escaper->escapeHtml($reply->content);
 					$message->setFrom(new Swift_Address('phosphorum@phalconphp.com', $reply->user->name));
 				}
@@ -78,7 +80,7 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 				$prerifiedContent = $this->_prerify($escapedContent);
 				$htmlContent = nl2br($prerifiedContent);
 
-				$textContent = $escapedContent;
+				$textContent = $originalContent;
 
 				$htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
 				if ($notification->type == 'P') {

@@ -7,7 +7,7 @@
 		<h1>{{ post.title|e }}</h1>
 	</p>
 
-	<table width="90%" align="center">
+	<table class="view-list-posts" align="center">
 		<tr>
 			<td class="small" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48" class="img-rounded">
@@ -59,14 +59,23 @@
 		<tr>
 		{% if currentUser %}
 		<tr>
-			<td valign="top">
+			<td valign="top" class="small">
 				<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
 			</td>
 			<td>
+				<ul class="nav nav-tabs preview-nav">
+					<li class="active"><a href="#" onclick="return false">Comment</a></li>
+					<li><a href="#" onclick="return false">Preview</a></li>
+					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+				</ul>
+
 				<form method="post" autocomplete="off">
 					<p>
-						{{ hidden_field('id', 'value': post.id) }}
-						{{ text_area("content", "rows": 5, "placeholder": "Leave a comment") }}
+						<div id="comment-box">
+							{{ hidden_field('id', 'value': post.id) }}
+							{{ text_area("content", "rows": 5, "placeholder": "Leave a comment") }}
+						</div>
+						<div id="preview-box" style="display:none"></div>
 					</p>
 					<p>
 						<div class="pull-left">
@@ -93,7 +102,6 @@
 	</table>
 
 	{# include jquery and forum highlight scripts #}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     {{ javascript_include("js/forum.js") }}
 
     <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>

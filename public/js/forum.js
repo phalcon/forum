@@ -85,30 +85,39 @@ var Forum = {
 		return pre_code + code + '</pre>';
 	},
 
+	parseContent: function(html)
+	{
+		html = html.replace(/```([a-z]+)([^`]+)```(<br>|\n)?/gm, function($0, $1, $2) {
+			return Forum.getSh($1, $2.replace(/<br>/g, ""));
+		});
+
+		html = html.replace(/```([^`]+)```(<br>|\n)?/gm, function($0, $1, $2) {
+			return Forum.getSh(null, $2.replace(/<br>/g, ""));
+		});
+
+		//Replace URLs
+		html = html.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&">$&</a>');
+
+		//Create links to docs
+		html = html.replace(/Phalcon\\[a-zA-Z0-9\\]+/g, function($0) {
+			return '<a href="http://docs.phalconphp.com/en/latest/api/' + $0.replace(/\\/g, '_') + '.html">' + $0 + '</a>';
+		});
+
+		//Replace user names
+		html = html.replace(/[^\w]@(\w+)[^\w\(]/g, function($0, $1) {
+			return '<a href="' + Forum._uri + 'user/0/' + $1 + '">' + $0 + '</a>';
+		});
+
+		return html;
+	},
+
 	/**
 	 * Highlights texts enclosed into triple backticks
 	 */
 	highlight: function()
 	{
 		$('div.post-content').each(function(position, element){
-
-			var html = element.innerHTML;
-
-			//Replace Code
-			while (true) {
-				var matches = /```([a-z]+)([^`]+)```(<br>|\n)?/gm.exec(html);
-				if (!matches) {
-					break;
-				}
-				var code = Forum.getSh(matches[1], matches[2].replace(new RegExp('<br>', 'g'), ""));
-				html = html.replace(matches[0], code);
-			}
-
-			//Replace URLs
-			html = html.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&" target="_new">$&</a>');
-
-			//Re-Update the HTML
-			element.innerHTML = html;
+			element.innerHTML = Forum.parseContent(element.innerHTML);
 		});
 
 		if (Forum._shDocument > 0) {
@@ -204,16 +213,55 @@ var Forum = {
 		}
 	},
 
+	changeCommentTab: function(event)
+	{
+
+		event.data.links.each(function(position, element){
+			$(element).removeClass('active');
+		});
+
+		$(this).addClass('active');
+
+		if ($('a', this)[0].innerHTML == 'Preview') {
+
+			var content = $('textarea', '#comment-box')[0].value;
+			if (content !== '') {
+				content = content.replace('\n', '<br>');
+				$('#preview-box')[0].innerHTML = Forum.parseContent(content);
+			} else {
+				$('#preview-box')[0].innerHTML = 'Nothing to preview'
+			}
+
+			$('pre', '#preview-box').each(function(postion, element){
+				if (typeof sh_languages['php'] !== "undefined") {
+					sh_highlightElement(element, sh_languages['php']);
+				}
+			});
+
+			$('#comment-box').hide();
+			$('#preview-box').show();
+
+		} else {
+			$('#comment-box').show();
+			$('#preview-box').hide();
+		}
+	},
+
 	/**
 	 * Add callbacks to edit/delete buttons
 	 */
 	addCallbacks: function()
 	{
-		$('i.reply-edit').each(function(position, element){
+		$('i.reply-edit').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.editComment);
 		});
-		$('i.reply-remove').each(function(position, element){
+		$('i.reply-remove').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.deleteComment);
+		});
+
+		var previewNavLinks = $('ul.preview-nav li');
+		previewNavLinks.each(function(position, element) {
+			$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
 		});
 	},
 

@@ -31,6 +31,10 @@ require __DIR__ . "/../app/config/services.php";
 /**
  * Handle the request
  */
-$application = new Phalcon\Mvc\Application();
-$application->setDI($di);
-echo $application->handle()->getContent();
+try {
+	$application = new Phalcon\Mvc\Application();
+	$application->setDI($di);
+	echo $application->handle()->getContent();
+} catch(Exception $e) {
+	echo $e->getMessage();
+}
