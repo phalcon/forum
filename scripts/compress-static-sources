@@ -1,0 +1,8 @@
+cat ../public/bootstrap/css/bootstrap.min.css > ../public/css/s.css
+cat ../public/bootstrap/css/bootstrap-responsive.min.css >> ../public/css/s.css
+java -jar yuicompressor-2.4.7.jar ../public/css/style.css >> ../public/css/s.css
+
+cat ../public/js/jquery.min.js > ../public/js/j.js
+cat ../public/bootstrap/js/bootstrap.min.js >> ../public/js/j.js
+cat ../public/js/twitter.min.js >> ../public/js/j.js
+java -jar compiler.jar --js ../public/js/gs.js --js ../public/js/forum.js >> ../public/js/j.js

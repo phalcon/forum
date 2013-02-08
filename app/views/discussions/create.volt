@@ -22,7 +22,17 @@
 			  </p>
 
 			  <p>
-				{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+
+			  	<ul class="nav nav-tabs preview-nav">
+					<li class="active"><a href="#" onclick="return false">Write</a></li>
+					<li><a href="#" onclick="return false">Preview</a></li>
+					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+				</ul>
+
+				<div id="comment-box">
+					{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+				</div>
+				<div id="preview-box" style="display:none"></div>
 			  </p>
 
 			  <p>

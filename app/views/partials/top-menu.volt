@@ -15,10 +15,14 @@
 					<li>{{ link_to('settings', 'Settings') }}</li>
 					<li>{{ link_to('logout', 'Logout') }}</li>
 					{% endif %}
+				</ul>
+				<ul class="nav pull-right mobile-dissapear">
 					<li>
-						<form class="form-inline" action="{{ url('search') }}" method="get">
-							<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
-						</form>
+						<div align="center">
+							<form class="form-inline" action="{{ url('search') }}" method="get">
+								<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
+							</form>
+						</div>
 					</li>
 				</ul>
 			</div>

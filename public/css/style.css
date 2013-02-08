@@ -27,7 +27,6 @@ div.navbar-inner {
 
 div.navbar-inner input {
 	margin-top: 5px;
-	float: right;
 }
 
 div.sidebar .btn-large {
@@ -48,30 +47,36 @@ div.start-discussion {
 
 div.start-discussion input,
 div.start-discussion textarea,
-div.start-discussion select,
 div.view-discussion textarea {
 	width: 98%;
+	margin: 0px;
+}
+
+div.start-discussion select {
+	width: 100%;
+	margin: 0px;
 }
 
 div.start-discussion h1,
 div.view-discussion h1 {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	padding-left: 25px;
+	padding-left: 10px;
 }
 
-div.view-discussion ul.preview-nav {
+ul.preview-nav {
 	margin-bottom: 7px;
 }
 
-div.view-discussion ul.preview-nav a {
+ul.preview-nav a {
 	color: #717171;
 }
 
-div.view-discussion div#preview-box {
+div#preview-box {
 	border: 1px solid #ddd;
 	margin: 5px;
 	padding: 5px;
+	text-align: left;
 }
 
 div.view-discussion a.help {
@@ -121,8 +126,14 @@ div.view-discussion div.post-content {
 	margin-bottom: 10px;
 }
 
-div.view-discussion form.edit-form {
+div.view-discussion form.edit-form input {
 	margin-bottom: 10px;
+	margin-top: 4px;
+}
+
+div.view-discussion form.edit-form input.btn-success {
+	margin-bottom: 10px;
+	width: 100px;
 }
 
 div.view-discussion td.small {
@@ -147,7 +158,6 @@ div.hot-discussions span.author {
 	font-size: 11px;
 }
 
-table.view-list-posts,
 table.list-posts {
 	width: 100%;
 }
@@ -268,6 +278,25 @@ table.view-list-posts {
 	width: 95%;
 }
 
+div.collapse {
+	background-color: #fafafa;
+	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+	background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+	background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+	background-repeat: repeat-x;
+	border: 1px solid #d4d4d4;
+		-webkit-border-radius: 4px;
+		 -moz-border-radius: 4px;
+			  border-radius: 4px;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
+	*zoom: 1;
+	-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+		 -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+			  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+}
+
 @media (max-width: 767px) {
 	body {
 		padding-right: 0px;
@@ -311,10 +340,10 @@ table.view-list-posts {
 		margin: 0px;
 		text-align: center;
 	}
-	div.remove-image img {
-		display: hidden;
+	td.remove-image {
+		display: none;
 	}
-	div.view-discussion ul.preview-nav {
+	ul.preview-nav {
 		width: 100%;
 	}
 	ul.nav-tabs {
@@ -327,23 +356,43 @@ table.view-list-posts {
 	#footer div.social label {
 		font-size: 12px;
 	}
+	div.start-discussion form {
+		text-align: center;
+	}
+	div.start-discussion input,
+	div.start-discussion textarea {
+		width: 92%;
+	}
+	div.view-discussion textarea {
+		width: 97%;
+	}
+	div.start-discussion select,
+	div.start-discussion ul.preview-nav {
+		width: 94%;
+	}
+	div.start-discussion ul.preview-nav {
+		margin-left: 10px;
+	}
+	table.view-list-posts {
+		width: 98%;
+	}
+	table.list-posts td {
+		padding: 7px;
+	}
+	table.list-posts td.number {
+		width: 25px;
+	}
+	table.list-posts td .big-number {
+		font-size: 16px;
+	}
 }
 
-div.collapse {
-	background-color: #fafafa;
-	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-	background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-	background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-	background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-	background-repeat: repeat-x;
-	border: 1px solid #d4d4d4;
-		-webkit-border-radius: 4px;
-		 -moz-border-radius: 4px;
-			  border-radius: 4px;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
-	*zoom: 1;
-	-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-		 -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-			  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+@media (max-width: 800px) {
+	div.navbar-inner input {
+		margin: 0px;
+		width: 70%;
+	}
+	div.user-profile select {
+		width: 220px;
+	}
 }

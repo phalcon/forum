@@ -2,7 +2,7 @@
 <div class="user-profile">
 	<table align="center">
 		<tr>
-			<td class="small" valign="top">
+			<td class="small remove-image" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64" class="img-rounded">
 			</td>
 			<td align="left" valign="top">

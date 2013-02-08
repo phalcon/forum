@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span1">
+		<div class="span1 remove-image">
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
 		</div>
 		<div class="span9">
@@ -26,14 +26,23 @@
 				</p>
 
 				<p>
-					{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+					<ul class="nav nav-tabs preview-nav">
+						<li class="active"><a href="#" onclick="return false">Write</a></li>
+						<li><a href="#" onclick="return false">Preview</a></li>
+						<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+					</ul>
+
+					<div id="comment-box">
+						{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+					</div>
+					<div id="preview-box" style="display:none"></div>
 				</p>
 
 				<p>
-					<div align="left">
-						{{ link_to('discussion/' , 'Cancel') }}
+					<div class="pull-left">
+						{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug , 'Cancel') }}
 					</div>
-					<div align="right">
+					<div class="pull-right">
 						<button type="submit" class="btn btn-success">Save</button>
 					</div>
 			  	</p>

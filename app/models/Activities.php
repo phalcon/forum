@@ -21,11 +21,13 @@ class Activities extends Model
 	public function initialize()
 	{
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
-			'alias' => 'user'
+			'alias' => 'user',
+			'reusable' => true
 		));
 
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(
-			'alias' => 'post'
+			'alias' => 'post',
+			'reusable' => true
 		));
 
 		$this->addBehavior(new Timestampable(array(

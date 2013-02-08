@@ -125,6 +125,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->currentOrder = $order;
 		$this->view->offset = $offset;
 		$this->view->paginatorUri = 'discussions/' . $order;
+		$this->view->canonical = '';
 	}
 
 	/**
@@ -325,6 +326,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					}
 				}
 			}
+
+			/**
+			 * Generate cannonical meta
+			 */
+			$this->view->canonical = 'discussion/' . $post->id . '/' . $post->slug;
+
 		} else {
 
 			/**
@@ -502,6 +509,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 	public function helpAction()
 	{
-
+		$this->response->redirect('discussion/1/welcome-to-the-forum');
 	}
 }

@@ -23,11 +23,11 @@
 <table class="list-posts">
 {% for post in posts %}
 	<tr>
-		<td class="number {% if !post.number_replies %}no-replies{%endif %}" align="center">
+		<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
 			<span class="big-number">{{ post.number_replies }}</span><br>
 			replies
 		</td>
-		<td class="number {% if !post.number_views %}no-views{%endif %}" align="center">
+		<td class="number{% if !post.number_views %} no-views{%endif %}" align="center">
 			<span class="big-number">{{ post.number_views }}</span><br>
 			views
 		</td>

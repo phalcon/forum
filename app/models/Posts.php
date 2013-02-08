@@ -31,11 +31,13 @@ class Posts extends Model
 	public function initialize()
 	{
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
-			'alias' => 'user'
+			'alias' => 'user',
+			'reusable' => true
 		));
 
 		$this->belongsTo('categories_id', 'Phosphorum\Models\Categories', 'id', array(
 			'alias' => 'category',
+			'reusable' => true,
 			'foreignKey' => array(
 				'message' => 'The category is not valid'
 			)
@@ -67,6 +69,7 @@ class Posts extends Model
 		$postView->ipaddress = $this->getDI()->getRequest()->getClientAddress();
 		$this->views = $postView;
 		$this->created_at = time();
+		$this->modified_at = time();
 	}
 
 	public function afterCreate()
@@ -112,6 +115,19 @@ class Posts extends Model
 			$this->category->number_posts++;
 			$this->category->save();
 		}
+	}
+
+	/**
+	 * Returns a W3C date to be used in the sitemap
+	 *
+	 * @return string
+	 */
+	public function getUTCModifiedAt()
+	{
+		$modifiedAt = new \DateTime();
+		$modifiedAt->setTimezone(new \DateTimeZone('UTC'));
+		$modifiedAt->setTimestamp($this->modified_at);
+		return $modifiedAt->format('Y-m-d\TH:i:s\Z');
 	}
 
 }

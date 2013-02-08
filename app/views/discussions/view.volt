@@ -101,9 +101,4 @@
 		</tr>
 	</table>
 
-	{# include jquery and forum highlight scripts #}
-    {{ javascript_include("js/forum.js") }}
-
-    <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 </div>
-

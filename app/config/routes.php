@@ -2,6 +2,11 @@
 
 $router = new Phalcon\Mvc\Router(false);
 
+$router->add('/sitemap', array(
+	'controller' => 'sitemap',
+	'action' => 'index'
+));
+
 $router->add('/help', array(
 	'controller' => 'discussions',
 	'action' => 'help'
@@ -32,31 +37,6 @@ $router->add('/logout', array(
 	'action' => 'logout'
 ));
 
-$router->add('/discussions/{order:[a-z]+}', array(
-	'controller' => 'discussions',
-	'action' => 'index'
-));
-
-$router->add('/discussions/{order:[a-z]+}/{offset:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'index'
-));
-
-$router->add('/discussion/{id:[0-9]+}/{slug}', array(
-	'controller' => 'discussions',
-	'action' => 'view'
-));
-
-$router->add('/user/{id:[0-9]+}/{login}', array(
-	'controller' => 'discussions',
-	'action' => 'user'
-));
-
-$router->add('/category/{id:[0-9]+}/{slug}', array(
-	'controller' => 'discussions',
-	'action' => 'category'
-));
-
 $router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
 	'controller' => 'discussions',
 	'action' => 'category'
@@ -77,6 +57,16 @@ $router->add('/edit/discussion/{id:[0-9]+}', array(
 	'action' => 'edit'
 ));
 
+$router->add('/user/{id:[0-9]+}/{login}', array(
+	'controller' => 'discussions',
+	'action' => 'user'
+));
+
+$router->add('/category/{id:[0-9]+}/{slug}', array(
+	'controller' => 'discussions',
+	'action' => 'category'
+));
+
 $router->add('/reply/{id:[0-9]+}', array(
 	'controller' => 'replies',
 	'action' => 'get'
@@ -90,6 +80,21 @@ $router->add('/reply/update', array(
 $router->add('/reply/delete/{id:[0-9]+}', array(
 	'controller' => 'replies',
 	'action' => 'delete'
+));
+
+$router->add('/discussions/{order:[a-z]+}', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
+$router->add('/discussions/{order:[a-z]+}/{offset:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
+$router->add('/discussion/{id:[0-9]+}/{slug}', array(
+	'controller' => 'discussions',
+	'action' => 'view'
 ));
 
 $router->add('/', array(

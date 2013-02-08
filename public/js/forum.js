@@ -87,6 +87,8 @@ var Forum = {
 
 	parseContent: function(html)
 	{
+		html = html.replace(/\t/g, '  ');
+
 		html = html.replace(/```([a-z]+)([^`]+)```(<br>|\n)?/gm, function($0, $1, $2) {
 			return Forum.getSh($1, $2.replace(/<br>/g, ""));
 		});
@@ -96,7 +98,7 @@ var Forum = {
 		});
 
 		//Replace URLs
-		html = html.replace(/[a-z]+:\/\/[^\s<>\$]+/g, '<a href="$&">$&</a>');
+		html = html.replace(/[a-z]+:\/\/[^\s<>\)\(\$]+/g, '<a href="$&">$&</a>');
 
 		//Create links to docs
 		html = html.replace(/Phalcon\\[a-zA-Z0-9\\]+/g, function($0) {
@@ -208,11 +210,42 @@ var Forum = {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'reply/' + element.data('id'),
-				context: content,
+				context: content
 			}).done(Forum.makeCommentEditable);
 		}
 	},
 
+	highlightElement: function(element, elementOriginal)
+	{
+		if (typeof sh_languages !== "undefined") {
+
+			if (element.hasClass('sh_php')) {
+				type = 'php';
+			} else {
+				if (element.hasClass('sh_css')) {
+					type = 'css';
+				} else {
+					if (element.hasClass('sh_html')) {
+						type = 'html';
+					} else {
+						if (element.hasClass('sh_sql')) {
+							type = 'sql';
+						} else {
+							type = 'php';
+						}
+					}
+				}
+			}
+
+			if (typeof sh_languages[type] !== "undefined") {
+				sh_highlightElement(elementOriginal, sh_languages[type]);
+			};
+		};
+	},
+
+	/**
+	 * Changes a tab in a comment, highlightight the preview page
+	 */
 	changeCommentTab: function(event)
 	{
 
@@ -226,6 +259,8 @@ var Forum = {
 
 			var content = $('textarea', '#comment-box')[0].value;
 			if (content !== '') {
+				content = content.replace(/</g, '&lt;');
+				content = content.replace(/>/g, '&gt;');
 				content = content.replace('\n', '<br>');
 				$('#preview-box')[0].innerHTML = Forum.parseContent(content);
 			} else {
@@ -233,9 +268,7 @@ var Forum = {
 			}
 
 			$('pre', '#preview-box').each(function(postion, element){
-				if (typeof sh_languages['php'] !== "undefined") {
-					sh_highlightElement(element, sh_languages['php']);
-				}
+				Forum.highlightElement($(element), element);
 			});
 
 			$('#comment-box').hide();
