@@ -21,7 +21,7 @@
 				<label>Support</label><br />
 				<a href="https://docs.phalconphp.com">Documentation</a><br />
 				<a href="http://stackoverflow.com/questions/tagged/phalcon">StackOverflow</a><br />
-				<a href="https://groups.google.com/forum/#!forum/phalcon">Google Group</a>
+				<a href="https://groups.google.com/forum/#!forum/phalcon">Google Group</a><br />
 				<a href="https://github.com/phalcon/cphalcon/issues">Bug Tracker on Github</a><br />
 			</p>
 			<p>

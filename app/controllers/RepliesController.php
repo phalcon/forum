@@ -84,12 +84,9 @@ class RepliesController extends \Phalcon\Mvc\Controller
 	public function deleteAction($id)
 	{
 
-		$response = new Response();
-
 		$usersId = $this->session->get('identity');
 		if (!$usersId) {
-			$response->setStatusCode('401', 'Unauthorized');
-			return $response;
+			return $this->response->setStatusCode('401', 'Unauthorized');
 		}
 
 		$postReply = PostsReplies::findFirst(array(
@@ -97,16 +94,18 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			'bind' => array($id, $usersId)
 		));
 		if ($postReply) {
+
 			if ($postReply->delete()) {
 				if ($usersId != $postReply->post->users_id) {
 					$postReply->post->number_replies--;
 					$postReply->post->save();
 				}
 			}
+
+			return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
 		}
 
-		$response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
-		return $response;
+		return $this->response->redirect();
 	}
 
 }
