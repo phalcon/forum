@@ -58,7 +58,7 @@ CREATE TABLE `categories` (
   `number_posts` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `number_posts` (`number_posts`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,6 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'MVC','mvc',0),(2,'ORM','orm',0),(3,'Volt','volt',0),(4,'Offtopic','offtopic',0),(5,'General','general',0),(6,'Installation','installation',0),(7,'Jobs','jobs',0),(8,'Cache','cache',0),(9,'Paginator','paginator',0),(10,'DI/IoC','di-ioc',0),(11,'Events','events-manager',0),(12,'Developer Tools','developer-tools',0),(13,'Routing','routing',0),(14,'Annotations','annotations',0),(15,'News/Announcements','news-announcements',0),(16,'Security','security',0),(17,'Acl','acl',0),(18,'Escaping/Filtering','escaping-filtering',0),(19,'Incubator','incubator',0),(20,'Internals','internals',0);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,13 +120,14 @@ CREATE TABLE `posts` (
   `number_views` int(3) unsigned NOT NULL,
   `number_replies` int(3) unsigned NOT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
-  `modified_in` int(18) unsigned DEFAULT NULL,
+  `modified_at` int(18) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
-  KEY `created_at` (`created_at`),
   KEY `categories_id` (`categories_id`),
   KEY `title` (`title`),
-  KEY `number_replies` (`number_replies`)
+  KEY `number_replies` (`number_replies`),
+  KEY `modified_at` (`modified_at`),
+  KEY `created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -240,7 +240,7 @@ CREATE TABLE `users` (
   `timezone` varchar(48) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `access_token` (`access_token`),
-  KEY `notifications` (`notifications`)
+  KEY `login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-01 17:29:57
+-- Dump completed on 2013-03-12  8:11:09

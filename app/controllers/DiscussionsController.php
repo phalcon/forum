@@ -108,9 +108,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				Tag::setTitle('Discussions');
 		}
 
-		$itemBuilder->offset($offset);
+		$itemBuilder->offset((int) $offset);
 
-		$this->view->posts = $itemBuilder->getQuery()
+		$this->view->posts = $itemBuilder
+			->getQuery()
 			->execute($params);
 
 		$this->view->totalPosts = $totalBuilder

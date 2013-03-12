@@ -107,6 +107,23 @@ var Forum = {
 
 		//Replace user names
 		html = html.replace(/[^\w]@(\w+)[^\w\(]/g, function($0, $1) {
+			switch ($1) {
+				case 'var':
+				case 'return':
+				case 'throws':
+				case 'param':
+				case 'static':
+				case 'see':
+				case 'var':
+				case 'package':
+				case 'author':
+				case 'subpackage':
+				case 'Source':
+				case 'Column':
+				case 'Primary':
+				case 'Identity':
+					return $0;
+			}
 			return '<a href="' + Forum._uri + 'user/0/' + $1 + '">' + $0 + '</a>';
 		});
 
