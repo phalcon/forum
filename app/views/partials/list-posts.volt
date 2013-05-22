@@ -64,7 +64,7 @@
 	</div>
 {% endif %}
 
-{% if totalPosts['0'] > 30 %}
+{% if totalPosts.count > 30 %}
 	<div class="pagination next">
   		<ul>
 			<li>{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
