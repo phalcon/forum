@@ -4,7 +4,8 @@
 			'new': 'All discussions',
 			'hot': 'Hot',
 			'unanswered': 'Unanswered',
-			'my': 'My discussions'
+			'my': 'My discussions',
+                        'answers':'My answers'
 		] %}
 		{% for order, label in orders %}
 			{% if order == currentOrder %}
