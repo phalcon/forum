@@ -57,7 +57,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		))
 		->limit(30);
 
-		$totalBuilder->columns('COUNT(*) rowcount');
+		$totalBuilder->columns('COUNT(*) AS count');
 
 		/**
 		 * Query the categories ordering them by number_posts

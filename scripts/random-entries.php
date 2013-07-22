@@ -18,13 +18,29 @@ function generateRandomString($length, $characters, $n)
     return $randomString;
 }
 
+for ($i = 0; $i <= 20; $i++) {
+
+    $title = generateRandomString(72, $characters, $n);
+
+    $content = generateRandomString(265, $characters, $n);
+
+    $post = new Phosphorum\Models\Categories();
+    $post->name = $title;
+    $post->slug = Phalcon\Tag::friendlyTitle($title);
+    if (!$post->save()) {
+        var_dump($post->getMessages());
+        break;
+    }
+
+}
+
 for ($i = 0; $i <= 500; $i++) {
 
 	$title = generateRandomString(72, $characters, $n);
 
 	$content = generateRandomString(265, $characters, $n);
 
-	$post = new Forum\Models\Posts();
+	$post = new Phosphorum\Models\Posts();
 	$post->title = $title;
 	$post->slug = Phalcon\Tag::friendlyTitle($title);
 	$post->content = $content;
