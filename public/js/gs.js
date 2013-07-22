@@ -4,7 +4,7 @@ $(window).on("load", function(){
 	//Tweets
 	getTwitters("tweet", {
 		id: "phalconphp",
-		count: 2,
+		count: 3,
 		enableLinks: true,
 		ignoreReplies: true,
 		clearContents: true,

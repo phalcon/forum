@@ -2,21 +2,19 @@
 
 error_reporting(E_ALL);
 
-#require '../../pretty-exceptions/loader.php';
+//(new Phalcon\Debug)->listen();
 
 /**
  * Read the configuration
  */
 $config = include __DIR__ . "/../app/config/config.php";
 
-$loader = new \Phalcon\Loader();
-
 /**
  * Include the loader
  */
 require __DIR__ . "/../app/config/loader.php";
 
-$loader->register();
+try {
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -31,11 +29,8 @@ require __DIR__ . "/../app/config/services.php";
 /**
  * Handle the request
  */
-try {
-	$application = new Phalcon\Mvc\Application();
-	$application->setDI($di);
-	echo $application->handle()->getContent();
-} catch(Exception $e) {
-	echo $e->getMessage();
-	//echo $e->getTraceAsString();
-}
+$application = new Phalcon\Mvc\Application($di);
+
+echo $application->handle()->getContent();
+
+} catch (Exception $e) { echo 'Sorry, an error has ocurred :('; }

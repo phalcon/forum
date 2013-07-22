@@ -7,6 +7,9 @@
 			'my': 'My discussions'
 		] %}
 		{% for order, label in orders %}
+			{% if order == 'my' and !session.get('identity') %}
+				{% continue %}
+			{% endif %}
 			{% if order == currentOrder %}
 				<li class="active">
 			{% else %}
@@ -22,7 +25,7 @@
 <div class="row">
 <table class="list-posts">
 {% for post in posts %}
-	<tr>
+	<tr {% if post.sticked == 'Y' %}class="sticked"{%endif %}>
 		<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
 			<span class="big-number">{{ post.number_replies }}</span><br>
 			replies
@@ -64,7 +67,7 @@
 	</div>
 {% endif %}
 
-{% if totalPosts['0'] > 30 %}
+{% if totalPosts["rowcount"] > 30 %}
 	<div class="pagination next">
   		<ul>
 			<li>{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>

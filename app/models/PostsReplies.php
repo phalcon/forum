@@ -105,4 +105,13 @@ class PostsReplies extends Model
 
 		}
 	}
+
+	public function afterSave()
+	{
+		if ($this->id) {
+			$viewCache = $this->getDI()->getViewCache();
+			$viewCache->delete('post-' . $this->posts_id);
+		}
+	}
+
 }
