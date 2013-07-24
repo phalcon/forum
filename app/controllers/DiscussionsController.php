@@ -7,7 +7,8 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
-	Phosphorum\Models\Users;
+	Phosphorum\Models\Users,
+	Phalcon\Tag;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
@@ -27,7 +28,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	 * This method prepares the queries to be executed in each list of posts
 	 * The returned builders are used as base in the search, tagged list and index lists
 	 */
-	protected function prepareQueries()
+	protected function prepareQueries($joinReply=false)
 	{
 
 		$itemBuilder = $this->modelsManager->createBuilder()
@@ -36,7 +37,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			))
 			->join('Phosphorum\Models\Users', null, 'u')
 			->join('Phosphorum\Models\Categories', null, 'c')
-			->orderBy('p.sticked DESC, p.created_at DESC');
+			->orderBy('p.created_at DESC');
+                
+        if ($joinReply) {
+            $itemBuilder->groupBy("p.id")
+                        ->join('\Phosphorum\Models\PostsReplies', "r.posts_id = p.id", 'r');
+        }
 
 		$totalBuilder = clone $itemBuilder;
 
@@ -77,7 +83,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	public function indexAction($order=null, $offset=0)
 	{
 
-		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
+        if ($order=="answers") {
+            list($itemBuilder, $totalBuilder) = $this->prepareQueries(true);
+        } else {
+            list($itemBuilder, $totalBuilder) = $this->prepareQueries();
+        }
 
 		/**
 		 * Create the conditions according to the order parameter
@@ -104,6 +114,17 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$itemBuilder->where('p.number_replies = 0');
 				$totalBuilder->where('p.number_replies = 0');
 				break;
+                            
+            case 'answers':
+				$this->tag->setTitle('My Answers');
+				$userId = $this->session->get('identity');
+				if ($userId) {
+					$params = array($userId);
+					$itemBuilder->where('r.users_id = ?0');
+					$totalBuilder->where('r.users_id = ?0');
+				}
+				break;
+                            
 			default:
 				$this->tag->setTitle('Discussions');
 		}
@@ -127,7 +148,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->offset = $offset;
 		$this->view->paginatorUri = 'discussions/' . $order;
 		$this->view->canonical = '';
-
 	}
 
 	/**
@@ -155,7 +175,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			->execute(array($categoryId));
 
 		if (!count($posts)) {
-			$this->flashSession->notice('There are no posts in category: ' . $category->name);
+			$this->flashSession->notice('There are no posts in category: '.$category->name);
 			return $this->response->redirect();
 		}
 
