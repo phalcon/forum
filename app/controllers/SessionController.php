@@ -15,6 +15,24 @@ class SessionController extends \Phalcon\Mvc\Controller
 		return $this->response->redirect();
 	}
 
+    /**
+     * Returns to the discussion
+     *
+     * @return \Phalcon\Http\ResponseInterface
+     */
+    protected function discussionsRedirect()
+    {
+
+        $referer =  $this->request->getHTTPReferer();
+
+        $path = parse_url($referer,PHP_URL_PATH);
+
+        $this->router->handle($path);
+        $matched = $this->router->wasMatched();
+
+        return $matched ? $this->response->redirect($path,true) : $this->indexRedirect();
+    }
+
     public function authorizeAction()
     {
 
@@ -23,7 +41,7 @@ class SessionController extends \Phalcon\Mvc\Controller
     		return $oauth->authorize();
     	}
 
-    	return $this->indexRedirect();
+    	return $this->discussionsRedirect();
     }
 
     public function accessTokenAction()
@@ -84,11 +102,11 @@ class SessionController extends \Phalcon\Mvc\Controller
 				$this->flashSession->success('Welcome back '.$user->name);
 			}
 
-			return $this->indexRedirect();
+			return $this->discussionsRedirect();
 		}
 
 		$this->flashSession->error('Invalid Github response');
-		return $this->indexRedirect();
+		return $this->discussionsRedirect();
     }
 
     public function logoutAction()
@@ -96,7 +114,7 @@ class SessionController extends \Phalcon\Mvc\Controller
     	$this->session->remove('identity');
 
     	$this->flashSession->success('Goodbye!');
-		return $this->indexRedirect();
+		return $this->discussionsRedirect();
     }
 
     public function shadowLoginAction()
