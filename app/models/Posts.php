@@ -20,13 +20,17 @@ class Posts extends Model
 
 	public $content;
 
-	public $created_at;
-
-	public $modified_at;
-
 	public $number_views;
 
 	public $number_replies;
+
+	public $sticked;
+
+	public $modified_at;
+
+	public $created_at;
+
+	public $status;
 
 	public function initialize()
 	{
@@ -57,6 +61,8 @@ class Posts extends Model
 	{
 		$this->number_views = 0;
 		$this->number_replies = 0;
+		$this->sticked = 'N';
+		$this->status = 'A';
 	}
 
 	/**
@@ -114,6 +120,14 @@ class Posts extends Model
 			 */
 			$this->category->number_posts++;
 			$this->category->save();
+		}
+	}
+
+	public function afterSave()
+	{
+		if ($this->id) {
+			$viewCache = $this->getDI()->getViewCache();
+			$viewCache->delete('post-' . $this->id);
 		}
 	}
 

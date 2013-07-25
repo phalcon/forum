@@ -17,7 +17,8 @@ $di->set('volt', function($view, $di) {
 	$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
 
 	$volt->setOptions(array(
-		"compiledPath" => "../app/cache/volt/"
+		"compiledPath" => __DIR__ . "/../cache/volt/",
+		"compiledSeparator" => "_"
 	));
 
 	return $volt;
@@ -72,11 +73,9 @@ $di->set('db', function() use ($config) {
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
  */
 $di->set('modelsMetadata', function() use ($config) {
-	if (isset($config->models->metadata)) {
-		$metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\'.$config->models->metadata->adapter;
-		return new $metadataAdapter();
-	}
-	return new \Phalcon\Mvc\Model\Metadata\Memory();
+	return new \Phalcon\Mvc\Model\Metadata\Files(array(
+		'metaDataDir' => __DIR__ . '/../cache/metaData/'
+	));
 }, true);
 
 /**
@@ -92,7 +91,7 @@ $di->set('session', function() {
  * Router
  */
 $di->set('router', function() {
-	return include "../app/config/routes.php";
+	return include __DIR__ . "/routes.php";
 }, true);
 
 /**
@@ -137,6 +136,10 @@ $di->set('viewCache', function() {
     $frontCache = new \Phalcon\Cache\Frontend\Output(array(
         "lifetime" => 2592000
     ));
+
+    /*return new \Phalcon\Cache\Backend\Apc($frontCache, array(
+        "prefix" => "cache-"
+    ));*/
 
     //Memcached connection settings
     return new \Phalcon\Cache\Backend\File($frontCache, array(

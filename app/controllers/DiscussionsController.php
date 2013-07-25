@@ -28,7 +28,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	 * This method prepares the queries to be executed in each list of posts
 	 * The returned builders are used as base in the search, tagged list and index lists
 	 */
-	protected function prepareQueries()
+	protected function prepareQueries($joinReply=false)
 	{
 
 		$itemBuilder = $this->modelsManager->createBuilder()
@@ -38,6 +38,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			->join('Phosphorum\Models\Users', null, 'u')
 			->join('Phosphorum\Models\Categories', null, 'c')
 			->orderBy('p.created_at DESC');
+                
+        if ($joinReply) {
+            $itemBuilder->groupBy("p.id")
+                        ->join('\Phosphorum\Models\PostsReplies', "r.posts_id = p.id", 'r');
+        }
 
 		$totalBuilder = clone $itemBuilder;
 
@@ -47,6 +52,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'p.slug',
 			'p.number_replies',
 			'p.number_views',
+			'p.sticked',
 			'p.created_at',
 			'user_name' => 'u.name',
 			'user_login' => 'u.login',
@@ -77,7 +83,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	public function indexAction($order=null, $offset=0)
 	{
 
-		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
+        if ($order=="answers") {
+            list($itemBuilder, $totalBuilder) = $this->prepareQueries(true);
+        } else {
+            list($itemBuilder, $totalBuilder) = $this->prepareQueries();
+        }
 
 		/**
 		 * Create the conditions according to the order parameter
@@ -85,13 +95,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$params = null;
 		switch ($order) {
 			case 'hot':
-				Tag::setTitle('Hot Discussions');
+				$this->tag->setTitle('Hot Discussions');
 				$userId = $this->session->get('identity');
 				$itemBuilder->orderBy('p.modified_at DESC');
 				$totalBuilder->orderBy('p.modified_at DESC');
 				break;
 			case 'my':
-				Tag::setTitle('My Discussions');
+				$this->tag->setTitle('My Discussions');
 				$userId = $this->session->get('identity');
 				if ($userId) {
 					$params = array($userId);
@@ -100,12 +110,23 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				}
 				break;
 			case 'unanswered':
-				Tag::setTitle('Unanswered Discussions');
+				$this->tag->setTitle('Unanswered Discussions');
 				$itemBuilder->where('p.number_replies = 0');
 				$totalBuilder->where('p.number_replies = 0');
 				break;
+                            
+            case 'answers':
+				$this->tag->setTitle('My Answers');
+				$userId = $this->session->get('identity');
+				if ($userId) {
+					$params = array($userId);
+					$itemBuilder->where('r.users_id = ?0');
+					$totalBuilder->where('r.users_id = ?0');
+				}
+				break;
+                            
 			default:
-				Tag::setTitle('Discussions');
+				$this->tag->setTitle('Discussions');
 		}
 
 		$itemBuilder->offset((int) $offset);
@@ -134,7 +155,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	 */
 	public function categoryAction($categoryId, $slug, $offset=0)
 	{
-		Tag::setTitle('Discussions');
+		$this->tag->setTitle('Discussions');
 
 		$category = Categories::findFirstById($categoryId);
 		if (!$category) {
@@ -146,12 +167,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$totalBuilder->where('p.categories_id = ?0');
 
-		$itemBuilder->where('p.categories_id = ?0')
-			->orderBy('p.created_at DESC');
-
-		$itemBuilder->offset($offset);
-
-		$posts = $itemBuilder->getQuery()
+		$posts = $itemBuilder
+			->where('p.categories_id = ?0')
+			->orderBy('p.created_at DESC')
+			->offset($offset)
+			->getQuery()
 			->execute(array($categoryId));
 
 		if (!count($posts)) {
@@ -183,7 +203,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			return $this->response->redirect();
 		}
 
-		Tag::setTitle('Start a Discussion');
+		$this->tag->setTitle('Start a Discussion');
 
 		if ($this->request->isPost()) {
 
@@ -193,7 +213,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->users_id = $usersId;
 			$post->categories_id = $this->request->getPost('categoryId');
 			$post->title = $title;
-			$post->slug = Tag::friendlyTitle($title);
+			$post->slug = $this->tag->friendlyTitle($title);
 			$post->content = $this->request->getPost('content');
 
 			if ($post->save()) {
@@ -232,7 +252,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 * Find the post using get
 		 */
 		$post = Posts::findFirst(array(
-			"id = ?0 AND users_id = ?1",
+			"id = ?0 AND (users_id = ?1 OR 1 = ?1)",
 			"bind" => array($id, $usersId)
 		));
 		if (!$post) {
@@ -247,7 +267,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			$post->categories_id = $this->request->getPost('categoryId');
 			$post->title = $title;
-			$post->slug = Tag::friendlyTitle($title);
+			$post->slug = $this->tag->friendlyTitle($title);
 			$post->content = $content;
 
 			if ($post->save()) {
@@ -266,13 +286,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		} else {
 
-			Tag::displayTo('id', $post->id);
-			Tag::displayTo('title', $post->title);
-			Tag::displayTo('content', $post->content);
-			Tag::displayTo('categoryId', $post->categories_id);
+			$this->tag->displayTo('id', $post->id);
+			$this->tag->displayTo('title', $post->title);
+			$this->tag->displayTo('content', $post->content);
+			$this->tag->displayTo('categoryId', $post->categories_id);
 		}
 
-		Tag::setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
+		$this->tag->setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
 
 		$this->view->categories = Categories::find(array(
 			'order' => 'name'
@@ -291,6 +311,21 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	{
 
 		if (!$this->request->isPost()) {
+
+			if (!$this->session->get('identity')) {
+
+				/**
+		 		 * Enable cache
+		 		 */
+				$this->view->cache(array('key' => 'post-' . $id));
+
+				/**
+				 * Check for a cache
+				 */
+				if ($this->viewCache->exists('post-' . $id)) {
+					return;
+				}
+			}
 
 			/**
 			 * Find the post using get
@@ -375,7 +410,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		/**
 		 * Set the post name as title - escaping it first
 		 */
-		Tag::setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
+		$this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
 		$this->view->post = $post;
 	}
@@ -393,7 +428,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => array('number' => 30, 'offset' => 0)
 		));
 
-		Tag::setTitle('Recent Activity');
+		$this->tag->setTitle('Recent Activity');
 	}
 
 	/**
@@ -402,7 +437,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	public function searchAction()
 	{
 
-		Tag::setTitle('Search Results');
+		$this->tag->setTitle('Search Results');
 
 		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
@@ -470,7 +505,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => 15
 		));
 
-		Tag::setTitle('Profile');
+		$this->tag->setTitle('Profile');
 	}
 
 	public function settingsAction()
@@ -497,12 +532,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				return $this->response->redirect();
 			}
 		} else {
-			Tag::displayTo('timezone', $user->timezone);
-			Tag::displayTo('notifications', $user->notifications);
+			$this->tag->displayTo('timezone', $user->timezone);
+			$this->tag->displayTo('notifications', $user->notifications);
 		}
 
-		Tag::setTitle('My Settings');
-		Tag::setAutoEscape(false);
+		$this->tag->setTitle('My Settings');
+		$this->tag->setAutoEscape(false);
 
 		$this->view->user = $user;
 		$this->view->timezones = require '../app/config/timezones.php';

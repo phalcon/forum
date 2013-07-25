@@ -29,20 +29,11 @@ CREATE TABLE `activities` (
   `posts_id` int(10) unsigned DEFAULT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `created_at` (`created_at`),
   KEY `users_id` (`users_id`),
-  KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `posts_id` (`posts_id`),
+  KEY `created_at` (`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=1193 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `activities`
---
-
-LOCK TABLES `activities` WRITE;
-/*!40000 ALTER TABLE `activities` DISABLE KEYS */;
-/*!40000 ALTER TABLE `activities` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `categories`
@@ -58,17 +49,8 @@ CREATE TABLE `categories` (
   `number_posts` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `number_posts` (`number_posts`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categories`
---
-
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `notifications`
@@ -91,17 +73,8 @@ CREATE TABLE `notifications` (
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`),
   KEY `sent` (`sent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5966 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notifications`
---
-
-LOCK TABLES `notifications` WRITE;
-/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `posts`
@@ -119,26 +92,20 @@ CREATE TABLE `posts` (
   `content` text,
   `number_views` int(3) unsigned NOT NULL,
   `number_replies` int(3) unsigned NOT NULL,
+  `sticked` char(1) DEFAULT 'N',
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
+  `status` char(1) NOT NULL DEFAULT 'A',
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `categories_id` (`categories_id`),
   KEY `title` (`title`),
   KEY `number_replies` (`number_replies`),
   KEY `modified_at` (`modified_at`),
-  KEY `created_at` (`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `created_at` (`created_at`),
+  KEY `sticked` (`sticked`,`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `posts`
---
-
-LOCK TABLES `posts` WRITE;
-/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_notifications`
@@ -153,17 +120,8 @@ CREATE TABLE `posts_notifications` (
   `posts_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=553 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `posts_notifications`
---
-
-LOCK TABLES `posts_notifications` WRITE;
-/*!40000 ALTER TABLE `posts_notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `posts_notifications` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_replies`
@@ -182,17 +140,8 @@ CREATE TABLE `posts_replies` (
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=833 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `posts_replies`
---
-
-LOCK TABLES `posts_replies` WRITE;
-/*!40000 ALTER TABLE `posts_replies` DISABLE KEYS */;
-/*!40000 ALTER TABLE `posts_replies` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_views`
@@ -207,17 +156,8 @@ CREATE TABLE `posts_views` (
   `ipaddress` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`,`ipaddress`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9402 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `posts_views`
---
-
-LOCK TABLES `posts_views` WRITE;
-/*!40000 ALTER TABLE `posts_views` DISABLE KEYS */;
-/*!40000 ALTER TABLE `posts_views` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -241,17 +181,8 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `access_token` (`access_token`),
   KEY `login` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -262,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-12  8:11:09
+-- Dump completed on 2013-07-22 13:54:30

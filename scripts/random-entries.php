@@ -6,55 +6,55 @@
 
 require 'cli-bootstrap.php';
 
-$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-?!"·$%/()=[]´ç+*\`\'#';
-$n = strlen($characters);
 
-function generateRandomString($length, $characters, $n)
-{
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $n - 1)];
-    }
-    return $randomString;
-}
+for ( $i = 0; $i <= 20; $i++ ) {
 
-for ($i = 0; $i <= 20; $i++) {
+    $title   = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 50);
+    $content = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 265);
 
-    $title = generateRandomString(72, $characters, $n);
+    $title   = chunk_split($title , rand(3 , 10) , ' ');
+    $content = chunk_split($content , rand(3 , 10) , ' ');
 
-    $content = generateRandomString(265, $characters, $n);
 
-    $post = new Phosphorum\Models\Categories();
+    $post       = new Phosphorum\Models\Categories();
     $post->name = $title;
     $post->slug = Phalcon\Tag::friendlyTitle($title);
-    if (!$post->save()) {
+
+    if ( !$post->save() ) {
+
         var_dump($post->getMessages());
         break;
     }
 
 }
 
-for ($i = 0; $i <= 500; $i++) {
+for ( $i = 0; $i <= 500; $i++ ) {
 
-	$title = generateRandomString(72, $characters, $n);
+    $title   = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 50);
+    $content = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 265);
 
-	$content = generateRandomString(265, $characters, $n);
+    $title   = chunk_split($title , rand(3 , 10) , ' ');
+    $content = chunk_split($content , rand(3 , 10) , ' ');
 
-	$post = new Phosphorum\Models\Posts();
-	$post->title = $title;
-	$post->slug = Phalcon\Tag::friendlyTitle($title);
-	$post->content = $content;
-	$post->users_id = 1;
-	$post->categories_id = mt_rand(1, 20);
-	if (!$post->save()) {
-		var_dump($post->getMessages());
-		break;
-	}
+    $post                = new Phosphorum\Models\Posts();
+    $post->title         = $title;
+    $post->slug          = Phalcon\Tag::friendlyTitle($title);
+    $post->content       = $content;
+    $post->users_id      = 1;
+    $post->categories_id = mt_rand(1 , 20);
 
-	$post->category->number_posts++;
-	if (!$post->category->save()) {
-		var_dump($post->category->getMessages());
-		break;
-	}
+    if ( !$post->save() ) {
+
+        var_dump($post->getMessages());
+        break;
+    }
+
+    $post->category->number_posts++;
+
+    if ( !$post->category->save() ) {
+
+        var_dump($post->category->getMessages());
+        break;
+    }
 }
 

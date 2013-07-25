@@ -1,7 +1,9 @@
 .hg/
 .hgignore
 .DS_Store
-app/cache/volt/
+app/cache/volt/*.php
 public/.DS_Store
 app/cache/views/cache-*
+app/cache/metaData/*.php
+/nbproject/
 .idea/

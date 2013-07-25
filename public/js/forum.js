@@ -89,12 +89,16 @@ var Forum = {
 	{
 		html = html.replace(/\t/g, '  ');
 
-		html = html.replace(/```([a-z]+)([^`]+)```(<br>|\n)?/gm, function($0, $1, $2) {
+		html = html.replace(/```([a-z]+)([^`]+)```(<br>|\n|\r\n)?/gm, function($0, $1, $2) {
 			return Forum.getSh($1, $2.replace(/<br>/g, ""));
 		});
 
-		html = html.replace(/```([^`]+)```(<br>|\n)?/gm, function($0, $1, $2) {
-			return Forum.getSh(null, $2.replace(/<br>/g, ""));
+		html = html.replace(/```([^`]+)```(<br>|\n|\r\n)?/gm, function($0, $1, $2) {
+			if (typeof $2 !== "undefined") {
+				return Forum.getSh(null, $2.replace(/<br>/g, ""));
+			} else {
+				return $0;
+			}
 		});
 
 		//Replace URLs
@@ -106,7 +110,7 @@ var Forum = {
 		});
 
 		//Replace user names
-		html = html.replace(/[^\w]@(\w+)[^\w\(]/g, function($0, $1) {
+		html = html.replace(/[^\w]@([\w\-\_]+)[^\w\(]/g, function($0, $1) {
 			switch ($1) {
 				case 'var':
 				case 'return':
@@ -141,7 +145,9 @@ var Forum = {
 
 		if (Forum._shDocument > 0) {
 			window.setTimeout(function(){
-				sh_highlightDocument();
+				if (typeof sh_highlightDocument !== "undefined") {
+					sh_highlightDocument();
+				}
 			}, 500);
 		}
 	},
