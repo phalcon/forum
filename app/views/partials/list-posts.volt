@@ -7,7 +7,12 @@
 			'my': 'My discussions',
                         'answers':'My answers'
 		] %}
+		
+		
 		{% for order, label in orders %}
+			{% if (order == 'my' or order == 'answers' )  and !session.get('identity') %}
+				{% continue %}
+			{% endif %}
 			{% if order == currentOrder %}
 				<li class="active">
 			{% else %}
@@ -23,7 +28,7 @@
 <div class="row">
 <table class="list-posts">
 {% for post in posts %}
-	<tr>
+	<tr {% if post.sticked == 'Y' %}class="sticked"{%endif %}>
 		<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
 			<span class="big-number">{{ post.number_replies }}</span><br>
 			replies
