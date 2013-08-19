@@ -29,16 +29,30 @@ class OAuth extends \Phalcon\DI\Injectable
 	public function authorize()
 	{
 		$this->view->disable();
+
+        $key = $this->security->getTokenKey();
+        $token = $this->security->getToken();
+
 		$url = $this->_endPointAuthorize.
 			'?client_id='.$this->_clientId.
 			'&redirect_uri='.$this->_redirectUriAuthorize.
-			'&state='.$this->security->getToken().
+                urlencode('&statekey=' .$key) . // add the tokenkey as a query param. Then we will be able to use it to check token authenticity
+			'&state='.$token.
 			'&scope=user:email';
 		$this->response->redirect($url, true);
 	}
 
 	public function accessToken()
 	{
+
+        // check the securtity - anti csrf token
+        $key=$this->request->getQuery('statekey');
+        $value=$this->request->getQuery('state');
+
+
+        if( ! $this->di->get("security")->checkToken($key,$value))
+            return false;
+
 		$this->view->disable();
 		$response = $this->send($this->_endPointAccessToken, array(
 			'client_id' => $this->_clientId,
