@@ -110,7 +110,7 @@ var Forum = {
 		});
 
 		//Replace user names
-		html = html.replace(/[^\w]@([\w\-\_]+)[^\w\(]/g, function($0, $1) {
+		html = html.replace(/[^\w]@([A-Za-z0-9\-\_]+)/g, function($0, $1) {
 			switch ($1) {
 				case 'var':
 				case 'return':
