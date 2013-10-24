@@ -1,0 +1,1994 @@
+[2013-10-24 17:21:20] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:21:26] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::haveInSession [] []
+[2013-10-24 17:21:26] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:21:26] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:21:33] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::haveInSession [] []
+[2013-10-24 17:21:33] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:21:33] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:43:40] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::haveInSession [] []
+[2013-10-24 17:43:40] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:43:40] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:43:42] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::haveInSession [] []
+[2013-10-24 17:43:42] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:43:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:44:00] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::haveInSession [] []
+[2013-10-24 17:44:00] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:44:00] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:44:42] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::amOnPage [] []
+[2013-10-24 17:44:42] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:44:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:45:59] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::amOnPage [] []
+[2013-10-24 17:45:59] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:45:59] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:46:35] ShadowLoginCept.php.ALERT: Call to undefined method TestGuy::amOnPage [] []
+[2013-10-24 17:46:35] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:46:35] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:47:00] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 17:47:01] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 17:47:01] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 17:47:01] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 17:47:01] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:47:22] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 17:47:22] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 17:47:22] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 17:47:22] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 17:47:22] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:47:24] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 17:47:24] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 17:47:24] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 17:47:24] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 17:47:24] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:48:20] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 17:48:20] ShadowLoginCept.php.ALERT: Service 'session1' wasn't found in the dependency injection container [] []
+[2013-10-24 17:48:20] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:48:20] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 17:48:43] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:14:17] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:14:17] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:14:17] ShadowLoginCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 18:14:17] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 18:14:17] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:17:20] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:17:20] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:17:20] ShadowLoginCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 18:17:20] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 18:17:20] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:22:48] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:22:48] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:22:48] ShadowLoginCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 18:22:48] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 18:22:48] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 18:27:25] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 18:27:47] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 18:28:39] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:29:24] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:29:24] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:29:24] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:29:24] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:29:24] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 18:35:03] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:40:23] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:40:23] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:40:23] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:40:23] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:40:23] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:40:23] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:54:54] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:54:54] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 18:54:54] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 18:54:54] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 18:54:54] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 18:54:54] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 18:54:54] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 18:54:54] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 18:54:54] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:02:25] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:02:25] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:02:25] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:02:26] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:02:26] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:02:26] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:02:26] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:02:26] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:02:26] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:02:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:02:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:02:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:02:42] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:02:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:02:42] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:02:42] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:02:42] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:02:42] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:03:12] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:03:12] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:03:12] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:03:12] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:03:12] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:03:12] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:03:12] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:03:12] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:03:12] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:12:17] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:12:17] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:12:17] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:12:17] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:12:17] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:12:17] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:12:17] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:12:17] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:12:17] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.ALERT: Unexpected value type: expected object implementing Phalcon\Session\AdapterInterface, object of type Codeception\Util\Connector\PhalconMemorySession given [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:12:32] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:12:32] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:12:32] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:12:32] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:12:32] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:15:49] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:15:49] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:15:49] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:15:49] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:15:49] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:15:51] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:15:51] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:15:51] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:15:51] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:15:51] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:16:09] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:16:09] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:16:09] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:16:09] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:16:09] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:19:09] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:19:09] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:19:09] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:19:09] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:19:09] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:23:23] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:23:23] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:23:23] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:23:23] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:23:23] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:23:23] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:23:23] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:23:23] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:23:23] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:39:08] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:39:08] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:39:08] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:39:08] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:39:08] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:39:08] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:39:08] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:39:08] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:39:08] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:39:14] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:39:14] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:39:14] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:39:14] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:39:14] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:39:14] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:39:14] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:39:14] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:39:14] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:40:00] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:40:00] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:40:00] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:40:00] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:40:00] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:40:00] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:40:00] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:40:00] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:40:00] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:40:44] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:40:44] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:40:44] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:40:44] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:40:44] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:40:44] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:40:44] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:40:44] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:40:44] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:40:44] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:42:35] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:42:35] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:42:35] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:42:35] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:42:41] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:42:41] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:42:41] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:42:41] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:43:37] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:43:37] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:43:37] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:43:37] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:43:37] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:47:44] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:47:44] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:48:09] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:09] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:09] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:09] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:48:09] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:48:09] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:09] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:09] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:09] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:48:09] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 19:48:13] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:13] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:13] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:13] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:48:13] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:48:13] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:13] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:13] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:13] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:48:13] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:48:19] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 19:48:19] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 19:50:10] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:50:10] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:50:10] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:50:10] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:50:10] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:50:10] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:50:10] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:50:10] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:50:10] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 19:50:10] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 19:58:10] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:58:10] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 19:58:10] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 19:58:10] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 19:58:10] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 19:58:10] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 19:58:10] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 19:58:10] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 19:58:10] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:00:51] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:00:51] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:00:51] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:00:51] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:00:51] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:00:51] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:00:51] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:00:51] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:00:51] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:01:11] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:01:11] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:01:11] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:01:11] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:01:11] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:01:11] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:01:11] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:01:11] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:01:11] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:01:59] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:01:59] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:01:59] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:01:59] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:01:59] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:01:59] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:01:59] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:01:59] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:01:59] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:02:20] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:02:20] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:02:20] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:02:21] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:02:21] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:02:21] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:02:21] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:02:21] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:02:21] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.ALERT: Unexpected value type: expected object implementing Phalcon\Session\AdapterInterface, object of type Mock_Adapter_c366b723 given [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:04:33] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:04:33] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:04:33] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:04:33] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:04:33] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.ALERT: Stubbed class Phalcon\Session\Adapter\File doesn't exist. [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:04:49] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:04:49] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:04:49] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:04:49] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:04:49] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.ALERT: Stubbed class Phalcon\Session\Adapter\File doesn't exist. [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:05:00] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:05:00] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:05:00] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:05:00] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:05:00] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.ALERT: Class Phalcon\Session\Adapter\File does not exist [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:06] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:06] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:06] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:06] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:06] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.ALERT: Class Phalcon\Session\Adapter\File does not exist [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:15] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:15] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:15] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:15] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:15] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.ALERT: Class \Phalcon\Session\Adapter\File does not exist [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:22] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:22] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:22] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:22] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:22] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:33] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:33] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:33] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:33] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:06:33] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:33] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:33] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:33] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:33] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:42] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:06:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:42] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:42] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:42] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:42] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.ALERT: Wrong number of parameters [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:54] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:06:54] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:06:54] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:06:54] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:06:54] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.ALERT: Wrong number of parameters [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:22] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:22] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:22] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:07:22] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:22] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.ALERT: Wrong number of parameters [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:27] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:27] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:27] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:07:27] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:27] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.ALERT: Unexpected value type: expected object implementing Phalcon\Session\AdapterInterface, object of type Mock_Adapter_9f2af54d given [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:51] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:07:51] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:07:51] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:07:51] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:07:51] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:09:39] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:09:39] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:09:39] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:09:39] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:09:39] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:10:06] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:10:06] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:10:06] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:10:06] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:10:06] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:10:22] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:10:22] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:10:22] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:10:22] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:10:22] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:10:57] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:10:57] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:10:57] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:11:07] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:07] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:11:07] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:11:08] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:11:08] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:11:08] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:11:08] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:08] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:08] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:11:08] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:11:08] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:11:36] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:36] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:36] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:11:36] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:11:36] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:11:54] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:54] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:54] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:11:54] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:11:54] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:58] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:58] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:11:58] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:11:58] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:11:58] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:11:58] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:11:58] StartDiscussionCept.php.ALERT: A session had already been started - ignoring session_start() [] []
+[2013-10-24 20:11:58] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:11:58] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:12:15] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:12:15] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:12:15] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:12:15] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:12:15] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:12:15] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:27:33] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:27:33] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:27:33] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:27:33] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:27:33] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:27:33] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:27:44] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:27:44] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:04] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:04] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:14] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:14] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:59] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:28:59] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:29:29] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:29:29] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:31:37] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:31:37] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:31:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:31:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:31:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.ALERT: Undefined index: identity-timezone [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:32:06] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.ALERT: Undefined index: identity-timezone [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:32:06] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:32:46] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:32:46] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:34:43] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:34:43] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:34:43] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:34:43] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:34:43] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:34:43] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:34:43] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:34:43] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:34:43] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:34:43] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:34:58] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:34:58] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:34:58] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:34:58] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:34:58] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:34:58] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:34:58] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:34:58] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:34:58] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:34:58] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:35:04] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:04] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:04] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:04] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:35:04] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:35:04] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:04] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:04] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:04] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:35:04] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:35:21] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:21] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:21] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:21] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:35:21] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:35:21] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:21] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:21] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:21] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:35:21] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:35:33] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:35:33] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:35:58] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:58] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:58] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:58] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:35:58] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:35:58] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:35:58] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:35:58] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:35:58] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:35:58] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:37:03] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:37:03] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:37:03] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:37:03] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:37:03] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:37:03] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:37:03] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:37:03] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:37:03] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:37:03] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:38:39] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:38:39] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:38:39] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:38:39] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:38:39] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:38:39] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:38:39] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:38:39] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:38:39] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:38:39] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:39:01] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:39:01] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:39:01] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:39:01] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:39:01] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:39:01] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:39:01] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:39:01] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:39:01] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:39:01] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:39:21] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:39:21] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:39:21] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:39:21] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:39:21] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:39:21] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:39:21] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:39:21] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:39:21] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:39:21] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:40:06] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:06] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:06] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:06] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:40:06] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:40:06] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:06] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:06] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:06] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:40:06] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:40:10] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:10] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:10] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:10] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:40:10] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:40:10] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:10] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:10] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:10] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:40:10] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:40:17] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:17] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:17] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:17] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:40:17] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:40:17] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:17] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:17] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:17] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:40:17] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:40:19] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:19] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:19] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:19] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:40:19] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:40:19] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:40:19] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:40:19] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:40:19] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:40:19] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:42:34] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:34] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:34] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:34] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:42:34] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:42:34] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:34] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:34] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:34] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:42:34] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:42:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:42] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:42:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:42:42] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:42] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:42] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:42] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:42:42] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:42:49] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:49] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:49] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:49] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:42:49] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:42:49] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:49] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:49] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:49] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:42:49] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:42:55] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:42:59] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:42:59] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:43:07] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:43:07] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:11] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:11] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:11] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:11] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:43:12] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:12] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:12] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:12] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:12] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:43:12] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:43:28] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:43:28] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:43:31] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:43:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:44:19] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:44:19] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:44:19] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:44:19] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:44:19] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:44:19] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:44:19] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:44:19] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:44:19] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:44:19] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:45:50] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:45:50] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:46:02] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:46:02] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:46:37] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:46:37] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:46:37] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:46:37] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:46:37] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:46:37] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:46:37] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:46:37] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:46:37] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:46:37] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:50:17] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:50:17] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:50:17] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:50:17] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:50:17] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:50:17] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:50:17] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:50:17] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:50:17] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:50:17] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:50:41] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:50:41] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:50:41] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:50:41] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:50:41] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:50:41] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:50:41] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:50:41] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:50:41] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:50:41] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:50:54] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:50:54] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:50:54] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.ALERT: Undefined index: identity-timezone [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:51:34] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.ALERT: Undefined index: identity-timezone [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:51:34] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:51:44] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:51:44] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:51:44] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:51:44] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:51:44] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:51:44] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:51:44] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:51:44] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:51:44] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:51:44] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:52:02] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:02] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:02] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:14] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:14] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:14] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:52:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 20:52:42] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.ALERT: date_default_timezone_set(): Timezone ID '1' is invalid [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:52:50] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.ALERT: date_default_timezone_set(): Timezone ID '1' is invalid [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:52:50] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:53:42] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:53:42] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:53:42] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:53:42] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:53:42] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:53:42] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:53:42] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:53:42] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:53:42] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:53:42] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.ALERT: date_default_timezone_set() expects parameter 1 to be string, array given [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:53:51] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.ALERT: date_default_timezone_set() expects parameter 1 to be string, array given [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:53:51] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.ALERT: date_default_timezone_set() expects parameter 1 to be string, array given [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:55:02] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.ALERT: date_default_timezone_set() expects parameter 1 to be string, array given [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:55:02] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.ALERT: Unexpected value type: expected object implementing Phalcon\Session\AdapterInterface, object of type Codeception\Util\Connector\Sess given [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:55:30] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.ALERT: Unexpected value type: expected object implementing Phalcon\Session\AdapterInterface, object of type Codeception\Util\Connector\Sess given [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.INFO: # ERROR # [] []
+[2013-10-24 20:55:30] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 20:57:47] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:57:47] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:57:47] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:57:47] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:57:47] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:57:47] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:57:47] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:57:47] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:57:47] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:57:47] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 20:58:32] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:58:32] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:58:32] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:58:32] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 20:58:32] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 20:58:32] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 20:58:32] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 20:58:32] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 20:58:32] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 20:58:32] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:07:34] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:07:34] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:07:34] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:07:34] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:07:34] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:07:34] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:07:34] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:07:34] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:07:34] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:07:34] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:08:53] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:08:53] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:08:53] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:08:53] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:08:53] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:08:53] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:08:53] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:08:53] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:08:53] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:08:53] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:09:47] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:09:47] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:09:47] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:09:47] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:09:47] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:09:47] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:09:47] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:09:47] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:09:47] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:09:47] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:09:49] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:09:49] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:09:49] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:09:49] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:09:49] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:09:49] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:09:49] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:09:49] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:09:49] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:09:49] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:11:19] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:19] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:11:19] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:11:19] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:11:19] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:11:19] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:11:19] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:11:19] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:19] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:11:19] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:11:23] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:23] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:11:23] ShadowLoginCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "logout". [] []
+[2013-10-24 21:11:23] ShadowLoginCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:11:23] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:11:23] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:11:44] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:11:44] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:11:44] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:44] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:11:44] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:11:44] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:11:44] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:11:44] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:11:45] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:11:45] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:11:45] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:11:45] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:12:01] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:01] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:01] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:01] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:12:01] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:12:01] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:12:16] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:16] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:16] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:16] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:12:16] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:12:21] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:21] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:21] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:21] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:12:21] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:12:35] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:35] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:35] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:35] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:12:35] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:12:48] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:12:48] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:12:48] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:12:48] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:12:48] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:13:16] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:13:16] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:13:16] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:13:16] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:13:16] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:14:20] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:14:20] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:14:20] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:14:20] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:14:20] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:14:21] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:14:21] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:14:21] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:14:21] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:14:21] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:14:21] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:07] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:07] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:07] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:07] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:15:07] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:15:07] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:22] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:22] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:22] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:22] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:15:22] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:15:22] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:28] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:28] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:28] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:28] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:15:28] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.ALERT: Failed asserting that 
+-->  <bold>/</bold><info><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Discussions - Phalcon Framework</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="canonical" href="http://forum.phalconphp.com/"/>
+	</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "start a discussion". [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: # FAILED # [] []
+[2013-10-24 21:15:28] StartDiscussionCept.php.INFO: PASSED [] []
+[2013-10-24 21:15:30] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:30] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:30] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:30] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:15:30] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:15:58] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:15:58] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:15:58] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:15:58] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:15:58] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:18:26] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:18:26] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:18:26] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:18:26] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:18:26] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []
+[2013-10-24 21:18:32] ShadowLoginCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:18:32] ShadowLoginCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:18:32] ShadowLoginCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:18:32] ShadowLoginCept.php.INFO: see "Logout" [] []
+[2013-10-24 21:18:32] ShadowLoginCept.php.INFO: PASSED [] []
+[2013-10-24 21:18:32] StartDiscussionCept.php.INFO: have in session "identity",1 [] []
+[2013-10-24 21:18:32] StartDiscussionCept.php.INFO: have in session "identity-name","Phalcon" [] []
+[2013-10-24 21:18:32] StartDiscussionCept.php.INFO: am on page "/" [] []
+[2013-10-24 21:18:32] StartDiscussionCept.php.INFO: see "Start a Discussion" [] []
+[2013-10-24 21:18:32] StartDiscussionCept.php.INFO: click "Start a Discussion" [] []

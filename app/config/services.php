@@ -83,7 +83,7 @@ $di->set('modelsMetadata', function() use ($config) {
  */
 $di->set('session', function() {
 	$session = new \Phalcon\Session\Adapter\Files();
-	$session->start();
+	@$session->start();
 	return $session;
 }, true);
 
