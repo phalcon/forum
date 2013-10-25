@@ -468,8 +468,64 @@ class TestGuy extends \Codeception\AbstractGuy
      * @see Codeception\Module\Phalcon1::haveInSession()
      * @return \Codeception\Maybe
      */
-    public function haveInSession($key, $value) {
+    public function haveInSession($key, $val) {
         $this->scenario->addStep(new \Codeception\Step\Action('haveInSession', func_get_args()));
+        if ($this->scenario->running()) {
+            $result = $this->scenario->runStep();
+            return new Maybe($result);
+        }
+        return new Maybe();
+    }
+
+ 
+    /**
+     * This method is generated.
+     * Documentation taken from corresponding module.
+     * ----------------------------------------------
+     *
+     *
+     * @see Codeception\Module\Phalcon1::haveRecord()
+     * @return \Codeception\Maybe
+     */
+    public function haveRecord($model, $attributes = null) {
+        $this->scenario->addStep(new \Codeception\Step\Action('haveRecord', func_get_args()));
+        if ($this->scenario->running()) {
+            $result = $this->scenario->runStep();
+            return new Maybe($result);
+        }
+        return new Maybe();
+    }
+
+ 
+    /**
+     * This method is generated.
+     * Documentation taken from corresponding module.
+     * ----------------------------------------------
+     *
+     *
+    * Conditional Assertion: Test won't be stopped on fail
+     * @see Codeception\Module\Phalcon1::seeRecord()
+     * @return \Codeception\Maybe
+     */
+    public function canSeeRecord($model, $attributes = null) {
+        $this->scenario->addStep(new \Codeception\Step\ConditionalAssertion('seeRecord', func_get_args()));
+        if ($this->scenario->running()) {
+            $result = $this->scenario->runStep();
+            return new Maybe($result);
+        }
+        return new Maybe();
+    }
+    /**
+     * This method is generated.
+     * Documentation taken from corresponding module.
+     * ----------------------------------------------
+     *
+     *
+     * @see Codeception\Module\Phalcon1::seeRecord()
+     * @return \Codeception\Maybe
+     */
+    public function seeRecord($model, $attributes = null) {
+        $this->scenario->addStep(new \Codeception\Step\Assertion('seeRecord', func_get_args()));
         if ($this->scenario->running()) {
             $result = $this->scenario->runStep();
             return new Maybe($result);

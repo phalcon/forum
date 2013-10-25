@@ -233,10 +233,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		}
 
 
-		$this->view->categories = new \Codeception\Maybe();
-		// Categories::find(array(
-		// 	'order' => 'name'
-		// ));
+		$this->view->categories = Categories::find(array(
+			'order' => 'name'
+		));
+
 	}
 
 	/**
@@ -385,7 +385,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$content = $this->request->getPost('content', 'trim');
 			if ($content) {
 
+
 				$usersId = $this->session->get('identity');
+				\Codeception\Util\Debug::debug(json_encode($usersId));
 
 				/**
 				 * Only update the number of replies if the user that commented isn't the same that posted
