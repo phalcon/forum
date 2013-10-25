@@ -52,7 +52,6 @@ class PostsReplies extends Model
 
 			$toNotify = array();
 
-
 			/**
 			 * Notify users that always want notifications
 			 */
