@@ -43,6 +43,18 @@ Then you'll need to create the database and initialize schema:
     echo 'CREATE DATABASE forum' | mysql -u root
     cat schemas/forum.sql | mysql -u root forum
 
+Tests
+-----
+
+Uses [Codeception](http://codeception.com) functional tests. Execute:
+
+    php codecept.phar run
+
+Detailed output:
+
+    php codecept.phar run --debug    
+
+
 License
 -------
 Phosphorum is open-sourced software licensed under the New BSD License.
