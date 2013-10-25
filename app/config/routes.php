@@ -22,14 +22,9 @@ $router->add('/settings', array(
 	'action' => 'settings'
 ));
 
-$router->add('/log-me', array(
-	'controller' => 'session',
-	'action' => 'shad3owLogin'
-));
-
 $router->add('/login/oauth/authorize', array(
 	'controller' => 'session',
-	'action' => 'shadowLogin'
+	'action' => 'authorize'
 ));
 
 $router->add('/login/oauth/access_token', array(
