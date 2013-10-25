@@ -18,7 +18,6 @@
 			  </p>
 
 			  <p>
-			  Category
 			  	{{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...') }}
 			  </p>
 
