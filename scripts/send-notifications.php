@@ -84,10 +84,10 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 
 				$htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
 				if ($notification->type == 'P') {
-					$htmlContent .= '&mdash;<br>View the complete thread on '.
+					$htmlContent .= '&mdash;<br>This email works only as notification. Don\'t reply. To join conversation you must view the complete thread on '.
 					PHP_EOL.'<a href="http://forum.phalconphp.com/discussion/' .$post->id. '/' . $post->slug . '">Phosphorum</a>. ';
 				} else {
-					$htmlContent .= '&mdash;<br>View the complete thread on '.
+					$htmlContent .= '&mdash;<br>This email works only as notification. Don\'t reply. To join conversation you must view the complete thread on '.
 					PHP_EOL.'<a href="http://forum.phalconphp.com/discussion/' .$post->id. '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
 				}
 				$htmlContent .= PHP_EOL.'Change your preferences <a href="http://forum.phalconphp.com/settings">here</a>';
