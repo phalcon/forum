@@ -6,4 +6,5 @@ public/.DS_Store
 app/cache/views/cache-*
 app/cache/metaData/*.php
 /nbproject/
+tests/_log/*
 .idea/
