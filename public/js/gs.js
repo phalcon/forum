@@ -2,14 +2,14 @@
 $(window).on("load", function(){
 
 	//Tweets
-	getTwitters("tweet", {
+	/*getTwitters("tweet", {
 		id: "phalconphp",
 		count: 3,
 		enableLinks: true,
 		ignoreReplies: true,
 		clearContents: true,
 		template: '"%text%" <a href="http://twitter.com/%user_screen_name%/statuses/%id%/">%time%</a>'
-	});
+	});*/
 
 	if(document.location.hostname!='localhost'){
 		var _gaq = _gaq || [];
@@ -28,5 +28,13 @@ $(window).on("load", function(){
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
 		})();*/
 	}
+
+	var cx = '009733439235723428699:lh9ltjgvdz8';
+	var gcse = document.createElement('script');
+	gcse.type = 'text/javascript';
+	gcse.async = true;
+	gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//www.google.com/cse/cse.js?cx=' + cx;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(gcse, s);
 
 });

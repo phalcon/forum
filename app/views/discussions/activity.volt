@@ -6,6 +6,27 @@
 	</p>
 
 	<table width="90%" align="center">
+		<tr>
+			<td colspan="2">
+				<div class="row">
+					<ul class="nav nav-tabs">
+						{% set orders = [
+							'': 'Forum',
+							'/irc': 'IRC'
+						] %}
+						{% for order, label in orders %}
+							{% if order == '' %}
+								<li class="active">
+							{% else %}
+								<li>
+							{% endif %}
+								{{ link_to('activity' ~ order, label) }}
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</td>
+		</tr>
 		{% for activity in activities %}
 		<tr>
 			<td class="small" valign="top">

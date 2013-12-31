@@ -5,7 +5,7 @@
 			'hot': 'Hot',
 			'unanswered': 'Unanswered',
 			'my': 'My discussions',
-                        'answers':'My answers'
+						'answers':'My answers'
 		] %}
 		{% for order, label in orders %}
 			{% if (order == 'my' or order == 'answers' )  and !session.get('identity') %}
@@ -62,7 +62,7 @@
 
 {% if offset > 0 %}
 	<div class="pagination prev">
-  		<ul>
+		<ul>
 			<li>{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
 		</ul>
 	</div>
@@ -70,7 +70,7 @@
 
 {% if totalPosts.count > 30 %}
 	<div class="pagination next">
-  		<ul>
+		<ul>
 			<li>{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
 		</ul>
 	</div>

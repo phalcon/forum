@@ -7,8 +7,8 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
-	Phosphorum\Models\Users,
-	Phalcon\Tag;
+	Phosphorum\Models\IrcLog,
+	Phosphorum\Models\Users;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
@@ -37,11 +37,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			))
 			->join('Phosphorum\Models\Users', null, 'u')
 			->join('Phosphorum\Models\Categories', null, 'c')
-			->orderBy('p.created_at DESC');
-                
+			->orderBy('p.sticked DESC, p.created_at DESC');
+
         if ($joinReply) {
             $itemBuilder->groupBy("p.id")
-                        ->join('\Phosphorum\Models\PostsReplies', "r.posts_id = p.id", 'r');
+                        ->join('Phosphorum\Models\PostsReplies', "r.posts_id = p.id", 'r');
         }
 
 		$totalBuilder = clone $itemBuilder;
@@ -83,14 +83,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	public function indexAction($order=null, $offset=0)
 	{
 
-        if ($order=="answers") {
+        if ($order == "answers") {
             list($itemBuilder, $totalBuilder) = $this->prepareQueries(true);
         } else {
             list($itemBuilder, $totalBuilder) = $this->prepareQueries();
         }
 
 		/**
-		 * Create the conditions according to the order parameter
+		 * Create the conditions according to the parameter order
 		 */
 		$params = null;
 		switch ($order) {
@@ -114,7 +114,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$itemBuilder->where('p.number_replies = 0');
 				$totalBuilder->where('p.number_replies = 0');
 				break;
-                            
             case 'answers':
 				$this->tag->setTitle('My Answers');
 				$userId = $this->session->get('identity');
@@ -124,7 +123,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					$totalBuilder->where('r.users_id = ?0');
 				}
 				break;
-                            
+
 			default:
 				$this->tag->setTitle('Discussions');
 		}
@@ -416,6 +415,31 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	}
 
 	/**
+	 * Shows the latest activity on the IRC
+	 */
+	public function ircAction()
+	{
+
+		$irclog = IrcLog::find(array(
+			'order' => 'datelog DESC',
+			'limit' => 250
+		));
+
+		$activities = array();
+		foreach ($irclog as $log) {
+			$who = explode('@', $log->who);
+			$nick = $who[0];
+			$parts = explode('!', $who[0]);
+			$log->who = substr($parts[0], 1);
+			$activities[] = $log;
+		}
+
+		$this->view->activities = array_reverse($activities);
+
+		$this->tag->setTitle('Recent Activity on the IRC');
+	}
+
+	/**
 	 * Shows the latest activity on the forum
 	 */
 	public function activityAction($offset=0)
@@ -428,7 +452,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => array('number' => 30, 'offset' => 0)
 		));
 
-		$this->tag->setTitle('Recent Activity');
+		$this->tag->setTitle('Recent Activity on the Forum');
 	}
 
 	/**

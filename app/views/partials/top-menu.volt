@@ -19,9 +19,12 @@
 				<ul class="nav pull-right mobile-dissapear">
 					<li>
 						<div align="center">
-							<form class="form-inline" action="{{ url('search') }}" method="get">
+							<!--<form class="form-inline" action="{{ url('search') }}" method="get">
 								<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
-							</form>
+							</form>-->
+							<div style="width:300px;padding:10px">
+								<gcse:searchbox-only></gcse:searchbox-only>
+							</div>
 						</div>
 					</li>
 				</ul>
