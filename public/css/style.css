@@ -532,26 +532,32 @@ pre.sh_sourceCode, pre.sh_sourceCode {
 	margin-top: 7px;
 	margin-bottom: 7px;
 }
-                
+
 pre.sh_sourceCode span.sh_symbol,
-pre.sh_sourceCode span.sh_cbracket, 
-pre.sh_sourceCode span.sh_symbol, 
+pre.sh_sourceCode span.sh_cbracket,
+pre.sh_sourceCode span.sh_symbol,
 pre.sh_sourceCode span.sh_cbracket {
 	color: #99968b;
 }
 
 pre.sh_sourceCode span.sh_keyword, pre.sh_sourceCode span.sh_keyword {
-	color: #8ac6f2;            
-}        
+	color: #8ac6f2;
+}
 
-        #wrapper #content .post .copy p {
-            margin: 10px 0 0 0;
-            padding: 0;
-            line-height: 26px;
-        }
-        #wrapper #content .post .copy pre.sh_sourceCode span.sh_string, pre        .sh_sourceCode span.sh_string {
-            color: #95e454;
-        }
-        #wrapper #content .post .copy pre.sh_sourceCode span.sh_function, pre.sh_sourceCode span.sh_function {        
-            color: #cae682;
-        }
+#wrapper #content .post .copy p {
+	margin: 10px 0 0 0;
+	padding: 0;
+	line-height: 26px;
+}
+
+#wrapper #content .post .copy pre.sh_sourceCode span.sh_string, pre        .sh_sourceCode span.sh_string {
+	color: #95e454;
+}
+
+#wrapper #content .post .copy pre.sh_sourceCode span.sh_function, pre.sh_sourceCode span.sh_function {
+	color: #cae682;
+}
+
+.gsc-control-searchbox-only {
+	border-radius: 5px;
+}
