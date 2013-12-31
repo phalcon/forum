@@ -202,6 +202,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			return $this->response->redirect();
 		}
 
+
 		$this->tag->setTitle('Start a Discussion');
 
 		if ($this->request->isPost()) {
@@ -230,9 +231,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			}
 		}
 
+
 		$this->view->categories = Categories::find(array(
 			'order' => 'name'
 		));
+
 	}
 
 	/**

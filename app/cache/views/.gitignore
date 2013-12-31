@@ -1,0 +1,4 @@
+*
+!.gitignore
+!cache-sidebar/
+!cache-sidebar/*
