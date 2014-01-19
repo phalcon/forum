@@ -1,4 +1,6 @@
+
 <div class="row">
+
 	<ul class="nav nav-tabs">
 		{% set orders = [
 			'new': 'All discussions',
@@ -24,6 +26,7 @@
 
 {% if posts|length %}
 <div class="row">
+
 <table class="list-posts">
 {% for post in posts %}
 	<tr>

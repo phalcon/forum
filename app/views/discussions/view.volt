@@ -14,7 +14,7 @@
 			</td>
 			<td>
 				<div class="post-header">
-					<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name) }}</span>
+					<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
 					posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
 
 					<div class="posts-buttons">
@@ -37,7 +37,7 @@
 			</td>
 			<td>
 				<div class="post-header">
-					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name) }}</span>
+					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
 					commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
 
 					<div class="posts-buttons">

@@ -6,7 +6,7 @@
 				<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64" class="img-rounded">
 			</td>
 			<td align="left" valign="top">
-				<h1>{{ user.name }}</h1>
+				<h1>{{ user.name|e }}</h1>
 				<p>
 					<span>joined {{ date('M d/Y', user.created_at) }}</span><br>
 					<span>posts {{ numberPosts }}</span> / <span>replies {{ numberReplies }}</span><br>

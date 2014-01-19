@@ -11,9 +11,9 @@ $(window).on("load", function(){
 		template: '"%text%" <a href="http://twitter.com/%user_screen_name%/statuses/%id%/">%time%</a>'
 	});*/
 
-	if(document.location.hostname!='localhost'){
+	if (document.location.hostname != 'localhost'){
 		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-29332509-1']);
+		_gaq.push(['_setAccount',    'UA-29332509-1']);
 		_gaq.push(['_setDomainName', 'phalconphp.com']);
 		_gaq.push(['_trackPageview']);
 		(function() {

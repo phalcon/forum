@@ -47,6 +47,11 @@ $router->add('/activity', array(
 	'action' => 'activity'
 ));
 
+$router->add('/activity/irc', array(
+	'controller' => 'discussions',
+	'action' => 'irc'
+));
+
 $router->add('/post/discussion', array(
 	'controller' => 'discussions',
 	'action' => 'create'
