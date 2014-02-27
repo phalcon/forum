@@ -1,39 +1,39 @@
 {{ content() }}
 
-<div class="start-discussion">
+<div class="container start-discussion">
 
 	<div align="left">
 		<h1>Start a Discussion</h1>
 	</div>
 
 	<div class="row">
-		<div class="span1 remove-image">
+		<div class="col-md-1 remove-image" align="right">
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
 		</div>
-		<div class="span9">
-			<form method="post" autocomplete="off">
+		<div class="col-md-9">
+			<form method="post" autocomplete="off" role="form">
 
-			  <p>
-				{{ text_field("title", "placeholder": "Title") }}
-			  </p>
+			  <div class="form-group">
+				{{ text_field("title", "placeholder": "Title", "class": "form-control") }}
+			  </div>
 
-			  <p>
-			  	{{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...') }}
-			  </p>
+			  <div class="form-group">
+			  	{{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...', "class": "form-control") }}
+			  </div>
 
-			  <p>
+			  <div class="form-group">
 
-			  	<ul class="nav nav-tabs preview-nav">
+			  	<!--<ul class="nav nav-tabs preview-nav">
 					<li class="active"><a href="#" onclick="return false">Write</a></li>
 					<li><a href="#" onclick="return false">Preview</a></li>
 					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
-				</ul>
+				</ul>-->
 
-				<div id="comment-box">
-					{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+				<div class="form-group">
+					{{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
 				</div>
 				<div id="preview-box" style="display:none"></div>
-			  </p>
+			  </div>
 
 			  <p>
 			  	<div class="pull-left">

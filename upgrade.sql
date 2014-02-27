@@ -1,0 +1,1 @@
+ alter table posts add locked char(1) default 'N';

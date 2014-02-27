@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="container">
 
 	<ul class="nav nav-tabs">
 		{% set orders = [
@@ -7,7 +7,7 @@
 			'hot': 'Hot',
 			'unanswered': 'Unanswered',
 			'my': 'My discussions',
-						'answers':'My answers'
+			'answers':'My answers'
 		] %}
 		{% for order, label in orders %}
 			{% if (order == 'my' or order == 'answers' )  and !session.get('identity') %}
@@ -25,36 +25,39 @@
 </div>
 
 {% if posts|length %}
-<div class="row">
-
-<table class="list-posts">
+<div class="container">
+<br/>
+<table class="table table-striped" width="90%">
+	<tr>
+		<th>Topic</th>
+		<th>Users</th>
+		<th>Category</th>
+		<th>Replies</th>
+		<th>Views</th>
+		<th>Created</th>
+	</tr>
 {% for post in posts %}
 	<tr>
+		<td align="left">
+			{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
+			{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
+		</td>
+		<td>
+			{% for gravatar in post.getRecentUsers() %}
+				<img src="https://secure.gravatar.com/avatar/{{ gravatar }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
+			{% endfor %}
+		</td>
+		<td>
+			<span class="author">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
+		</td>
 		<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
-			<span class="big-number">{{ post.number_replies }}</span><br>
-			replies
+			<span class="big-number">{{ post.number_replies }}</span>
 		</td>
 		<td class="number{% if !post.number_views %} no-views{%endif %}" align="center">
-			<span class="big-number">{{ post.number_views }}</span><br>
-			views
+			<span class="big-number">{{ post.number_views }}</span>
 		</td>
-		<td align="left">
-			<div class="post">
-				<p>
-					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
-				</p>
-				<p>
-					<div class="pull-left">
-						<span class="date">{{ date('M d/Y', post.created_at) }}</span>
-					</div>
-
-					<div class="pull-right">
-						<span class="author">category {{ link_to('category/' ~ post.category_id ~ '/' ~ post.category_slug, post.category_name) }}</span>
-						<span class="author">author {{ link_to('user/' ~ post.user_id ~ '/' ~ post.user_login, post.user_name) }}</span>
-					</div>
-				</p>
-
-			</div>
+		<td>
+			<span class="date">{{ post.getHumanCreatedAt() }}</span>
 		</td>
 	</tr>
 {% endfor %}
@@ -84,3 +87,5 @@
 {% else %}
 	<div>There are no posts here</div>
 {% endif %}
+
+

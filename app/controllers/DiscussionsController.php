@@ -35,8 +35,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			->from(array(
 				'p' => 'Phosphorum\Models\Posts'
 			))
-			->join('Phosphorum\Models\Users', null, 'u')
-			->join('Phosphorum\Models\Categories', null, 'c')
 			->orderBy('p.sticked DESC, p.created_at DESC');
 
         if ($joinReply) {
@@ -47,19 +45,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$totalBuilder = clone $itemBuilder;
 
 		$itemBuilder->columns(array(
-			'p.id',
-			'p.title',
-			'p.slug',
-			'p.number_replies',
-			'p.number_views',
-			'p.sticked',
-			'p.created_at',
-			'user_name' => 'u.name',
-			'user_login' => 'u.login',
-			'user_id' => 'u.id',
-			'category_name' => 'c.name',
-			'category_slug' => 'c.slug',
-			'category_id' => 'c.id'
+			'p.*'
 		))
 		->limit(30);
 
@@ -311,6 +297,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	 */
 	public function viewAction($id, $slug)
 	{
+		$id = (int) $id;
 
 		if (!$this->request->isPost()) {
 
@@ -319,14 +306,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				/**
 		 		 * Enable cache
 		 		 */
-				$this->view->cache(array('key' => 'post-' . $id));
+				//$this->view->cache(array('key' => 'post-' . $id));
 
 				/**
 				 * Check for a cache
 				 */
-				if ($this->viewCache->exists('post-' . $id)) {
-					return;
-				}
+				//if ($this->viewCache->exists('post-' . $id)) {
+				//	return;
+				//}
 			}
 
 			/**

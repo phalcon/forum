@@ -1,6 +1,6 @@
 
 
-<div class="sidebar">
+{#<div class="sidebar">
 
 	{% if session.get('identity') %}
 		{{ link_to('post/discussion', 'Start a Discussion', 'class': 'btn btn-large btn-info', 'rel': 'nofollow') }}
@@ -20,4 +20,4 @@
 	</ul>
 	{% endcache %}
 
-</div>
+</div>#}

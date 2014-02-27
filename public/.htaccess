@@ -1,4 +1,5 @@
 AddDefaultCharset UTF-8
+DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On

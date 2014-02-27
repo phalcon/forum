@@ -52,14 +52,14 @@ class SessionController extends \Phalcon\Mvc\Controller
     	if (is_array($response)) {
 
 			if (isset($response['error'])) {
-				$this->flashSession->error('Github: '.$response['error']);
+				$this->flashSession->error('Github: ' . $response['error']);
 				return $this->indexRedirect();
 			}
 
 			$githubUser = new GithubUsers($response['access_token']);
 
 			if (!$githubUser->isValid()) {
-				$this->flashSession->error('Invalid Github response');
+				$this->flashSession->error('Invalid Github response' . print_r($response, true));
 				return $this->indexRedirect();
 			}
 

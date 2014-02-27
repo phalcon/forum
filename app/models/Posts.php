@@ -144,4 +144,32 @@ class Posts extends Model
 		return $modifiedAt->format('Y-m-d\TH:i:s\Z');
 	}
 
+	public function getRecentUsers()
+	{
+		$number = 0;
+		$users = array($this->user->id => $this->user->gravatar_id);
+		foreach ($this->getReplies(['order' => 'created_at DESC']) as $reply) {
+			if (!isset($users[$reply->user->id])) {
+				$users[$reply->user->id] = $reply->user->gravatar_id;
+				$number++;
+			}
+			if ($number > 2) {
+				break;
+			}
+		}
+		return $users;
+	}
+
+	public function getHumanCreatedAt()
+	{
+		$diff = time() - $this->created_at;
+		if ($diff > 86400) {
+			return ((int) ($diff / 86400)) . 'd';
+		} else {
+			if ($diff > 3600) {
+				return ((int) ($diff / 3600)) . 'h';
+			}
+		}
+	}
+
 }

@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div class="start-discussion">
+<div class="start-discussion container">
 
 	<div align="left">
 		<h1>Edit Discussion: {{ post.title|e }}</h1>
@@ -11,15 +11,15 @@
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
 		</div>
 		<div class="span9">
-			<form method="post" autocomplete="off">
+			<form method="post" autocomplete="off" role="form">
 
-				<p>
+				<div class="form-group">
 					{{ hidden_field("id") }}
-				</p>
+				</div>
 
-				<p>
+				<div class="form-group">
 					{{ text_field("title", "placeholder": "Title") }}
-				</p>
+				</div>
 
 				<p>
 					{{ select("categoryId", categories, 'using': ['id', 'name']) }}

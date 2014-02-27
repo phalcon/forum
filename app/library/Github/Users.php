@@ -2,6 +2,8 @@
 
 namespace Phosphorum\Github;
 
+use Guzzle\Http\Client as HttpClient;
+
 class Users
 {
 
@@ -18,10 +20,9 @@ class Users
 	public function request($method)
 	{
 		try {
-			$transport = new \HttpRequest($this->_endPoint.$method.'?access_token='.$this->_accessToken);
-			$transport->send();
-			return json_decode($transport->getResponseBody(), true);
-		} catch (\HttpInvalidParamException $e) {
+			$client = new HttpClient();			
+			return json_decode($client->get($this->_endPoint . $method . '?access_token=' . $this->_accessToken)->send()->getBody(), true);
+		} catch (\Exception $e) {
 			return null;
 		}
 	}

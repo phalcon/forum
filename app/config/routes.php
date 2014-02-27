@@ -102,6 +102,16 @@ $router->add('/discussion/{id:[0-9]+}/{slug}', array(
 	'action' => 'view'
 ));
 
+$router->add('/discussions', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
+$router->add('/index.html', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
 $router->add('/', array(
 	'controller' => 'discussions',
 	'action' => 'index'

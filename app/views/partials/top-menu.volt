@@ -1,34 +1,31 @@
-<div class="navbar">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</a>
-			{{ link_to('', 'Phosphorum', 'class': 'brand') }}
-			<div class="nav-collapse">
-				<ul class="nav">
-					<li>{{ link_to('', 'Discussions') }}</li>
-					<li>{{ link_to('activity', 'Activity') }}</li>
-					{% if session.get('identity') %}
-					<li>{{ link_to('settings', 'Settings') }}</li>
-					<li>{{ link_to('logout', 'Logout') }}</li>
-					{% endif %}
-				</ul>
-				<ul class="nav pull-right mobile-dissapear">
-					<li>
-						<div align="center">
-							<!--<form class="form-inline" action="{{ url('search') }}" method="get">
-								<input type="text" class="input-medium search-query" name="q" placeholder="Search"/>
-							</form>-->
-							<div style="width:300px;padding:10px">
-								<gcse:searchbox-only></gcse:searchbox-only>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
+<header>
+	<nav class="navbar navbar-reverse" role="navigation">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  {{ link_to('', 'Phosphorum', 'class': 'navbar-brand') }}
 		</div>
-	</div>
-</div>
+
+		<div class="collapse navbar-collapse">
+		  <ul class="nav navbar-nav navbar-right">
+		  	{%- if session.get('identity') -%}
+				<li>{{ link_to('post/discussion', 'Start a Discussion', 'class': 'btn btn-default btn-info', 'rel': 'nofollow') }}</li>
+			{%- else -%}
+				<li>{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-info', 'rel': 'nofollow') }}</li>
+			{%- endif -%}
+			<li>{{ link_to('', '<span class="glyphicon glyphicon-comment"></span>', 'title': 'Discussions') }}</li>
+			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Activity') }}</li>
+			{% if session.get('identity') %}
+			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Activity') }}</li>
+			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>
+			{% endif %}
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+</header>

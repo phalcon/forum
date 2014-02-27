@@ -2,55 +2,71 @@
 
 {% set currentUser = session.get('identity') %}
 
-<div class="view-discussion">
+<div class="container">
+
+	<ol class="breadcrumb">
+		<li>{{ link_to('', 'Home') }}</a></li>
+		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</a></li>
+	</ol>
+
 	<p>
 		<h1>{{ post.title|e }}</h1>
 	</p>
 
-	<table class="view-list-posts" align="center">
+	<table class="table discussion" align="center">
 		<tr>
-			<td class="small" valign="top">
-				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48" class="img-rounded">
+			<td valign="top" align="center" width="100">
+				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
 			</td>
 			<td>
 				<div class="post-header">
-					<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
-					posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
-
 					<div class="posts-buttons">
-						{% if post.users_id == currentUser %}
-							{{ link_to('edit/discussion/' ~ post.id, '<i class="icon-edit" title="Edit"></i>') }}
-						{% endif %}
+						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
+							<span class="action-date">
+								posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
+							</span>
+						</a>
 					</div>
-
 				</div>
 				<div class="post-content">
-					{{ post.content|e|nl2br }}
+					{{ markdown.render(post.content|e) }}
+				</div>
+				<div class="posts-buttons">
+					{% if post.users_id == currentUser %}
+						{{ link_to('edit/discussion/' ~ post.id, 'Edit', "class": "btn btn-default btn-xs") }}
+						{{ link_to('delete/discussion/' ~ post.id, 'Delete', "class": "btn btn-default btn-xs") }}
+					{% endif %}
 				</div>
 			</td>
 		</tr>
 
 		{% for reply in post.replies %}
 		<tr>
-			<td class="small" valign="top">
-				<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48" class="img-rounded">
+			<td class="small" valign="top" align="center">
+				<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
 			</td>
 			<td>
 				<div class="post-header">
-					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
-					commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
 
 					<div class="posts-buttons">
-						<a name="C{{ reply.id }}" href="#C{{ reply.id }}"><i class="icon-globe" title="Permalink"></i></a>
+						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
+							<span class="action-date">
+								commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
+							</span>
+						</a>
 						{% if reply.users_id == currentUser %}
 							<i class="icon-edit reply-edit" title="Edit" data-id="{{ reply.id }}"></i>
 							<i class="icon-remove reply-remove" title="Delete" data-id="{{ reply.id }}"></i>
 						{% endif %}
 					</div>
 
+
+
 				</div>
 				<div class="post-content">
-					{{ reply.content|e|nl2br }}
+					{{ markdown.render(reply.content|e) }}
 				</div>
 			</td>
 		</tr>
@@ -60,7 +76,7 @@
 		{% if currentUser %}
 		<tr>
 			<td valign="top" class="small">
-				<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
+				<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 			</td>
 			<td>
 				<ul class="nav nav-tabs preview-nav">
@@ -69,11 +85,11 @@
 					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
 				</ul>
 
-				<form method="post" autocomplete="off">
+				<form method="post" autocomplete="off" role="form">
 					<p>
 						<div id="comment-box">
 							{{ hidden_field('id', 'value': post.id) }}
-							{{ text_area("content", "rows": 5, "placeholder": "Leave a comment") }}
+							{{ text_area("content", "rows": 5, "placeholder": "Leave a comment", "class": "form-control") }}
 						</div>
 						<div id="preview-box" style="display:none"></div>
 					</p>
