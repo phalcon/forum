@@ -11,6 +11,7 @@
 		{{- stylesheet_link("//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css", false) -}}
 		{{- stylesheet_link("css/theme.css", true) -}}
 		{{- stylesheet_link("css/editor.css", true) -}}
+		{{- stylesheet_link("css/diff.css", true) -}}
 
 		<style type="text/css">
 			.navbar-reverse .navbar-nav>li>a {
@@ -50,7 +51,8 @@
 			}
 
 			table.discussion .small {
-				width: 100px;
+				width: 120px;
+				text-align: center;
 			}
 
 			table.discussion .small a {
@@ -66,8 +68,44 @@
 				border: 1px solid #c0c0c0;
 			}
 
+			table.discussion .CodeMirror {
+				height: 120px;
+			}
+
 			pre.prettyprint {
 				padding: 10px;
+			}
+
+			table.discussion img {
+				max-width: 550px;
+				max-height: 600px;
+			}
+
+			.action-edit {
+				color: #ea7c62;
+				cursor: pointer;
+			}
+
+			.post-content {
+				max-width: 900px;
+				overflow-y: scroll;
+			}
+
+			@media (min-width: 1280px) {
+				.modal-dialog {
+					width: 1024px;
+				}
+			}
+
+			@media (min-width: 1024px) {
+				.modal-dialog {
+					width: 900px;
+				}
+			}
+
+			#historyBody {
+				max-height: 550px;
+				overflow-y: scroll;
 			}
 
 		</style>

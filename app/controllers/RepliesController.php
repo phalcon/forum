@@ -60,8 +60,8 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		}
 
 		$postReply = PostsReplies::findFirst(array(
-			'id = ?0 AND users_id = ?1',
-			'bind' => array($this->request->getPost('id'), $usersId)
+			'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
+			'bind' => array($this->request->getPost('id'), $usersId, $this->session->get('identity-moderator'))
 		));
 		if (!$postReply) {
 			return $this->response->redirect();
@@ -90,8 +90,8 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		}
 
 		$postReply = PostsReplies::findFirst(array(
-			'id = ?0 AND users_id = ?1',
-			'bind' => array($id, $usersId)
+			'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
+			'bind' => array($id, $usersId, $this->session->get('identity-moderator'))
 		));
 		if ($postReply) {
 

@@ -20,6 +20,8 @@ class PostsReplies extends Model
 
 	public $modified_at;
 
+	public $edit_at;
+
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(

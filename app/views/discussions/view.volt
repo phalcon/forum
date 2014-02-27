@@ -21,18 +21,23 @@
 			</td>
 			<td class="post-body">
 				<div class="post-header">
-					<div class="posts-buttons">
-						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
+					<div class="posts-buttons" align="right">
+						{% if post.edited_at > 0 %}
+							<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
+								edited <span>{{ date('M d/Y H:i', post.edited_at) }}</span>
+							</span><br/>
+						{% endif %}
+						<a name="C{{ post.id }}" href="#C{{ post.id }}">
 							<span class="action-date">
 								posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
 							</span>
 						</a>
 					</div>
 				</div>
-				<div class="post-content">
+				<div class="post-content row">
 					{{ markdown.render(post.content|e) }}
 				</div>
-				<div class="posts-buttons">
+				<div class="posts-buttons" align="right">
 					{% if post.users_id == currentUser or moderator == 'Y' %}
 						{{ link_to('edit/discussion/' ~ post.id, 'Edit', "class": "btn btn-default btn-xs") }}
 						{{ link_to('delete/discussion/' ~ post.id, 'Delete', "class": "btn btn-default btn-xs") }}
@@ -55,16 +60,18 @@
 								commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
 							</span>
 						</a>
-						{% if reply.users_id == currentUser or moderator == 'Y' %}
-							<br>
-							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">Edit</a>
-							<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">Delete</a>
-							<br>
-						{% endif %}
 					</div>
 				</div>
-				<div class="post-content">
+				<div class="post-content row">
 					{{ markdown.render(reply.content|e) }}
+				</div>
+				<div class="posts-buttons" align="right">
+					{% if reply.users_id == currentUser or moderator == 'Y' %}
+						<br>
+						<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">Edit</a>
+						<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">Delete</a>
+						<br>
+					{% endif %}
 				</div>
 			</td>
 		</tr>
@@ -125,4 +132,20 @@
 
 </div>
 
+<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="historyModalLabel">History</h4>
+      </div>
+      <div class="modal-body" id="historyBody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 

@@ -10,7 +10,7 @@
 		<div class="col-md-1 remove-image" align="right">
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-10">
 			<form method="post" autocomplete="off" role="form">
 
 			  <div class="form-group">

@@ -3,6 +3,7 @@
         "guzzle/guzzle": "~3.7",
 		"aws/aws-sdk-php": "2.*",
 		"swiftmailer/swiftmailer": "@stable",
-		"kzykhys/ciconia": "~1.0.0"
+		"kzykhys/ciconia": "~1.0.0",
+		"phpspec/php-diff": "dev-master"
     }
 }

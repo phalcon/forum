@@ -5,6 +5,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsViews,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsHistory,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
 	Phosphorum\Models\IrcLog,
@@ -403,6 +404,45 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
 		$this->view->post = $post;
+	}
+
+	public function historyAction($id = 0)
+	{
+
+		$this->view->disable();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			$this->flashSession->error('The discussion does not exist');
+			return $this->response->redirect();
+		}
+
+		$a = explode("\n", $post->content);
+
+		$first = true;
+		$postHistories = PostsHistory::find(array('posts_id = ?0', 'bind' => array($post->id), 'order' => 'created_at DESC'));
+		if (count($postHistories) > 1) {
+			foreach ($postHistories as $postHistory) {
+				if ($first) {
+					$first = false;
+					continue;
+				}
+				break;
+			}
+		} else {
+			$postHistory = $postHistories->getFirst();
+		}
+
+		$b = explode("\n", $postHistory->content);
+
+
+		$diff = new \Diff($b, $a, array());
+		$renderer = new \Diff_Renderer_Html_SideBySide();
+
+		echo $diff->Render($renderer);
 	}
 
 	/**

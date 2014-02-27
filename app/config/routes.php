@@ -107,6 +107,11 @@ $router->add('/discussions', array(
 	'action' => 'index'
 ));
 
+$router->add('/discussion/history/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'history'
+));
+
 $router->add('/index.html', array(
 	'controller' => 'discussions',
 	'action' => 'index'

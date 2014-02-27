@@ -48,6 +48,9 @@ var Forum = {
 			this.hide();
 
 			this.parent().append(form);
+
+			var editor = new Editor({ 'element': textarea });
+			editor.render();
 		}
 	},
 
@@ -82,7 +85,8 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 
-		var content = $('div.post-content', element.parents()[3]);
+		var content = $('div.post-content', element.parents()[1]);
+		window.x = element;
 		if (content.is(':visible')) {
 			$.ajax({
 				dataType: 'json',
@@ -90,6 +94,19 @@ var Forum = {
 				context: content
 			}).done(Forum.makeCommentEditable);
 		}
+	},
+
+	/**
+	 * Converts the post-comment div into an editable textarea
+	 */
+	postHistory: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			url: Forum._uri + 'discussion/history/' + element.data('id'),
+		}).done(function(response){
+			$('#historyBody').html(response);
+		});
 	},
 
 	/**
@@ -133,8 +150,13 @@ var Forum = {
 		$('a.reply-edit').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.editComment);
 		});
+
 		$('a.reply-remove').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.deleteComment);
+		});
+
+		$('span.action-edit').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.postHistory);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');

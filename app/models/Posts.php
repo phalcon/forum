@@ -30,6 +30,8 @@ class Posts extends Model
 
 	public $created_at;
 
+	public $edit_at;
+
 	public $status;
 
 	public function initialize()
@@ -125,10 +127,17 @@ class Posts extends Model
 
 	public function afterSave()
 	{
+
 		if ($this->id) {
 			$viewCache = $this->getDI()->getViewCache();
 			$viewCache->delete('post-' . $this->id);
 		}
+
+		$history = new PostsHistory();
+		$history->posts_id = $this->id;
+		$history->users_id = $this->users_id;
+		$history->content = $this->content;
+		$history->save();
 	}
 
 	/**
