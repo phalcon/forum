@@ -2,15 +2,20 @@
 
 <div class="start-discussion container">
 
+	<ol class="breadcrumb">
+		<li>{{ link_to('', 'Home') }}</a></li>
+		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</a></li>
+	</ol>
+
 	<div align="left">
 		<h1>Edit Discussion: {{ post.title|e }}</h1>
 	</div>
 
 	<div class="row">
-		<div class="span1 remove-image">
-			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
+		<div class="col-md-1 remove-image" align="right">
+			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 		</div>
-		<div class="span9">
+		<div class="col-md-9">
 			<form method="post" autocomplete="off" role="form">
 
 				<div class="form-group">
@@ -18,12 +23,12 @@
 				</div>
 
 				<div class="form-group">
-					{{ text_field("title", "placeholder": "Title") }}
+					{{ text_field("title", "placeholder": "Title", "class": "form-control") }}
 				</div>
 
-				<p>
-					{{ select("categoryId", categories, 'using': ['id', 'name']) }}
-				</p>
+				<div class="form-group">
+					{{ select("categoryId", categories, 'using': ['id', 'name'], "class": "form-control") }}
+				</div>
 
 				<p>
 					<ul class="nav nav-tabs preview-nav">
@@ -33,7 +38,7 @@
 					</ul>
 
 					<div id="comment-box">
-						{{ text_area("content", "rows": 15, "placeholder": "Leave the content") }}
+						{{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
 					</div>
 					<div id="preview-box" style="display:none"></div>
 				</p>
@@ -51,3 +56,10 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	window.onload = function(){
+		var editor = new Editor();
+		editor.render();
+	};
+</script>

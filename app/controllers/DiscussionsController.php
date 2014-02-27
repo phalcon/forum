@@ -240,8 +240,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 * Find the post using get
 		 */
 		$post = Posts::findFirst(array(
-			"id = ?0 AND (users_id = ?1 OR 1 = ?1)",
-			"bind" => array($id, $usersId)
+			"id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
+			"bind" => array($id, $usersId, $this->session->get('identity-moderator'))
 		));
 		if (!$post) {
 			$this->flashSession->error('The discussion does not exist');
@@ -257,6 +257,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->title = $title;
 			$post->slug = $this->tag->friendlyTitle($title);
 			$post->content = $content;
+			$post->edited_at = time();
 
 			if ($post->save()) {
 

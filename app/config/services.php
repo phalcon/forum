@@ -75,6 +75,9 @@ $di->set('db', function() use ($config) {
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
  */
 $di->set('modelsMetadata', function() use ($config) {
+
+	return new \Phalcon\Mvc\Model\Metadata\Memory();
+
 	return new \Phalcon\Mvc\Model\Metadata\Files(array(
 		'metaDataDir' => __DIR__ . '/../cache/metaData/'
 	));

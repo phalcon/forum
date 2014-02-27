@@ -31,8 +31,8 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		}
 
 		$postReply = PostsReplies::findFirst(array(
-			'id = ?0 AND users_id = ?1',
-			'bind' => array($id, $usersId)
+			'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
+			'bind' => array($id, $usersId, $this->session->get('identity-moderator'))
 		));
 		if ($postReply) {
 			$data = array('status' => 'OK', 'id' => $postReply->id, 'comment' => $postReply->content);

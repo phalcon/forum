@@ -1,6 +1,6 @@
 {{ content() }}
 
-{% set currentUser = session.get('identity') %}
+{% set currentUser = session.get('identity'), moderator = session.get('identity-moderator') %}
 
 <div class="container">
 
@@ -15,11 +15,11 @@
 
 	<table class="table discussion" align="center">
 		<tr>
-			<td valign="top" align="center" width="100">
+			<td valign="top" align="center" class="small">
 				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
 			</td>
-			<td>
+			<td class="post-body">
 				<div class="post-header">
 					<div class="posts-buttons">
 						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
@@ -33,7 +33,7 @@
 					{{ markdown.render(post.content|e) }}
 				</div>
 				<div class="posts-buttons">
-					{% if post.users_id == currentUser %}
+					{% if post.users_id == currentUser or moderator == 'Y' %}
 						{{ link_to('edit/discussion/' ~ post.id, 'Edit', "class": "btn btn-default btn-xs") }}
 						{{ link_to('delete/discussion/' ~ post.id, 'Delete', "class": "btn btn-default btn-xs") }}
 					{% endif %}
@@ -47,23 +47,21 @@
 				<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
 			</td>
-			<td>
+			<td class="post-body">
 				<div class="post-header">
-
-					<div class="posts-buttons">
+					<div class="posts-buttons" align="right">
 						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
 							<span class="action-date">
 								commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
 							</span>
 						</a>
-						{% if reply.users_id == currentUser %}
-							<i class="icon-edit reply-edit" title="Edit" data-id="{{ reply.id }}"></i>
-							<i class="icon-remove reply-remove" title="Delete" data-id="{{ reply.id }}"></i>
+						{% if reply.users_id == currentUser or moderator == 'Y' %}
+							<br>
+							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">Edit</a>
+							<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">Delete</a>
+							<br>
 						{% endif %}
 					</div>
-
-
-
 				</div>
 				<div class="post-content">
 					{{ markdown.render(reply.content|e) }}
@@ -75,8 +73,9 @@
 		<tr>
 		{% if currentUser %}
 		<tr>
-			<td valign="top" class="small">
-				<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
+			<td valign="top" class="small" align="center">
+				<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+				<span>{{ link_to('', 'You') }}</span>
 			</td>
 			<td>
 				<ul class="nav nav-tabs preview-nav">
@@ -102,6 +101,13 @@
 						</div>
 					</p>
 				</form>
+
+				<script type="text/javascript">
+					window.onload = function(){
+						var editor = new Editor();
+						editor.render();
+					};
+				</script>
 			</td>
 		{% else %}
 			<td></td>
@@ -118,3 +124,5 @@
 	</table>
 
 </div>
+
+

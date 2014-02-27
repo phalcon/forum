@@ -19,6 +19,7 @@ var Forum = {
 			textarea.name = 'content';
 			textarea.rows = 7;
 			textarea.value = response.comment;
+			textarea.className = 'form-control';
 			form.appendChild(textarea);
 
 			var hidden = document.createElement('INPUT');
@@ -29,14 +30,14 @@ var Forum = {
 
 			var cancel = document.createElement('INPUT');
 			cancel.type = 'button';
-			cancel.className = 'btn btn-small pull-left';
+			cancel.className = 'btn btn-default btn-sm pull-left';
 			cancel.value = 'Cancel';
 			$(cancel).bind('click', { form: form, element: this}, Forum.cancelEditing);
 			form.appendChild(cancel);
 
 			var submit = document.createElement('INPUT');
 			submit.type = 'buttom';
-			submit.className = 'btn btn-success btn-small pull-right';
+			submit.className = 'btn btn-success btn-sm pull-right';
 			submit.value = 'Update Comment';
 			$(submit).bind('click', { form: form }, function(event) {
 				this.disabled = true;
@@ -82,7 +83,6 @@ var Forum = {
 		var element = $(event.data.element);
 
 		var content = $('div.post-content', element.parents()[3]);
-
 		if (content.is(':visible')) {
 			$.ajax({
 				dataType: 'json',
@@ -90,34 +90,6 @@ var Forum = {
 				context: content
 			}).done(Forum.makeCommentEditable);
 		}
-	},
-
-	highlightElement: function(element, elementOriginal)
-	{
-		if (typeof sh_languages !== "undefined") {
-
-			if (element.hasClass('sh_php')) {
-				type = 'php';
-			} else {
-				if (element.hasClass('sh_css')) {
-					type = 'css';
-				} else {
-					if (element.hasClass('sh_html')) {
-						type = 'html';
-					} else {
-						if (element.hasClass('sh_sql')) {
-							type = 'sql';
-						} else {
-							type = 'php';
-						}
-					}
-				}
-			}
-
-			if (typeof sh_languages[type] !== "undefined") {
-				sh_highlightElement(elementOriginal, sh_languages[type]);
-			};
-		};
 	},
 
 	/**
@@ -144,10 +116,6 @@ var Forum = {
 				$('#preview-box')[0].innerHTML = 'Nothing to preview'
 			}
 
-			$('pre', '#preview-box').each(function(postion, element){
-				Forum.highlightElement($(element), element);
-			});
-
 			$('#comment-box').hide();
 			$('#preview-box').show();
 
@@ -162,10 +130,10 @@ var Forum = {
 	 */
 	addCallbacks: function()
 	{
-		$('i.reply-edit').each(function(position, element) {
+		$('a.reply-edit').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.editComment);
 		});
-		$('i.reply-remove').each(function(position, element) {
+		$('a.reply-remove').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.deleteComment);
 		});
 

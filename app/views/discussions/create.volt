@@ -8,7 +8,7 @@
 
 	<div class="row">
 		<div class="col-md-1 remove-image" align="right">
-			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48" class="img-rounded">
+			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 		</div>
 		<div class="col-md-9">
 			<form method="post" autocomplete="off" role="form">
@@ -23,11 +23,11 @@
 
 			  <div class="form-group">
 
-			  	<!--<ul class="nav nav-tabs preview-nav">
+			  	<ul class="nav nav-tabs preview-nav">
 					<li class="active"><a href="#" onclick="return false">Write</a></li>
-					<li><a href="#" onclick="return false">Preview</a></li>
+					<!--<li><a href="#" onclick="return false">Preview</a></li>-->
 					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
-				</ul>-->
+				</ul>
 
 				<div class="form-group">
 					{{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
@@ -48,3 +48,10 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	window.onload = function(){
+		var editor = new Editor();
+		editor.render();
+	};
+</script>

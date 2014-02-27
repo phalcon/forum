@@ -30,7 +30,7 @@
 		{% for activity in activities %}
 		<tr>
 			<td class="small" valign="top">
-				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=48" class="img-rounded">
+				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 			</td>
 			<td>
 				<div class="activity">

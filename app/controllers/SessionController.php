@@ -95,11 +95,12 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$this->session->set('identity-name', $user->name);
 			$this->session->set('identity-gravatar', $user->gravatar_id);
 			$this->session->set('identity-timezone', $user->timezone);
+			$this->session->set('identity-moderator', $user->moderator);
 
 			if ($user->getOperationMade() == Model::OP_CREATE) {
-				$this->flashSession->success('Welcome '.$user->name);
+				$this->flashSession->success('Welcome ' . $user->name);
 			} else {
-				$this->flashSession->success('Welcome back '.$user->name);
+				$this->flashSession->success('Welcome back ' . $user->name);
 			}
 
 			return $this->discussionsRedirect();
