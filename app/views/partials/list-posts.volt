@@ -10,7 +10,7 @@
 			'answers':'My answers'
 		] %}
 		{% for order, label in orders %}
-			{% if (order == 'my' or order == 'answers' )  and !session.get('identity') %}
+			{% if (order == 'my' or order == 'answers') and !session.get('identity') %}
 				{% continue %}
 			{% endif %}
 			{% if order == currentOrder %}
@@ -27,7 +27,7 @@
 {% if posts|length %}
 <div class="container">
 <br/>
-<table class="table table-striped" width="90%">
+<table class="table table-striped list-discussions" width="90%">
 	<tr>
 		<th>Topic</th>
 		<th>Users</th>
@@ -64,25 +64,16 @@
 </table>
 
 </div>
-<div class="row">
 
-{% if offset > 0 %}
-	<div class="pagination prev">
-		<ul>
-			<li>{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
-		</ul>
-	</div>
-{% endif %}
+<ul class="pager">
+	{% if offset > 0 %}
+		<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
+	{% endif %}
 
-{% if totalPosts.count > 30 %}
-	<div class="pagination next">
-		<ul>
-			<li>{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
-		</ul>
-	</div>
-{% endif %}
-
-</div>
+	{% if totalPosts.count > 30 %}
+		<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
+	{% endif %}
+</ul>
 
 {% else %}
 	<div>There are no posts here</div>

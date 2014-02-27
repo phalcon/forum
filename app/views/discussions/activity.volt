@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div class="view-discussion">
+<div class="view-discussion container">
 	<p>
 		<h1>Recent Activity</h1>
 	</p>
@@ -30,7 +30,7 @@
 		{% for activity in activities %}
 		<tr>
 			<td class="small" valign="top">
-				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
+				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
 			</td>
 			<td>
 				<div class="activity">
@@ -44,7 +44,7 @@
 					has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
 					{% endif %}
 
-					<span class="date">{{ date('M d/Y H:i', activity.created_at) }}</span>
+					<span class="date">{{ activity.getHumanCreatedAt() }}</span>
 				</div>
 			</td>
 		</tr>

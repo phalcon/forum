@@ -37,4 +37,18 @@ class Activities extends Model
 		)));
 	}
 
+	public function getHumanCreatedAt()
+	{
+		$diff = time() - $this->created_at;
+		if ($diff > 86400) {
+			return ((int) ($diff / 86400)) . 'd';
+		} else {
+			if ($diff > 3600) {
+				return ((int) ($diff / 3600)) . 'h';
+			} else {
+				return ((int) ($diff / 60)) . 'm';
+			}
+		}
+	}
+
 }

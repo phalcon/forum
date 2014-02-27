@@ -177,6 +177,8 @@ class Posts extends Model
 		} else {
 			if ($diff > 3600) {
 				return ((int) ($diff / 3600)) . 'h';
+			} else {
+				return ((int) ($diff / 60)) . 'm';
 			}
 		}
 	}

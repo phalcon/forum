@@ -19,6 +19,7 @@
 				<li>{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-info', 'rel': 'nofollow') }}</li>
 			{%- endif -%}
 			<li>{{ link_to('', '<span class="glyphicon glyphicon-comment"></span>', 'title': 'Discussions') }}</li>
+			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-th-list"></span>', 'title': 'Categories') }}</li>
 			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Activity') }}</li>
 			{% if session.get('identity') %}
 			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Activity') }}</li>
