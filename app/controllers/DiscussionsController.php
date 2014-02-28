@@ -197,6 +197,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			$title = $this->request->getPost('title', 'trim');
 
+			$user = Users::findFirstById($usersId);
+			$user->karma += 5;
+			$user->vote_points += 5;
+			$user->save();
+
 			$post = new Posts();
 			$post->users_id = $usersId;
 			$post->categories_id = $this->request->getPost('categoryId');
@@ -380,8 +385,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 * Only update the number of replies if the user that commented isn't the same that posted
 				 */
 				if ($post->users_id != $usersId) {
+
 					$post->number_replies++;
 					$post->modified_at = time();
+
+					$user = Users::findFirstById($usersId);
+					$user->karma += 10;
+					$user->vote_points += 10;
+					$user->save();
 				}
 
 				$postReply = new PostsReplies();

@@ -2,7 +2,8 @@
 
 namespace Phosphorum\Controllers;
 
-use Phosphorum\Models\Posts,
+use Phosphorum\Models\Users,
+	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
 	Phalcon\Http\Response;
 
@@ -98,6 +99,12 @@ class RepliesController extends \Phalcon\Mvc\Controller
 
 			if ($postReply->delete()) {
 				if ($usersId != $postReply->post->users_id) {
+
+					$user = Users::findFirstById($usersId);
+					$user->karma -= 10;
+					$user->vote_points -= 10;
+					$user->save();
+
 					$postReply->post->number_replies--;
 					$postReply->post->save();
 				}

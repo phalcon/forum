@@ -59,6 +59,14 @@ class Users extends Model
 		$this->timezone = 'Europe/London';
 	}
 
+	public function afterValidation()
+	{
+		if ($this->votes_points >= 30) {
+			$this->votes++;
+			$this->votes_points = 0;
+		}
+	}
+
 	public function afterCreate()
 	{
 		if ($this->id > 0) {
