@@ -41,6 +41,16 @@
 						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
 						{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}
 					{% endif %}
+					{% if currentUser %}
+						<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
+							<span class="glyphicon glyphicon-thumbs-up"></span>
+							{{ post.votes_up }}
+						</a>
+						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
+							<span class="glyphicon glyphicon-thumbs-down"></span>
+							{{ post.votes_down }}
+						</a>
+					{% endif %}
 				</div>
 			</td>
 		</tr>
@@ -77,7 +87,16 @@
 						<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">
 							<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
 						</a>
-						<br>
+					{% endif %}
+					{% if currentUser %}
+						<a href="#" onclick="return false" class="btn btn-success btn-xs vote-reply-up" data-id="{{ reply.id }}">
+							<span class="glyphicon glyphicon-thumbs-up"></span>
+							{{ reply.votes_up }}
+						</a>
+						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-reply-down" data-id="{{ reply.id }}">
+							<span class="glyphicon glyphicon-thumbs-down"></span>
+							{{ reply.votes_down }}
+						</a>
 					{% endif %}
 				</div>
 			</td>

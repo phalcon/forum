@@ -80,6 +80,7 @@ table.discussion img {
 
 .post-content {
     max-width: 900px;
+    min-height: 100px;
 }
 
 @media (min-width: 1280px) {

@@ -22,6 +22,10 @@ class PostsReplies extends Model
 
 	public $edited_at;
 
+	public $votes_up;
+
+	public $votes_down;
+
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(

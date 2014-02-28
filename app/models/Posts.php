@@ -24,6 +24,10 @@ class Posts extends Model
 
 	public $number_replies;
 
+	public $votes_up;
+
+	public $votes_down;
+
 	public $sticked;
 
 	public $modified_at;

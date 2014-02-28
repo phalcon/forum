@@ -10,6 +10,7 @@
 				<p>
 					<span>joined {{ date('M d/Y', user.created_at) }}</span><br>
 					<span>posts {{ numberPosts }}</span> / <span>replies {{ numberReplies }}</span><br>
+					<span>reputation <b>{{ user.karma }}</b></span><br>
 					<a href="https://github.com/{{ user.login }}">Github Profile</a>
 				</p>
 				<p>
@@ -27,7 +28,6 @@
 							{% elseif activity.type == 'C' %}
 							has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
 							{% endif %}
-
 							<span class="date">{{ date('M d/Y H:i', activity.created_at) }}</span>
 						</div>
 					{% endfor %}

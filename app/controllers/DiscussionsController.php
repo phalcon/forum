@@ -9,7 +9,8 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
 	Phosphorum\Models\IrcLog,
-	Phosphorum\Models\Users;
+	Phosphorum\Models\Users,
+	Phalcon\Http\Response;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
@@ -443,6 +444,118 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$renderer = new \Diff_Renderer_Html_SideBySide();
 
 		echo $diff->Render($renderer);
+	}
+
+	/**
+	 * Votes a post up
+	 */
+	public function voteUpAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$post->votes_up++;
+		if ($post->users_id != $user->id) {
+			$post->user->karma += 5;
+			$post->user->vote_points += 5;
+		}
+
+		if ($post->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
+	/**
+	 * Votes a post down
+	 */
+	public function voteDownAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$post->votes_down++;
+		if ($post->users_id != $user->id) {
+			$post->user->karma -= 5;
+			$post->user->vote_points -= 5;
+		}
+
+		if ($post->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
 	}
 
 	/**

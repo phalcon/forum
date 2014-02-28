@@ -117,6 +117,16 @@ $router->add('/discussion/history/{id:[0-9]+}', array(
 	'action' => 'history'
 ));
 
+$router->add('/discussion/vote-up/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteUp'
+));
+
+$router->add('/discussion/vote-down/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteDown'
+));
+
 $router->add('/index.html', array(
 	'controller' => 'discussions',
 	'action' => 'index'

@@ -31,6 +31,12 @@ class Users extends Model
 
 	public $moderator;
 
+	public $karma;
+
+	public $votes;
+
+	public $votes_points;
+
 	public function initialize()
 	{
 		$this->addBehavior(new Timestampable(array(
@@ -47,6 +53,9 @@ class Users extends Model
 	{
 		$this->notifications = 'P';
 		$this->moderator = 'N';
+		$this->karma = 5;
+		$this->votes = 0;
+		$this->votes_points = 0;
 		$this->timezone = 'Europe/London';
 	}
 

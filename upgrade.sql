@@ -3,6 +3,12 @@ alter table users add moderator char(1) default 'N';
 alter table posts add edited_at int(18) unsigned after modified_at;
 alter table posts_replies add edited_at int(18) unsigned;
 alter table users add karma int;
+alter table posts_replies add votes_up int unsigned;
+alter table posts_replies add votes_down int unsigned;
+alter table posts add votes_up int unsigned after number_replies;
+alter table posts add votes_down int unsigned after votes_up;
+alter table users add votes int unsigned;
+alter table users add votes_points int;
 
 CREATE TABLE `posts_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

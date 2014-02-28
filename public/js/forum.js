@@ -86,7 +86,6 @@ var Forum = {
 		var element = $(event.data.element);
 
 		var content = $('div.post-content', element.parents()[1]);
-		window.x = element;
 		if (content.is(':visible')) {
 			$.ajax({
 				dataType: 'json',
@@ -94,6 +93,42 @@ var Forum = {
 				context: content
 			}).done(Forum.makeCommentEditable);
 		}
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	votePostUp: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'discussion/vote-up/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				alert(response.message);
+			} else {
+				window.location.reload();
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	votePostDown: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'discussion/vote-down/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				alert(response.message);
+			} else {
+				window.location.reload();
+			}
+		});
 	},
 
 	/**
@@ -157,6 +192,14 @@ var Forum = {
 
 		$('span.action-edit').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.postHistory);
+		});
+
+		$('a.vote-post-up').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.votePostUp);
+		});
+
+		$('a.vote-post-down').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.votePostDown);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');
