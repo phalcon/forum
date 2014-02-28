@@ -19,8 +19,22 @@
 				<li>{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-info', 'rel': 'nofollow') }}</li>
 			{%- endif -%}
 			<li>{{ link_to('', '<span class="glyphicon glyphicon-comment"></span>', 'title': 'Discussions') }}</li>
-			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-th-list"></span>', 'title': 'Categories') }}</li>
-			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Activity') }}</li>
+			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Categories') }}</li>
+
+			<li class="dropdown">
+          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Activity">
+          			<span class="glyphicon glyphicon-th-list"></span> <b class="caret"></b>
+          		</a>
+				<ul class="dropdown-menu">
+		            <li><a href="#">Action</a></li>
+		            <li><a href="#">Another action</a></li>
+		            <li><a href="#">Something else here</a></li>
+		            <li class="divider"></li>
+		            <li><a href="#">Separated link</a></li>
+		            <li class="divider"></li>
+		            <li><a href="#">One more separated link</a></li>
+	          	</ul>
+	        </li>
 			{% if session.get('identity') %}
 			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Activity') }}</li>
 			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>

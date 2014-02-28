@@ -20,21 +20,19 @@
 				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
 			</td>
 			<td class="post-body">
-				<div class="post-header">
-					<div class="posts-buttons" align="right">
-						{% if post.edited_at > 0 %}
-							<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
-								edited <span>{{ date('M d/Y H:i', post.edited_at) }}</span>
-							</span><br/>
-						{% endif %}
-						<a name="C{{ post.id }}" href="#C{{ post.id }}">
-							<span class="action-date">
-								posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
-							</span>
-						</a>
-					</div>
+				<div class="posts-buttons" align="right">
+					{% if post.edited_at > 0 %}
+						<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
+							edited <span>{{ date('M d/Y H:i', post.edited_at) }}</span>
+						</span><br/>
+					{% endif %}
+					<a name="C{{ post.id }}" href="#C{{ post.id }}">
+						<span class="action-date">
+							posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
+						</span>
+					</a>
 				</div>
-				<div class="post-content row">
+				<div class="post-content">
 					{{ markdown.render(post.content|e) }}
 				</div>
 				<div class="posts-buttons" align="right">
@@ -53,16 +51,19 @@
 				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
 			</td>
 			<td class="post-body">
-				<div class="post-header">
-					<div class="posts-buttons" align="right">
-						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
-							<span class="action-date">
-								commented <span>{{ date('M d/Y H:i', reply.created_at) }}</span>
-							</span>
-						</a>
-					</div>
+				<div class="posts-buttons" align="right">
+					{% if reply.edited_at > 0 %}
+						<span class="action-date action-edit" data-id="{{ reply.id }}" data-toggle="modal" data-target="#historyModal">
+							edited <span>{{ date('M d/Y H:i', reply.edited_at) }}</span>
+						</span><br/>
+					{% endif %}
+					<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
+						<span class="action-date">
+							commented <span>{{ reply.getHumanCreatedAt() }}</span>
+						</span>
+					</a>
 				</div>
-				<div class="post-content row">
+				<div class="post-content">
 					{{ markdown.render(reply.content|e) }}
 				</div>
 				<div class="posts-buttons" align="right">

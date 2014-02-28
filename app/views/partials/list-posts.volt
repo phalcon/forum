@@ -26,54 +26,57 @@
 
 {% if posts|length %}
 <div class="container">
-<br/>
-<table class="table table-striped list-discussions" width="90%">
-	<tr>
-		<th>Topic</th>
-		<th>Users</th>
-		<th>Category</th>
-		<th>Replies</th>
-		<th>Views</th>
-		<th>Created</th>
-	</tr>
-{% for post in posts %}
-	<tr>
-		<td align="left">
-			{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
-			{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
-		</td>
-		<td>
-			{% for gravatar in post.getRecentUsers() %}
-				<img src="https://secure.gravatar.com/avatar/{{ gravatar }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
-			{% endfor %}
-		</td>
-		<td>
-			<span class="author">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
-		</td>
-		<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
-			<span class="big-number">{{ post.number_replies }}</span>
-		</td>
-		<td class="number{% if !post.number_views %} no-views{%endif %}" align="center">
-			<span class="big-number">{{ post.number_views }}</span>
-		</td>
-		<td>
-			<span class="date">{{ post.getHumanCreatedAt() }}</span>
-		</td>
-	</tr>
-{% endfor %}
-</table>
-
+	<br/>
+	<div class="table-responsive">
+		<table class="table table-striped list-discussions" width="90%">
+			<tr>
+				<th>Topic</th>
+				<th>Users</th>
+				<th>Category</th>
+				<th>Replies</th>
+				<th>Views</th>
+				<th>Created</th>
+			</tr>
+		{% for post in posts %}
+			<tr>
+				<td align="left">
+					{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
+					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
+				</td>
+				<td>
+					{% for gravatar in post.getRecentUsers() %}
+						<img src="https://secure.gravatar.com/avatar/{{ gravatar }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
+					{% endfor %}
+				</td>
+				<td>
+					<span class="author">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
+				</td>
+				<td class="number{% if !post.number_replies %} no-replies{%endif %}" align="center">
+					<span class="big-number">{{ post.number_replies }}</span>
+				</td>
+				<td class="number{% if !post.number_views %} no-views{%endif %}" align="center">
+					<span class="big-number">{{ post.number_views }}</span>
+				</td>
+				<td>
+					<span class="date">{{ post.getHumanCreatedAt() }}</span>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
 </div>
 
-<ul class="pager">
-	{% if offset > 0 %}
-		<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
-	{% endif %}
+<div class="container">
+	<ul class="pager">
+		{% if offset > 0 %}
+			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
+		{% endif %}
 
-	{% if totalPosts.count > 30 %}
-		<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
-	{% endif %}
-</ul>
+		{% if totalPosts.count > 30 %}
+			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
+		{% endif %}
+	</ul>
+</div>
 
 {% else %}
 	<div>There are no posts here</div>

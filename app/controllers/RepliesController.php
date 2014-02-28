@@ -70,6 +70,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$content = $this->request->getPost('content');
 		if (trim($content)) {
 			$postReply->content = $content;
+			$postReply->edited_at = time();
 			$postReply->save();
 		}
 
