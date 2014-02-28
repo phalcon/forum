@@ -37,8 +37,8 @@
 				</div>
 				<div class="posts-buttons" align="right">
 					{% if post.users_id == currentUser or moderator == 'Y' %}
-						{{ link_to('edit/discussion/' ~ post.id, 'Edit', "class": "btn btn-default btn-xs") }}
-						{{ link_to('delete/discussion/' ~ post.id, 'Delete', "class": "btn btn-default btn-xs") }}
+						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
+						{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}
 					{% endif %}
 				</div>
 			</td>
@@ -69,8 +69,12 @@
 				<div class="posts-buttons" align="right">
 					{% if reply.users_id == currentUser or moderator == 'Y' %}
 						<br>
-						<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">Edit</a>
-						<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">Delete</a>
+						<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">
+							<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
+						</a>
+						<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">
+							<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
+						</a>
 						<br>
 					{% endif %}
 				</div>
