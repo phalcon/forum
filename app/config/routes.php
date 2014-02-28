@@ -37,6 +37,11 @@ $router->add('/logout', array(
 	'action' => 'logout'
 ));
 
+$router->add('/karma', array(
+	'controller' => 'utils',
+	'action' => 'karma'
+));
+
 $router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
 	'controller' => 'discussions',
 	'action' => 'category'

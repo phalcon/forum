@@ -134,9 +134,9 @@ class Posts extends Model
 		}
 
 		$history = new PostsHistory();
-		$history->posts_id = $this->id;
+		$history->posts_id = $this->getDI()->getSession()->get('identity');
 		$history->users_id = $this->users_id;
-		$history->content = $this->content;
+		$history->content  = $this->content;
 		$history->save();
 	}
 
@@ -156,10 +156,10 @@ class Posts extends Model
 	public function getRecentUsers()
 	{
 		$number = 0;
-		$users = array($this->user->id => $this->user->gravatar_id);
+		$users = array($this->user->id => array($this->user->login, $this->user->gravatar_id));
 		foreach ($this->getReplies(['order' => 'created_at DESC']) as $reply) {
 			if (!isset($users[$reply->user->id])) {
-				$users[$reply->user->id] = $reply->user->gravatar_id;
+				$users[$reply->user->id] = array($reply->user->login, $reply->user->gravatar_id);
 				$number++;
 			}
 			if ($number > 2) {
@@ -172,13 +172,17 @@ class Posts extends Model
 	public function getHumanCreatedAt()
 	{
 		$diff = time() - $this->created_at;
-		if ($diff > 86400) {
-			return ((int) ($diff / 86400)) . 'd';
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->created_at);
 		} else {
-			if ($diff > 3600) {
-				return ((int) ($diff / 3600)) . 'h';
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd';
 			} else {
-				return ((int) ($diff / 60)) . 'm';
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h';
+				} else {
+					return ((int) ($diff / 60)) . 'm';
+				}
 			}
 		}
 	}

@@ -119,13 +119,17 @@ class PostsReplies extends Model
 	public function getHumanCreatedAt()
 	{
 		$diff = time() - $this->created_at;
-		if ($diff > 86400) {
-			return ((int) ($diff / 86400)) . 'd ago';
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->created_at);
 		} else {
-			if ($diff > 3600) {
-				return ((int) ($diff / 3600)) . 'h ago';
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd';
 			} else {
-				return ((int) ($diff / 60)) . 'm ago';
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h';
+				} else {
+					return ((int) ($diff / 60)) . 'm';
+				}
 			}
 		}
 	}

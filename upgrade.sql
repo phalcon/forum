@@ -2,6 +2,7 @@ alter table posts add locked char(1) default 'N';
 alter table users add moderator char(1) default 'N';
 alter table posts add edited_at int(18) unsigned after modified_at;
 alter table posts_replies add edited_at int(18) unsigned;
+alter table users add karma int;
 
 CREATE TABLE `posts_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

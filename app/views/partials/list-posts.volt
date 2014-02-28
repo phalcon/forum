@@ -44,8 +44,10 @@
 					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
 				</td>
 				<td>
-					{% for gravatar in post.getRecentUsers() %}
-						<img src="https://secure.gravatar.com/avatar/{{ gravatar }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
+					{% for id, user in post.getRecentUsers() %}
+					 	<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
+							<img src="https://secure.gravatar.com/avatar/{{ user[1] }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
+						</a>
 					{% endfor %}
 				</td>
 				<td>

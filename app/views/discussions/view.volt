@@ -17,7 +17,8 @@
 		<tr>
 			<td valign="top" align="center" class="small">
 				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
-				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span>
+				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span><br>
+				<span class="karma">{{ post.user.karma }}</span>
 			</td>
 			<td class="post-body">
 				<div class="posts-buttons" align="right">
@@ -28,7 +29,7 @@
 					{% endif %}
 					<a name="C{{ post.id }}" href="#C{{ post.id }}">
 						<span class="action-date">
-							posted this <span>{{ date('M d/Y H:i', post.created_at) }}</span>
+							<span>{{ post.getHumanCreatedAt() }}</span>
 						</span>
 					</a>
 				</div>
@@ -48,7 +49,8 @@
 		<tr>
 			<td class="small" valign="top" align="center">
 				<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
-				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span>
+				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span><br>
+				<span class="karma">{{ reply.user.getHumanKarma() }}</span>
 			</td>
 			<td class="post-body">
 				<div class="posts-buttons" align="right">
@@ -59,7 +61,7 @@
 					{% endif %}
 					<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
 						<span class="action-date">
-							commented <span>{{ reply.getHumanCreatedAt() }}</span>
+							<span>{{ reply.getHumanCreatedAt() }}</span>
 						</span>
 					</a>
 				</div>
@@ -145,7 +147,7 @@
         <h4 class="modal-title" id="historyModalLabel">History</h4>
       </div>
       <div class="modal-body" id="historyBody">
-        ...
+        Loading...
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

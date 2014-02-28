@@ -34,6 +34,19 @@
 		            <li class="divider"></li>
 		            <li><a href="#">One more separated link</a></li>
 	          	</ul>
+
+	          	{% cache "sidebar" %}
+					<ul class="dropdown-menu">
+					{% for category in categories %}
+						<li>
+							{{ link_to('category/' ~ category.id ~ '/' ~ category.slug,
+								category.name ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
+							}}
+						</li>
+					{% endfor %}
+				</ul>
+	{% endcache %}
+
 	        </li>
 			{% if session.get('identity') %}
 			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Activity') }}</li>

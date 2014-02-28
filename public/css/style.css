@@ -80,7 +80,6 @@ table.discussion img {
 
 .post-content {
     max-width: 900px;
-    overflow-y: scroll;
 }
 
 @media (min-width: 1280px) {
@@ -105,3 +104,7 @@ table.discussion img {
     height: 24px;
 }
 
+.karma {
+    color: #777;
+    font-size: 10px;
+}

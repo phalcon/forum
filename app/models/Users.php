@@ -29,6 +29,8 @@ class Users extends Model
 
 	public $timezone;
 
+	public $moderator;
+
 	public function initialize()
 	{
 		$this->addBehavior(new Timestampable(array(
@@ -44,6 +46,7 @@ class Users extends Model
 	public function beforeCreate()
 	{
 		$this->notifications = 'P';
+		$this->moderator = 'N';
 		$this->timezone = 'Europe/London';
 	}
 
@@ -54,6 +57,15 @@ class Users extends Model
 			$activity->users_id = $this->id;
 			$activity->type = 'U';
 			$activity->save();
+		}
+	}
+
+	public function getHumanKarma()
+	{
+		if ($this->karma >= 1000) {
+			return sprintf("%.1f", $this->karma / 1000) . 'k';
+		} else {
+			return $this->karma;
 		}
 	}
 

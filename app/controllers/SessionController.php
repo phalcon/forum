@@ -113,6 +113,8 @@ class SessionController extends \Phalcon\Mvc\Controller
     public function logoutAction()
     {
     	$this->session->remove('identity');
+    	$this->session->remove('identity-name');
+    	$this->session->remove('identity-moderator');
 
     	$this->flashSession->success('Goodbye!');
 		return $this->discussionsRedirect();
@@ -127,6 +129,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 		$this->session->set('identity-name', 'Phalcon');
 		$this->session->set('identity-gravatar', '5d6f567f9109789fd9f702959768e35d');
 		$this->session->set('identity-timezone', 'America/Bogota');
+		$this->session->set('identity->moderator', 'Y');
     }
 
 }
