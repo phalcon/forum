@@ -106,7 +106,8 @@ var Forum = {
 			url: Forum._uri + 'discussion/vote-up/' + element.data('id')
 		}).done(function(response){
 			if (response.status == "error") {
-				alert(response.message);
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
 			} else {
 				window.location.reload();
 			}
@@ -124,7 +125,46 @@ var Forum = {
 			url: Forum._uri + 'discussion/vote-down/' + element.data('id')
 		}).done(function(response){
 			if (response.status == "error") {
-				alert(response.message);
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload();
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteReplyUp: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/vote-up/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload();
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteReplyDown: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/vote-down/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
 			} else {
 				window.location.reload();
 			}
@@ -200,6 +240,14 @@ var Forum = {
 
 		$('a.vote-post-down').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.votePostDown);
+		});
+
+		$('a.vote-reply-up').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteReplyUp);
+		});
+
+		$('a.vote-reply-down').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteReplyDown);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');

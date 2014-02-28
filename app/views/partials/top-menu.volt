@@ -22,32 +22,26 @@
 			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Categories') }}</li>
 
 			<li class="dropdown">
+
           		<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Activity">
           			<span class="glyphicon glyphicon-th-list"></span> <b class="caret"></b>
           		</a>
-				<ul class="dropdown-menu">
-		            <li><a href="#">Action</a></li>
-		            <li><a href="#">Another action</a></li>
-		            <li><a href="#">Something else here</a></li>
-		            <li class="divider"></li>
-		            <li><a href="#">Separated link</a></li>
-		            <li class="divider"></li>
-		            <li><a href="#">One more separated link</a></li>
-	          	</ul>
 
-	          	{% cache "sidebar" %}
+				{% cache "sidebar" %}
 					<ul class="dropdown-menu">
-					{% for category in categories %}
-						<li>
-							{{ link_to('category/' ~ category.id ~ '/' ~ category.slug,
-								category.name ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
-							}}
-						</li>
-					{% endfor %}
-				</ul>
-	{% endcache %}
-
+						{% if categories is defined %}
+							{% for category in categories %}
+								<li>
+									{{ link_to('category/' ~ category.id ~ '/' ~ category.slug,
+										category.name ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
+									}}
+								</li>
+							{% endfor %}
+						{% endif %}
+					</ul>
+				{% endcache %}
 	        </li>
+
 			{% if session.get('identity') %}
 			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Activity') }}</li>
 			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>

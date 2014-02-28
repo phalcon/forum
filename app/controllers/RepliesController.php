@@ -116,4 +116,116 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		return $this->response->redirect();
 	}
 
+	/**
+	 * Votes a post up
+	 */
+	public function voteUpAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$postReply = PostsReplies::findFirstById($id);
+		if (!$postReply) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post reply does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$postReply->votes_up++;
+		if ($postReply->users_id != $user->id) {
+			$postReply->user->karma += 5;
+			$postReply->user->vote_points += 5;
+		}
+
+		if ($postReply->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
+	/**
+	 * Votes a post down
+	 */
+	public function voteDownAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$postReply = PostsReplies::findFirstById($id);
+		if (!$postReply) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post reply does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$postReply->votes_down++;
+		if ($postReply->users_id != $user->id) {
+			$postReply->user->karma -= 5;
+			$postReply->user->vote_points -= 5;
+		}
+
+		if ($postReply->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
 }

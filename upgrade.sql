@@ -29,3 +29,11 @@ CREATE TABLE `posts_replies_history` (
   PRIMARY KEY (`id`),
   KEY `posts_replies_id` (`posts_replies_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `posts_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

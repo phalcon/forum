@@ -127,6 +127,16 @@ $router->add('/discussion/vote-down/{id:[0-9]+}', array(
 	'action' => 'voteDown'
 ));
 
+$router->add('/reply/vote-up/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteUp'
+));
+
+$router->add('/reply/vote-down/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteDown'
+));
+
 $router->add('/index.html', array(
 	'controller' => 'discussions',
 	'action' => 'index'

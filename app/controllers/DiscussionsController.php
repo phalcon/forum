@@ -6,6 +6,7 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsViews,
 	Phosphorum\Models\PostsReplies,
 	Phosphorum\Models\PostsHistory,
+	Phosphorum\Models\PostsVotes,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
 	Phosphorum\Models\IrcLog,
@@ -82,12 +83,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 */
 		$params = null;
 		switch ($order) {
+
 			case 'hot':
 				$this->tag->setTitle('Hot Discussions');
 				$userId = $this->session->get('identity');
 				$itemBuilder->orderBy('p.modified_at DESC');
 				$totalBuilder->orderBy('p.modified_at DESC');
 				break;
+
 			case 'my':
 				$this->tag->setTitle('My Discussions');
 				$userId = $this->session->get('identity');
@@ -97,11 +100,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					$totalBuilder->where('p.users_id = ?0');
 				}
 				break;
+
 			case 'unanswered':
 				$this->tag->setTitle('Unanswered Discussions');
 				$itemBuilder->where('p.number_replies = 0');
 				$totalBuilder->where('p.number_replies = 0');
 				break;
+
             case 'answers':
 				$this->tag->setTitle('My Answers');
 				$userId = $this->session->get('identity');
@@ -448,13 +453,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$postHistory = $postHistories->getFirst();
 		}
 
-		$b = explode("\n", $postHistory->content);
+		if (is_object($postHistory)) {
+			$b = explode("\n", $postHistory->content);
 
+			$diff = new \Diff($b, $a, array());
+			$renderer = new \Diff_Renderer_Html_SideBySide();
 
-		$diff = new \Diff($b, $a, array());
-		$renderer = new \Diff_Renderer_Html_SideBySide();
-
-		echo $diff->Render($renderer);
+			echo $diff->Render($renderer);
+		} else {
+			$this->flash->notice('No history available to show');
+		}
 	}
 
 	/**
@@ -488,6 +496,25 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				'status' => 'error',
 				'message' => 'You don\'t have enough votes available'
 			));
+		}
+
+		if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this post'
+			));
+		}
+
+		$postVote = new PostsVotes();
+		$postVote->posts_id = $post->id;
+		$postVote->users_id = $user->id;
+		if (!$postVote->save()) {
+			foreach ($postVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
 		}
 
 		$post->votes_up++;
@@ -545,6 +572,18 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				'message' => 'You don\'t have enough votes available'
 			));
 		}
+
+		if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this post'
+			));
+		}
+
+		$postVote = new PostsVotes();
+		$postVote->posts_id = $post->id;
+		$postVote->users_id = $user->id;
+		$postVote->save();
 
 		$post->votes_down++;
 		if ($post->users_id != $user->id) {
@@ -720,6 +759,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->user = $user;
 		$this->view->timezones = require '../app/config/timezones.php';
+
+		$this->view->numberPosts = Posts::count(array(
+			'users_id = ?0',
+			'bind' => array($user->id)
+		));
+
+		$this->view->numberReplies = PostsReplies::count(array(
+			'users_id = ?0',
+			'bind' => array($user->id)
+		));
 	}
 
 	public function helpAction()

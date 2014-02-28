@@ -109,3 +109,30 @@ table.discussion img {
     color: #777;
     font-size: 10px;
 }
+
+.dropdown-menu {
+    min-width: 240px;
+}
+
+.dropdown-menu .label-default {
+    color: whitesmoke;
+}
+
+.user-profile .small {
+    width: 100px;
+    text-align: center;
+}
+
+.user-profile h1 {
+    margin: 0px;
+}
+
+table.discussion .small a.user-moderator-Y {
+    background: #ffffc2;
+    color: #0077b3;
+    padding: 2px;
+}
+
+.user-profile .date {
+    color: #999;
+}

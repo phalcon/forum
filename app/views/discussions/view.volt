@@ -17,8 +17,8 @@
 		<tr>
 			<td valign="top" align="center" class="small">
 				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
-				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e) }}</span><br>
-				<span class="karma">{{ post.user.karma }}</span>
+				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
+				<span class="karma">{{ post.user.getHumanKarma() }}</span>
 			</td>
 			<td class="post-body">
 				<div class="posts-buttons" align="right">
@@ -59,7 +59,7 @@
 		<tr>
 			<td class="small" valign="top" align="center">
 				<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
-				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e) }}</span><br>
+				<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
 				<span class="karma">{{ reply.user.getHumanKarma() }}</span>
 			</td>
 			<td class="post-body">
@@ -175,3 +175,19 @@
   </div>
 </div>
 
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header alert-danger">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="errorModalLabel">Error</h4>
+      </div>
+      <div class="modal-body" id="errorBody">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 
 <div class="user-profile container">
-	<table align="center" class="table">
+	<table align="center">
 		<tr>
 			<td class="small remove-image" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64&amp;r=pg&amp;d=identicon" class="img-rounded">
@@ -8,8 +8,8 @@
 			<td align="left" valign="top">
 				<h1>{{ user.name|e }}</h1>
 				<p>
-					<span>joined {{ date('M d/Y', user.created_at) }}</span><br>
-					<span>posts {{ numberPosts }}</span> / <span>replies {{ numberReplies }}</span><br>
+					<span>joined <b>{{ date('M d/Y', user.created_at) }}</b></span><br>
+					<span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>
 					<span>reputation <b>{{ user.karma }}</b></span><br>
 					<a href="https://github.com/{{ user.login }}">Github Profile</a>
 				</p>
@@ -28,7 +28,7 @@
 							{% elseif activity.type == 'C' %}
 							has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
 							{% endif %}
-							<span class="date">{{ date('M d/Y H:i', activity.created_at) }}</span>
+							<span class="date">{{ activity.getHumanCreatedAt() }}</span>
 						</div>
 					{% endfor %}
 				</p>
