@@ -127,12 +127,30 @@ class PostsReplies extends Model
 			return date('M \'y', $this->created_at);
 		} else {
 			if ($diff > 86400) {
-				return ((int) ($diff / 86400)) . 'd';
+				return ((int) ($diff / 86400)) . 'd ago';
 			} else {
 				if ($diff > 3600) {
-					return ((int) ($diff / 3600)) . 'h';
+					return ((int) ($diff / 3600)) . 'h ago';
 				} else {
-					return ((int) ($diff / 60)) . 'm';
+					return ((int) ($diff / 60)) . 'm ago';
+				}
+			}
+		}
+	}
+
+	public function getHumanEditedAt()
+	{
+		$diff = time() - $this->edited_at;
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->edited_at);
+		} else {
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd ago';
+			} else {
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h ago';
+				} else {
+					return ((int) ($diff / 60)) . 'm ago';
 				}
 			}
 		}

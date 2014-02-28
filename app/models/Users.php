@@ -53,15 +53,15 @@ class Users extends Model
 	{
 		$this->notifications = 'P';
 		$this->moderator = 'N';
-		$this->karma = 5;
-		$this->votes = 0;
-		$this->votes_points = 0;
+		$this->karma += 15;
+		$this->votes_points += 15;
+		$this->votes = 10;
 		$this->timezone = 'Europe/London';
 	}
 
 	public function afterValidation()
 	{
-		if ($this->votes_points >= 30) {
+		if ($this->votes_points >= 50) {
 			$this->votes++;
 			$this->votes_points = 0;
 		}

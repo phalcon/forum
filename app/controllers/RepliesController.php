@@ -101,8 +101,8 @@ class RepliesController extends \Phalcon\Mvc\Controller
 				if ($usersId != $postReply->post->users_id) {
 
 					$user = Users::findFirstById($usersId);
-					$user->karma -= 10;
-					$user->vote_points -= 10;
+					$user->karma -= 15;
+					$user->votes_points -= 15;
 					$user->save();
 
 					$postReply->post->number_replies--;
@@ -151,12 +151,23 @@ class RepliesController extends \Phalcon\Mvc\Controller
 
 		$postReply->votes_up++;
 		if ($postReply->users_id != $user->id) {
-			$postReply->user->karma += 5;
-			$postReply->user->vote_points += 5;
+			if ($postReply->post->users_id == $user->id) {
+				$points = (15 + intval(abs($user->karma - $postReply->user->karma)/1000));
+			} else {
+				$points = (10 + intval(abs($user->karma - $postReply->user->karma)/1000));
+			}
+			$postReply->user->karma += $points;
+			$postReply->user->votes_points += $points;
 		}
 
 		if ($postReply->save()) {
+
+			if ($postReply->users_id != $user->id) {
+				$user->karma += 10;
+				$user->votes_points += 10;
+			}
 			$user->votes--;
+
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {
 					return $response->setJsonContent(array(
@@ -207,12 +218,23 @@ class RepliesController extends \Phalcon\Mvc\Controller
 
 		$postReply->votes_down++;
 		if ($postReply->users_id != $user->id) {
-			$postReply->user->karma -= 5;
-			$postReply->user->vote_points -= 5;
+			if ($postReply->post->users_id == $user->id) {
+				$points = (15 + intval(abs($user->karma - $postReply->user->karma)/1000));
+			} else {
+				$points = (10 + intval(abs($user->karma - $postReply->user->karma)/1000));
+			}
+			$postReply->user->karma -= $points;
+			$postReply->user->votes_points -= $points;
 		}
 
 		if ($postReply->save()) {
+
+			if ($postReply->users_id != $user->id) {
+				$user->karma += 10;
+				$user->votes_points += 10;
+			}
 			$user->votes--;
+
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {
 					return $response->setJsonContent(array(

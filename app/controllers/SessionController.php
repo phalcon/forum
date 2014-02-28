@@ -80,6 +80,8 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$user->login = $githubUser->getLogin();
 			$user->email = $githubUser->getEmail();
 			$user->gravatar_id = $githubUser->getGravatarId();
+			$user->karma += 5;
+			$user->vote_points += 5;
 
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {

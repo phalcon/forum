@@ -37,7 +37,7 @@ p {
 }
 
 table.discussion .small {
-    width: 120px;
+    width: 90px;
     text-align: center;
 }
 
@@ -46,6 +46,7 @@ table.discussion .small a {
 }
 
 table.discussion .small img {
+    margin-top: 10px;
     width: 48px;
     height: 48px;
     border: none;
@@ -80,7 +81,8 @@ table.discussion img {
 
 .post-content {
     max-width: 900px;
-    min-height: 100px;
+    min-height: 70px;
+    padding-left: 5px;
 }
 
 @media (min-width: 1280px) {
@@ -118,6 +120,10 @@ table.discussion img {
     color: whitesmoke;
 }
 
+.user-profile {
+    width: 790px;
+}
+
 .user-profile .small {
     width: 100px;
     text-align: center;
@@ -125,6 +131,10 @@ table.discussion img {
 
 .user-profile h1 {
     margin: 0px;
+}
+
+.user-profile table {
+    width: 100%;
 }
 
 table.discussion .small a.user-moderator-Y {
@@ -135,4 +145,91 @@ table.discussion .small a.user-moderator-Y {
 
 .user-profile .date {
     color: #999;
+}
+
+
+.bs-callout {
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #eee;
+}
+
+.bs-callout-info {
+    background-color: #f4f8fa;
+    border-color: #5bc0de;
+}
+
+.bs-callout-danger {
+    background-color: #fdf7f7;
+    border-color: #d9534f;
+}
+
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.help table {
+    max-width: 70%;
+}
+
+.post-negative a,
+.post-negative td {
+    color: #c0c0c0;
+    font-size: 12px;
+}
+
+.post-negative img {
+    width: 16px;
+    height: 16px;
+}
+
+.post-negative-h1,
+.post-negative-body {
+    color: #c0c0c0;
+}
+
+tr.reply-negative td,
+tr.reply-negative p {
+    color: #c0c0c0;
+    font-size: 0.9em;
+}
+
+tr.reply-positive td,
+tr.reply-positive p {
+    font-size: 1.1em;
+}
+
+tr.reply-negative td.small img {
+    width: 32px;
+    height: 32px;
+}
+
+tr.reply-negative .post-content {
+    min-height: 50px;
+}
+
+tr.reply-negative {
+    background: #fafafa;
+}
+
+tr.reply-positive {
+    background: #f4f8fa;
+}
+
+div#footer .version {
+    color: #c0c0c0;
+    font-size: 12px;
 }

@@ -62,7 +62,7 @@ var Forum = {
 		//Are you sure you want to delete this?
 		var element = $(event.data.element);
 		var form = $(event.data.form);
-
+		$('div.posts-buttons', element.parents()[1]).show();
 		element.show();
 		form.remove();
 	},
@@ -84,8 +84,8 @@ var Forum = {
 	editComment: function(event)
 	{
 		var element = $(event.data.element);
-
-		var content = $('div.post-content', element.parents()[1]);
+		var content = $('div.post-content', element.parents()[2]);
+		$('div.posts-buttons', element.parents()[2]).hide();
 		if (content.is(':visible')) {
 			$.ajax({
 				dataType: 'json',

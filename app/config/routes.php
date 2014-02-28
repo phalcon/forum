@@ -7,9 +7,54 @@ $router->add('/sitemap', array(
 	'action' => 'index'
 ));
 
+$router->add('/help/markdown', array(
+	'controller' => 'help',
+	'action' => 'markdown'
+));
+
+$router->add('/help/karma', array(
+	'controller' => 'help',
+	'action' => 'karma'
+));
+
 $router->add('/help', array(
+	'controller' => 'help',
+	'action' => 'index'
+));
+
+$router->add('/index.html', array(
 	'controller' => 'discussions',
-	'action' => 'help'
+	'action' => 'index'
+));
+
+$router->add('/discussions', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
+$router->add('/discussion/history/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'history'
+));
+
+$router->add('/discussion/vote-up/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteUp'
+));
+
+$router->add('/discussion/vote-down/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteDown'
+));
+
+$router->add('/reply/vote-up/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteUp'
+));
+
+$router->add('/reply/vote-down/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteDown'
 ));
 
 $router->add('/search', array(
@@ -105,41 +150,6 @@ $router->add('/discussions/{order:[a-z]+}/{offset:[0-9]+}', array(
 $router->add('/discussion/{id:[0-9]+}/{slug}', array(
 	'controller' => 'discussions',
 	'action' => 'view'
-));
-
-$router->add('/discussions', array(
-	'controller' => 'discussions',
-	'action' => 'index'
-));
-
-$router->add('/discussion/history/{id:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'history'
-));
-
-$router->add('/discussion/vote-up/{id:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'voteUp'
-));
-
-$router->add('/discussion/vote-down/{id:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'voteDown'
-));
-
-$router->add('/reply/vote-up/{id:[0-9]+}', array(
-	'controller' => 'replies',
-	'action' => 'voteUp'
-));
-
-$router->add('/reply/vote-down/{id:[0-9]+}', array(
-	'controller' => 'replies',
-	'action' => 'voteDown'
-));
-
-$router->add('/index.html', array(
-	'controller' => 'discussions',
-	'action' => 'index'
 ));
 
 $router->add('/', array(

@@ -204,7 +204,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			$user = Users::findFirstById($usersId);
 			$user->karma += 5;
-			$user->vote_points += 5;
+			$user->votes_points += 5;
 			$user->save();
 
 			$post = new Posts();
@@ -314,7 +314,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		if (!$this->request->isPost()) {
 
-			if (!$this->session->get('identity')) {
+			$usersId = $this->session->get('identity');
+			if (!$usersId) {
 
 				/**
 		 		 * Enable cache
@@ -355,6 +356,19 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 */
 				$post->number_views++;
 
+				if ($post->users_id != $usersId) {
+
+					$post->user->karma += 1;
+					$post->user->votes_points += 1;
+
+					$user = Users::findFirstById($usersId);
+					if ($user) {
+						$user->karma += 2;
+						$user->votes_points += 2;
+						$user->save();
+					}
+				}
+
 				$postView = new PostsViews();
 				$postView->post = $post;
 				$postView->ipaddress = $ipAddress;
@@ -394,9 +408,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					$post->number_replies++;
 					$post->modified_at = time();
 
+					$post->user->karma += 5;
+					$post->user->votes_points += 10;
+
 					$user = Users::findFirstById($usersId);
 					$user->karma += 10;
-					$user->vote_points += 10;
+					$user->votes_points += 10;
 					$user->save();
 				}
 
@@ -519,8 +536,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->votes_up++;
 		if ($post->users_id != $user->id) {
+
 			$post->user->karma += 5;
-			$post->user->vote_points += 5;
+			$post->user->votes_points += 5;
+
+			$user->karma += 10;
+			$user->votes_points += 10;
 		}
 
 		if ($post->save()) {
@@ -587,8 +608,12 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->votes_down++;
 		if ($post->users_id != $user->id) {
+
 			$post->user->karma -= 5;
-			$post->user->vote_points -= 5;
+			$post->user->votes_points -= 5;
+
+			$user->karma += 10;
+			$user->votes_points += 10;
 		}
 
 		if ($post->save()) {
