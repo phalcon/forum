@@ -6738,7 +6738,7 @@ var shortcuts = {
 	'Cmd-I': toggleItalic,
 	'Cmd-K': drawLink,
 	'Cmd-Alt-I': drawImage,
-	"Cmd-'": toggleBlockquote,
+	//"Cmd-'": toggleBlockquote,
 	'Cmd-Alt-L': toggleOrderedList,
 	'Cmd-L': toggleUnOrderedList
 };
@@ -7093,7 +7093,7 @@ var toolbar = [
 	{name: 'italic', action: toggleItalic},
 	'|',
 
-	{name: 'quote', action: toggleBlockquote},
+	//{name: 'quote', action: toggleBlockquote},
 	{name: 'unordered-list', action: toggleUnOrderedList},
 	{name: 'ordered-list', action: toggleOrderedList},
 	'|',

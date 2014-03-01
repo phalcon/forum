@@ -92,11 +92,6 @@ $router->add('/karma', array(
 	'action' => 'karma'
 ));
 
-$router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'category'
-));
-
 $router->add('/activity', array(
 	'controller' => 'discussions',
 	'action' => 'activity'
@@ -105,6 +100,16 @@ $router->add('/activity', array(
 $router->add('/activity/irc', array(
 	'controller' => 'discussions',
 	'action' => 'irc'
+));
+
+$router->add('/delete/discussion/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'delete'
+));
+
+$router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'category'
 ));
 
 $router->add('/post/discussion', array(

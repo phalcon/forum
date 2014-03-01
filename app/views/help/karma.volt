@@ -116,6 +116,8 @@
 		</table>
 	</div>
 
+	<hr>
+
 	<h3>Advantages or Karma/Reputation</h3>
 	<ul>
 		<li>Earn respect from the community</li>

@@ -9,6 +9,10 @@ alter table posts add votes_up int unsigned after number_replies;
 alter table posts add votes_down int unsigned after votes_up;
 alter table users add votes int unsigned;
 alter table users add votes_points int;
+alter table posts add deleted int(3) default 0;
+alter table posts add index `deleted`(deleted);
+update posts set votes_up = (number_views / 50) - 1 where votes_up is null;
+update posts set votes_up = null where votes_up = 0;
 
 CREATE TABLE `posts_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

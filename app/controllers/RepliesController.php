@@ -5,6 +5,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsRepliesHistory,
 	Phalcon\Http\Response;
 
 class RepliesController extends \Phalcon\Mvc\Controller
@@ -248,6 +249,52 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		return $response->setJsonContent(array(
 			'status' => 'OK'
 		));
+	}
+
+	/**
+	 * Shows the latest modification made to a post
+	 */
+	public function historyAction($id = 0)
+	{
+
+		$this->view->disable();
+
+		/**
+		 * Find the post using get
+		 */
+		$postReply = PostsReplies::findFirstById($id);
+		if (!$postReply) {
+			$this->flashSession->error('The reply does not exist');
+			return $this->response->redirect();
+		}
+
+		$a = explode("\n", $postReply->content);
+
+		$first = true;
+		$postHistories = PostsRepliesHistory::find(array('posts_replies_id = ?0', 'bind' => array($postReply->id), 'order' => 'created_at DESC'));
+		if (count($postHistories) > 1) {
+			foreach ($postHistories as $postHistory) {
+				if ($first) {
+					$first = false;
+					continue;
+				}
+				break;
+			}
+		} else {
+			$postHistory = $postHistories->getFirst();
+		}
+
+		if (is_object($postHistory)) {
+
+			$b = explode("\n", $postHistory->content);
+
+			$diff = new \Diff($b, $a, array());
+			$renderer = new \Diff_Renderer_Html_SideBySide();
+
+			echo $diff->Render($renderer);
+		} else {
+			$this->flash->notice('No history available to show');
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ class HelpController extends \Phalcon\Mvc\Controller
 {
 	public function initialize()
 	{
+		$this->tag->setTitle('Help');
 		$this->view->setTemplateBefore(array('discussions'));
 	}
 

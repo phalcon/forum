@@ -121,6 +121,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$this->tag->setTitle('Discussions');
 		}
 
+		$itemBuilder->andWhere('p.deleted = 0');
+		$totalBuilder->andWhere('p.deleted = 0');
+
 		$itemBuilder->offset((int) $offset);
 
 		$this->view->posts = $itemBuilder
@@ -157,10 +160,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
-		$totalBuilder->where('p.categories_id = ?0');
+		$totalBuilder->where('p.categories_id = ?0 AND deleted = 0');
 
 		$posts = $itemBuilder
-			->where('p.categories_id = ?0')
+			->where('p.categories_id = ?0 AND deleted = 0')
 			->orderBy('p.created_at DESC')
 			->offset($offset)
 			->getQuery()
@@ -303,6 +306,43 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	}
 
 	/**
+	 * This shows the create post form and also store the related post
+	 */
+	public function deleteAction($id)
+	{
+
+		$usersId = $this->session->get('identity');
+		if (!$usersId) {
+			$this->flashSession->error('You must be logged first');
+			return $this->response->redirect();
+		}
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirst(array(
+			"id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
+			"bind" => array($id, $usersId, $this->session->get('identity-moderator'))
+		));
+		if (!$post) {
+			$this->flashSession->error('The discussion does not exist');
+			return $this->response->redirect();
+		}
+
+		if ($post->sticked == 'Y') {
+			$this->flashSession->error('The discussion cannot be deleted because it\'s sticked');
+			return $this->response->redirect();
+		}
+
+		$post->deleted = 1;
+		if ($post->save()) {
+			$this->flashSession->success('Discussion was successfully deleted');
+			return $this->response->redirect();
+		}
+
+	}
+
+	/**
 	 * Displays a post and its comments
 	 *
 	 * @param int $id
@@ -336,6 +376,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post = Posts::findFirstById($id);
 			if (!$post) {
 				$this->flashSession->error('The discussion does not exist');
+				return $this->response->redirect();
+			}
+
+			if ($post->deleted) {
+				$this->flashSession->error('The discussion is deleted');
 				return $this->response->redirect();
 			}
 
@@ -395,6 +440,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				return $this->response->redirect();
 			}
 
+			if ($post->deleted) {
+				$this->flashSession->error('The discussion is deleted');
+				return $this->response->redirect();
+			}
+
 			$content = $this->request->getPost('content', 'trim');
 			if ($content) {
 
@@ -440,6 +490,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->post = $post;
 	}
 
+	/**
+	 * Shows the latest modification made to a post
+	 */
 	public function historyAction($id = 0)
 	{
 
@@ -742,7 +795,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		));
 
 		$this->view->activities = Activities::find(array(
-			'users_id = ?0',
+			'users_id = ?0 AND deleted = 0',
 			'bind' => array($id),
 			'order' => 'created_at DESC',
 			'limit' => 15
@@ -786,7 +839,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->timezones = require '../app/config/timezones.php';
 
 		$this->view->numberPosts = Posts::count(array(
-			'users_id = ?0',
+			'users_id = ?0 AND deleted = 0',
 			'bind' => array($user->id)
 		));
 

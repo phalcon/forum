@@ -5,7 +5,7 @@
 		<h1>Recent Activity</h1>
 	</p>
 
-	<table width="90%" align="center" class="table">
+	<table width="90%" align="center" class="table table-striped">
 		<tr>
 			<td colspan="2">
 				<div class="row">

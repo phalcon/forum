@@ -182,8 +182,12 @@ table.discussion .small a.user-moderator-Y {
     margin-bottom: 0;
 }
 
+.help {
+    width: 800px;
+}
+
 .help table {
-    max-width: 70%;
+    max-width: 80%;
 }
 
 .post-negative a,

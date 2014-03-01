@@ -92,7 +92,7 @@
 							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
 							</a>
-							<a class="btn btn-default btn-xs reply-delete" data-id="{{ reply.id }}">
+							<a class="btn btn-default btn-xs reply-remove" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
 							</a>
 						{% endif %}
@@ -119,10 +119,9 @@
 					<span>{{ link_to('', 'You') }}</span>
 				</td>
 				<td>
-					<ul class="nav nav-tabs preview-nav">
+					<ul class="nav nav-tabs">
 						<li class="active"><a href="#" onclick="return false">Comment</a></li>
-						<!--<li><a href="#" onclick="return false">Preview</a></li>-->
-						<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+						<li>{{ link_to('help/markdown', 'Help', 'class': 'help', 'parent': '_new') }}</li>
 					</ul>
 
 					<form method="post" autocomplete="off" role="form">

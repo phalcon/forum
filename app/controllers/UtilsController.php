@@ -30,7 +30,7 @@ class UtilsController extends \Phalcon\Mvc\Controller
 				));
 
 				$user->karma = ($numberReplies * 10 + $numberPosts * 5);
-				$user->votes = intval($user->karma / 30);
+				$user->votes = intval($user->karma / 50);
 				$user->save();
 			}
 		}
