@@ -43,16 +43,17 @@
 				<td align="left">
 					{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
 					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
+					{% if post.accepted_answer == "Y" %}&nbsp;<span class="label label-success">SOLVED</span>{% endif %}
 				</td>
 				<td>
-					{% for id, user in post.getRecentUsers() %}
+					{%- for id, user in post.getRecentUsers() -%}
 					 	<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
 							<img src="https://secure.gravatar.com/avatar/{{ user[1] }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
 						</a>
-					{% endfor %}
+					{%- endfor -%}
 				</td>
 				<td>
-					<span class="author">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
+					<span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
 				</td>
 				<td align="center">
 					<span class="big-number">{% if post.number_replies > 0 %}{{ post.number_replies }}{%endif %}</span>
