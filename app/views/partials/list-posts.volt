@@ -30,7 +30,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
-				<th>Topic</th>
+				<th width="55%">Topic</th>
 				<th>Users</th>
 				<th>Category</th>
 				<th>Replies</th>
@@ -83,5 +83,3 @@
 {% else %}
 	<div>There are no posts here</div>
 {% endif %}
-
-

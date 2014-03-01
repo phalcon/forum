@@ -14,7 +14,8 @@
 
 			<div class="bs-callout bs-callout-info">
 				<h4>Creating a new Post</h4>
-				<p>Help us make this a great place for discussion and collaboration. Please spend some time browsing the topics here before replying or starting your own, and you’ll have a better chance of meeting others who share your interests or have had similar problems. If you want to report any bug related to Phalcon or its projects. Please post it on <a href="https://github.com/phalcon/cphalcon/issues">Github</a> issues.</p>
+				<p>Help us make this a great place for discussion and collaboration. Please spend some time browsing the topics here
+					before replying or starting your own, and you’ll have a better chance of meeting others who share your interests or have had similar problems. If you want to report any bug related to Phalcon or suggest a new feature, please post it on <a href="https://github.com/phalcon/cphalcon/issues">Github</a> issues.</p>
 			</div>
 
 			<form method="post" autocomplete="off" role="form">

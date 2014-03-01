@@ -7,6 +7,16 @@ $router->add('/sitemap', array(
 	'action' => 'index'
 ));
 
+$router->add('/help/moderators', array(
+	'controller' => 'help',
+	'action' => 'moderators'
+));
+
+$router->add('/help/voting', array(
+	'controller' => 'help',
+	'action' => 'voting'
+));
+
 $router->add('/help/markdown', array(
 	'controller' => 'help',
 	'action' => 'markdown'

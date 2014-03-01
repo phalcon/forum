@@ -34,9 +34,11 @@ class Posts extends Model
 
 	public $created_at;
 
-	public $edit_at;
+	public $edited_at;
 
 	public $status;
+
+	public $deleted;
 
 	public function initialize()
 	{
@@ -65,6 +67,7 @@ class Posts extends Model
 
 	public function beforeValidationOnCreate()
 	{
+		$this->deleted = 0;
 		$this->number_views = 0;
 		$this->number_replies = 0;
 		$this->sticked = 'N';

@@ -22,8 +22,9 @@
 						</ul>
 					</p>
 					<p>
+						<table class="table table-striped">
 						{% for activity in activities %}
-							<div class="activity">
+							<tr><td>
 								{% if activity.type == 'U' %}
 								has joined the forum
 								{% elseif activity.type == 'P' %}
@@ -32,8 +33,9 @@
 								has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
 								{% endif %}
 								<span class="date">{{ activity.getHumanCreatedAt() }}</span>
-							</div>
+							</td></tr>
 						{% endfor %}
+						</table>
 					</p>
 				</td>
 			</tr>

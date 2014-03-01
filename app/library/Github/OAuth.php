@@ -51,7 +51,7 @@ class OAuth extends \Phalcon\DI\Injectable
         $key = $this->request->getQuery('statekey');
         $value = $this->request->getQuery('state');
 
-        if (!$this->di->get("security")->checkToken($key, $value)) {
+        if (!$this->di["security"]->checkToken($key, $value)) {
             return false;
 		}
 
@@ -68,7 +68,7 @@ class OAuth extends \Phalcon\DI\Injectable
 
 	public function send($url, $parameters, $method='post')
 	{
-		try {			
+		try {
 
 			$client = new HttpClient();
 
@@ -77,7 +77,7 @@ class OAuth extends \Phalcon\DI\Injectable
 			);
 
 			switch ($method) {
-				case 'post':					
+				case 'post':
 					$request = $client->post($url, $headers, $parameters);
 					break;
 				case 'get':
@@ -90,8 +90,9 @@ class OAuth extends \Phalcon\DI\Injectable
 			return json_decode((string) $request->send()->getBody(), true);
 
 		} catch (\Exception $e) {
+			file_put_contents('a.txt', $e->getMessage());
 			return false;
-		} 
+		}
 
 	}
 

@@ -10,8 +10,8 @@
 
 	<p>
 		Karma or reputation is a scoring system that rewards users for their contributions, collaboration and participation in the forum.
-		The forum awards points for almost any activity undertaken. Karma enable the community to
-		to collectively identify the best (and worst) contributions and contributors. This document explains how many points are given for each activity:
+		The forum awards points for almost any activity undertaken. Karma enable the community
+		to collectively identify the best (and worst) contributions. This document explains how many points are given for each activity:
 	</p>
 
 	<div align="center">
@@ -111,6 +111,10 @@
 				<tr>
 					<td>Improving a post or commentary, moving a post to the right category</td>
 					<td><span class="label label-success">+25</span></th>
+				</tr>
+				<tr>
+					<td>Delete an offensive post or comment</td>
+					<td><span class="label label-success">+10</span></th>
 				</tr>
 			</thead>
 		</table>

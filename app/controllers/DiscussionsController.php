@@ -206,8 +206,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$title = $this->request->getPost('title', 'trim');
 
 			$user = Users::findFirstById($usersId);
-			$user->karma += 5;
-			$user->votes_points += 5;
+			$user->karma += 10;
+			$user->votes_points += 10;
 			$user->save();
 
 			$post = new Posts();
@@ -274,6 +274,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->content = $content;
 			$post->edited_at = time();
 
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					$user->karma += 25;
+					$user->votes_points += 25;
+					$user->save();
+				}
+			}
+
 			if ($post->save()) {
 
 				/**
@@ -336,6 +346,25 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->deleted = 1;
 		if ($post->save()) {
+
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					if ($user->moderator == 'Y') {
+						$user->karma += 10;
+						$user->votes_points += 10;
+						$user->save();
+					}
+				}
+
+				$user = $post->user;
+				$user->karma -= 10;
+				$user->votes_points -= 10;
+				$user->save();
+			}
+
 			$this->flashSession->success('Discussion was successfully deleted');
 			return $this->response->redirect();
 		}
@@ -785,7 +814,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->user = $user;
 
 		$this->view->numberPosts = Posts::count(array(
-			'users_id = ?0',
+			'users_id = ?0 AND deleted = 0',
 			'bind' => array($user->id)
 		));
 
@@ -795,7 +824,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		));
 
 		$this->view->activities = Activities::find(array(
-			'users_id = ?0 AND deleted = 0',
+			'users_id = ?0',
 			'bind' => array($id),
 			'order' => 'created_at DESC',
 			'limit' => 15

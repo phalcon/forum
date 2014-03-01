@@ -33,8 +33,7 @@
 				<p>
 					<ul class="nav nav-tabs preview-nav">
 						<li class="active"><a href="#" onclick="return false">Write</a></li>
-						<li><a href="#" onclick="return false">Preview</a></li>
-						<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+						<li>{{ link_to('help/markdown', 'Help', 'class': 'help', 'parent': '_new') }}</li>
 					</ul>
 
 					<div id="comment-box">

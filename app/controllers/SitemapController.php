@@ -42,11 +42,31 @@ class SitemapController extends \Phalcon\Mvc\Controller
 		$url->appendChild($sitemap->createElement('priority', '1.0'));
 		$urlset->appendChild($url);
 
-		foreach (Posts::find(array('order' => 'number_replies DESC')) as $post) {
+		$posts = Posts::find(array(
+			'columns' => '
+				id,
+				slug,
+				modified_at,
+				number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies as karma',
+			'order' => 'karma DESC'
+		));
+
+		$karma = Posts::maximum(array(
+			'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies'
+		));
+
+		foreach ($posts as $post) {
+
+			$modifiedAt = new \DateTime();
+			$modifiedAt->setTimezone(new \DateTimeZone('UTC'));
+			$modifiedAt->setTimestamp($post->modified_at);
+
+			$postKarma = $post->karma / ($karma + 100);
+
 			$url = $sitemap->createElement('url');
 			$url->appendChild($sitemap->createElement('loc', 'http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug));
-			$url->appendChild($sitemap->createElement('priority', '0.8'));
-			$url->appendChild($sitemap->createElement('lastmod', $post->getUTCModifiedAt()));
+			$url->appendChild($sitemap->createElement('priority', $postKarma > 0.7 ? sprintf("%0.1f", $postKarma) : sprintf("%0.1f", $postKarma + 0.25)));
+			$url->appendChild($sitemap->createElement('lastmod', $modifiedAt->format('Y-m-d\TH:i:s\Z')));
 			$urlset->appendChild($url);
 		}
 

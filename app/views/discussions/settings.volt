@@ -16,6 +16,7 @@
 						<span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>
 						<span>reputation <b>{{ user.karma }}</b></span><br>
 						<span>votes available <b>{{ user.votes }}</b></span><br>
+						<span>voting points <b>{{ user.votes_points }}/50</b></span><br>
 					</p>
 					<hr>
 					<p>

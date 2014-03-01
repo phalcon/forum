@@ -22,11 +22,14 @@
 			<li class="dropdown">
           		<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Search">
           			<span class="glyphicon glyphicon-search"></span> <b class="caret"></b>
-          			<ul class="dropdown-menu">
-						<li>
-						</li>
-					</ul>
           		</a>
+          		<ul class="dropdown-menu">
+					<li>
+						<div style="width:300px;padding:10px">
+							<gcse:searchbox-only></gcse:searchbox-only>
+						</div>
+					</li>
+				</ul>
           	</li>
 			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Categories') }}</li>
 

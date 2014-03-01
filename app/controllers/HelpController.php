@@ -30,5 +30,15 @@ class HelpController extends \Phalcon\Mvc\Controller
 
 	}
 
+	public function votingAction()
+	{
+
+	}
+
+	public function moderatorsAction()
+	{
+
+	}
+
 }
 
