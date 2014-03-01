@@ -40,6 +40,8 @@ class Posts extends Model
 
 	public $deleted;
 
+	public $accepted_answer;
+
 	public function initialize()
 	{
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
@@ -71,6 +73,7 @@ class Posts extends Model
 		$this->number_views = 0;
 		$this->number_replies = 0;
 		$this->sticked = 'N';
+		$this->accepted_answer = 'N';
 		$this->status = 'A';
 	}
 

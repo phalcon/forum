@@ -828,7 +828,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->activities = Activities::find(array(
 			'users_id = ?0',
-			'bind' => array($id),
+			'bind' => array($user->id),
 			'order' => 'created_at DESC',
 			'limit' => 15
 		));

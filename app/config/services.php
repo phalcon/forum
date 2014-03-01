@@ -25,7 +25,7 @@ $di->set('volt', function($view, $di) {
 	$volt->setOptions(array(
 		"compiledPath" => __DIR__ . "/../cache/volt/",
 		"compiledSeparator" => "_",
-		"compileAlways" => true
+		//"compileAlways" => true
 	));
 
 	return $volt;

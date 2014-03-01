@@ -6,6 +6,7 @@ use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
 	Phosphorum\Models\PostsRepliesHistory,
+	Phosphorum\Models\PostsRepliesVotes,
 	Phalcon\Http\Response;
 
 class RepliesController extends \Phalcon\Mvc\Controller
@@ -150,6 +151,17 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
+		$voted = PostsRepliesVotes::count(array(
+			'posts_replies_id = ?0 AND users_id = ?1',
+			'bind' => array($postReply->id, $user->id)
+		));
+		if ($voted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this reply'
+			));
+		}
+
 		$postReply->votes_up++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
@@ -214,6 +226,17 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			return $response->setJsonContent(array(
 				'status' => 'error',
 				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$voted = PostsRepliesVotes::count(array(
+			'posts_replies_id = ?0 AND users_id = ?1',
+			'bind' => array($postReply->id, $user->id)
+		));
+		if ($voted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this reply'
 			));
 		}
 
@@ -296,5 +319,76 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			$this->flash->notice('No history available to show');
 		}
 	}
+
+	/**
+	 * Accepts a reply as answer
+	 */
+	public function acceptAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$postReply = PostsReplies::findFirstById($id);
+		if (!$postReply) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post reply does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($postReply->accepted == 'Y') {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'This reply is already accepted as answer'
+			));
+		}
+
+		if ($postReply->post->accepted_answer == 'Y') {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'This post already has an accepted answer'
+			));
+		}
+
+		$postReply->accepted = 'Y';
+		if ($postReply->users_id != $user->id) {
+			$points = (30 + intval(abs($user->karma - $postReply->user->karma)/1000));
+			$postReply->user->karma += $points;
+			$postReply->user->votes_points += $points;
+			$postReply->post->accepted_answer = 'Y';
+		}
+
+		if ($postReply->save()) {
+
+			if ($postReply->users_id != $user->id) {
+				$user->karma += 10;
+				$user->votes_points += 10;
+			}
+
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
 
 }

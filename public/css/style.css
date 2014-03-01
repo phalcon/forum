@@ -234,7 +234,57 @@ tr.reply-positive {
     background: #f4f8fa;
 }
 
+tr.reply-accepted {
+    background: #f4f8fa;
+}
+
+tr.reply-accepted .post-content {
+    min-height: 140px;
+}
+
 div#footer .version {
     color: #c0c0c0;
     font-size: 12px;
+}
+
+.posts-buttons .btn-default {
+    color: #919191;
+}
+
+.table-title td {
+    padding: 0px;
+}
+
+.table-title h1 {
+    margin: 0px;
+}
+
+.table-stats {
+    border: 1px solid #dadada;
+}
+
+.table-stats td {
+    padding: 7px;
+    text-align: center;
+    font-size: 12px;
+    padding-right: 11px;
+    padding-left: 11px;
+    color: #0077b3;
+}
+
+.table-stats label {
+    color: #999999;
+    margin: 0px;
+    font-weight: normal;
+}
+
+div.accepted-reply {
+    color: #47a447;
+    font-size: 11px;
+}
+
+div.accepted-reply span {
+    font-size: 32px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

@@ -42,3 +42,14 @@ CREATE TABLE `posts_votes` (
   `created_at` int(18) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `posts_replies_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_replies_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+alter table posts_replies add accepted char(1) default 'N';
+alter table posts add accepted_answer char(1) default 'N';

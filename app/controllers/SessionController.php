@@ -121,16 +121,4 @@ class SessionController extends \Phalcon\Mvc\Controller
 		return $this->discussionsRedirect();
     }
 
-    public function shadowLoginAction()
-    {
-    	/**
-		 * Store the user data in session
-		 */
-		$this->session->set('identity', 1);
-		$this->session->set('identity-name', 'Phalcon');
-		$this->session->set('identity-gravatar', '5d6f567f9109789fd9f702959768e35d');
-		$this->session->set('identity-timezone', 'America/Bogota');
-		$this->session->set('identity->moderator', 'Y');
-    }
-
 }

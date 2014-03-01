@@ -18,14 +18,35 @@
 	</ol>
 
 	<p>
-		<table>
+		<table width="100%" class="table-title">
 			<tr>
-				<td>
+				<td width="70%">
 					<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">
 						{{- post.title|e -}}
 					</h1>
-					<td>
-
+					<td align="right">
+						<table class="table-stats">
+							<td>
+								<label>Created</label><br>
+								{{ post.getHumanCreatedAt() }}
+							</td>
+							<td>
+								<label>Last Reply</label><br>
+								{{ post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" }}
+							</td>
+							<td>
+								<label>Replies</label><br>
+								{{ post.number_replies }}
+							</td>
+							<td>
+								<label>Views</label><br>
+								{{ post.number_views }}
+							</td>
+							<td>
+								<label>Votes</label><br>
+								{{ post.votes_up - post.votes_down }}
+							</td>
+						</table>
 					</td>
 				</td>
 			</tr>
@@ -62,42 +83,52 @@
 							{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}
 						{% endif %}
 						{% if currentUser %}
-							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
-								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{ post.votes_up }}
-							</a>
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ post.votes_down }}
 							</a>
-						{% else %}
-							<a href="#" onclick="return false" class="btn btn-success btn-xs">
+							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
 								<span class="glyphicon glyphicon-thumbs-up"></span>
 								{{ post.votes_up }}
 							</a>
+						{% else %}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ post.votes_down }}
+							</a>
+							<a href="#" onclick="return false" class="btn btn-success btn-xs">
+								<span class="glyphicon glyphicon-thumbs-up"></span>
+								{{ post.votes_up }}
 							</a>
 						{% endif %}
 					</div>
 				</td>
 			</tr>
 
-			{% for reply in post.replies %}
-			<tr class="{% if (reply.votes_up - reply.votes_down) <= -10 %}reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 10 %}reply-positive{% endif %}">
+			{%- for reply in post.replies -%}
+			<tr class="{% if (reply.votes_up - reply.votes_down) <= -10 %}reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 10 %}reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
 				<td class="small" valign="top" align="center">
+
 					<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
 					<span class="karma">{{ reply.user.getHumanKarma() }}</span>
+
+					{%- if reply.accepted == 'Y' -%}
+						<div class="accepted-reply">
+							<span class="glyphicon glyphicon-ok"></span>
+							Accepted<br>
+							answer
+						</div>
+					{%- endif -%}
+
 				</td>
 				<td class="post-body">
 					<div class="posts-buttons" align="right">
-						{% if reply.edited_at > 0 %}
+						{%- if reply.edited_at > 0 -%}
 							<span class="action-date action-reply-edit" data-id="{{ reply.id }}" data-toggle="modal" data-target="#historyModal">
 								edited <span>{{ reply.getHumanEditedAt() }}</span>
 							</span><br/>
-						{% endif %}
+						{%- endif -%}
 						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
 							<span class="action-date">
 								<span>{{ reply.getHumanCreatedAt() }}</span>
@@ -110,6 +141,11 @@
 					<div class="posts-buttons" align="right">
 						{% if reply.users_id == currentUser or moderator == 'Y' %}
 							<br>
+							{% if post.accepted_answer != 'Y' %}
+								<a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
+									<span class="glyphicon glyphicon-ok"></span>&nbsp;Accept Answer
+								</a>
+							{% endif %}
 							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
 							</a>
@@ -118,31 +154,31 @@
 							</a>
 						{% endif %}
 						{% if currentUser %}
-							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-reply-up" data-id="{{ reply.id }}">
-								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{ reply.votes_up }}
-							</a>
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-reply-down" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ reply.votes_down }}
 							</a>
-						{% else %}
-							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-login" data-id="{{ reply.id }}">
+							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-reply-up" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-up"></span>
 								{{ reply.votes_up }}
 							</a>
+						{% else %}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-login" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ reply.votes_down }}
+							</a>
+							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-login" data-id="{{ reply.id }}">
+								<span class="glyphicon glyphicon-thumbs-up"></span>
+								{{ reply.votes_up }}
 							</a>
 						{% endif %}
 					</div>
 				</td>
 			</tr>
-			{% endfor %}
+			{%- endfor -%}
 
 			<tr>
-			{% if currentUser %}
+			{%- if currentUser -%}
 			<tr>
 				<td valign="top" class="small" align="center">
 					<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
@@ -172,7 +208,7 @@
 						</p>
 					</form>
 				</td>
-			{% else %}
+			{%- else -%}
 				<td></td>
 				<td>
 					<div class="pull-left">
@@ -182,7 +218,7 @@
 						{{ link_to('login/oauth/authorize', 'Log In to Comment', 'class': 'btn btn-info') }}
 					</div>
 				</td>
-			{% endif %}
+			{%- endif -%}
 			</tr>
 		</table>
 	</div>

@@ -172,6 +172,25 @@ var Forum = {
 	},
 
 	/**
+	 * Accept a reply as correct answer
+	 */
+	acceptAnswer: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/accept/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload();
+			}
+		});
+	},
+
+	/**
 	 * Vote a post up
 	 */
 	voteLogin: function(event)
@@ -277,6 +296,10 @@ var Forum = {
 
 		$('a.vote-login').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.voteLogin);
+		});
+
+		$('a.reply-accept').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.acceptAnswer);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');

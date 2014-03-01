@@ -26,6 +26,8 @@ class PostsReplies extends Model
 
 	public $votes_down;
 
+	public $accepted;
+
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(

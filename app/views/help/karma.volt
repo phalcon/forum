@@ -30,7 +30,7 @@
 			<tbody>
 				<tr>
 					<td>Signing up on the forum</td>
-					<td><span class="label label-success">+15</span></th>
+					<td><span class="label label-success">+45</span></th>
 				</tr>
 				<tr>
 					<td>Logging in on the forum</td>
@@ -54,7 +54,15 @@
 				</tr>
 				<tr>
 					<td>Getting a reply by someone else on your post</td>
-					<td><span class="label label-success">5</span></th>
+					<td><span class="label label-success">+5</span></th>
+				</tr>
+				<tr>
+					<td>Getting an own reply as 'accepted answer' by someone else</td>
+					<td><span class="label label-success">30 + abs(user_karma - your_karma) / 1000</span></th>
+				</tr>
+				<tr>
+					<td>Accepting someone else's reply as 'accepted answer'</td>
+					<td><span class="label label-success">+10</span></th>
 				</tr>
 				<tr>
 					<td>Voting someone else's post (positive or negative)</td>
@@ -113,7 +121,7 @@
 					<td><span class="label label-success">+25</span></th>
 				</tr>
 				<tr>
-					<td>Delete an offensive post or comment</td>
+					<td>Delete an offensive or spammy post or comment</td>
 					<td><span class="label label-success">+10</span></th>
 				</tr>
 			</thead>
