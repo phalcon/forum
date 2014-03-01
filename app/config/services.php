@@ -75,9 +75,7 @@ $di->set('db', function() use ($config) {
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
  */
 $di->set('modelsMetadata', function() use ($config) {
-
-	return new \Phalcon\Mvc\Model\Metadata\Memory();
-
+	//return new \Phalcon\Mvc\Model\Metadata\Memory();
 	return new \Phalcon\Mvc\Model\Metadata\Files(array(
 		'metaDataDir' => __DIR__ . '/../cache/metaData/'
 	));
@@ -155,7 +153,8 @@ $di->set('viewCache', function() {
 
 $di->set('markdown', function(){
 	$ciconia = new Ciconia();
-	$ciconia->addExtension(new \Ciconia\Extension\Gfm\TableExtension());
+	$ciconia->addExtension(new \Phosphorum\Markdown\TableExtension());
+	$ciconia->addExtension(new \Phosphorum\Markdown\MentionExtension());
 	$ciconia->addExtension(new \Ciconia\Extension\Gfm\FencedCodeBlockExtension());
 	$ciconia->addExtension(new \Ciconia\Extension\Gfm\UrlAutoLinkExtension());
 	return $ciconia;

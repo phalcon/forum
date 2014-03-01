@@ -804,6 +804,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$user = Users::findFirstById($id);
 		} else {
 			$user = Users::findFirstByLogin($username);
+			if (!$user) {
+				$user = Users::findFirstByName($username);
+			}
 		}
 
 		if (!$user) {

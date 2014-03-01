@@ -18,7 +18,18 @@
 	</ol>
 
 	<p>
-		<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">{{ post.title|e }}</h1>
+		<table>
+			<tr>
+				<td>
+					<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">
+						{{- post.title|e -}}
+					</h1>
+					<td>
+
+					</td>
+				</td>
+			</tr>
+		</table>
 	</p>
 
 	<div class="table-responsive">
