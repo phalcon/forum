@@ -38,7 +38,7 @@
 				<th>Created</th>
 			</tr>
 		{% for post in posts %}
-			<tr class="{% if (post.votes_up - post.votes_down) <= -1 %}post-negative{% endif %}">
+			<tr class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative{% endif %}">
 				<td align="left">
 					{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
 					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}

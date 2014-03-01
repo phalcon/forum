@@ -101,7 +101,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			if ($postReply->delete()) {
 				if ($usersId != $postReply->post->users_id) {
 
-					$user = Users::findFirstById($usersId);
+					$user = Users::findFirstById($postReply->post->users_id);
 					$user->karma -= 15;
 					$user->votes_points -= 15;
 					$user->save();
