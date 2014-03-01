@@ -7287,7 +7287,7 @@ Editor.prototype.createStatusbar = function(status) {
 					el.innerHTML = mlines;
 					if (mlines > 4) {
 						window.setTimeout(function(mlines) {
-							this.setSize(null, (mlines * 24) + 'px');
+							this.setSize(null, (mlines * 22) + 'px');
 						}.bind(cm, mlines), 500);
 					}
 				});

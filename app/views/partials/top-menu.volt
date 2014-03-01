@@ -31,11 +31,11 @@
 					</li>
 				</ul>
           	</li>
-			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Categories') }}</li>
+			<li>{{ link_to('activity', '<span class="glyphicon glyphicon-eye-open"></span>', 'title': 'Activity') }}</li>
 
 			<li class="dropdown">
 
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Activity">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Categories">
 					<span class="glyphicon glyphicon-th-list"></span> <b class="caret"></b>
 				</a>
 
@@ -61,7 +61,7 @@
 			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>
 			{% endif %}
 		  </ul>
-		</div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
+		</div>
+	  </div>
 	</nav>
 </header>

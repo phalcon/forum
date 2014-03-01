@@ -214,8 +214,8 @@ class Posts extends Model
 
 	public function getHumanModifiedAt()
 	{
-		$diff = time() - $this->modified_at;
-		if ($diff > 60) {
+		if ($this->modified_at != $this->created_at) {
+			$diff = time() - $this->modified_at;
 			if ($diff > (86400 * 30)) {
 				return date('M \'y', $this->modified_at);
 			} else {
