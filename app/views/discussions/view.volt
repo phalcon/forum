@@ -5,7 +5,8 @@
 {% if (post.votes_up - post.votes_down) <= -10 %}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
-		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
+		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data,
+		 spam or aggressive vocabulary or tone, etc.</p>
 	</div>
 {% endif %}
 
@@ -32,7 +33,7 @@
 					<div class="posts-buttons" align="right">
 						{% if post.edited_at > 0 %}
 							<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
-								edited <span>{{ date('M d/Y H:i', post.edited_at) }}</span>
+								edited <span>{{ post.getHumanEditedAt() }}</span>
 							</span><br/>
 						{% endif %}
 						<a name="C{{ post.id }}" href="#C{{ post.id }}">
@@ -55,6 +56,15 @@
 								{{ post.votes_up }}
 							</a>
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
+								<span class="glyphicon glyphicon-thumbs-down"></span>
+								{{ post.votes_down }}
+							</a>
+						{% else %}
+							<a href="#" onclick="return false" class="btn btn-success btn-xs">
+								<span class="glyphicon glyphicon-thumbs-up"></span>
+								{{ post.votes_up }}
+							</a>
+							<a href="#" onclick="return false" class="btn btn-danger btn-xs">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ post.votes_down }}
 							</a>
@@ -105,6 +115,15 @@
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ reply.votes_down }}
 							</a>
+						{% else %}
+							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-login" data-id="{{ reply.id }}">
+								<span class="glyphicon glyphicon-thumbs-up"></span>
+								{{ reply.votes_up }}
+							</a>
+							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-login" data-id="{{ reply.id }}">
+								<span class="glyphicon glyphicon-thumbs-down"></span>
+								{{ reply.votes_down }}
+							</a>
 						{% endif %}
 					</div>
 				</td>
@@ -121,14 +140,14 @@
 				<td>
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#" onclick="return false">Comment</a></li>
-						<li>{{ link_to('help/markdown', 'Help', 'class': 'help', 'parent': '_new') }}</li>
+						<li>{{ link_to('help/markdown', 'Help', 'class': 'help', 'parent': '_blank') }}</li>
 					</ul>
 
 					<form method="post" autocomplete="off" role="form">
 						<p>
 							<div id="comment-box">
 								{{ hidden_field('id', 'value': post.id) }}
-								{{ text_area("content", "rows": 5, "placeholder": "Leave a comment", "class": "form-control") }}
+								{{ text_area("content", "rows": 5, "class": "form-control") }}
 							</div>
 							<div id="preview-box" style="display:none"></div>
 						</p>

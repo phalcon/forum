@@ -7088,6 +7088,10 @@ function wordCount(data) {
 	return count;
 }
 
+function lineCount(data) {
+	return data.split(/\r\n|\r|\n/).length;
+}
+
 var toolbar = [
 	{name: 'bold', action: toggleBold},
 	{name: 'italic', action: toggleItalic},
@@ -7279,7 +7283,13 @@ Editor.prototype.createStatusbar = function(status) {
 			} else if (name === 'lines') {
 				el.innerHTML = '0';
 				cm.on('update', function() {
-					el.innerHTML = cm.lineCount();
+					var mlines = lineCount(cm.getValue());
+					el.innerHTML = mlines;
+					if (mlines > 4) {
+						window.setTimeout(function(mlines) {
+							this.setSize(null, (mlines * 24) + 'px');
+						}.bind(cm, mlines), 500);
+					}
 				});
 			} else if (name === 'cursor') {
 				el.innerHTML = '0:0';
@@ -7291,6 +7301,7 @@ Editor.prototype.createStatusbar = function(status) {
 			bar.appendChild(el);
 		})(status[i]);
 	}
+
 	var cmWrapper = this.codemirror.getWrapperElement();
 	cmWrapper.parentNode.insertBefore(bar, cmWrapper.nextSibling);
 	return bar;

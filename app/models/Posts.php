@@ -194,4 +194,42 @@ class Posts extends Model
 		}
 	}
 
+	public function getHumanEditedAt()
+	{
+		$diff = time() - $this->edited_at;
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->edited_at);
+		} else {
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd ago';
+			} else {
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h ago';
+				} else {
+					return ((int) ($diff / 60)) . 'm ago';
+				}
+			}
+		}
+	}
+
+	public function getHumanModifiedAt()
+	{
+		$diff = time() - $this->modified_at;
+		if ($diff > 60) {
+			if ($diff > (86400 * 30)) {
+				return date('M \'y', $this->modified_at);
+			} else {
+				if ($diff > 86400) {
+					return ((int) ($diff / 86400)) . 'd ago';
+				} else {
+					if ($diff > 3600) {
+						return ((int) ($diff / 3600)) . 'h ago';
+					} else {
+						return ((int) ($diff / 60)) . 'm ago';
+					}
+				}
+			}
+		}
+	}
+
 }

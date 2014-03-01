@@ -30,12 +30,13 @@
 	<div class="table-responsive">
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
-				<th width="55%">Topic</th>
+				<th width="50%">Topic</th>
 				<th>Users</th>
 				<th>Category</th>
 				<th>Replies</th>
 				<th>Views</th>
 				<th>Created</th>
+				<th>Last Reply</th>
 			</tr>
 		{% for post in posts %}
 			<tr class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative{% endif %}">
@@ -61,6 +62,9 @@
 				</td>
 				<td>
 					<span class="date">{{ post.getHumanCreatedAt() }}</span>
+				</td>
+				<td>
+					<span class="date">{{ post.getHumanModifiedAt() }}</span>
 				</td>
 			</tr>
 		{% endfor %}

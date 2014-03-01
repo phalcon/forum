@@ -172,6 +172,14 @@ var Forum = {
 	},
 
 	/**
+	 * Vote a post up
+	 */
+	voteLogin: function(event)
+	{
+		window.location = Forum._uri + 'login/oauth/authorize';
+	},
+
+	/**
 	 * Shows the latest modification made to a post
 	 */
 	postHistory: function(event)
@@ -265,6 +273,10 @@ var Forum = {
 
 		$('a.vote-reply-down').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.voteReplyDown);
+		});
+
+		$('a.vote-login').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteLogin);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');
