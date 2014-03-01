@@ -172,13 +172,26 @@ var Forum = {
 	},
 
 	/**
-	 * Converts the post-comment div into an editable textarea
+	 * Shows the latest modification made to a post
 	 */
 	postHistory: function(event)
 	{
 		var element = $(event.data.element);
 		$.ajax({
 			url: Forum._uri + 'discussion/history/' + element.data('id'),
+		}).done(function(response){
+			$('#historyBody').html(response);
+		});
+	},
+
+	/**
+	 * Shows the latest modification made to a post
+	 */
+	replyHistory: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			url: Forum._uri + 'reply/history/' + element.data('id'),
 		}).done(function(response){
 			$('#historyBody').html(response);
 		});
@@ -234,6 +247,10 @@ var Forum = {
 			$(element).bind('click', {element: element}, Forum.postHistory);
 		});
 
+		$('span.action-reply-edit').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.replyHistory);
+		});
+
 		$('a.vote-post-up').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.votePostUp);
 		});
@@ -254,6 +271,11 @@ var Forum = {
 		previewNavLinks.each(function(position, element) {
 			$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
 		});
+
+		if ($('textarea').length) {
+			var editor = new Editor();
+			editor.render();
+		}
 	},
 
 	/**

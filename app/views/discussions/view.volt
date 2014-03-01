@@ -4,9 +4,9 @@
 
 {% if (post.votes_up - post.votes_down) <= -10 %}
 	<div class="bs-callout bs-callout-danger">
-    	<h4>Too many negative votes</h4>
-    	<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
-  	</div>
+		<h4>Too many negative votes</h4>
+		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
+	</div>
 {% endif %}
 
 <div class="container">
@@ -73,7 +73,7 @@
 				<td class="post-body">
 					<div class="posts-buttons" align="right">
 						{% if reply.edited_at > 0 %}
-							<span class="action-date action-edit" data-id="{{ reply.id }}" data-toggle="modal" data-target="#historyModal">
+							<span class="action-date action-reply-edit" data-id="{{ reply.id }}" data-toggle="modal" data-target="#historyModal">
 								edited <span>{{ reply.getHumanEditedAt() }}</span>
 							</span><br/>
 						{% endif %}
@@ -142,13 +142,6 @@
 							</div>
 						</p>
 					</form>
-
-					<script type="text/javascript">
-						window.onload = function(){
-							var editor = new Editor();
-							editor.render();
-						};
-					</script>
 				</td>
 			{% else %}
 				<td></td>
@@ -168,35 +161,34 @@
 </div>
 
 <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="historyModalLabel">History</h4>
-      </div>
-      <div class="modal-body" id="historyBody">
-        Loading...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="historyModalLabel">History</h4>
+			</div>
+			<div class="modal-body" id="historyBody">
+				Loading...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header alert-danger">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="errorModalLabel">Error</h4>
-      </div>
-      <div class="modal-body" id="errorBody">
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header alert-danger">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="errorModalLabel">Error</h4>
+			</div>
+			<div class="modal-body" id="errorBody">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>

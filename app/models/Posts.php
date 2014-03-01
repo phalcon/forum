@@ -138,8 +138,8 @@ class Posts extends Model
 		}
 
 		$history = new PostsHistory();
-		$history->posts_id = $this->getDI()->getSession()->get('identity');
-		$history->users_id = $this->users_id;
+		$history->posts_id = $this->id;
+		$history->users_id = $this->getDI()->getSession()->get('identity');
 		$history->content  = $this->content;
 		$history->save();
 	}

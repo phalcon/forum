@@ -32,6 +32,11 @@ $router->add('/discussions', array(
 	'action' => 'index'
 ));
 
+$router->add('/reply/history/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'history'
+));
+
 $router->add('/discussion/history/{id:[0-9]+}', array(
 	'controller' => 'discussions',
 	'action' => 'history'

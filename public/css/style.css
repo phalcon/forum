@@ -57,7 +57,7 @@ table.discussion .post-editor {
 }
 
 .CodeMirror {
-    height: 200px;
+    height: 250px;
     border: 1px solid #c0c0c0;
 }
 
@@ -74,7 +74,8 @@ table.discussion img {
     max-height: 600px;
 }
 
-.action-edit {
+.action-edit,
+.action-reply-edit {
     color: #ea7c62;
     cursor: pointer;
 }

@@ -56,10 +56,3 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-	window.onload = function(){
-		var editor = new Editor();
-		editor.render();
-	};
-</script>

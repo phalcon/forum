@@ -118,6 +118,12 @@ class PostsReplies extends Model
 			$viewCache = $this->getDI()->getViewCache();
 			$viewCache->delete('post-' . $this->posts_id);
 		}
+
+		$history = new PostsRepliesHistory();
+		$history->posts_replies_id = $this->id;
+		$history->users_id = $this->getDI()->getSession()->get('identity');
+		$history->content  = $this->content;
+		$history->save();
 	}
 
 	public function getHumanCreatedAt()
