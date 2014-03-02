@@ -2,8 +2,8 @@
 
 namespace Phosphorum\Models;
 
-use Phosphorum\Models\Activities,
-	Phalcon\Mvc\Model,
+use Phalcon\Mvc\Model,
+	Phosphorum\Models\Activities,
 	Phalcon\Mvc\Model\Behavior\Timestampable;
 
 class Users extends Model
@@ -29,6 +29,14 @@ class Users extends Model
 
 	public $timezone;
 
+	public $moderator;
+
+	public $karma;
+
+	public $votes;
+
+	public $votes_points;
+
 	public function initialize()
 	{
 		$this->addBehavior(new Timestampable(array(
@@ -44,7 +52,19 @@ class Users extends Model
 	public function beforeCreate()
 	{
 		$this->notifications = 'P';
+		$this->moderator = 'N';
+		$this->karma += 45;
+		$this->votes_points += 45;
+		$this->votes = 0;
 		$this->timezone = 'Europe/London';
+	}
+
+	public function afterValidation()
+	{
+		if ($this->votes_points >= 50) {
+			$this->votes++;
+			$this->votes_points = 0;
+		}
 	}
 
 	public function afterCreate()
@@ -54,6 +74,15 @@ class Users extends Model
 			$activity->users_id = $this->id;
 			$activity->type = 'U';
 			$activity->save();
+		}
+	}
+
+	public function getHumanKarma()
+	{
+		if ($this->karma >= 1000) {
+			return sprintf("%.1f", $this->karma / 1000) . 'k';
+		} else {
+			return $this->karma;
 		}
 	}
 

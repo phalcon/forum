@@ -1,0 +1,8 @@
+{
+    "require": {
+        "guzzle/guzzle": "~3.7",
+		"swiftmailer/swiftmailer": "@stable",
+		"kzykhys/ciconia": "~1.0.0",
+		"phpspec/php-diff": "dev-master"
+    }
+}

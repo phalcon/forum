@@ -2,6 +2,8 @@
 
 namespace Phosphorum\Github;
 
+use Guzzle\Http\Client as HttpClient;
+
 class OAuth extends \Phalcon\DI\Injectable
 {
 
@@ -46,12 +48,12 @@ class OAuth extends \Phalcon\DI\Injectable
 	{
 
         // check the securtity - anti csrf token
-        $key=$this->request->getQuery('statekey');
-        $value=$this->request->getQuery('state');
+        $key = $this->request->getQuery('statekey');
+        $value = $this->request->getQuery('state');
 
-
-        if( ! $this->di->get("security")->checkToken($key,$value))
+        if (!$this->di["security"]->checkToken($key, $value)) {
             return false;
+		}
 
 		$this->view->disable();
 		$response = $this->send($this->_endPointAccessToken, array(
@@ -64,46 +66,34 @@ class OAuth extends \Phalcon\DI\Injectable
 		return $response;
 	}
 
-	public function send($url, $parameters, $method=\HttpRequest::METH_POST)
+	public function send($url, $parameters, $method='post')
 	{
 		try {
 
-			$transport = $this->getTransport();
+			$client = new HttpClient();
 
-			$transport->setHeaders(array(
+			$headers = array(
 				'Accept' => 'application/json'
-			));
-
-			$transport->setUrl($url);
-			$transport->setMethod($method);
+			);
 
 			switch ($method) {
-				case \HttpRequest::METH_POST:
-					$transport->addPostFields($parameters);
+				case 'post':
+					$request = $client->post($url, $headers, $parameters);
 					break;
-				case \HttpRequest::METH_GET:
-					$transport->addQueryData($parameters);
+				case 'get':
+					$request = $client->get($url, $headers, $parameters);
 					break;
+				default:
+					throw new \Exception('Invalid HTTP method');
 			}
 
-			$transport->send();
+			return json_decode((string) $request->send()->getBody(), true);
 
-			return json_decode($transport->getResponseBody(), true);
-
-		} catch (\HttpInvalidParamException $e) {
-			return false;
-		} catch (\HttpRequestException $e) {
+		} catch (\Exception $e) {
+			file_put_contents('a.txt', $e->getMessage());
 			return false;
 		}
 
-	}
-
-	public function getTransport()
-	{
-		if (!$this->_transport) {
-			$this->_transport = new \HttpRequest();
-		}
-		return $this->_transport;
 	}
 
 }

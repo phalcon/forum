@@ -5,10 +5,14 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsViews,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsBounties,
+	Phosphorum\Models\PostsHistory,
+	Phosphorum\Models\PostsVotes,
 	Phosphorum\Models\Categories,
 	Phosphorum\Models\Activities,
 	Phosphorum\Models\IrcLog,
-	Phosphorum\Models\Users;
+	Phosphorum\Models\Users,
+	Phalcon\Http\Response;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
 {
@@ -35,8 +39,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			->from(array(
 				'p' => 'Phosphorum\Models\Posts'
 			))
-			->join('Phosphorum\Models\Users', null, 'u')
-			->join('Phosphorum\Models\Categories', null, 'c')
 			->orderBy('p.sticked DESC, p.created_at DESC');
 
         if ($joinReply) {
@@ -47,21 +49,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$totalBuilder = clone $itemBuilder;
 
 		$itemBuilder->columns(array(
-			'p.id',
-			'p.title',
-			'p.slug',
-			'p.number_replies',
-			'p.number_views',
-			'p.sticked',
-			'p.created_at',
-			'user_name' => 'u.name',
-			'user_login' => 'u.login',
-			'user_id' => 'u.id',
-			'category_name' => 'c.name',
-			'category_slug' => 'c.slug',
-			'category_id' => 'c.id'
+			'p.*'
 		))
-		->limit(30);
+		->limit(40);
 
 		$totalBuilder->columns('COUNT(*) AS count');
 
@@ -94,12 +84,14 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 */
 		$params = null;
 		switch ($order) {
+
 			case 'hot':
 				$this->tag->setTitle('Hot Discussions');
 				$userId = $this->session->get('identity');
 				$itemBuilder->orderBy('p.modified_at DESC');
 				$totalBuilder->orderBy('p.modified_at DESC');
 				break;
+
 			case 'my':
 				$this->tag->setTitle('My Discussions');
 				$userId = $this->session->get('identity');
@@ -109,11 +101,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					$totalBuilder->where('p.users_id = ?0');
 				}
 				break;
+
 			case 'unanswered':
 				$this->tag->setTitle('Unanswered Discussions');
-				$itemBuilder->where('p.number_replies = 0');
-				$totalBuilder->where('p.number_replies = 0');
+				$itemBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
+				$totalBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
 				break;
+
             case 'answers':
 				$this->tag->setTitle('My Answers');
 				$userId = $this->session->get('identity');
@@ -127,6 +121,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			default:
 				$this->tag->setTitle('Discussions');
 		}
+
+		$itemBuilder->andWhere('p.deleted = 0');
+		$totalBuilder->andWhere('p.deleted = 0');
 
 		$itemBuilder->offset((int) $offset);
 
@@ -164,10 +161,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
-		$totalBuilder->where('p.categories_id = ?0');
+		$totalBuilder->where('p.categories_id = ?0 AND deleted = 0');
 
 		$posts = $itemBuilder
-			->where('p.categories_id = ?0')
+			->where('p.categories_id = ?0 AND deleted = 0')
 			->orderBy('p.created_at DESC')
 			->offset($offset)
 			->getQuery()
@@ -209,6 +206,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			$title = $this->request->getPost('title', 'trim');
 
+			$user = Users::findFirstById($usersId);
+			$user->karma += 10;
+			$user->votes_points += 10;
+			$user->save();
+
 			$post = new Posts();
 			$post->users_id = $usersId;
 			$post->categories_id = $this->request->getPost('categoryId');
@@ -217,12 +219,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->content = $this->request->getPost('content');
 
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -254,8 +250,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		 * Find the post using get
 		 */
 		$post = Posts::findFirst(array(
-			"id = ?0 AND (users_id = ?1 OR 1 = ?1)",
-			"bind" => array($id, $usersId)
+			"id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
+			"bind" => array($id, $usersId, $this->session->get('identity-moderator'))
 		));
 		if (!$post) {
 			$this->flashSession->error('The discussion does not exist');
@@ -271,14 +267,19 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->title = $title;
 			$post->slug = $this->tag->friendlyTitle($title);
 			$post->content = $content;
+			$post->edited_at = time();
+
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					$user->karma += 25;
+					$user->votes_points += 25;
+					$user->save();
+				}
+			}
 
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -304,6 +305,62 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	}
 
 	/**
+	 * This shows the create post form and also store the related post
+	 */
+	public function deleteAction($id)
+	{
+
+		$usersId = $this->session->get('identity');
+		if (!$usersId) {
+			$this->flashSession->error('You must be logged first');
+			return $this->response->redirect();
+		}
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirst(array(
+			"id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
+			"bind" => array($id, $usersId, $this->session->get('identity-moderator'))
+		));
+		if (!$post) {
+			$this->flashSession->error('The discussion does not exist');
+			return $this->response->redirect();
+		}
+
+		if ($post->sticked == 'Y') {
+			$this->flashSession->error('The discussion cannot be deleted because it\'s sticked');
+			return $this->response->redirect();
+		}
+
+		$post->deleted = 1;
+		if ($post->save()) {
+
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					if ($user->moderator == 'Y') {
+						$user->karma += 10;
+						$user->votes_points += 10;
+						$user->save();
+					}
+				}
+
+				$user = $post->user;
+				$user->karma -= 10;
+				$user->votes_points -= 10;
+				$user->save();
+			}
+
+			$this->flashSession->success('Discussion was successfully deleted');
+			return $this->response->redirect();
+		}
+
+	}
+
+	/**
 	 * Displays a post and its comments
 	 *
 	 * @param int $id
@@ -311,14 +368,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 	 */
 	public function viewAction($id, $slug)
 	{
+		$id = (int) $id;
 
 		if (!$this->request->isPost()) {
 
-			if (!$this->session->get('identity')) {
+			$usersId = $this->session->get('identity');
+			if (!$usersId) {
 
 				/**
-		 		 * Enable cache
-		 		 */
+			 	 * Enable cache
+			 	 */
 				$this->view->cache(array('key' => 'post-' . $id));
 
 				/**
@@ -338,6 +397,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				return $this->response->redirect();
 			}
 
+			if ($post->deleted) {
+				$this->flashSession->error('The discussion is deleted');
+				return $this->response->redirect();
+			}
+
 			$ipAddress = $this->request->getClientAddress();
 
 			$viewed = PostsViews::count(array(
@@ -354,6 +418,18 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 * Increase the number of views in the post
 				 */
 				$post->number_views++;
+				if ($post->users_id != $usersId) {
+
+					$post->user->karma += 1;
+					$post->user->votes_points += 1;
+
+					$user = Users::findFirstById($usersId);
+					if ($user) {
+						$user->karma += 2;
+						$user->votes_points += 2;
+						$user->save();
+					}
+				}
 
 				$postView = new PostsViews();
 				$postView->post = $post;
@@ -381,17 +457,36 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				return $this->response->redirect();
 			}
 
+			if ($post->deleted) {
+				$this->flashSession->error('The discussion is deleted');
+				return $this->response->redirect();
+			}
+
 			$content = $this->request->getPost('content', 'trim');
 			if ($content) {
 
 				$usersId = $this->session->get('identity');
 
 				/**
+				 * Check if the question can have a bounty before add the reply
+				 */
+				$canHaveBounty = $post->canHaveBounty();
+
+				/**
 				 * Only update the number of replies if the user that commented isn't the same that posted
 				 */
 				if ($post->users_id != $usersId) {
+
 					$post->number_replies++;
 					$post->modified_at = time();
+
+					$post->user->karma += 5;
+					$post->user->votes_points += 10;
+
+					$user = Users::findFirstById($usersId);
+					$user->karma += 10;
+					$user->votes_points += 10;
+					$user->save();
 				}
 
 				$postReply = new PostsReplies();
@@ -400,6 +495,21 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$postReply->content = $content;
 
 				if ($postReply->save()) {
+
+					if ($post->users_id != $usersId && $canHaveBounty) {
+						$bounty = $post->getBounty();
+						$postBounty = new PostsBounties();
+						$postBounty->posts_id = $post->id;
+						$postBounty->users_id = $usersId;
+						$postBounty->posts_replies_id = $postReply->id;
+						$postBounty->points = $bounty['value'];
+						if (!$postBounty->save()) {
+							foreach ($postBounty->getMessages() as $message) {
+								$this->flash->error($message);
+							}
+						}
+					}
+
 					return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug . '#C' . $postReply->id);
 				}
 
@@ -415,6 +525,202 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
 		$this->view->post = $post;
+	}
+
+	/**
+	 * Shows the latest modification made to a post
+	 */
+	public function historyAction($id = 0)
+	{
+
+		$this->view->disable();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			$this->flashSession->error('The discussion does not exist');
+			return $this->response->redirect();
+		}
+
+		$a = explode("\n", $post->content);
+
+		$first = true;
+		$postHistories = PostsHistory::find(array('posts_id = ?0', 'bind' => array($post->id), 'order' => 'created_at DESC'));
+		if (count($postHistories) > 1) {
+			foreach ($postHistories as $postHistory) {
+				if ($first) {
+					$first = false;
+					continue;
+				}
+				break;
+			}
+		} else {
+			$postHistory = $postHistories->getFirst();
+		}
+
+		if (is_object($postHistory)) {
+			$b = explode("\n", $postHistory->content);
+
+			$diff = new \Diff($b, $a, array());
+			$renderer = new \Diff_Renderer_Html_SideBySide();
+
+			echo $diff->Render($renderer);
+		} else {
+			$this->flash->notice('No history available to show');
+		}
+	}
+
+	/**
+	 * Votes a post up
+	 */
+	public function voteUpAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this post'
+			));
+		}
+
+		$postVote = new PostsVotes();
+		$postVote->posts_id = $post->id;
+		$postVote->users_id = $user->id;
+		if (!$postVote->save()) {
+			foreach ($postVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
+		}
+
+		$post->votes_up++;
+		if ($post->users_id != $user->id) {
+
+			$post->user->karma += 5;
+			$post->user->votes_points += 5;
+
+			$user->karma += 10;
+			$user->votes_points += 10;
+		}
+
+		if ($post->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
+	/**
+	 * Votes a post down
+	 */
+	public function voteDownAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$post = Posts::findFirstById($id);
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($user->votes <= 0) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this post'
+			));
+		}
+
+		$postVote = new PostsVotes();
+		$postVote->posts_id = $post->id;
+		$postVote->users_id = $user->id;
+		$postVote->save();
+
+		$post->votes_down++;
+		if ($post->users_id != $user->id) {
+
+			$post->user->karma -= 5;
+			$post->user->votes_points -= 5;
+
+			$user->karma += 10;
+			$user->votes_points += 10;
+		}
+
+		if ($post->save()) {
+			$user->votes--;
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
 	}
 
 	/**
@@ -452,7 +758,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->activities = Activities::find(array(
 			'order' => 'created_at DESC',
-			'limit' => array('number' => 30, 'offset' => 0)
+			'limit' => array('number' => 40, 'offset' => 0)
 		));
 
 		$this->tag->setTitle('Recent Activity on the Forum');
@@ -506,6 +812,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$user = Users::findFirstById($id);
 		} else {
 			$user = Users::findFirstByLogin($username);
+			if (!$user) {
+				$user = Users::findFirstByName($username);
+			}
 		}
 
 		if (!$user) {
@@ -516,7 +825,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->user = $user;
 
 		$this->view->numberPosts = Posts::count(array(
-			'users_id = ?0',
+			'users_id = ?0 AND deleted = 0',
 			'bind' => array($user->id)
 		));
 
@@ -527,7 +836,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->activities = Activities::find(array(
 			'users_id = ?0',
-			'bind' => array($id),
+			'bind' => array($user->id),
 			'order' => 'created_at DESC',
 			'limit' => 15
 		));
@@ -568,6 +877,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->user = $user;
 		$this->view->timezones = require '../app/config/timezones.php';
+
+		$this->view->numberPosts = Posts::count(array(
+			'users_id = ?0 AND deleted = 0',
+			'bind' => array($user->id)
+		));
+
+		$this->view->numberReplies = PostsReplies::count(array(
+			'users_id = ?0',
+			'bind' => array($user->id)
+		));
 	}
 
 	public function helpAction()

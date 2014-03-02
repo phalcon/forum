@@ -7,9 +7,80 @@ $router->add('/sitemap', array(
 	'action' => 'index'
 ));
 
+$router->add('/help/moderators', array(
+	'controller' => 'help',
+	'action' => 'moderators'
+));
+
+$router->add('/help/voting', array(
+	'controller' => 'help',
+	'action' => 'voting'
+));
+
+$router->add('/help/markdown', array(
+	'controller' => 'help',
+	'action' => 'markdown'
+));
+
+$router->add('/help/karma', array(
+	'controller' => 'help',
+	'action' => 'karma'
+));
+
 $router->add('/help', array(
+	'controller' => 'help',
+	'action' => 'index'
+));
+
+$router->add('/index.html', array(
 	'controller' => 'discussions',
-	'action' => 'help'
+	'action' => 'index'
+));
+
+$router->add('/discussions', array(
+	'controller' => 'discussions',
+	'action' => 'index'
+));
+
+$router->add('/preview', array(
+	'controller' => 'utils',
+	'action' => 'preview'
+));
+
+$router->add('/reply/accept/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'accept'
+));
+
+$router->add('/reply/vote-up/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteUp'
+));
+
+$router->add('/reply/vote-down/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteDown'
+));
+
+
+$router->add('/reply/history/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'history'
+));
+
+$router->add('/discussion/history/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'history'
+));
+
+$router->add('/discussion/vote-up/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteUp'
+));
+
+$router->add('/discussion/vote-down/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'voteDown'
 ));
 
 $router->add('/search', array(
@@ -37,11 +108,6 @@ $router->add('/logout', array(
 	'action' => 'logout'
 ));
 
-$router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
-	'controller' => 'discussions',
-	'action' => 'category'
-));
-
 $router->add('/activity', array(
 	'controller' => 'discussions',
 	'action' => 'activity'
@@ -50,6 +116,16 @@ $router->add('/activity', array(
 $router->add('/activity/irc', array(
 	'controller' => 'discussions',
 	'action' => 'irc'
+));
+
+$router->add('/delete/discussion/{id:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'delete'
+));
+
+$router->add('/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}', array(
+	'controller' => 'discussions',
+	'action' => 'category'
 ));
 
 $router->add('/post/discussion', array(

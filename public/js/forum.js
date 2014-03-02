@@ -6,151 +6,7 @@ var Forum = {
 
 	_uri: '',
 
-	_shMain: false,
-
-	_shCss: false,
-
-	_sh: {},
-
-	_shDocument: 0,
-
-	/**
-	 * Starts the highlighters
-	 */
-	getSh: function(type, code)
-	{
-		var start = false;
-
-		switch (type) {
-			case 'php':
-				pre_code = '<pre class="sh_php sh_sourceCode">';
-				break;
-			case 'css':
-				pre_code = '<pre class="sh_css sh_sourceCode">';
-				break;
-			case 'js':
-			case 'javascript':
-				pre_code = '<pre class="sh_javascript sh_sourceCode">';
-				type = 'javascript';
-				break;
-			case 'html':
-				pre_code = '<pre class="sh_html sh_sourceCode">';
-				break;
-			case 'sh':
-			case 'bash':
-				pre_code = '<pre class="sh_sh sh_sourceCode">';
-				type = 'sh';
-				break;
-			case 'sql':
-			case 'phql':
-				pre_code = '<pre class="sh_sql sh_sourceCode">';
-				type = 'sql';
-				break;
-			default:
-				type = null;
-				pre_code = '<pre class="sh_sourceCode">';
-				break;
-		}
-
-		if (!Forum._shCss) {
-			var link = document.createElement('link');
-			link.type = 'text/css';
-			link.rel = 'stylesheet';
-			link.href = 'http://phalconphp.com/sh/css/sh_zenburn.css';
-			document.body.appendChild(link);
-			Forum._shCss = true;
-		}
-
-		if (!Forum._shMain) {
-			var script = document.createElement('script');
-			script.type = "text/javascript";
-			script.src = "http://phalconphp.com/sh/sh_main.js"
-			document.body.appendChild(script);
-			Forum._shDocument++;
-			Forum._shMain = true;
-			start = true;
-		}
-
-		if (type !== null) {
-			if (typeof Forum._sh[type] === "undefined") {
-				var script = document.createElement('script');
-				script.type = "text/javascript";
-				script.src = "http://phalconphp.com/sh/lang/sh_" + type + ".min.js"
-				document.body.appendChild(script);
-				Forum._shDocument++;
-				Forum._sh[type] = true;
-			}
-		}
-
-		return pre_code + code + '</pre>';
-	},
-
-	parseContent: function(html)
-	{
-		html = html.replace(/\t/g, '  ');
-
-		html = html.replace(/```([a-z]+)([^`]+)```(<br>|\n|\r\n)?/gm, function($0, $1, $2) {
-			return Forum.getSh($1, $2.replace(/<br>/g, ""));
-		});
-
-		html = html.replace(/```([^`]+)```(<br>|\n|\r\n)?/gm, function($0, $1, $2) {
-			if (typeof $2 !== "undefined") {
-				return Forum.getSh(null, $2.replace(/<br>/g, ""));
-			} else {
-				return $0;
-			}
-		});
-
-		//Replace URLs
-		html = html.replace(/[a-z]+:\/\/[^\s<>\)\(\$]+/g, '<a href="$&">$&</a>');
-
-		//Create links to docs
-		html = html.replace(/Phalcon\\[a-zA-Z0-9\\]+/g, function($0) {
-			return '<a href="http://docs.phalconphp.com/en/latest/api/' + $0.replace(/\\/g, '_') + '.html">' + $0 + '</a>';
-		});
-
-		//Replace user names
-		html = html.replace(/[^\w]@([A-Za-z0-9\-\_]+)/g, function($0, $1) {
-			switch ($1) {
-				case 'var':
-				case 'return':
-				case 'throws':
-				case 'param':
-				case 'static':
-				case 'see':
-				case 'var':
-				case 'package':
-				case 'author':
-				case 'subpackage':
-				case 'Source':
-				case 'Column':
-				case 'Primary':
-				case 'Identity':
-					return $0;
-			}
-			return '<a href="' + Forum._uri + 'user/0/' + $1 + '">' + $0 + '</a>';
-		});
-
-		return html;
-	},
-
-	/**
-	 * Highlights texts enclosed into triple backticks
-	 */
-	highlight: function()
-	{
-		$('div.post-content').each(function(position, element){
-			element.innerHTML = Forum.parseContent(element.innerHTML);
-		});
-
-		if (Forum._shDocument > 0) {
-			window.setTimeout(function(){
-				if (typeof sh_highlightDocument !== "undefined") {
-					sh_highlightDocument();
-				}
-			}, 500);
-		}
-	},
+	_editor: null,
 
 	makeCommentEditable: function(response)
 	{
@@ -165,6 +21,7 @@ var Forum = {
 			textarea.name = 'content';
 			textarea.rows = 7;
 			textarea.value = response.comment;
+			textarea.className = 'form-control';
 			form.appendChild(textarea);
 
 			var hidden = document.createElement('INPUT');
@@ -175,14 +32,14 @@ var Forum = {
 
 			var cancel = document.createElement('INPUT');
 			cancel.type = 'button';
-			cancel.className = 'btn btn-small pull-left';
+			cancel.className = 'btn btn-default btn-sm pull-left';
 			cancel.value = 'Cancel';
 			$(cancel).bind('click', { form: form, element: this}, Forum.cancelEditing);
 			form.appendChild(cancel);
 
 			var submit = document.createElement('INPUT');
 			submit.type = 'buttom';
-			submit.className = 'btn btn-success btn-small pull-right';
+			submit.className = 'btn btn-success btn-sm pull-right';
 			submit.value = 'Update Comment';
 			$(submit).bind('click', { form: form }, function(event) {
 				this.disabled = true;
@@ -193,6 +50,9 @@ var Forum = {
 			this.hide();
 
 			this.parent().append(form);
+
+			var editor = new Editor({ 'element': textarea });
+			editor.render();
 		}
 	},
 
@@ -204,7 +64,7 @@ var Forum = {
 		//Are you sure you want to delete this?
 		var element = $(event.data.element);
 		var form = $(event.data.form);
-
+		$('div.posts-buttons', element.parents()[1]).show();
 		element.show();
 		form.remove();
 	},
@@ -226,9 +86,8 @@ var Forum = {
 	editComment: function(event)
 	{
 		var element = $(event.data.element);
-
-		var content = $('div.post-content', element.parents()[3]);
-
+		var content = $('div.post-content', element.parents()[2]);
+		$('div.posts-buttons', element.parents()[2]).hide();
 		if (content.is(':visible')) {
 			$.ajax({
 				dataType: 'json',
@@ -238,32 +97,133 @@ var Forum = {
 		}
 	},
 
-	highlightElement: function(element, elementOriginal)
+	/**
+	 * Vote a post up
+	 */
+	votePostUp: function(event)
 	{
-		if (typeof sh_languages !== "undefined") {
-
-			if (element.hasClass('sh_php')) {
-				type = 'php';
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'discussion/vote-up/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
 			} else {
-				if (element.hasClass('sh_css')) {
-					type = 'css';
-				} else {
-					if (element.hasClass('sh_html')) {
-						type = 'html';
-					} else {
-						if (element.hasClass('sh_sql')) {
-							type = 'sql';
-						} else {
-							type = 'php';
-						}
-					}
-				}
+				window.location.reload(true);
 			}
+		});
+	},
 
-			if (typeof sh_languages[type] !== "undefined") {
-				sh_highlightElement(elementOriginal, sh_languages[type]);
-			};
-		};
+	/**
+	 * Vote a post up
+	 */
+	votePostDown: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'discussion/vote-down/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload(true);
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteReplyUp: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/vote-up/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload(true);
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteReplyDown: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/vote-down/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload(true);
+			}
+		});
+	},
+
+	/**
+	 * Accept a reply as correct answer
+	 */
+	acceptAnswer: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/accept/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload(true);
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteLogin: function(event)
+	{
+		window.location = Forum._uri + 'login/oauth/authorize';
+	},
+
+	/**
+	 * Shows the latest modification made to a post
+	 */
+	postHistory: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			url: Forum._uri + 'discussion/history/' + element.data('id'),
+		}).done(function(response){
+			$('#historyBody').html(response);
+		});
+	},
+
+	/**
+	 * Shows the latest modification made to a post
+	 */
+	replyHistory: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			url: Forum._uri + 'reply/history/' + element.data('id'),
+		}).done(function(response){
+			$('#historyBody').html(response);
+		});
 	},
 
 	/**
@@ -277,29 +237,26 @@ var Forum = {
 		});
 
 		$(this).addClass('active');
-
-		if ($('a', this)[0].innerHTML == 'Preview') {
-
-			var content = $('textarea', '#comment-box')[0].value;
+		var parent = $(this).parents()[2];
+		if ($('a', this).html() == 'Preview') {
+			var content = $('textarea', parent).data('editor').codemirror.getValue()
 			if (content !== '') {
-				content = content.replace(/</g, '&lt;');
-				content = content.replace(/>/g, '&gt;');
-				content = content.replace('\n', '<br>');
-				$('#preview-box')[0].innerHTML = Forum.parseContent(content);
+				$.ajax({
+					method: 'POST',
+					url: Forum._uri + 'preview',
+					data: {'content': content }
+				}).done(function(parent, response){
+					$('#preview-box', parent).html(response);
+					prettyPrint();
+				}.bind(this, parent));
 			} else {
-				$('#preview-box')[0].innerHTML = 'Nothing to preview'
-			}
-
-			$('pre', '#preview-box').each(function(postion, element){
-				Forum.highlightElement($(element), element);
-			});
-
-			$('#comment-box').hide();
-			$('#preview-box').show();
-
+				$('#preview-box', parent).html('Nothing to preview');
+			};
+			$('#comment-box', parent).hide();
+			$('#preview-box', parent).show();
 		} else {
-			$('#comment-box').show();
-			$('#preview-box').hide();
+			$('#comment-box', parent).show();
+			$('#preview-box', parent).hide();
 		}
 	},
 
@@ -308,17 +265,55 @@ var Forum = {
 	 */
 	addCallbacks: function()
 	{
-		$('i.reply-edit').each(function(position, element) {
+		$('a.reply-edit').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.editComment);
 		});
-		$('i.reply-remove').each(function(position, element) {
+
+		$('a.reply-remove').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.deleteComment);
+		});
+
+		$('span.action-edit').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.postHistory);
+		});
+
+		$('span.action-reply-edit').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.replyHistory);
+		});
+
+		$('a.vote-post-up').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.votePostUp);
+		});
+
+		$('a.vote-post-down').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.votePostDown);
+		});
+
+		$('a.vote-reply-up').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteReplyUp);
+		});
+
+		$('a.vote-reply-down').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteReplyDown);
+		});
+
+		$('a.vote-login').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteLogin);
+		});
+
+		$('a.reply-accept').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.acceptAnswer);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');
 		previewNavLinks.each(function(position, element) {
 			$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
 		});
+
+		if ($('textarea').length) {
+			var editor = new Editor();
+			editor.render();
+		}
 	},
 
 	/**
@@ -327,8 +322,8 @@ var Forum = {
 	initializeView: function(uri)
 	{
 		Forum._uri = uri;
-		Forum.highlight();
 		Forum.addCallbacks();
+		prettyPrint();
 	}
 
 };

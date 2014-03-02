@@ -12,7 +12,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 
 	protected function indexRedirect()
 	{
-		return $this->response->redirect();
+		return $this->response->redirect('discussions');
 	}
 
     /**
@@ -22,15 +22,14 @@ class SessionController extends \Phalcon\Mvc\Controller
      */
     protected function discussionsRedirect()
     {
-
         $referer =  $this->request->getHTTPReferer();
-
-        $path = parse_url($referer,PHP_URL_PATH);
-
-        $this->router->handle($path);
-        $matched = $this->router->wasMatched();
-
-        return $matched ? $this->response->redirect($path,true) : $this->indexRedirect();
+        $path = parse_url($referer, PHP_URL_PATH);
+        if ($path) {
+        	$this->router->handle($path);
+        	return $this->router->wasMatched() ? $this->response->redirect($path, true) : $this->indexRedirect();
+		} else {
+			return $this->indexRedirect();
+		}
     }
 
     public function authorizeAction()
@@ -52,7 +51,7 @@ class SessionController extends \Phalcon\Mvc\Controller
     	if (is_array($response)) {
 
 			if (isset($response['error'])) {
-				$this->flashSession->error('Github: '.$response['error']);
+				$this->flashSession->error('Github: ' . $response['error']);
 				return $this->indexRedirect();
 			}
 
@@ -80,6 +79,8 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$user->login = $githubUser->getLogin();
 			$user->email = $githubUser->getEmail();
 			$user->gravatar_id = $githubUser->getGravatarId();
+			$user->karma += 5;
+			$user->votes_points += 5;
 
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {
@@ -95,11 +96,12 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$this->session->set('identity-name', $user->name);
 			$this->session->set('identity-gravatar', $user->gravatar_id);
 			$this->session->set('identity-timezone', $user->timezone);
+			$this->session->set('identity-moderator', $user->moderator);
 
 			if ($user->getOperationMade() == Model::OP_CREATE) {
-				$this->flashSession->success('Welcome '.$user->name);
+				$this->flashSession->success('Welcome ' . $user->name);
 			} else {
-				$this->flashSession->success('Welcome back '.$user->name);
+				$this->flashSession->success('Welcome back ' . $user->name);
 			}
 
 			return $this->discussionsRedirect();
@@ -112,20 +114,11 @@ class SessionController extends \Phalcon\Mvc\Controller
     public function logoutAction()
     {
     	$this->session->remove('identity');
+    	$this->session->remove('identity-name');
+    	$this->session->remove('identity-moderator');
 
     	$this->flashSession->success('Goodbye!');
 		return $this->discussionsRedirect();
-    }
-
-    public function shadowLoginAction()
-    {
-    	/**
-		 * Store the user data in session
-		 */
-		$this->session->set('identity', 1);
-		$this->session->set('identity-name', 'Phalcon');
-		$this->session->set('identity-gravatar', '5d6f567f9109789fd9f702959768e35d');
-		$this->session->set('identity-timezone', 'America/Bogota');
     }
 
 }

@@ -20,14 +20,24 @@ class PostsReplies extends Model
 
 	public $modified_at;
 
+	public $edited_at;
+
+	public $votes_up;
+
+	public $votes_down;
+
+	public $accepted;
+
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(
-			'alias' => 'post'
+			'alias' => 'post',
+			'reusable' => true
 		));
 
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
-			'alias' => 'user'
+			'alias' => 'user',
+			'reusable' => true
 		));
 
 		$this->addBehavior(new Timestampable(array(
@@ -108,9 +118,64 @@ class PostsReplies extends Model
 
 	public function afterSave()
 	{
+		$this->clearCache();
+
+		$history = new PostsRepliesHistory();
+		$history->posts_replies_id = $this->id;
+		$history->users_id = $this->getDI()->getSession()->get('identity');
+		$history->content  = $this->content;
+		$history->save();
+	}
+
+	public function afterDelete()
+	{
+		$this->clearCache();
+	}
+
+	public function getHumanCreatedAt()
+	{
+		$diff = time() - $this->created_at;
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->created_at);
+		} else {
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd ago';
+			} else {
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h ago';
+				} else {
+					return ((int) ($diff / 60)) . 'm ago';
+				}
+			}
+		}
+	}
+
+	public function getHumanEditedAt()
+	{
+		$diff = time() - $this->edited_at;
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->edited_at);
+		} else {
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd ago';
+			} else {
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h ago';
+				} else {
+					return ((int) ($diff / 60)) . 'm ago';
+				}
+			}
+		}
+	}
+
+	public function clearCache()
+	{
 		if ($this->id) {
 			$viewCache = $this->getDI()->getViewCache();
 			$viewCache->delete('post-' . $this->posts_id);
+			$viewCache->delete('post-body-' . $this->posts_id);
+			$viewCache->delete('post-users-' . $this->posts_id);
+			$viewCache->delete('reply-body-' . $this->id);
 		}
 	}
 

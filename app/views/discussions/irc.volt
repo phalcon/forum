@@ -1,38 +1,31 @@
 {{ content() }}
 
-<div class="view-discussion">
+<div class="view-discussion container">
+
 	<p>
 		<h1>Recent Activity</h1>
 	</p>
 
-	<table width="90%" align="center">
-		<tr>
-			<td colspan="3">
-				<div class="row">
-					<ul class="nav nav-tabs">
-						{% set orders = [
-							'': 'Forum',
-							'/irc': 'IRC'
-						] %}
-						{% for order, label in orders %}
-							{% if order == '/irc' %}
-								<li class="active">
-							{% else %}
-								<li>
-							{% endif %}
-								{{ link_to('activity' ~ order, label) }}
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</td>
-		</tr>
+	<ul class="nav nav-tabs">
+		{% set orders = ['': 'Forum', '/irc': 'IRC'] %}
+		{% for order, label in orders %}
+			{% if order == '' %}
+			<li class="active">
+			{% else %}
+			<li>
+			{% endif %}
+			{{ link_to('activity' ~ order, label) }}
+			</li>
+		{% endfor %}
+	</ul>
+
+	<table width="90%" align="center" class="table">
 		{% for activity in activities %}
 		<tr>
-			<td class="medium" valign="top">
+			<td class="medium" valign="top" width="15%">
 				<span class="date">{{ date("Y/m/d h:i", activity.datelog )}}</span>
 			</td>
-			<td class="small" valign="top">
+			<td class="small" valign="top" width="10%">
 				{{ activity.who }}
 			</td>
 			<td>
