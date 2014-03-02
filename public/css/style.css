@@ -20,8 +20,10 @@ h1 {
     color: #717171;
 }
 
-table.discussion>tbody>tr>td {
+.discussion div.row {
     padding-bottom: 20px;
+    border-bottom: 1px solid #dadada;
+    padding-top: 5px;
 }
 
 p {
@@ -36,23 +38,23 @@ p {
     text-decoration: underline;
 }
 
-table.discussion .small {
+.discussion .small {
     width: 90px;
     text-align: center;
 }
 
-table.discussion .small a {
+.discussion .small a {
     color: #999999;
 }
 
-table.discussion .small img {
+.discussion .small img {
     margin-top: 10px;
     width: 48px;
     height: 48px;
     border: none;
 }
 
-table.discussion .post-editor {
+.discussion .post-editor {
     padding-left: 7px;
 }
 
@@ -65,7 +67,7 @@ pre.prettyprint {
     padding: 10px;
 }
 
-table.discussion img {
+.discussion img {
     max-width: 550px;
     max-height: 600px;
 }
@@ -134,7 +136,7 @@ table.discussion img {
     width: 100%;
 }
 
-table.discussion .small a.user-moderator-Y {
+.discussion .small a.user-moderator-Y {
     background: #ffffc2;
     color: #0077b3;
     padding: 2px;
@@ -288,4 +290,21 @@ div.accepted-reply span {
 #preview-box {
     min-height: 180px;
     margin: 20px;
+}
+
+@media (max-width: 320px) {
+
+    .discussion .small img {
+        width: 32px;
+        height: 32px;
+        float: left;
+    }
+
+    .discussion .small {
+        width: 40px;
+    }
+
+    .discussion .small a {
+        font-size: 10px;
+    }
 }

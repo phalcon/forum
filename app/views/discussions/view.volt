@@ -32,99 +32,95 @@
 	</ol>
 
 	<p>
-		<table width="100%" class="table-title">
-			<tr>
-				<td width="70%">
-					<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">
-						{{- post.title|e -}}
-					</h1>
-					<td align="right">
-						<table class="table-stats">
-							<td>
-								<label>Created</label><br>
-								{{- post.getHumanCreatedAt() -}}
-							</td>
-							<td>
-								<label>Last Reply</label><br>
-								{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
-							</td>
-							<td>
-								<label>Replies</label><br>
-								{{- post.number_replies -}}
-							</td>
-							<td>
-								<label>Views</label><br>
-								{{- post.number_views -}}
-							</td>
-							<td>
-								<label>Votes</label><br>
-								{{- post.votes_up - post.votes_down -}}
-							</td>
-						</table>
+		<div class="row table-title">
+			<div class="col-md-8">
+				<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">
+					{{- post.title|e -}}
+				</h1>
+			</div>
+			<div class="col-md-4">
+				<table class="table-stats">
+					<td>
+						<label>Created</label><br>
+						{{- post.getHumanCreatedAt() -}}
 					</td>
-				</td>
-			</tr>
-		</table>
+					<td>
+						<label>Last Reply</label><br>
+						{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
+					</td>
+					<td>
+						<label>Replies</label><br>
+						{{- post.number_replies -}}
+					</td>
+					<td>
+						<label>Views</label><br>
+						{{- post.number_views -}}
+					</td>
+					<td>
+						<label>Votes</label><br>
+						{{- post.votes_up - post.votes_down -}}
+					</td>
+				</table>
+			</div>
+		</div>
 	</p>
 
-	<div class="table-responsive">
-		<table class="table discussion" align="center">
-			<tr>
-				<td valign="top" align="center" class="small">
-					<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
-					<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
-					<span class="karma">{{ post.user.getHumanKarma() }}</span>
-				</td>
-				<td class="post-body {% if (post.votes_up - post.votes_down) <= -10 %}post-negative-body{% endif %}">
-					<div class="posts-buttons" align="right">
-						{% if post.edited_at > 0 %}
-							<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
-								edited <span>{{ post.getHumanEditedAt() }}</span>
-							</span><br/>
-						{% endif %}
-						<a name="C{{ post.id }}" href="#C{{ post.id }}">
-							<span class="action-date">
-								<span>{{ post.getHumanCreatedAt() }}</span>
-							</span>
+	<div class="discussion">
+		<div class="row">
+			<div class="col-md-1 small" align="center">
+				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
+				<span class="karma">{{ post.user.getHumanKarma() }}</span>
+			</div>
+			<div class="col-md-11 post-body{% if (post.votes_up - post.votes_down) <= -10 %} post-negative-body{% endif %}">
+				<div class="posts-buttons" align="right">
+					{% if post.edited_at > 0 %}
+						<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
+							edited <span>{{ post.getHumanEditedAt() }}</span>
+						</span><br/>
+					{% endif %}
+					<a name="C{{ post.id }}" href="#C{{ post.id }}">
+						<span class="action-date">
+							<span>{{ post.getHumanCreatedAt() }}</span>
+						</span>
+					</a>
+				</div>
+				<div class="post-content">
+					{%- cache "post-body-" ~ post.id -%}
+					{{- markdown.render(post.content|e) -}}
+					{%- endcache -%}
+				</div>
+				<div class="posts-buttons" align="right">
+					{%- if post.users_id == currentUser or moderator == 'Y' -%}
+						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
+						{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
+					{%- endif %}
+					{%- if currentUser -%}
+						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
+							<span class="glyphicon glyphicon-thumbs-down"></span>
+							{{ post.votes_down }}
 						</a>
-					</div>
-					<div class="post-content">
-						{%- cache "post-body-" ~ post.id -%}
-						{{- markdown.render(post.content|e) -}}
-						{%- endcache -%}
-					</div>
-					<div class="posts-buttons" align="right">
-						{%- if post.users_id == currentUser or moderator == 'Y' -%}
-							{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
-							{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
-						{%- endif %}
-						{%- if currentUser -%}
-							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
-								<span class="glyphicon glyphicon-thumbs-down"></span>
-								{{ post.votes_down }}
-							</a>
-							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
-								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{ post.votes_up }}
-							</a>
-						{%- else -%}
-							<a href="#" onclick="return false" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-thumbs-down"></span>
-								{{- post.votes_down -}}
-							</a>
-							<a href="#" onclick="return false" class="btn btn-success btn-xs">
-								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{- post.votes_up -}}
-							</a>
-						{%- endif -%}
-					</div>
-				</td>
-			</tr>
+						<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
+							<span class="glyphicon glyphicon-thumbs-up"></span>
+							{{ post.votes_up }}
+						</a>
+					{%- else -%}
+						<a href="#" onclick="return false" class="btn btn-danger btn-xs">
+							<span class="glyphicon glyphicon-thumbs-down"></span>
+							{{- post.votes_down -}}
+						</a>
+						<a href="#" onclick="return false" class="btn btn-success btn-xs">
+							<span class="glyphicon glyphicon-thumbs-up"></span>
+							{{- post.votes_up -}}
+						</a>
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
 
-			{%- for reply in post.replies -%}
-			<tr class="{% if (reply.votes_up - reply.votes_down) <= -10 %}reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 10 %}reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
-				<td class="small" valign="top" align="center">
-
+		{%- for reply in post.replies -%}
+			<div class="row{% if (reply.votes_up - reply.votes_down) <= -10 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 10 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
+				<div class="col-md-1 small" align="center">
 					<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
 					<span class="karma">{{ reply.user.getHumanKarma() }}</span>
@@ -136,9 +132,8 @@
 							answer
 						</div>
 					{%- endif -%}
-
-				</td>
-				<td class="post-body">
+				</div>
+				<div class="col-md-11">
 					<div class="posts-buttons" align="right">
 						{%- if reply.edited_at > 0 -%}
 							<span class="action-date action-reply-edit" data-id="{{ reply.id }}" data-toggle="modal" data-target="#historyModal">
@@ -157,7 +152,7 @@
 						{%- endcache -%}
 					</div>
 					<div class="posts-buttons" align="right">
-						{%- if reply.users_id == currentUser or moderator == 'Y' -%}
+						{%- if reply.users_id == post.users_id or moderator == 'Y' -%}
 							<br>
 							{%- if post.accepted_answer != 'Y' -%}
 								<a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
@@ -191,11 +186,13 @@
 							</a>
 						{%- endif -%}
 					</div>
-				</td>
-			</tr>
+				</div>
+				</div>
+				<!--</td>
+			</tr>-->
 			{%- endfor -%}
 
-			<tr>
+			{#<tr>
 			{%- if currentUser -%}
 			<tr>
 				<td valign="top" class="small" align="center">
@@ -239,7 +236,7 @@
 				</td>
 			{%- endif -%}
 			</tr>
-		</table>
+		</table>#}
 	</div>
 
 </div>
