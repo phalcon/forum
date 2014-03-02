@@ -279,6 +279,7 @@ class Posts extends Model
 		if ($this->id) {
 			$viewCache = $this->getDI()->getViewCache();
 			$viewCache->delete('post-' . $this->id);
+			$viewCache->delete('post-body-' . $this->id);
 			$viewCache->delete('post-users-' . $this->id);
 			$viewCache->delete('sidebar');
 		}

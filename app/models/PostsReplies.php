@@ -118,17 +118,18 @@ class PostsReplies extends Model
 
 	public function afterSave()
 	{
-		if ($this->id) {
-			$viewCache = $this->getDI()->getViewCache();
-			$viewCache->delete('post-' . $this->posts_id);
-			$viewCache->delete('post-users-' . $this->posts_id);
-		}
+		$this->clearCache();
 
 		$history = new PostsRepliesHistory();
 		$history->posts_replies_id = $this->id;
 		$history->users_id = $this->getDI()->getSession()->get('identity');
 		$history->content  = $this->content;
 		$history->save();
+	}
+
+	public function afterDelete()
+	{
+		$this->clearCache();
 	}
 
 	public function getHumanCreatedAt()
@@ -164,6 +165,17 @@ class PostsReplies extends Model
 					return ((int) ($diff / 60)) . 'm ago';
 				}
 			}
+		}
+	}
+
+	public function clearCache()
+	{
+		if ($this->id) {
+			$viewCache = $this->getDI()->getViewCache();
+			$viewCache->delete('post-' . $this->posts_id);
+			$viewCache->delete('post-body-' . $this->posts_id);
+			$viewCache->delete('post-users-' . $this->posts_id);
+			$viewCache->delete('reply-body-' . $this->id);
 		}
 	}
 

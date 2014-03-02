@@ -89,7 +89,9 @@
 						</a>
 					</div>
 					<div class="post-content">
+						{%- cache "post-body-" ~ post.id -%}
 						{{- markdown.render(post.content|e) -}}
+						{%- endcache -%}
 					</div>
 					<div class="posts-buttons" align="right">
 						{%- if post.users_id == currentUser or moderator == 'Y' -%}
@@ -150,7 +152,9 @@
 						</a>
 					</div>
 					<div class="post-content">
-						{{ markdown.render(reply.content|e) }}
+						{%- cache "reply-body-" ~ reply.id -%}
+						{{- markdown.render(reply.content|e) -}}
+						{%- endcache -%}
 					</div>
 					<div class="posts-buttons" align="right">
 						{%- if reply.users_id == currentUser or moderator == 'Y' -%}
