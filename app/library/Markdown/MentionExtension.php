@@ -23,7 +23,7 @@ class MentionExtension implements ExtensionInterface
     {
         // Turn @username into [@username](http://example.com/user/username)
         $text->replace('/(?:^|[^a-zA-Z0-9.])@([A-Za-z]+[A-Za-z0-9]+)/', function (Text $w, Text $username) {
-            return '[@' . $username . '](http://forum.phalconphp.com/user/0/' . $username . ')';
+            return ' [@' . $username . '](http://forum.phalconphp.com/user/0/' . $username . ')';
         });
     }
 

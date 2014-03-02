@@ -204,39 +204,39 @@ pre.prettyprint {
     color: #c0c0c0;
 }
 
-tr.reply-negative td,
-tr.reply-negative p {
+div.reply-negative div,
+div.reply-negative p {
     color: #c0c0c0;
     font-size: 0.9em;
 }
 
-tr.reply-positive td,
-tr.reply-positive p {
+div.reply-positive div,
+div.reply-positive p {
     font-size: 1.1em;
 }
 
-tr.reply-negative td.small img {
+div.reply-negative td.small img {
     width: 32px;
     height: 32px;
 }
 
-tr.reply-negative .post-content {
+div.reply-negative .post-content {
     min-height: 50px;
 }
 
-tr.reply-negative {
+div.reply-negative {
     background: #fafafa;
 }
 
-tr.reply-positive {
+div.reply-positive {
     background: #f4f8fa;
 }
 
-tr.reply-accepted {
+div.reply-accepted {
     background: #f4f8fa;
 }
 
-tr.reply-accepted .post-content {
+div.reply-accepted .post-content {
     min-height: 140px;
 }
 
@@ -305,6 +305,14 @@ div.accepted-reply span {
     }
 
     .discussion .small a {
+        font-size: 10px;
+    }
+
+    .table-stats {
+        margin-top: 10px;
+    }
+
+    .table-stats td {
         font-size: 10px;
     }
 }

@@ -40,8 +40,10 @@ class UtilsController extends \Phalcon\Mvc\Controller
 	{
 		$response = new Response();
 		if ($this->request->isPost()) {
-			$content = $this->request->getPost('content');
-			$response->setContent($this->markdown->render($this->escaper->escapeHtml($content)));
+			if ($this->session->get('identity')) {
+				$content = $this->request->getPost('content');
+				$response->setContent($this->markdown->render($this->escaper->escapeHtml($content)));
+			}
 		}
 		return $response;
 	}

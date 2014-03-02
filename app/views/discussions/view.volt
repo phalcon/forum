@@ -124,12 +124,10 @@
 					<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
 					<span class="karma">{{ reply.user.getHumanKarma() }}</span>
-
 					{%- if reply.accepted == 'Y' -%}
 						<div class="accepted-reply">
 							<span class="glyphicon glyphicon-ok"></span>
-							Accepted<br>
-							answer
+							Accepted<br>answer
 						</div>
 					{%- endif -%}
 				</div>
@@ -187,19 +185,16 @@
 						{%- endif -%}
 					</div>
 				</div>
-				</div>
-				<!--</td>
-			</tr>-->
+			</div>
 			{%- endfor -%}
 
-			{#<tr>
+			<div class="row">
 			{%- if currentUser -%}
-			<tr>
-				<td valign="top" class="small" align="center">
+				<div class="col-md-1 small" align="center">
 					<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('', 'You') }}</span>
-				</td>
-				<td>
+				</div>
+				<div class="col-md-11">
 					<ul class="nav nav-tabs preview-nav">
 						<li class="active"><a href="#" onclick="return false">Comment</a></li>
 						<li><a href="#" onclick="return false">Preview</a></li>
@@ -223,10 +218,10 @@
 							</div>
 						</p>
 					</form>
-				</td>
+				</div>
 			{%- else -%}
-				<td></td>
-				<td>
+				<div class="col-md-1 small" align="center">
+				<div class="col-md-11">
 					<div class="pull-left">
 						{{- link_to('', 'Back to discussions') -}}
 					</div>
@@ -235,8 +230,8 @@
 					</div>
 				</td>
 			{%- endif -%}
-			</tr>
-		</table>#}
+			</div>
+		</div>
 	</div>
 
 </div>

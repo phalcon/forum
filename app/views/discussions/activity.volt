@@ -22,7 +22,7 @@
 	<table width="90%" align="center" class="table table-striped">
 		{% for activity in activities %}
 		<tr>
-			<td class="small" valign="top">
+			<td class="small hidden-xs" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
 			</td>
 			<td>
