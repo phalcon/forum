@@ -163,6 +163,18 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
+		$postReplyVote = new PostsRepliesVotes();
+		$postReplyVote->posts_replies_id = $postReply->id;
+		$postReplyVote->users_id = $user->id;
+		if (!$postReplyVote->save()) {
+			foreach ($postReplyVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
+		}
+
 		$postReply->votes_up++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
@@ -239,6 +251,18 @@ class RepliesController extends \Phalcon\Mvc\Controller
 				'status' => 'error',
 				'message' => 'You have already voted this reply'
 			));
+		}
+
+		$postReplyVote = new PostsRepliesVotes();
+		$postReplyVote->posts_replies_id = $postReply->id;
+		$postReplyVote->users_id = $user->id;
+		if (!$postReplyVote->save()) {
+			foreach ($postReplyVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
 		}
 
 		$postReply->votes_down++;

@@ -96,7 +96,7 @@
 					<div class="posts-buttons" align="right">
 						{%- if post.users_id == currentUser or moderator == 'Y' -%}
 							{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
-							{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}
+							{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
 						{%- endif %}
 						{%- if currentUser -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
@@ -162,14 +162,14 @@
 							{%- if post.accepted_answer != 'Y' -%}
 								<a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
 									<span class="glyphicon glyphicon-ok"></span>&nbsp;Accept Answer
-								</a>
+								</a>&nbsp;
 							{%- endif -%}
 							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
 							</a>
 							<a class="btn btn-default btn-xs reply-remove" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
-							</a>
+							</a>&nbsp;
 						{%- endif -%}
 						{%- if currentUser -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-reply-down" data-id="{{ reply.id }}">

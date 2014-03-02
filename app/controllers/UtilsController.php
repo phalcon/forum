@@ -36,5 +36,10 @@ class UtilsController extends \Phalcon\Mvc\Controller
 		}
 	}
 
+	public function previewAction()
+	{
+
+	}
+
 }
 
