@@ -19,4 +19,5 @@ class PostsViews extends Model
 			'alias' => 'post'
 		));
 	}
+
 }

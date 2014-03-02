@@ -5,6 +5,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsBounties,
 	Phosphorum\Models\PostsRepliesHistory,
 	Phosphorum\Models\PostsRepliesVotes,
 	Phalcon\Http\Response;
@@ -360,20 +361,34 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
-		$postReply->accepted = 'Y';
-		if ($postReply->users_id != $user->id) {
-			$points = (30 + intval(abs($user->karma - $postReply->user->karma)/1000));
+		if ($postReply->post->users_id != $postReply->users_id) {
+
+			$postReply->post->user->karma += 10;
+			$postReply->post->user->votes_points += 10;
+
+			$points = (30 + intval(abs($user->karma - $post->user->karma)/1000));
+
+			$postBounty = PostsBounties::findFirst(array(
+				'users_id = ?0 AND posts_replies_id = ?1',
+				'bind' => array($postReply->users_id, $postReply->id)
+			));
+			if ($postBounty) {
+				$points += $postBounty->points;
+			}
+
 			$postReply->user->karma += $points;
 			$postReply->user->votes_points += $points;
-			$postReply->post->accepted_answer = 'Y';
-		}
 
-		if ($postReply->save()) {
-
-			if ($postReply->users_id != $user->id) {
+			if ($postReply->users_id != $user->id && $postReply->post->users_id != $user->id) {
 				$user->karma += 10;
 				$user->votes_points += 10;
 			}
+		}
+
+		$postReply->accepted = 'Y';
+		$postReply->post->accepted_answer = 'Y';
+
+		if ($postReply->save()) {
 
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {

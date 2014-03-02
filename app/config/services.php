@@ -4,6 +4,9 @@ use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View;
 use Phalcon\Db\Adapter\Pdo\Mysql as DatabaseConnection;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Logger\Adapter\File as FileLogger;
+use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
 use Ciconia\Ciconia;
 
 /**
@@ -25,7 +28,7 @@ $di->set('volt', function($view, $di) {
 	$volt->setOptions(array(
 		"compiledPath" => __DIR__ . "/../cache/volt/",
 		"compiledSeparator" => "_",
-		//"compileAlways" => true
+		"compileAlways" => true
 	));
 
 	return $volt;
@@ -52,21 +55,21 @@ $di->set('view', function() use ($config) {
  */
 $di->set('db', function() use ($config) {
 
-	/*$eventsManager = new Phalcon\Events\Manager();
+	$eventsManager = new EventsManager();
 
-	$logger = new \Phalcon\Logger\Adapter\File("../app/logs/db.log");
+	$logger = new FileLogger("../app/logs/db.log");
 
 	//Listen all the database events
 	$eventsManager->attach('db', function($event, $connection) use ($logger) {
-	    if ($event->getType() == 'beforeQuery') {
-	        $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
-	    }
-	});*/
+		if ($event->getType() == 'beforeQuery') {
+			$logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+		}
+	});
 
 	$connection = new DatabaseConnection($config->database->toArray());
 
 	//Assign the eventsManager to the db adapter instance
-	//$connection->setEventsManager($eventsManager);
+	$connection->setEventsManager($eventsManager);
 
 	return $connection;
 });
@@ -75,8 +78,7 @@ $di->set('db', function() use ($config) {
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
  */
 $di->set('modelsMetadata', function() use ($config) {
-	//return new \Phalcon\Mvc\Model\Metadata\Memory();
-	return new \Phalcon\Mvc\Model\Metadata\Files(array(
+	return new MetaDataAdapter(array(
 		'metaDataDir' => __DIR__ . '/../cache/metaData/'
 	));
 }, true);
@@ -135,20 +137,44 @@ $di->set('dispatcher', function() {
  */
 $di->set('viewCache', function() {
 
+	//Cache data for one day by default
+	$frontCache = new \Phalcon\Cache\Frontend\Output(array(
+		"lifetime" => 86400
+	));
+
+	if (function_exists('apc_store')) {
+		return new \Phalcon\Cache\Backend\Apc($frontCache, array(
+			"prefix" => "forum-cache-"
+		));
+	}
+
+	return new \Phalcon\Cache\Backend\File($frontCache, array(
+		"cacheDir" => __DIR__ . "/../cache/views/",
+		"prefix" => "forum-cache-"
+	));
+});
+
+/**
+ * Cache
+ */
+$di->set('modelsCache', function() {
+
     //Cache data for one day by default
-    $frontCache = new \Phalcon\Cache\Frontend\Output(array(
-        "lifetime" => 2592000
+    $frontCache = new \Phalcon\Cache\Frontend\Data(array(
+        "lifetime" => 900
     ));
 
-    /*return new \Phalcon\Cache\Backend\Apc($frontCache, array(
-        "prefix" => "cache-"
-    ));*/
+    if (function_exists('apc_store')) {
+	    return new \Phalcon\Cache\Backend\Apc($frontCache, array(
+	        "prefix" => "forum-cache-data-"
+	    ));
+	}
 
-    //Memcached connection settings
     return new \Phalcon\Cache\Backend\File($frontCache, array(
-        "cacheDir" => __DIR__ . "/../cache/views/",
-        "prefix" => "cache-"
+        "cacheDir" => __DIR__ . "/../cache/data/",
+        "prefix" => "forum-cache-data-"
     ));
+
 });
 
 $di->set('markdown', function(){

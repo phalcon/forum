@@ -53,3 +53,15 @@ CREATE TABLE `posts_replies_votes` (
 
 alter table posts_replies add accepted char(1) default 'N';
 alter table posts add accepted_answer char(1) default 'N';
+
+CREATE TABLE `posts_bounties` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `posts_replies_id` int(10) unsigned NOT NULL,
+  `points` int(10) unsigned NOT NULL,
+  `created_at` int(18) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_replies_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

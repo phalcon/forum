@@ -31,11 +31,13 @@ class PostsReplies extends Model
 	public function initialize()
 	{
 		$this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', array(
-			'alias' => 'post'
+			'alias' => 'post',
+			'reusable' => true
 		));
 
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
-			'alias' => 'user'
+			'alias' => 'user',
+			'reusable' => true
 		));
 
 		$this->addBehavior(new Timestampable(array(
@@ -119,6 +121,7 @@ class PostsReplies extends Model
 		if ($this->id) {
 			$viewCache = $this->getDI()->getViewCache();
 			$viewCache->delete('post-' . $this->posts_id);
+			$viewCache->delete('post-users-' . $this->posts_id);
 		}
 
 		$history = new PostsRepliesHistory();

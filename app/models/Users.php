@@ -2,8 +2,8 @@
 
 namespace Phosphorum\Models;
 
-use Phosphorum\Models\Activities,
-	Phalcon\Mvc\Model,
+use Phalcon\Mvc\Model,
+	Phosphorum\Models\Activities,
 	Phalcon\Mvc\Model\Behavior\Timestampable;
 
 class Users extends Model

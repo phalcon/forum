@@ -138,16 +138,18 @@ class Posts extends Model
 	public function afterSave()
 	{
 
-		if ($this->id) {
-			$viewCache = $this->getDI()->getViewCache();
-			$viewCache->delete('post-' . $this->id);
-		}
+		$this->clearCache();
 
 		$history = new PostsHistory();
 		$history->posts_id = $this->id;
 		$history->users_id = $this->getDI()->getSession()->get('identity');
 		$history->content  = $this->content;
 		$history->save();
+	}
+
+	public function afterDelete()
+	{
+		$this->clearCache();
 	}
 
 	/**
@@ -232,6 +234,53 @@ class Posts extends Model
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks if the post can have a bounty
+	 *
+	 * @return boolean
+	 */
+	public function canHaveBounty()
+	{
+		if ($this->accepted_answer != "Y" && $this->sticked != 'Y' && $this->number_replies == 0 && ($this->votes_up - $this->votes_down) >= 0) {
+			$diff = time() - $this->created_at;
+			if ($diff > 86400) {
+				if ($diff < (86400 * 30)) {
+					return true;
+				}
+			} else {
+				if ($diff < 3600) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public function getBounty()
+	{
+		$diff = time() - $this->created_at;
+		if ($diff > 86400) {
+			if ($diff < (86400 * 30)) {
+				return array('type' => 'old', 'value' => 150 + intval($diff / 86400 * 3));
+			}
+		} else {
+			if ($diff < 3600) {
+				return array('type' => 'fast-reply', 'value' => 200);
+			}
+		}
+		return false;
+	}
+
+	public function clearCache()
+	{
+		if ($this->id) {
+			$viewCache = $this->getDI()->getViewCache();
+			$viewCache->delete('post-' . $this->id);
+			$viewCache->delete('post-users-' . $this->id);
+			$viewCache->delete('sidebar');
 		}
 	}
 

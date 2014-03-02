@@ -5,6 +5,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsViews,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsBounties,
 	Phosphorum\Models\PostsHistory,
 	Phosphorum\Models\PostsVotes,
 	Phosphorum\Models\Categories,
@@ -50,7 +51,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$itemBuilder->columns(array(
 			'p.*'
 		))
-		->limit(30);
+		->limit(40);
 
 		$totalBuilder->columns('COUNT(*) AS count');
 
@@ -103,8 +104,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			case 'unanswered':
 				$this->tag->setTitle('Unanswered Discussions');
-				$itemBuilder->where('p.number_replies = 0');
-				$totalBuilder->where('p.number_replies = 0');
+				$itemBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
+				$totalBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
 				break;
 
             case 'answers':
@@ -218,12 +219,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->content = $this->request->getPost('content');
 
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -285,12 +280,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			}
 
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -387,16 +376,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			if (!$usersId) {
 
 				/**
-		 		 * Enable cache
-		 		 */
-				//$this->view->cache(array('key' => 'post-' . $id));
+			 	 * Enable cache
+			 	 */
+				$this->view->cache(array('key' => 'post-' . $id));
 
 				/**
 				 * Check for a cache
 				 */
-				//if ($this->viewCache->exists('post-' . $id)) {
-				//	return;
-				//}
+				if ($this->viewCache->exists('post-' . $id)) {
+					return;
+				}
 			}
 
 			/**
@@ -429,7 +418,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 * Increase the number of views in the post
 				 */
 				$post->number_views++;
-
 				if ($post->users_id != $usersId) {
 
 					$post->user->karma += 1;
@@ -480,6 +468,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$usersId = $this->session->get('identity');
 
 				/**
+				 * Check if the question can have a bounty before add the reply
+				 */
+				$canHaveBounty = $post->canHaveBounty();
+
+				/**
 				 * Only update the number of replies if the user that commented isn't the same that posted
 				 */
 				if ($post->users_id != $usersId) {
@@ -502,6 +495,21 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$postReply->content = $content;
 
 				if ($postReply->save()) {
+
+					if ($post->users_id != $usersId && $canHaveBounty) {
+						$bounty = $post->getBounty();
+						$postBounty = new PostsBounties();
+						$postBounty->posts_id = $post->id;
+						$postBounty->users_id = $usersId;
+						$postBounty->posts_replies_id = $postReply->id;
+						$postBounty->points = $bounty['value'];
+						if (!$postBounty->save()) {
+							foreach ($postBounty->getMessages() as $message) {
+								$this->flash->error($message);
+							}
+						}
+					}
+
 					return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug . '#C' . $postReply->id);
 				}
 
@@ -750,7 +758,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->activities = Activities::find(array(
 			'order' => 'created_at DESC',
-			'limit' => array('number' => 30, 'offset' => 0)
+			'limit' => array('number' => 40, 'offset' => 0)
 		));
 
 		$this->tag->setTitle('Recent Activity on the Forum');

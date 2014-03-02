@@ -2,9 +2,7 @@
 
 namespace Phosphorum\Models;
 
-use Phalcon\Mvc\Model;
-
-class Categories extends Model
+class Categories extends CacheableModel
 {
 
 	public $id;

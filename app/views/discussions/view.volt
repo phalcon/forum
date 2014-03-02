@@ -1,14 +1,28 @@
-{{ content() }}
+{{- content() -}}
 
-{% set currentUser = session.get('identity'), moderator = session.get('identity-moderator') %}
+{%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
 
-{% if (post.votes_up - post.votes_down) <= -10 %}
+{%- if (post.votes_up - post.votes_down) <= -10 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
 		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data,
 		 spam or aggressive vocabulary or tone, etc.</p>
 	</div>
-{% endif %}
+{%- endif -%}
+
+{%- if post.canHaveBounty() -%}
+{%- set bounty = post.getBounty() -%}
+<div class="bs-callout bs-callout-info">
+	<h4>Bounty available!</h4>
+	{%- if bounty['type'] == "old" -%}
+	<p>It has been a while and this question still does not have any answers.
+		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
+	{%- elseif bounty['type'] == "fast-reply" -%}
+	<p>This post has recently posted.
+		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
+	{%- endif -%}
+</div>
+{%- endif -%}
 
 <div class="container">
 
@@ -28,23 +42,23 @@
 						<table class="table-stats">
 							<td>
 								<label>Created</label><br>
-								{{ post.getHumanCreatedAt() }}
+								{{- post.getHumanCreatedAt() -}}
 							</td>
 							<td>
 								<label>Last Reply</label><br>
-								{{ post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" }}
+								{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
 							</td>
 							<td>
 								<label>Replies</label><br>
-								{{ post.number_replies }}
+								{{- post.number_replies -}}
 							</td>
 							<td>
 								<label>Views</label><br>
-								{{ post.number_views }}
+								{{- post.number_views -}}
 							</td>
 							<td>
 								<label>Votes</label><br>
-								{{ post.votes_up - post.votes_down }}
+								{{- post.votes_up - post.votes_down -}}
 							</td>
 						</table>
 					</td>
@@ -75,14 +89,14 @@
 						</a>
 					</div>
 					<div class="post-content">
-						{{ markdown.render(post.content|e) }}
+						{{- markdown.render(post.content|e) -}}
 					</div>
 					<div class="posts-buttons" align="right">
-						{% if post.users_id == currentUser or moderator == 'Y' %}
+						{%- if post.users_id == currentUser or moderator == 'Y' -%}
 							{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
 							{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}
-						{% endif %}
-						{% if currentUser %}
+						{%- endif %}
+						{%- if currentUser -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ post.votes_down }}
@@ -91,16 +105,16 @@
 								<span class="glyphicon glyphicon-thumbs-up"></span>
 								{{ post.votes_up }}
 							</a>
-						{% else %}
+						{%- else -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
-								{{ post.votes_down }}
+								{{- post.votes_down -}}
 							</a>
 							<a href="#" onclick="return false" class="btn btn-success btn-xs">
 								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{ post.votes_up }}
+								{{- post.votes_up -}}
 							</a>
-						{% endif %}
+						{%- endif -%}
 					</div>
 				</td>
 			</tr>
@@ -139,21 +153,21 @@
 						{{ markdown.render(reply.content|e) }}
 					</div>
 					<div class="posts-buttons" align="right">
-						{% if reply.users_id == currentUser or moderator == 'Y' %}
+						{%- if reply.users_id == currentUser or moderator == 'Y' -%}
 							<br>
-							{% if post.accepted_answer != 'Y' %}
+							{%- if post.accepted_answer != 'Y' -%}
 								<a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
 									<span class="glyphicon glyphicon-ok"></span>&nbsp;Accept Answer
 								</a>
-							{% endif %}
+							{%- endif -%}
 							<a class="btn btn-default btn-xs reply-edit" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
 							</a>
 							<a class="btn btn-default btn-xs reply-remove" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
 							</a>
-						{% endif %}
-						{% if currentUser %}
+						{%- endif -%}
+						{%- if currentUser -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-reply-down" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ reply.votes_down }}
@@ -162,7 +176,7 @@
 								<span class="glyphicon glyphicon-thumbs-up"></span>
 								{{ reply.votes_up }}
 							</a>
-						{% else %}
+						{%- else -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-login" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
 								{{ reply.votes_down }}
@@ -171,7 +185,7 @@
 								<span class="glyphicon glyphicon-thumbs-up"></span>
 								{{ reply.votes_up }}
 							</a>
-						{% endif %}
+						{%- endif -%}
 					</div>
 				</td>
 			</tr>
@@ -193,14 +207,14 @@
 					<form method="post" autocomplete="off" role="form">
 						<p>
 							<div id="comment-box">
-								{{ hidden_field('id', 'value': post.id) }}
-								{{ text_area("content", "rows": 5, "class": "form-control") }}
+								{{- hidden_field('id', 'value': post.id) -}}
+								{{- text_area("content", "rows": 5, "class": "form-control") -}}
 							</div>
 							<div id="preview-box" style="display:none"></div>
 						</p>
 						<p>
 							<div class="pull-left">
-								{{ link_to('', 'Back to discussions') }}
+								{{- link_to('', 'Back to discussions') -}}
 							</div>
 							<div class="pull-right">
 								<button type="submit" class="btn btn-success">Add Comment</button>
@@ -212,10 +226,10 @@
 				<td></td>
 				<td>
 					<div class="pull-left">
-						{{ link_to('', 'Back to discussions') }}
+						{{- link_to('', 'Back to discussions') -}}
 					</div>
 					<div class="pull-right">
-						{{ link_to('login/oauth/authorize', 'Log In to Comment', 'class': 'btn btn-info') }}
+						{{- link_to('login/oauth/authorize', 'Log In to Comment', 'class': 'btn btn-info') -}}
 					</div>
 				</td>
 			{%- endif -%}
