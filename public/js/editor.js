@@ -7156,9 +7156,12 @@ Editor.markdown = function(text) {
  * Render editor to the given element.
  */
 Editor.prototype.render = function(el) {
+
 	if (!el) {
 		el = this.element || document.getElementsByTagName('textarea')[0];
 	}
+
+	$(el).data('editor', this);
 
 	if (this._rendered && this._rendered === el) {
 		// Already rendered.
@@ -7285,7 +7288,7 @@ Editor.prototype.createStatusbar = function(status) {
 				cm.on('update', function() {
 					var mlines = lineCount(cm.getValue());
 					el.innerHTML = mlines;
-					if (mlines > 4) {
+					if (mlines > 9) {
 						window.setTimeout(function(mlines) {
 							this.setSize(null, (mlines * 22) + 'px');
 						}.bind(cm, mlines), 500);

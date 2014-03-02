@@ -244,7 +244,14 @@ class Posts extends Model
 	 */
 	public function canHaveBounty()
 	{
-		if ($this->accepted_answer != "Y" && $this->sticked != 'Y' && $this->number_replies == 0 && ($this->votes_up - $this->votes_down) >= 0) {
+		$canHave = $this->accepted_answer != "Y" &&
+					$this->sticked != 'Y' &&
+					$this->number_replies == 0 &&
+					$this->categories_id != 15 && //announcements
+					$this->categories_id != 4 && //offtopic
+					$this->categories_id != 7 && //jobs
+					($this->votes_up - $this->votes_down) >= 0;
+		if ($canHave) {
 			$diff = time() - $this->created_at;
 			if ($diff > 86400) {
 				if ($diff < (86400 * 30)) {
@@ -268,7 +275,7 @@ class Posts extends Model
 			}
 		} else {
 			if ($diff < 3600) {
-				return array('type' => 'fast-reply', 'value' => 200);
+				return array('type' => 'fast-reply', 'value' => 100);
 			}
 		}
 		return false;

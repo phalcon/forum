@@ -6,6 +6,8 @@ var Forum = {
 
 	_uri: '',
 
+	_editor: null,
+
 	makeCommentEditable: function(response)
 	{
 		if (response.status == 'OK') {
@@ -109,7 +111,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -128,7 +130,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -147,7 +149,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -166,7 +168,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -185,7 +187,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -235,25 +237,26 @@ var Forum = {
 		});
 
 		$(this).addClass('active');
-
-		if ($('a', this)[0].innerHTML == 'Preview') {
-
-			var content = $('textarea', '#comment-box')[0].value;
+		var parent = $(this).parents()[2];
+		if ($('a', this).html() == 'Preview') {
+			var content = $('textarea', parent).data('editor').codemirror.getValue()
 			if (content !== '') {
-				content = content.replace(/</g, '&lt;');
-				content = content.replace(/>/g, '&gt;');
-				content = content.replace('\n', '<br>');
-				$('#preview-box')[0].innerHTML = Forum.parseContent(content);
+				$.ajax({
+					method: 'POST',
+					url: Forum._uri + 'preview',
+					data: {'content': content }
+				}).done(function(parent, response){
+					$('#preview-box', parent).html(response);
+					prettyPrint();
+				}.bind(this, parent));
 			} else {
-				$('#preview-box')[0].innerHTML = 'Nothing to preview'
-			}
-
-			$('#comment-box').hide();
-			$('#preview-box').show();
-
+				$('#preview-box', parent).html('Nothing to preview');
+			};
+			$('#comment-box', parent).hide();
+			$('#preview-box', parent).show();
 		} else {
-			$('#comment-box').show();
-			$('#preview-box').hide();
+			$('#comment-box', parent).show();
+			$('#preview-box', parent).hide();
 		}
 	},
 

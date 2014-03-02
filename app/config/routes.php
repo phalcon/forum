@@ -42,6 +42,11 @@ $router->add('/discussions', array(
 	'action' => 'index'
 ));
 
+$router->add('/preview', array(
+	'controller' => 'utils',
+	'action' => 'preview'
+));
+
 $router->add('/reply/accept/{id:[0-9]+}', array(
 	'controller' => 'replies',
 	'action' => 'accept'

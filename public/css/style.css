@@ -57,12 +57,8 @@ table.discussion .post-editor {
 }
 
 .CodeMirror {
-    height: 250px;
+    height: 200px;
     border: 1px solid #c0c0c0;
-}
-
-table.discussion .CodeMirror {
-    height: 120px;
 }
 
 pre.prettyprint {
@@ -287,4 +283,9 @@ div.accepted-reply span {
     font-size: 32px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+#preview-box {
+    min-height: 180px;
+    margin: 20px;
 }

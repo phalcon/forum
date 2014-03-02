@@ -203,9 +203,10 @@
 					<span>{{ link_to('', 'You') }}</span>
 				</td>
 				<td>
-					<ul class="nav nav-tabs">
+					<ul class="nav nav-tabs preview-nav">
 						<li class="active"><a href="#" onclick="return false">Comment</a></li>
-						<li>{{ link_to('help/markdown', 'Help', 'class': 'help', 'parent': '_blank') }}</li>
+						<li><a href="#" onclick="return false">Preview</a></li>
+						<li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
 					</ul>
 
 					<form method="post" autocomplete="off" role="form">

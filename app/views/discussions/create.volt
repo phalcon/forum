@@ -34,12 +34,14 @@
 
 				<ul class="nav nav-tabs preview-nav">
 					<li class="active"><a href="#" onclick="return false">Write</a></li>
-					<!--<li><a href="#" onclick="return false">Preview</a></li>-->
-					<li class="pull-right">{{ link_to('help', 'Help', 'class': 'help') }}</li>
+					<li><a href="#" onclick="return false">Preview</a></li>
+					<li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
 				</ul>
 
-				<div class="form-group">
-					{{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
+				<div id="comment-box">
+					<div class="form-group">
+						{{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
+					</div>
 				</div>
 				<div id="preview-box" style="display:none"></div>
 			  </div>

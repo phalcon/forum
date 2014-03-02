@@ -25,7 +25,7 @@
           		</a>
           		<ul class="dropdown-menu">
 					<li>
-						<div style="width:300px;padding:10px">
+						<div style="width:300px">
 							<gcse:searchbox-only></gcse:searchbox-only>
 						</div>
 					</li>
