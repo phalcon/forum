@@ -57,6 +57,11 @@ $router->add('/discussions', array(
 	'action' => 'index'
 ));
 
+$router->add('/hook/mail-reply', array(
+	'controller' => 'hooks',
+	'action' => 'mailReply'
+));
+
 $router->add('/preview', array(
 	'controller' => 'utils',
 	'action' => 'preview'

@@ -33,7 +33,9 @@ class HooksController extends \Phalcon\Mvc\Controller
 	public function mailReplyAction()
 	{
 		$response = new Response();
-		file_put_contents('../a.txt', print_r($_POST, true));
+		if ($this->request->isPost()) {
+			file_put_contents('../a.txt', print_r($_POST, true));
+		}
 		return $response;
 	}
 
