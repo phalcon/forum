@@ -7097,7 +7097,7 @@ var toolbar = [
 	{name: 'italic', action: toggleItalic},
 	'|',
 
-	//{name: 'quote', action: toggleBlockquote},
+	{name: 'quote', action: toggleBlockquote},
 	{name: 'unordered-list', action: toggleUnOrderedList},
 	{name: 'ordered-list', action: toggleOrderedList},
 	'|',
@@ -7189,7 +7189,8 @@ Editor.prototype.render = function(el) {
 		theme: 'paper',
 		indentWithTabs: true,
 		lineNumbers: false,
-		extraKeys: keyMaps
+		extraKeys: keyMaps,
+		lineWrapping: true
 	});
 
 	if (options.toolbar !== false) {

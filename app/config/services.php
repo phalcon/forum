@@ -149,12 +149,16 @@ $di->set('dispatcher', function() {
 /**
  * View cache
  */
-$di->set('viewCache', function() {
+$di->set('viewCache', function() use ($config) {
 
-	//Cache data for one day by default
-	$frontCache = new \Phalcon\Cache\Frontend\Output(array(
-		"lifetime" => 86400
-	));
+	if ($config->application->debug) {
+		$frontCache = new \Phalcon\Cache\Frontend\None();
+	} else {
+		//Cache data for one day by default
+		$frontCache = new \Phalcon\Cache\Frontend\Output(array(
+			"lifetime" => 86400 * 30
+		));
+	}
 
 	return new \Phalcon\Cache\Backend\File($frontCache, array(
 		"cacheDir" => __DIR__ . "/../cache/views/",
@@ -169,26 +173,20 @@ $di->set('modelsCache', function() {
 
     //Cache data for one day by default
     $frontCache = new \Phalcon\Cache\Frontend\Data(array(
-        "lifetime" => 900
+        "lifetime" => 86400 * 30
     ));
-
-    if (function_exists('apc_store')) {
-	    return new \Phalcon\Cache\Backend\Apc($frontCache, array(
-	        "prefix" => "forum-cache-data-"
-	    ));
-	}
 
     return new \Phalcon\Cache\Backend\File($frontCache, array(
         "cacheDir" => __DIR__ . "/../cache/data/",
         "prefix" => "forum-cache-data-"
     ));
-
 });
 
 $di->set('markdown', function(){
 	$ciconia = new Ciconia();
 	$ciconia->addExtension(new \Phosphorum\Markdown\TableExtension());
 	$ciconia->addExtension(new \Phosphorum\Markdown\MentionExtension());
+	$ciconia->addExtension(new \Phosphorum\Markdown\BlockQuoteExtension());
 	$ciconia->addExtension(new \Ciconia\Extension\Gfm\FencedCodeBlockExtension());
 	$ciconia->addExtension(new \Ciconia\Extension\Gfm\UrlAutoLinkExtension());
 	return $ciconia;

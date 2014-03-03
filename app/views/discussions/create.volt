@@ -7,10 +7,10 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-1 remove-image" align="right">
+		<div class="col-md-1 remove-image hidden-xs" align="right">
 			<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded">
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-11">
 
 			<div class="bs-callout bs-callout-info">
 				<h4>Creating a new Post</h4>
@@ -51,7 +51,7 @@
 					{{ link_to('', 'Back to discussions') }}
 				</div>
 				<div class="pull-right">
-					<button type="submit" class="btn btn-success">Submit Discussion</button>
+					<button type="submit" class="btn btn-sm btn-success">Submit Discussion</button>
 				</div>
 			  </p>
 

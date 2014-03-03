@@ -20,8 +20,10 @@ h1 {
     color: #717171;
 }
 
-table.discussion>tbody>tr>td {
+.discussion div.row {
     padding-bottom: 20px;
+    border-bottom: 1px solid #dadada;
+    padding-top: 5px;
 }
 
 p {
@@ -36,23 +38,23 @@ p {
     text-decoration: underline;
 }
 
-table.discussion .small {
+.discussion .small {
     width: 90px;
     text-align: center;
 }
 
-table.discussion .small a {
+.discussion .small a {
     color: #999999;
 }
 
-table.discussion .small img {
+.discussion .small img {
     margin-top: 10px;
     width: 48px;
     height: 48px;
     border: none;
 }
 
-table.discussion .post-editor {
+.discussion .post-editor {
     padding-left: 7px;
 }
 
@@ -65,7 +67,7 @@ pre.prettyprint {
     padding: 10px;
 }
 
-table.discussion img {
+.discussion img {
     max-width: 550px;
     max-height: 600px;
 }
@@ -121,6 +123,10 @@ table.discussion img {
     width: 820px;
 }
 
+.user-profile .login {
+    color: #969696;
+}
+
 .user-profile .small {
     width: 100px;
     text-align: center;
@@ -134,7 +140,7 @@ table.discussion img {
     width: 100%;
 }
 
-table.discussion .small a.user-moderator-Y {
+.discussion .small a.user-moderator-Y {
     background: #ffffc2;
     color: #0077b3;
     padding: 2px;
@@ -202,40 +208,40 @@ table.discussion .small a.user-moderator-Y {
     color: #c0c0c0;
 }
 
-tr.reply-negative td,
-tr.reply-negative p {
+div.reply-negative div,
+div.reply-negative p {
     color: #c0c0c0;
     font-size: 0.9em;
 }
 
-tr.reply-positive td,
-tr.reply-positive p {
+div.reply-positive div,
+div.reply-positive p {
     font-size: 1.1em;
 }
 
-tr.reply-negative td.small img {
+div.reply-negative td.small img {
     width: 32px;
     height: 32px;
 }
 
-tr.reply-negative .post-content {
+div.reply-negative .post-content {
     min-height: 50px;
 }
 
-tr.reply-negative {
+div.reply-negative {
     background: #fafafa;
 }
 
-tr.reply-positive {
+div.reply-positive {
     background: #f4f8fa;
 }
 
-tr.reply-accepted {
+div.reply-accepted {
     background: #f4f8fa;
 }
 
-tr.reply-accepted .post-content {
-    min-height: 140px;
+div.reply-accepted .post-content {
+    min-height: 105px;
 }
 
 div#footer .version {
@@ -280,7 +286,7 @@ div.accepted-reply {
 }
 
 div.accepted-reply span {
-    font-size: 32px;
+    font-size: 26px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -288,4 +294,69 @@ div.accepted-reply span {
 #preview-box {
     min-height: 180px;
     margin: 20px;
+}
+
+blockquote {
+    padding: 12px;
+    margin-top: 14px;
+    margin-left: 15px;
+    font-size: 14px;
+    border-left: 5px solid #cccccc;
+    background: whitesmoke;
+}
+
+blockquote p {
+    margin: 0px;
+}
+
+@media (max-width: 320px) {
+
+    .discussion .small img {
+        width: 32px;
+        height: 32px;
+        float: left;
+    }
+
+    .discussion .small {
+        width: 40px;
+    }
+
+    .discussion .small a {
+        font-size: 10px;
+    }
+
+    .table-stats {
+        margin-top: 10px;
+    }
+
+    .table-stats td {
+        font-size: 10px;
+    }
+
+    table.list-discussions {
+        width: 300px;
+    }
+
+    table.list-discussions td {
+        overflow-y: hidden;
+    }
+}
+
+.modal-backdrop {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.in-reply-to {
+    padding: 5px 12px;
+    border: 1px solid #e6e6e6;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.in-reply-to img {
+    margin: 3px;
+}
+
+table.list-discussions a:visited {
+    color: #8c8c8c;
 }

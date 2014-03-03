@@ -14,6 +14,8 @@ class PostsReplies extends Model
 
 	public $users_id;
 
+	public $in_reply_to_id;
+
 	public $content;
 
 	public $created_at;
@@ -35,6 +37,11 @@ class PostsReplies extends Model
 			'reusable' => true
 		));
 
+		$this->belongsTo('in_reply_to_id', 'Phosphorum\Models\PostsReplies', 'id', array(
+			'alias' => 'postReplyTo',
+			'reusable' => true
+		));
+
 		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
 			'alias' => 'user',
 			'reusable' => true
@@ -48,6 +55,11 @@ class PostsReplies extends Model
 				'field' => 'modified_at'
 			)
         )));
+	}
+
+	public function beforeCreate()
+	{
+		$this->accepted = 'N';
 	}
 
 	public function afterCreate()

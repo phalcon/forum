@@ -323,7 +323,9 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		if (count($postHistories) > 1) {
 			foreach ($postHistories as $postHistory) {
 				if ($first) {
-					$first = false;
+					if ($postHistory->content != $postReply->content) {
+						$first = false;
+					}
 					continue;
 				}
 				break;

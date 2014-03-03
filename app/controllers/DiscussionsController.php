@@ -161,10 +161,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
-		$totalBuilder->where('p.categories_id = ?0 AND deleted = 0');
+		$totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
 
 		$posts = $itemBuilder
-			->where('p.categories_id = ?0 AND deleted = 0')
+			->where('p.categories_id = ?0 AND p.deleted = 0')
 			->orderBy('p.created_at DESC')
 			->offset($offset)
 			->getQuery()
@@ -425,8 +425,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 					$user = Users::findFirstById($usersId);
 					if ($user) {
-						$user->karma += 2;
-						$user->votes_points += 2;
+						if ($user->moderator == 'Y') {
+							$user->karma += 4;
+							$user->votes_points += 4;
+						} else {
+							$user->karma += 2;
+							$user->votes_points += 2;
+						}
 						$user->save();
 					}
 				}
@@ -491,6 +496,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 				$postReply = new PostsReplies();
 				$postReply->post = $post;
+				$postReply->in_reply_to_id = $this->request->getPost('reply-id', 'int');
 				$postReply->users_id = $usersId;
 				$postReply->content = $content;
 
@@ -841,7 +847,19 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => 15
 		));
 
-		$this->tag->setTitle('Profile');
+		$users = Users::find(array('columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC'));
+		$ranking = count($users);
+		foreach ($users as $position => $everyUser) {
+			if ($everyUser->id == $user->id) {
+				$ranking = $position + 1;
+				break;
+			}
+		}
+
+		$this->view->ranking = $ranking;
+		$this->view->total_ranking = count($users);
+
+		$this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
 	}
 
 	public function settingsAction()

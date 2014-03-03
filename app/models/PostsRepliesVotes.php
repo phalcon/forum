@@ -18,7 +18,7 @@ class PostsRepliesVotes extends Model
 
 	public function initialize()
 	{
-		$this->belongsTo('posts_id', 'Phosphorum\Models\PostsReplies', 'id', array(
+		$this->belongsTo('posts_replies_id', 'Phosphorum\Models\PostsReplies', 'id', array(
 			'alias' => 'postReply'
 		));
 
@@ -36,8 +36,7 @@ class PostsRepliesVotes extends Model
 	public function afterSave()
 	{
 		if ($this->id) {
-			$viewCache = $this->getDI()->getViewCache();
-			$viewCache->delete('post-' . $this->postReply->post->id);
+			$this->postReply->clearCache();
 		}
 	}
 
