@@ -18,7 +18,7 @@ class PostsRepliesVotes extends Model
 
 	public function initialize()
 	{
-		$this->belongsTo('posts_id', 'Phosphorum\Models\PostsReplies', 'id', array(
+		$this->belongsTo('posts_replies_id', 'Phosphorum\Models\PostsReplies', 'id', array(
 			'alias' => 'postReply'
 		));
 
