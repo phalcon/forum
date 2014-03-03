@@ -286,10 +286,10 @@ var Forum = {
 			} else {
 				$('#preview-box', parent).html('Nothing to preview');
 			};
-			$('#comment-box', parent).hide();
+			$('#comment-box, #reply-comment-box', parent).hide();
 			$('#preview-box', parent).show();
 		} else {
-			$('#comment-box', parent).show();
+			$('#comment-box, #reply-comment-box', parent).show();
 			$('#preview-box', parent).hide();
 		}
 	},
