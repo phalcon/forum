@@ -72,7 +72,6 @@ var Forum = {
 					'element': textarea
 				});
 				editor.render();
-				editor.reFocus();
 			}, 200)
 		}
 	},

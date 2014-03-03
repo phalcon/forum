@@ -7189,7 +7189,8 @@ Editor.prototype.render = function(el) {
 		theme: 'paper',
 		indentWithTabs: true,
 		lineNumbers: false,
-		extraKeys: keyMaps
+		extraKeys: keyMaps,
+		lineWrapping: true
 	});
 
 	if (options.toolbar !== false) {
