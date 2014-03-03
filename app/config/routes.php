@@ -7,6 +7,16 @@ $router->add('/sitemap', array(
 	'action' => 'index'
 ));
 
+$router->add('/help/moderators', array(
+	'controller' => 'help',
+	'action' => 'moderators'
+));
+
+$router->add('/help/voting', array(
+	'controller' => 'help',
+	'action' => 'voting'
+));
+
 $router->add('/help/markdown', array(
 	'controller' => 'help',
 	'action' => 'markdown'
@@ -32,6 +42,27 @@ $router->add('/discussions', array(
 	'action' => 'index'
 ));
 
+$router->add('/preview', array(
+	'controller' => 'utils',
+	'action' => 'preview'
+));
+
+$router->add('/reply/accept/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'accept'
+));
+
+$router->add('/reply/vote-up/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteUp'
+));
+
+$router->add('/reply/vote-down/{id:[0-9]+}', array(
+	'controller' => 'replies',
+	'action' => 'voteDown'
+));
+
+
 $router->add('/reply/history/{id:[0-9]+}', array(
 	'controller' => 'replies',
 	'action' => 'history'
@@ -49,16 +80,6 @@ $router->add('/discussion/vote-up/{id:[0-9]+}', array(
 
 $router->add('/discussion/vote-down/{id:[0-9]+}', array(
 	'controller' => 'discussions',
-	'action' => 'voteDown'
-));
-
-$router->add('/reply/vote-up/{id:[0-9]+}', array(
-	'controller' => 'replies',
-	'action' => 'voteUp'
-));
-
-$router->add('/reply/vote-down/{id:[0-9]+}', array(
-	'controller' => 'replies',
 	'action' => 'voteDown'
 ));
 
@@ -85,11 +106,6 @@ $router->add('/login/oauth/access_token', array(
 $router->add('/logout', array(
 	'controller' => 'session',
 	'action' => 'logout'
-));
-
-$router->add('/karma', array(
-	'controller' => 'utils',
-	'action' => 'karma'
 ));
 
 $router->add('/activity', array(

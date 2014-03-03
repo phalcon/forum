@@ -1,35 +1,28 @@
 {{ content() }}
 
 <div class="view-discussion container">
+
 	<p>
 		<h1>Recent Activity</h1>
 	</p>
 
+	<ul class="nav nav-tabs">
+		{% set orders = ['': 'Forum', '/irc': 'IRC'] %}
+		{% for order, label in orders %}
+			{% if order == '' %}
+			<li class="active">
+			{% else %}
+			<li>
+			{% endif %}
+			{{ link_to('activity' ~ order, label) }}
+			</li>
+		{% endfor %}
+	</ul>
+
 	<table width="90%" align="center" class="table table-striped">
-		<tr>
-			<td colspan="2">
-				<div class="row">
-					<ul class="nav nav-tabs">
-						{% set orders = [
-							'': 'Forum',
-							'/irc': 'IRC'
-						] %}
-						{% for order, label in orders %}
-							{% if order == '' %}
-								<li class="active">
-							{% else %}
-								<li>
-							{% endif %}
-								{{ link_to('activity' ~ order, label) }}
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</td>
-		</tr>
 		{% for activity in activities %}
 		<tr>
-			<td class="small" valign="top">
+			<td class="small hidden-xs" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
 			</td>
 			<td>

@@ -9,6 +9,7 @@ use Phosphorum\Models\Users,
 
 class HelpController extends \Phalcon\Mvc\Controller
 {
+
 	public function initialize()
 	{
 		$this->tag->setTitle('Help');
@@ -26,6 +27,16 @@ class HelpController extends \Phalcon\Mvc\Controller
 	}
 
 	public function markdownAction()
+	{
+
+	}
+
+	public function votingAction()
+	{
+
+	}
+
+	public function moderatorsAction()
 	{
 
 	}

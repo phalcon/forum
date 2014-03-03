@@ -93,6 +93,7 @@ you can use the generic selector below, but it's slower:
 .CodeMirror {
   height: 300px;
 }
+
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */
   overflow: auto;

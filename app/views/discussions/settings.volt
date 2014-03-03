@@ -2,12 +2,13 @@
 
 <hr>
 
-<div align="center">
+<div align="center" class="container">
 	<div class="user-profile">
 		<table align="center">
 			<tr>
-				<td class="small remove-image" valign="top">
-					<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64&amp;r=pg&amp;d=identicon" class="img-rounded">
+				<td class="small hidden-xs" valign="top">
+					<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64&amp;r=pg&amp;d=identicon" class="img-rounded"
+					width="64" height="64">
 				</td>
 				<td align="left" valign="top">
 					<h1>{{ user.name|e }}</h1>
@@ -16,6 +17,7 @@
 						<span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>
 						<span>reputation <b>{{ user.karma }}</b></span><br>
 						<span>votes available <b>{{ user.votes }}</b></span><br>
+						<span>voting points <b>{{ user.votes_points }}/50</b></span><br>
 					</p>
 					<hr>
 					<p>

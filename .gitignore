@@ -9,3 +9,4 @@ app/cache/metaData/*.php
 tests/_log/*
 vendor/
 .idea/
+composer.lock

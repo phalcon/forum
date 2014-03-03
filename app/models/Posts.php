@@ -34,9 +34,13 @@ class Posts extends Model
 
 	public $created_at;
 
-	public $edit_at;
+	public $edited_at;
 
 	public $status;
+
+	public $deleted;
+
+	public $accepted_answer;
 
 	public function initialize()
 	{
@@ -65,9 +69,11 @@ class Posts extends Model
 
 	public function beforeValidationOnCreate()
 	{
+		$this->deleted = 0;
 		$this->number_views = 0;
 		$this->number_replies = 0;
 		$this->sticked = 'N';
+		$this->accepted_answer = 'N';
 		$this->status = 'A';
 	}
 
@@ -132,16 +138,18 @@ class Posts extends Model
 	public function afterSave()
 	{
 
-		if ($this->id) {
-			$viewCache = $this->getDI()->getViewCache();
-			$viewCache->delete('post-' . $this->id);
-		}
+		$this->clearCache();
 
 		$history = new PostsHistory();
 		$history->posts_id = $this->id;
 		$history->users_id = $this->getDI()->getSession()->get('identity');
 		$history->content  = $this->content;
 		$history->save();
+	}
+
+	public function afterDelete()
+	{
+		$this->clearCache();
 	}
 
 	/**
@@ -188,6 +196,99 @@ class Posts extends Model
 					return ((int) ($diff / 60)) . 'm ago';
 				}
 			}
+		}
+	}
+
+	public function getHumanEditedAt()
+	{
+		$diff = time() - $this->edited_at;
+		if ($diff > (86400 * 30)) {
+			return date('M \'y', $this->edited_at);
+		} else {
+			if ($diff > 86400) {
+				return ((int) ($diff / 86400)) . 'd ago';
+			} else {
+				if ($diff > 3600) {
+					return ((int) ($diff / 3600)) . 'h ago';
+				} else {
+					return ((int) ($diff / 60)) . 'm ago';
+				}
+			}
+		}
+	}
+
+	public function getHumanModifiedAt()
+	{
+		if ($this->modified_at != $this->created_at) {
+			$diff = time() - $this->modified_at;
+			if ($diff > (86400 * 30)) {
+				return date('M \'y', $this->modified_at);
+			} else {
+				if ($diff > 86400) {
+					return ((int) ($diff / 86400)) . 'd ago';
+				} else {
+					if ($diff > 3600) {
+						return ((int) ($diff / 3600)) . 'h ago';
+					} else {
+						return ((int) ($diff / 60)) . 'm ago';
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if the post can have a bounty
+	 *
+	 * @return boolean
+	 */
+	public function canHaveBounty()
+	{
+		$canHave = $this->accepted_answer != "Y" &&
+					$this->sticked != 'Y' &&
+					$this->number_replies == 0 &&
+					$this->categories_id != 15 && //announcements
+					$this->categories_id != 4 && //offtopic
+					$this->categories_id != 7 && //jobs
+					($this->votes_up - $this->votes_down) >= 0;
+		if ($canHave) {
+			$diff = time() - $this->created_at;
+			if ($diff > 86400) {
+				if ($diff < (86400 * 30)) {
+					return true;
+				}
+			} else {
+				if ($diff < 3600) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public function getBounty()
+	{
+		$diff = time() - $this->created_at;
+		if ($diff > 86400) {
+			if ($diff < (86400 * 30)) {
+				return array('type' => 'old', 'value' => 150 + intval($diff / 86400 * 3));
+			}
+		} else {
+			if ($diff < 3600) {
+				return array('type' => 'fast-reply', 'value' => 100);
+			}
+		}
+		return false;
+	}
+
+	public function clearCache()
+	{
+		if ($this->id) {
+			$viewCache = $this->getDI()->getViewCache();
+			$viewCache->delete('post-' . $this->id);
+			$viewCache->delete('post-body-' . $this->id);
+			$viewCache->delete('post-users-' . $this->id);
+			$viewCache->delete('sidebar');
 		}
 	}
 

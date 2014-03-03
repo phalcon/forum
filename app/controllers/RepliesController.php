@@ -5,7 +5,9 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsBounties,
 	Phosphorum\Models\PostsRepliesHistory,
+	Phosphorum\Models\PostsRepliesVotes,
 	Phalcon\Http\Response;
 
 class RepliesController extends \Phalcon\Mvc\Controller
@@ -101,7 +103,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			if ($postReply->delete()) {
 				if ($usersId != $postReply->post->users_id) {
 
-					$user = Users::findFirstById($usersId);
+					$user = Users::findFirstById($postReply->post->users_id);
 					$user->karma -= 15;
 					$user->votes_points -= 15;
 					$user->save();
@@ -148,6 +150,29 @@ class RepliesController extends \Phalcon\Mvc\Controller
 				'status' => 'error',
 				'message' => 'You don\'t have enough votes available'
 			));
+		}
+
+		$voted = PostsRepliesVotes::count(array(
+			'posts_replies_id = ?0 AND users_id = ?1',
+			'bind' => array($postReply->id, $user->id)
+		));
+		if ($voted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this reply'
+			));
+		}
+
+		$postReplyVote = new PostsRepliesVotes();
+		$postReplyVote->posts_replies_id = $postReply->id;
+		$postReplyVote->users_id = $user->id;
+		if (!$postReplyVote->save()) {
+			foreach ($postReplyVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
 		}
 
 		$postReply->votes_up++;
@@ -217,6 +242,29 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
+		$voted = PostsRepliesVotes::count(array(
+			'posts_replies_id = ?0 AND users_id = ?1',
+			'bind' => array($postReply->id, $user->id)
+		));
+		if ($voted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You have already voted this reply'
+			));
+		}
+
+		$postReplyVote = new PostsRepliesVotes();
+		$postReplyVote->posts_replies_id = $postReply->id;
+		$postReplyVote->users_id = $user->id;
+		if (!$postReplyVote->save()) {
+			foreach ($postReplyVote->getMessages() as $message) {
+				return $response->setJsonContent(array(
+					'status' => 'error',
+					'message' => $message->getMessage()
+				));
+			}
+		}
+
 		$postReply->votes_down++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
@@ -275,7 +323,9 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		if (count($postHistories) > 1) {
 			foreach ($postHistories as $postHistory) {
 				if ($first) {
-					$first = false;
+					if ($postHistory->content != $postReply->content) {
+						$first = false;
+					}
 					continue;
 				}
 				break;
@@ -296,5 +346,90 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			$this->flash->notice('No history available to show');
 		}
 	}
+
+	/**
+	 * Accepts a reply as answer
+	 */
+	public function acceptAction($id = 0)
+	{
+		$response = new Response();
+
+		/**
+		 * Find the post using get
+		 */
+		$postReply = PostsReplies::findFirstById($id);
+		if (!$postReply) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post reply does not exist'
+			));
+		}
+
+		$user = Users::findFirstById($this->session->get('identity'));
+		if (!$user) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You must log in first to vote'
+			));
+		}
+
+		if ($postReply->accepted == 'Y') {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'This reply is already accepted as answer'
+			));
+		}
+
+		if ($postReply->post->accepted_answer == 'Y') {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'This post already has an accepted answer'
+			));
+		}
+
+		if ($postReply->post->users_id != $postReply->users_id) {
+
+			$postReply->post->user->karma += 10;
+			$postReply->post->user->votes_points += 10;
+
+			$points = (30 + intval(abs($user->karma - $post->user->karma)/1000));
+
+			$postBounty = PostsBounties::findFirst(array(
+				'users_id = ?0 AND posts_replies_id = ?1',
+				'bind' => array($postReply->users_id, $postReply->id)
+			));
+			if ($postBounty) {
+				$points += $postBounty->points;
+			}
+
+			$postReply->user->karma += $points;
+			$postReply->user->votes_points += $points;
+
+			if ($postReply->users_id != $user->id && $postReply->post->users_id != $user->id) {
+				$user->karma += 10;
+				$user->votes_points += 10;
+			}
+		}
+
+		$postReply->accepted = 'Y';
+		$postReply->post->accepted_answer = 'Y';
+
+		if ($postReply->save()) {
+
+			if (!$user->save()) {
+				foreach ($user->getMessages() as $message) {
+					return $response->setJsonContent(array(
+						'status' => 'error',
+						'message' => $message->getMessage()
+					));
+				}
+			}
+		}
+
+		return $response->setJsonContent(array(
+			'status' => 'OK'
+		));
+	}
+
 
 }

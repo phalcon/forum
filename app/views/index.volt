@@ -21,6 +21,7 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 		{{ javascript_include("js/editor.js") }}
 		{{ javascript_include("js/forum.js") }}
+		{{ javascript_include("js/gs.js") }}
 		<script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 	</body>
 </html>

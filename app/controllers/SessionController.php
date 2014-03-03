@@ -12,7 +12,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 
 	protected function indexRedirect()
 	{
-		return $this->response->redirect();
+		return $this->response->redirect('discussions');
 	}
 
     /**
@@ -22,15 +22,14 @@ class SessionController extends \Phalcon\Mvc\Controller
      */
     protected function discussionsRedirect()
     {
-
         $referer =  $this->request->getHTTPReferer();
-
-        $path = parse_url($referer,PHP_URL_PATH);
-
-        $this->router->handle($path);
-        $matched = $this->router->wasMatched();
-
-        return $matched ? $this->response->redirect($path,true) : $this->indexRedirect();
+        $path = parse_url($referer, PHP_URL_PATH);
+        if ($path) {
+        	$this->router->handle($path);
+        	return $this->router->wasMatched() ? $this->response->redirect($path, true) : $this->indexRedirect();
+		} else {
+			return $this->indexRedirect();
+		}
     }
 
     public function authorizeAction()
@@ -59,7 +58,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$githubUser = new GithubUsers($response['access_token']);
 
 			if (!$githubUser->isValid()) {
-				$this->flashSession->error('Invalid Github response' . print_r($response, true));
+				$this->flashSession->error('Invalid Github response');
 				return $this->indexRedirect();
 			}
 
@@ -81,7 +80,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$user->email = $githubUser->getEmail();
 			$user->gravatar_id = $githubUser->getGravatarId();
 			$user->karma += 5;
-			$user->vote_points += 5;
+			$user->votes_points += 5;
 
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {
@@ -120,18 +119,6 @@ class SessionController extends \Phalcon\Mvc\Controller
 
     	$this->flashSession->success('Goodbye!');
 		return $this->discussionsRedirect();
-    }
-
-    public function shadowLoginAction()
-    {
-    	/**
-		 * Store the user data in session
-		 */
-		$this->session->set('identity', 1);
-		$this->session->set('identity-name', 'Phalcon');
-		$this->session->set('identity-gravatar', '5d6f567f9109789fd9f702959768e35d');
-		$this->session->set('identity-timezone', 'America/Bogota');
-		$this->session->set('identity->moderator', 'Y');
     }
 
 }

@@ -6,6 +6,8 @@ var Forum = {
 
 	_uri: '',
 
+	_editor: null,
+
 	makeCommentEditable: function(response)
 	{
 		if (response.status == 'OK') {
@@ -54,6 +56,26 @@ var Forum = {
 		}
 	},
 
+	addBaseComment: function(response)
+	{
+		if (response.status == 'OK') {
+			var parts = response.comment.split(/\r\n|\r|\n/), str = "\r\n\r\n";
+			for (var i = 0; i < parts.length; i++) {
+				str += ">" + parts[i] + "\r\n";
+			}
+			$('#replyModal #comment-textarea').html('<textarea name="content" id="replyContent"></textarea>');
+			$('#replyModal').modal('show');
+			var textarea = $('#replyModal textarea')[0];
+			$(textarea).val(str);
+			window.setTimeout(function(){
+				var editor = new Editor({
+					'element': textarea
+				});
+				editor.render();
+			}, 200)
+		}
+	},
+
 	/**
 	 * Cancels the comment editing
 	 */
@@ -96,6 +118,19 @@ var Forum = {
 	},
 
 	/**
+	 * Converts the post-comment div into an editable textarea
+	 */
+	replyReply: function(event)
+	{
+		var element = $(event.data.element);
+		$('#reply-id').val(element.data('id'))
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/' + element.data('id')
+		}).done(Forum.addBaseComment);
+	},
+
+	/**
 	 * Vote a post up
 	 */
 	votePostUp: function(event)
@@ -109,7 +144,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -128,7 +163,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -147,7 +182,7 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
 	},
@@ -166,9 +201,36 @@ var Forum = {
 				$('#errorModal .modal-body').html(response.message);
 				$('#errorModal').modal('show');
 			} else {
-				window.location.reload();
+				window.location.reload(true);
 			}
 		});
+	},
+
+	/**
+	 * Accept a reply as correct answer
+	 */
+	acceptAnswer: function(event)
+	{
+		var element = $(event.data.element);
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/accept/' + element.data('id')
+		}).done(function(response){
+			if (response.status == "error") {
+				$('#errorModal .modal-body').html(response.message);
+				$('#errorModal').modal('show');
+			} else {
+				window.location.reload(true);
+			}
+		});
+	},
+
+	/**
+	 * Vote a post up
+	 */
+	voteLogin: function(event)
+	{
+		window.location = Forum._uri + 'login/oauth/authorize';
 	},
 
 	/**
@@ -208,25 +270,26 @@ var Forum = {
 		});
 
 		$(this).addClass('active');
-
-		if ($('a', this)[0].innerHTML == 'Preview') {
-
-			var content = $('textarea', '#comment-box')[0].value;
+		var parent = $(this).parents()[2];
+		if ($('a', this).html() == 'Preview') {
+			var content = $('textarea', parent).data('editor').codemirror.getValue()
 			if (content !== '') {
-				content = content.replace(/</g, '&lt;');
-				content = content.replace(/>/g, '&gt;');
-				content = content.replace('\n', '<br>');
-				$('#preview-box')[0].innerHTML = Forum.parseContent(content);
+				$.ajax({
+					method: 'POST',
+					url: Forum._uri + 'preview',
+					data: {'content': content }
+				}).done(function(parent, response){
+					$('#preview-box', parent).html(response);
+					prettyPrint();
+				}.bind(this, parent));
 			} else {
-				$('#preview-box')[0].innerHTML = 'Nothing to preview'
-			}
-
-			$('#comment-box').hide();
-			$('#preview-box').show();
-
+				$('#preview-box', parent).html('Nothing to preview');
+			};
+			$('#comment-box, #reply-comment-box', parent).hide();
+			$('#preview-box', parent).show();
 		} else {
-			$('#comment-box').show();
-			$('#preview-box').hide();
+			$('#comment-box, #reply-comment-box', parent).show();
+			$('#preview-box', parent).hide();
 		}
 	},
 
@@ -265,6 +328,18 @@ var Forum = {
 
 		$('a.vote-reply-down').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.voteReplyDown);
+		});
+
+		$('a.reply-reply').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.replyReply);
+		});
+
+		$('a.vote-login').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.voteLogin);
+		});
+
+		$('a.reply-accept').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.acceptAnswer);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');

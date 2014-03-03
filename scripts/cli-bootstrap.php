@@ -30,3 +30,8 @@ $di = new \Phalcon\DI\FactoryDefault();
  * Include the application services
  */
 require __DIR__ . "/../app/config/services.php";
+
+/**
+ * Include composer autoloader
+ */
+require __DIR__ . "/../vendor/autoload.php";

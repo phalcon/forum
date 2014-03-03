@@ -5,6 +5,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsViews,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\PostsBounties,
 	Phosphorum\Models\PostsHistory,
 	Phosphorum\Models\PostsVotes,
 	Phosphorum\Models\Categories,
@@ -50,7 +51,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$itemBuilder->columns(array(
 			'p.*'
 		))
-		->limit(30);
+		->limit(40);
 
 		$totalBuilder->columns('COUNT(*) AS count');
 
@@ -103,8 +104,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 			case 'unanswered':
 				$this->tag->setTitle('Unanswered Discussions');
-				$itemBuilder->where('p.number_replies = 0');
-				$totalBuilder->where('p.number_replies = 0');
+				$itemBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
+				$totalBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
 				break;
 
             case 'answers':
@@ -160,10 +161,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
-		$totalBuilder->where('p.categories_id = ?0 AND deleted = 0');
+		$totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
 
 		$posts = $itemBuilder
-			->where('p.categories_id = ?0 AND deleted = 0')
+			->where('p.categories_id = ?0 AND p.deleted = 0')
 			->orderBy('p.created_at DESC')
 			->offset($offset)
 			->getQuery()
@@ -206,8 +207,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$title = $this->request->getPost('title', 'trim');
 
 			$user = Users::findFirstById($usersId);
-			$user->karma += 5;
-			$user->votes_points += 5;
+			$user->karma += 10;
+			$user->votes_points += 10;
 			$user->save();
 
 			$post = new Posts();
@@ -218,12 +219,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->content = $this->request->getPost('content');
 
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -274,13 +269,17 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$post->content = $content;
 			$post->edited_at = time();
 
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					$user->karma += 25;
+					$user->votes_points += 25;
+					$user->save();
+				}
+			}
+
 			if ($post->save()) {
-
-				/**
-				 * Refresh sidebar
-				 */
-				$this->view->getCache()->delete('sidebar');
-
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
 			}
 
@@ -336,6 +335,25 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->deleted = 1;
 		if ($post->save()) {
+
+			$usersId = $this->session->get('identity');
+			if ($post->users_id != $usersId) {
+
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					if ($user->moderator == 'Y') {
+						$user->karma += 10;
+						$user->votes_points += 10;
+						$user->save();
+					}
+				}
+
+				$user = $post->user;
+				$user->karma -= 10;
+				$user->votes_points -= 10;
+				$user->save();
+			}
+
 			$this->flashSession->success('Discussion was successfully deleted');
 			return $this->response->redirect();
 		}
@@ -358,16 +376,16 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			if (!$usersId) {
 
 				/**
-		 		 * Enable cache
-		 		 */
-				//$this->view->cache(array('key' => 'post-' . $id));
+			 	 * Enable cache
+			 	 */
+				$this->view->cache(array('key' => 'post-' . $id));
 
 				/**
 				 * Check for a cache
 				 */
-				//if ($this->viewCache->exists('post-' . $id)) {
-				//	return;
-				//}
+				if ($this->viewCache->exists('post-' . $id)) {
+					return;
+				}
 			}
 
 			/**
@@ -400,7 +418,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				 * Increase the number of views in the post
 				 */
 				$post->number_views++;
-
 				if ($post->users_id != $usersId) {
 
 					$post->user->karma += 1;
@@ -408,8 +425,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 					$user = Users::findFirstById($usersId);
 					if ($user) {
-						$user->karma += 2;
-						$user->votes_points += 2;
+						if ($user->moderator == 'Y') {
+							$user->karma += 4;
+							$user->votes_points += 4;
+						} else {
+							$user->karma += 2;
+							$user->votes_points += 2;
+						}
 						$user->save();
 					}
 				}
@@ -451,6 +473,11 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$usersId = $this->session->get('identity');
 
 				/**
+				 * Check if the question can have a bounty before add the reply
+				 */
+				$canHaveBounty = $post->canHaveBounty();
+
+				/**
 				 * Only update the number of replies if the user that commented isn't the same that posted
 				 */
 				if ($post->users_id != $usersId) {
@@ -469,10 +496,26 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 				$postReply = new PostsReplies();
 				$postReply->post = $post;
+				$postReply->in_reply_to_id = $this->request->getPost('reply-id', 'int');
 				$postReply->users_id = $usersId;
 				$postReply->content = $content;
 
 				if ($postReply->save()) {
+
+					if ($post->users_id != $usersId && $canHaveBounty) {
+						$bounty = $post->getBounty();
+						$postBounty = new PostsBounties();
+						$postBounty->posts_id = $post->id;
+						$postBounty->users_id = $usersId;
+						$postBounty->posts_replies_id = $postReply->id;
+						$postBounty->points = $bounty['value'];
+						if (!$postBounty->save()) {
+							foreach ($postBounty->getMessages() as $message) {
+								$this->flash->error($message);
+							}
+						}
+					}
+
 					return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug . '#C' . $postReply->id);
 				}
 
@@ -721,7 +764,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$this->view->activities = Activities::find(array(
 			'order' => 'created_at DESC',
-			'limit' => array('number' => 30, 'offset' => 0)
+			'limit' => array('number' => 40, 'offset' => 0)
 		));
 
 		$this->tag->setTitle('Recent Activity on the Forum');
@@ -775,6 +818,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$user = Users::findFirstById($id);
 		} else {
 			$user = Users::findFirstByLogin($username);
+			if (!$user) {
+				$user = Users::findFirstByName($username);
+			}
 		}
 
 		if (!$user) {
@@ -785,7 +831,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->view->user = $user;
 
 		$this->view->numberPosts = Posts::count(array(
-			'users_id = ?0',
+			'users_id = ?0 AND deleted = 0',
 			'bind' => array($user->id)
 		));
 
@@ -795,13 +841,25 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		));
 
 		$this->view->activities = Activities::find(array(
-			'users_id = ?0 AND deleted = 0',
-			'bind' => array($id),
+			'users_id = ?0',
+			'bind' => array($user->id),
 			'order' => 'created_at DESC',
 			'limit' => 15
 		));
 
-		$this->tag->setTitle('Profile');
+		$users = Users::find(array('columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC'));
+		$ranking = count($users);
+		foreach ($users as $position => $everyUser) {
+			if ($everyUser->id == $user->id) {
+				$ranking = $position + 1;
+				break;
+			}
+		}
+
+		$this->view->ranking = $ranking;
+		$this->view->total_ranking = count($users);
+
+		$this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
 	}
 
 	public function settingsAction()

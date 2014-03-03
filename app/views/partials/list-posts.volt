@@ -2,86 +2,101 @@
 <div class="container">
 
 	<ul class="nav nav-tabs">
-		{% set orders = [
+		{%- set orders = [
 			'new': 'All discussions',
 			'hot': 'Hot',
 			'unanswered': 'Unanswered',
 			'my': 'My discussions',
 			'answers':'My answers'
-		] %}
-		{% for order, label in orders %}
-			{% if (order == 'my' or order == 'answers') and !session.get('identity') %}
-				{% continue %}
-			{% endif %}
-			{% if order == currentOrder %}
+		] -%}
+		{%- for order, label in orders -%}
+			{%- if (order == 'my' or order == 'answers') and !session.get('identity') -%}
+				{%- continue -%}
+			{% endif -%}
+			{%- if order == currentOrder -%}
 				<li class="active">
-			{% else %}
+			{%- else -%}
 				<li>
-			{% endif %}
+			{%- endif -%}
 				{{ link_to('discussions/' ~ order, label) }}
 			</li>
-		{% endfor %}
+		{%- endfor -%}
 	</ul>
 </div>
 
-{% if posts|length %}
+{%- if posts|length -%}
 <div class="container">
 	<br/>
-	<div class="table-responsive">
+	<div align="center">
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
-				<th>Topic</th>
-				<th>Users</th>
-				<th>Category</th>
-				<th>Replies</th>
-				<th>Views</th>
-				<th>Created</th>
+				<th width="50%">Topic</th>
+				<th class="hidden-xs">Users</th>
+				<th class="hidden-xs">Category</th>
+				<th class="hidden-xs">Replies</th>
+				<th class="hidden-xs">Views</th>
+				<th class="hidden-xs">Created</th>
+				<th class="hidden-xs">Last Reply</th>
 			</tr>
-		{% for post in posts %}
-			<tr class="{% if (post.votes_up - post.votes_down) <= -1 %}post-negative{% endif %}">
+		{%- for post in posts -%}
+			<tr class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative{% endif %}">
 				<td align="left">
-					{% if post.sticked == "Y" %}<span class="glyphicon glyphicon-pushpin"></span>&nbsp;{% endif %}
-					{{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) }}
+
+					{%- if post.sticked == "Y" -%}
+						<span class="glyphicon glyphicon-pushpin"></span>&nbsp;
+					{%- endif -%}
+					{{- link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) -}}
+					{%- if post.accepted_answer == "Y" -%}
+						&nbsp;<span class="label label-success">SOLVED</span>
+					{%- else -%}
+						{%- if post.canHaveBounty() -%}
+							&nbsp;<span class="label label-info">BOUNTY</span>
+						{%- endif -%}
+					{%- endif -%}
+
 				</td>
-				<td>
-					{% for id, user in post.getRecentUsers() %}
-					 	<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
-							<img src="https://secure.gravatar.com/avatar/{{ user[1] }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
-						</a>
-					{% endfor %}
+				<td class="hidden-xs">
+					{%- cache "post-users-" ~ post.id -%}
+						{%- for id, user in post.getRecentUsers() -%}
+						 	<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
+								<img src="https://secure.gravatar.com/avatar/{{ user[1] }}?s=24&amp;r=pg&amp;d=identicon" width="24" height="24" class="img-rounded">
+							</a>
+						{%- endfor -%}
+					{%- endcache -%}
 				</td>
-				<td>
-					<span class="author">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
+				<td class="hidden-xs">
+					<span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
 				</td>
-				<td align="center">
+				<td class="hidden-xs" align="center">
 					<span class="big-number">{% if post.number_replies > 0 %}{{ post.number_replies }}{%endif %}</span>
 				</td>
-				<td align="center">
+				<td class="hidden-xs" align="center">
 					<span class="big-number">{{ post.number_views }}</span>
 				</td>
-				<td>
+				<td class="hidden-xs">
 					<span class="date">{{ post.getHumanCreatedAt() }}</span>
 				</td>
+				<td class="hidden-xs">
+					<span class="date">{{ post.getHumanModifiedAt() }}</span>
+				</td>
 			</tr>
-		{% endfor %}
+		{%- endfor -%}
 		</table>
 	</div>
 </div>
 
 <div class="container">
 	<ul class="pager">
-		{% if offset > 0 %}
-			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 30), 'Prev') }}</li>
-		{% endif %}
+		{%- if offset > 0 -%}
+			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 40), 'Prev') }}</li>
+		{%- endif -%}
 
-		{% if totalPosts.count > 30 %}
-			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 30), 'Next') }}</li>
-		{% endif %}
+		{%- if totalPosts.count > 40 -%}
+			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 40), 'Next') }}</li>
+		{%- endif -%}
 	</ul>
 </div>
 
-{% else %}
+{%- else -%}
 	<div>There are no posts here</div>
-{% endif %}
-
-
+{%- endif -%}

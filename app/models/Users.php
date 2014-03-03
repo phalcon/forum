@@ -2,8 +2,8 @@
 
 namespace Phosphorum\Models;
 
-use Phosphorum\Models\Activities,
-	Phalcon\Mvc\Model,
+use Phalcon\Mvc\Model,
+	Phosphorum\Models\Activities,
 	Phalcon\Mvc\Model\Behavior\Timestampable;
 
 class Users extends Model
@@ -53,9 +53,9 @@ class Users extends Model
 	{
 		$this->notifications = 'P';
 		$this->moderator = 'N';
-		$this->karma += 15;
-		$this->votes_points += 15;
-		$this->votes = 10;
+		$this->karma += 45;
+		$this->votes_points += 45;
+		$this->votes = 0;
 		$this->timezone = 'Europe/London';
 	}
 
