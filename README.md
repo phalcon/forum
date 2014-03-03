@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 Phosphorum 2
 ============
+=======
+Phosphorum
+==========
 
-This is the official Phalcon Forum you can adapt it to your own needs or improve it
-if you want.
+Phalcon is a web framework delivered as a C extension providing high performance and lower resource consumption.
+>>>>>>> b45640783e2b1d4c1f8cfd00266fab5f5428d676
+
+This is the official Phalcon Forum you can adapt it to your own needs or improve it if you want.
 
 Please write us if you have any feedback.
 
