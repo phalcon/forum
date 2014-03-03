@@ -1,11 +1,9 @@
 Phosphorum
 ==========
 
-Phalcon PHP is a web framework delivered as a C extension providing high
-performance and lower resource consumption.
+Phalcon is a web framework delivered as a C extension providing high performance and lower resource consumption.
 
-This is the official Phalcon Forum you can adapt it to your own needs or improve it
-if you want.
+This is the official Phalcon Forum you can adapt it to your own needs or improve it if you want.
 
 Please write us if you have any feedback.
 
