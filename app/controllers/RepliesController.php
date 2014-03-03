@@ -402,6 +402,13 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
+		if ($postReply->post->users_id != $user->id && $user->moderator != 'Y') {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'You can\'t accept this answer as correct'
+			));
+		}
+
 		if ($postReply->post->users_id != $postReply->users_id) {
 
 			$postReply->post->user->karma += 10;
