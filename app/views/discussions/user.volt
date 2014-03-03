@@ -6,7 +6,7 @@
 		<table align="center">
 			<tr>
 				<td class="small hidden-xs" valign="top">
-					<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64&amp;r=pg&amp;d=identicon" class="img-rounded">
+					<img src="https://secure.gravatar.com/avatar/{{ user.gravatar_id }}?s=64&amp;r=pg&amp;d=identicon" class="img-rounded" width="64" height="64">
 				</td>
 				<td align="left" valign="top">
 					<h1>{{ user.name|e }}</h1>

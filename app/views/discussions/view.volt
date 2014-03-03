@@ -68,7 +68,7 @@
 	<div class="discussion">
 		<div class="row">
 			<div class="col-md-1 small" align="center">
-				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"><br>
 				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
 				<span class="karma">{{ post.user.getHumanKarma() }}</span>
 			</div>
@@ -137,7 +137,7 @@
 						{%- if inReplyTo -%}
 						<div class="in-reply-to">
 							<a href="#C{{ reply.in_reply_to_id }}"><span class="glyphicon glyphicon-chevron-up"></span> in reply to
-								<img src="https://secure.gravatar.com/avatar/{{ inReplyTo.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded"> {{ inReplyTo.user.name }}</a>
+								<img src="https://secure.gravatar.com/avatar/{{ inReplyTo.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"> {{ inReplyTo.user.name }}</a>
 						</div>
 						{%- endif -%}
 					{%- endif -%}
@@ -207,7 +207,7 @@
 			<div class="row">
 			{%- if currentUser -%}
 				<div class="col-md-1 small" align="center">
-					<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
+					<img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"><br>
 					<span>{{ link_to('', 'You') }}</span>
 				</div>
 				<div class="col-md-11">
