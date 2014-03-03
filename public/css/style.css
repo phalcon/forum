@@ -237,7 +237,7 @@ div.reply-accepted {
 }
 
 div.reply-accepted .post-content {
-    min-height: 140px;
+    min-height: 105px;
 }
 
 div#footer .version {
@@ -282,7 +282,7 @@ div.accepted-reply {
 }
 
 div.accepted-reply span {
-    font-size: 32px;
+    font-size: 26px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -290,6 +290,19 @@ div.accepted-reply span {
 #preview-box {
     min-height: 180px;
     margin: 20px;
+}
+
+blockquote {
+    padding: 12px;
+    margin-top: 14px;
+    margin-left: 15px;
+    font-size: 14px;
+    border-left: 5px solid #cccccc;
+    background: whitesmoke;
+}
+
+blockquote p {
+    margin: 0px;
 }
 
 @media (max-width: 320px) {
@@ -315,4 +328,19 @@ div.accepted-reply span {
     .table-stats td {
         font-size: 10px;
     }
+}
+
+.modal-backdrop {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.in-reply-to {
+    padding: 5px 12px;
+    border: 1px solid #e6e6e6;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.in-reply-to img {
+    margin: 3px;
 }

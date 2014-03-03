@@ -90,7 +90,7 @@ class OAuth extends \Phalcon\DI\Injectable
 			return json_decode((string) $request->send()->getBody(), true);
 
 		} catch (\Exception $e) {
-			file_put_contents('a.txt', $e->getMessage());
+			//file_put_contents('error.txt', $e->getMessage());
 			return false;
 		}
 

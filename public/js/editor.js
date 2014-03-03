@@ -7097,7 +7097,7 @@ var toolbar = [
 	{name: 'italic', action: toggleItalic},
 	'|',
 
-	//{name: 'quote', action: toggleBlockquote},
+	{name: 'quote', action: toggleBlockquote},
 	{name: 'unordered-list', action: toggleUnOrderedList},
 	{name: 'ordered-list', action: toggleOrderedList},
 	'|',

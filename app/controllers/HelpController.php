@@ -9,6 +9,7 @@ use Phosphorum\Models\Users,
 
 class HelpController extends \Phalcon\Mvc\Controller
 {
+
 	public function initialize()
 	{
 		$this->tag->setTitle('Help');

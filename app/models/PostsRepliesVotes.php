@@ -36,8 +36,7 @@ class PostsRepliesVotes extends Model
 	public function afterSave()
 	{
 		if ($this->id) {
-			$viewCache = $this->getDI()->getViewCache();
-			$viewCache->delete('post-' . $this->postReply->post->id);
+			$this->postReply->clearCache();
 		}
 	}
 

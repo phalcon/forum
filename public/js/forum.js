@@ -56,6 +56,27 @@ var Forum = {
 		}
 	},
 
+	addBaseComment: function(response)
+	{
+		if (response.status == 'OK') {
+			var parts = response.comment.split(/\r\n|\r|\n/), str = "\r\n\r\n";
+			for (var i = 0; i < parts.length; i++) {
+				str += ">" + parts[i] + "\r\n";
+			}
+			$('#replyModal #comment-textarea').html('<textarea name="content" id="replyContent"></textarea>');
+			$('#replyModal').modal('show');
+			var textarea = $('#replyModal textarea')[0];
+			$(textarea).val(str);
+			window.setTimeout(function(){
+				var editor = new Editor({
+					'element': textarea
+				});
+				editor.render();
+				editor.reFocus();
+			}, 200)
+		}
+	},
+
 	/**
 	 * Cancels the comment editing
 	 */
@@ -95,6 +116,19 @@ var Forum = {
 				context: content
 			}).done(Forum.makeCommentEditable);
 		}
+	},
+
+	/**
+	 * Converts the post-comment div into an editable textarea
+	 */
+	replyReply: function(event)
+	{
+		var element = $(event.data.element);
+		$('#reply-id').val(element.data('id'))
+		$.ajax({
+			dataType: 'json',
+			url: Forum._uri + 'reply/' + element.data('id')
+		}).done(Forum.addBaseComment);
 	},
 
 	/**
@@ -295,6 +329,10 @@ var Forum = {
 
 		$('a.vote-reply-down').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.voteReplyDown);
+		});
+
+		$('a.reply-reply').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.replyReply);
 		});
 
 		$('a.vote-login').each(function(position, element) {
