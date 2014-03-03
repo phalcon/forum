@@ -388,20 +388,6 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		if (!$this->request->isPost()) {
 
 			$usersId = $this->session->get('identity');
-			if (!$usersId) {
-
-				/**
-			 	 * Enable cache
-			 	 */
-				$this->view->cache(array('key' => 'post-' . $id));
-
-				/**
-				 * Check for a cache
-				 */
-				if ($this->viewCache->exists('post-' . $id)) {
-					return;
-				}
-			}
 
 			/**
 			 * Find the post using get
@@ -438,16 +424,18 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					$post->user->karma += 1;
 					$post->user->votes_points += 1;
 
-					$user = Users::findFirstById($usersId);
-					if ($user) {
-						if ($user->moderator == 'Y') {
-							$user->karma += 4;
-							$user->votes_points += 4;
-						} else {
-							$user->karma += 2;
-							$user->votes_points += 2;
+					if ($usersId > 0) {
+						$user = Users::findFirstById($usersId);
+						if ($user) {
+							if ($user->moderator == 'Y') {
+								$user->karma += 4;
+								$user->votes_points += 4;
+							} else {
+								$user->karma += 2;
+								$user->votes_points += 2;
+							}
+							$user->save();
 						}
-						$user->save();
 					}
 				}
 
@@ -458,6 +446,21 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 					foreach ($postView->getMessages() as $message) {
 						$this->flash->error($message);
 					}
+				}
+			}
+
+			if (!$usersId) {
+
+				/**
+			 	 * Enable cache
+			 	 */
+				$this->view->cache(array('key' => 'post-' . $id));
+
+				/**
+				 * Check for a cache
+				 */
+				if ($this->viewCache->exists('post-' . $id)) {
+					return;
 				}
 			}
 
