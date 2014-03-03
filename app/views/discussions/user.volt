@@ -10,6 +10,7 @@
 				</td>
 				<td align="left" valign="top">
 					<h1>{{ user.name|e }}</h1>
+					<span class="login">{{ user.login }}</span><br>
 					<p>
 						<span>joined <b>{{ date('M d/Y', user.created_at) }}</b></span><br>
 						<span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>

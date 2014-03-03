@@ -123,6 +123,10 @@ pre.prettyprint {
     width: 820px;
 }
 
+.user-profile .login {
+    color: #969696;
+}
+
 .user-profile .small {
     width: 100px;
     text-align: center;
@@ -328,6 +332,14 @@ blockquote p {
     .table-stats td {
         font-size: 10px;
     }
+
+    table.list-discussions {
+        width: 300px;
+    }
+
+    table.list-discussions td {
+        overflow-y: hidden;
+    }
 }
 
 .modal-backdrop {
@@ -343,4 +355,8 @@ blockquote p {
 
 .in-reply-to img {
     margin: 3px;
+}
+
+table.list-discussions a:visited {
+    color: #8c8c8c;
 }
