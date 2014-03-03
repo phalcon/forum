@@ -7,20 +7,20 @@
 	</p>
 
 	<ul class="nav nav-tabs">
-		{% set orders = ['': 'Forum', '/irc': 'IRC'] %}
-		{% for order, label in orders %}
-			{% if order == '' %}
+		{%- set orders = ['': 'Forum', '/irc': 'IRC'] %}
+		{%- for order, label in orders -%}
+			{%- if order == '' -%}
 			<li class="active">
-			{% else %}
+			{%- else -%}
 			<li>
-			{% endif %}
+			{%- endif -%}
 			{{ link_to('activity' ~ order, label) }}
 			</li>
-		{% endfor %}
+		{%- endfor -%}
 	</ul>
 
 	<table width="90%" align="center" class="table table-striped">
-		{% for activity in activities %}
+		{%- for activity in activities -%}
 		<tr>
 			<td class="small hidden-xs" valign="top">
 				<img src="https://secure.gravatar.com/avatar/{{ activity.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
@@ -29,19 +29,19 @@
 				<div class="activity">
 					<span>{{ link_to('user/' ~ activity.user.id ~ '/' ~ activity.user.login, activity.user.name|e) }}</span>
 
-					{% if activity.type == 'U' %}
+					{%- if activity.type == 'U' -%}
 					has joined the forum
-					{% elseif activity.type == 'P' %}
+					{%- elseif activity.type == 'P' -%}
 					has posted {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-					{% elseif activity.type == 'C' %}
+					{%- elseif activity.type == 'C' -%}
 					has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-					{% endif %}
+					{%- endif -%}
 
 					<span class="date">{{ activity.getHumanCreatedAt() }}</span>
 				</div>
 			</td>
 		</tr>
-		{% endfor %}
+		{%- endfor -%}
 	</table>
 
 </div>

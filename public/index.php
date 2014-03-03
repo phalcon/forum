@@ -1,5 +1,20 @@
 <?php
 
+/*
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
+*/
+
 error_reporting(E_ALL);
 
 if (!isset($_GET['_url'])) {
@@ -16,7 +31,7 @@ $config = include __DIR__ . "/../app/config/config.php";
  */
 require __DIR__ . "/../app/config/loader.php";
 
-/** 
+/**
  * Include composer autoloader
  */
 require __DIR__ . "/../vendor/autoload.php";
@@ -40,6 +55,6 @@ try {
 
 	echo $application->handle()->getContent();
 
-} catch (Exception $e) { 
-	echo 'Sorry, an error has ocurred :('; echo $e->getMessage();
+} catch (Exception $e) {
+	echo 'Sorry, an error has ocurred :(';
 }

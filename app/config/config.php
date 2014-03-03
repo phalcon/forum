@@ -1,11 +1,26 @@
 <?php
 
+/*
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
+*/
+
 return new \Phalcon\Config(array(
 	'database' => array(
 		'adapter'  => 'Mysql',
 		'host'     => 'localhost',
 		'username' => 'root',
-		'password' => 'hea101',
+		'password' => '',
 		'dbname'     => 'forum',
 	),
 	'application' => array(
@@ -15,15 +30,11 @@ return new \Phalcon\Config(array(
 		'pluginsDir'     => __DIR__ . '/../../app/plugins/',
 		'libraryDir'     => __DIR__ . '/../../app/library/',
 		'baseUri'        => '/forum/',
-	),
-	'models' => array(
-		'metadata' => array(
-			'adapter' => 'Memory'
-		)
+		'debug'          => false
 	),
 	'github' => array(
-		'clientId' => '744ef40ff4a3b6452b67',
-		'clientSecret' => 'cc465b6b503d53fa30d6c63f516c034d8592fe79',
+		'clientId' => '',
+		'clientSecret' => '',
 		'redirectUri' => 'http://localhost/forum/login/oauth/access_token'
 	),
 	'amazon' => array(

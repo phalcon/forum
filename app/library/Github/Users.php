@@ -1,5 +1,20 @@
 <?php
 
+/*
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
+*/
+
 namespace Phosphorum\Github;
 
 use Guzzle\Http\Client as HttpClient;
@@ -20,7 +35,7 @@ class Users
 	public function request($method)
 	{
 		try {
-			$client = new HttpClient();			
+			$client = new HttpClient();
 			return json_decode($client->get($this->_endPoint . $method . '?access_token=' . $this->_accessToken)->send()->getBody(), true);
 		} catch (\Exception $e) {
 			return null;
