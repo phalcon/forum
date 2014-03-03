@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.27, for osx10.7 (i386)
+-- MySQL dump 10.13  Distrib 5.6.15, for osx10.8 (x86_64)
 --
 -- Host: localhost    Database: forum
 -- ------------------------------------------------------
--- Server version	5.5.27
+-- Server version	5.6.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,10 +29,10 @@ CREATE TABLE `activities` (
   `posts_id` int(10) unsigned DEFAULT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `created_at` (`created_at`),
   KEY `users_id` (`users_id`),
-  KEY `posts_id` (`posts_id`),
-  KEY `created_at` (`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=1193 DEFAULT CHARSET=utf8;
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8505 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,6 +50,23 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`id`),
   KEY `number_posts` (`number_posts`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `irclog`
+--
+
+DROP TABLE IF EXISTS `irclog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `irclog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `who` varchar(64) NOT NULL,
+  `content` text,
+  `datelog` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `datelog` (`datelog`)
+) ENGINE=InnoDB AUTO_INCREMENT=22696 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +90,7 @@ CREATE TABLE `notifications` (
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`),
   KEY `sent` (`sent`)
-) ENGINE=InnoDB AUTO_INCREMENT=5966 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64876 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,10 +109,16 @@ CREATE TABLE `posts` (
   `content` text,
   `number_views` int(3) unsigned NOT NULL,
   `number_replies` int(3) unsigned NOT NULL,
+  `votes_up` int(10) unsigned DEFAULT NULL,
+  `votes_down` int(10) unsigned DEFAULT NULL,
   `sticked` char(1) DEFAULT 'N',
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
-  `status` char(1) NOT NULL DEFAULT 'A',
+  `edited_at` int(18) unsigned DEFAULT NULL,
+  `status` char(1) DEFAULT 'A',
+  `locked` char(1) DEFAULT 'N',
+  `deleted` int(3) DEFAULT '0',
+  `accepted_answer` char(1) DEFAULT 'N',
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `categories_id` (`categories_id`),
@@ -103,8 +126,47 @@ CREATE TABLE `posts` (
   KEY `number_replies` (`number_replies`),
   KEY `modified_at` (`modified_at`),
   KEY `created_at` (`created_at`),
-  KEY `sticked` (`sticked`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8;
+  KEY `sticked` (`sticked`,`created_at`),
+  KEY `deleted` (`deleted`)
+) ENGINE=InnoDB AUTO_INCREMENT=1669 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_bounties`
+--
+
+DROP TABLE IF EXISTS `posts_bounties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_bounties` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `posts_replies_id` int(10) unsigned NOT NULL,
+  `points` int(10) unsigned NOT NULL,
+  `created_at` int(18) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_replies_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_history`
+--
+
+DROP TABLE IF EXISTS `posts_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +182,7 @@ CREATE TABLE `posts_notifications` (
   `posts_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=553 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4050 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,13 +196,52 @@ CREATE TABLE `posts_replies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
+  `in_reply_to_id` int(10) unsigned DEFAULT '0',
   `content` text,
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
+  `edited_at` int(18) unsigned DEFAULT NULL,
+  `votes_up` int(10) unsigned DEFAULT NULL,
+  `votes_down` int(10) unsigned DEFAULT NULL,
+  `accepted` char(1) DEFAULT 'N',
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=833 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5694 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_replies_history`
+--
+
+DROP TABLE IF EXISTS `posts_replies_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_replies_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_replies_id` (`posts_replies_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_replies_votes`
+--
+
+DROP TABLE IF EXISTS `posts_replies_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_replies_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +257,23 @@ CREATE TABLE `posts_views` (
   `ipaddress` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`,`ipaddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=9402 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=193198 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_votes`
+--
+
+DROP TABLE IF EXISTS `posts_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,10 +295,14 @@ CREATE TABLE `users` (
   `modified_at` int(18) unsigned DEFAULT NULL,
   `notifications` char(1) DEFAULT 'N',
   `timezone` varchar(48) DEFAULT NULL,
+  `moderator` char(1) DEFAULT 'N',
+  `karma` int(11) DEFAULT NULL,
+  `votes` int(10) unsigned DEFAULT NULL,
+  `votes_points` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `access_token` (`access_token`),
   KEY `login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1145 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -193,4 +314,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-07-22 13:54:30
+-- Dump completed on 2014-03-03 13:48:42
