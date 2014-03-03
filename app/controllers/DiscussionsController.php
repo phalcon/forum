@@ -847,7 +847,19 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			'limit' => 15
 		));
 
-		$this->tag->setTitle('Profile');
+		$users = Users::find(array('columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC'));
+		$ranking = count($users);
+		foreach ($users as $position => $everyUser) {
+			if ($everyUser->id == $user->id) {
+				$ranking = $position + 1;
+				break;
+			}
+		}
+
+		$this->view->ranking = $ranking;
+		$this->view->total_ranking = count($users);
+
+		$this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
 	}
 
 	public function settingsAction()

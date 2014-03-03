@@ -14,6 +14,7 @@
 						<span>joined <b>{{ date('M d/Y', user.created_at) }}</b></span><br>
 						<span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>
 						<span>reputation <b>{{ user.karma }}</b></span><br>
+						<span>reputation ranking <b>#{{ ranking }}</b> of <b>{{ total_ranking }}</b></span><br>
 						<a href="https://github.com/{{ user.login }}">Github Profile</a>
 					</p>
 					<p>
