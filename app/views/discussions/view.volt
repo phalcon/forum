@@ -159,7 +159,7 @@
 						{%- endcache -%}
 					</div>
 					<div class="posts-buttons" align="right">
-						{%- if currentUser > 0 and reply.users_id == post.users_id or moderator == 'Y' -%}
+						{%- if currentUser == post.users_id or moderator == 'Y' -%}
 							<br>
 							{%- if post.accepted_answer != 'Y' -%}
 								<a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
