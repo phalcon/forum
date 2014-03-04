@@ -27,7 +27,7 @@
 			</td>
 			<td>
 				<div class="activity">
-					<span>{{ link_to('user/' ~ activity.user.id ~ '/' ~ activity.user.login, activity.user.name|e) }}</span>
+					<span>{{ link_to('user/' ~ activity.user.id ~ '/' ~ activity.user.login, activity.user.name|e) }} </span>
 
 					{%- if activity.type == 'U' -%}
 					has joined the forum
