@@ -108,7 +108,11 @@ class HooksController extends \Phalcon\Mvc\Controller
 						}
 					}
 
-					if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? [^:]*:$', $line)) {
+					if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? ([^:]*):$/u', $line)) {
+						continue;
+					}
+
+					if (preg_match('/^On [A-Za-z]{3} [0-9]{1,2}, [0-9]{4} [0-9]{1,2}:[0-9]{2} [AP]M, ([^:]*):$/u', $line)) {
 						continue;
 					}
 
