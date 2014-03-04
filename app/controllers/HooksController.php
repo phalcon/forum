@@ -39,7 +39,7 @@ class HooksController extends \Phalcon\Mvc\Controller
 				return $response;
 			}
 
-			$events = @json_decode($data['mandrill_events'], true);
+			$events = @json_decode($this->request->getPost('mandrill_events'), true);
 			if (!is_array($events)) {
 				return $response;
 			}
@@ -61,15 +61,6 @@ class HooksController extends \Phalcon\Mvc\Controller
 
 				$msg = $event['msg'];
 				if (!isset($msg['dkim'])) {
-					continue;
-				}
-
-				$dkim = $msg['dkim'];
-				if (!isset($dkim['signed']) || !isset($dkim['valid'])) {
-					continue;
-				}
-
-				if (!$dkim['signed'] || !$dkim['valid']) {
 					continue;
 				}
 
@@ -105,11 +96,65 @@ class HooksController extends \Phalcon\Mvc\Controller
 					continue;
 				}
 
+				$str = array();
+				$firstNoBaseReplyLine = false;
+				foreach (array_reverse(preg_split('/\r\n|\n/', $content)) as $line) {
+
+					if (!$firstNoBaseReplyLine) {
+						if (substr($line, 0, 1) == '>') {
+							continue;
+						} else {
+							$firstNoBaseReplyLine = true;
+						}
+					}
+
+					$str[] = $line;
+				}
+
+				$content = join("\r\n", array_reverse($str));
+
+				/**
+				 * Check if the question can have a bounty before add the reply
+				 */
+				$canHaveBounty = $post->canHaveBounty();
+
+				/**
+				 * Only update the number of replies if the user that commented isn't the same that posted
+				 */
+				if ($post->users_id != $user->id) {
+
+					$post->number_replies++;
+					$post->modified_at = time();
+
+					$post->user->karma += 5;
+					$post->user->votes_points += 10;
+
+					$user->karma += 10;
+					$user->votes_points += 10;
+					$user->save();
+				}
+
 				$postReply = new PostsReplies();
 				$postReply->post = $post;
 				$postReply->users_id = $user->id;
 				$postReply->content = $content;
-				$postReply->save();
+
+				if ($postReply->save()) {
+
+					if ($post->users_id != $user->id && $canHaveBounty) {
+						$bounty = $post->getBounty();
+						$postBounty = new PostsBounties();
+						$postBounty->posts_id = $post->id;
+						$postBounty->users_id = $users->id;
+						$postBounty->posts_replies_id = $postReply->id;
+						$postBounty->points = $bounty['value'];
+						if (!$postBounty->save()) {
+							foreach ($postBounty->getMessages() as $message) {
+								$this->flash->error($message);
+							}
+						}
+					}
+				}
 			}
 		}
 

@@ -149,7 +149,12 @@ class PostsReplies extends Model
 
 		$history = new PostsRepliesHistory();
 		$history->posts_replies_id = $this->id;
-		$history->users_id = $this->getDI()->getSession()->get('identity');
+		$usersId = $this->getDI()->getSession()->get('identity');
+		if ($usersId) {
+			$history->users_id = $usersId;
+		} else {
+			$history->users_id = $this->users_id;
+		}
 		$history->content  = $this->content;
 		$history->save();
 	}

@@ -250,6 +250,7 @@ class Posts extends Model
 					$this->categories_id != 15 && //announcements
 					$this->categories_id != 4 && //offtopic
 					$this->categories_id != 7 && //jobs
+					$this->categories_id != 24 && //show community
 					($this->votes_up - $this->votes_down) >= 0;
 		if ($canHave) {
 			$diff = time() - $this->created_at;
