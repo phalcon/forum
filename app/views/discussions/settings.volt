@@ -38,7 +38,7 @@
 										{{ select_static('notifications', [
 											'N': 'Never',
 											'Y': 'Always',
-											'P': 'Someone replied my posts / Someone has replied in posts that I has replied'
+											'P': 'When someone replies to a discussion that I started or replied to'
 										], 'class': 'form-control') }}
 									</div>
 									<div class="form-group">
