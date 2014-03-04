@@ -35,6 +35,10 @@ class HooksController extends \Phalcon\Mvc\Controller
 		$response = new Response();
 		if ($this->request->isPost()) {
 
+			if ($this->config->mandrillapp->secret != $this->request->getQuery('secret')) {
+				return $response;
+			}
+
 			$events = @json_decode($data['mandrill_events'], true);
 			if (!is_array($events)) {
 				return $response;
