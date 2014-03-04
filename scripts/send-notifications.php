@@ -27,7 +27,10 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 
 	public function run()
 	{
+
 		$transport = null;
+		$from = 'phosphorum@phalconphp.com';
+
 		foreach (Phosphorum\Models\Notifications::find('sent = "N"') as $notification) {
 
 			$post = $notification->post;
@@ -42,10 +45,9 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 
 				if ($user->email && $user->notifications != 'N') {
 
-					$from = 'reply-i' . $post->id . '-' . time() . '@phosphorum.com';
-
 					$message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
 					$message->setTo(array($user->email => $user->name));
+					$message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
 
 					if ($notification->type == 'P') {
 						$originalContent = $post->content;

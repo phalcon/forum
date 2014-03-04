@@ -113,6 +113,7 @@ class HooksController extends \Phalcon\Mvc\Controller
 			}
 		}
 
+		return $response;
 	}
 
 }
