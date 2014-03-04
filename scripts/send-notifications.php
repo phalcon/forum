@@ -43,7 +43,7 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 
 			if ($post && $user && $reply) {
 
-				if ($user->email && $user->notifications != 'N') {
+				if ($user->email && $user->notifications != 'N' && strpos($user->email, '@users.noreply.github.com') > 0) {
 
 					$message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
 					$message->setTo(array($user->email => $user->name));

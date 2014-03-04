@@ -115,6 +115,9 @@ class SessionController extends \Phalcon\Mvc\Controller
 
 			if ($user->getOperationMade() == Model::OP_CREATE) {
 				$this->flashSession->success('Welcome ' . $user->name);
+				if (strpos($user->email, '@users.noreply.github.com') !== false) {
+					$this->flashSession->notice('Your current e-mail: ' . $this->escaper->escapeHtml($user->email) . ' does not allow us to send you e-mail notifications');
+				}
 			} else {
 				$this->flashSession->success('Welcome back ' . $user->name);
 			}
