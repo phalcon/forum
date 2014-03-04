@@ -27,6 +27,7 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\Activities,
 	Phosphorum\Models\IrcLog,
 	Phosphorum\Models\Users,
+	Phosphorum\Models\Karma,
 	Phalcon\Http\Response;
 
 class DiscussionsController extends \Phalcon\Mvc\Controller
@@ -222,16 +223,15 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			$title = $this->request->getPost('title', 'trim');
 
 			$user = Users::findFirstById($usersId);
-			$user->karma += 10;
-			$user->votes_points += 10;
+			$user->increaseKarma(Karma::ADD_NEW_POST);
 			$user->save();
 
 			$post = new Posts();
-			$post->users_id = $usersId;
+			$post->users_id      = $usersId;
 			$post->categories_id = $this->request->getPost('categoryId');
-			$post->title = $title;
-			$post->slug = $this->tag->friendlyTitle($title);
-			$post->content = $this->request->getPost('content');
+			$post->title         = $title;
+			$post->slug          = $this->tag->friendlyTitle($title);
+			$post->content       = $this->request->getPost('content');
 
 			if ($post->save()) {
 				return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
@@ -288,8 +288,7 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 			if ($post->users_id != $usersId) {
 				$user = Users::findFirstById($usersId);
 				if ($user) {
-					$user->karma += 25;
-					$user->votes_points += 25;
+					$user->increaseKarma(Karma::MODERATE_POST);
 					$user->save();
 				}
 			}
@@ -357,15 +356,13 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$user = Users::findFirstById($usersId);
 				if ($user) {
 					if ($user->moderator == 'Y') {
-						$user->karma += 10;
-						$user->votes_points += 10;
+						$user->increaseKarma(Karma::MODERATE_DELETE_POST);
 						$user->save();
 					}
 				}
 
 				$user = $post->user;
-				$user->karma -= 10;
-				$user->votes_points -= 10;
+				$user->decreaseKarma(Karma::DELETE_POST);
 				$user->save();
 			}
 
@@ -421,18 +418,15 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 				$post->number_views++;
 				if ($post->users_id != $usersId) {
 
-					$post->user->karma += 1;
-					$post->user->votes_points += 1;
+					$post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
 					if ($usersId > 0) {
 						$user = Users::findFirstById($usersId);
 						if ($user) {
 							if ($user->moderator == 'Y') {
-								$user->karma += 4;
-								$user->votes_points += 4;
+								$user->increaseKarma(Karma::MODERATE_VISIT_POST);
 							} else {
-								$user->karma += 2;
-								$user->votes_points += 2;
+								$user->increaseKarma(Karma::VISIT_POST);
 							}
 							$user->save();
 						}
@@ -502,13 +496,10 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 					$post->number_replies++;
 					$post->modified_at = time();
-
-					$post->user->karma += 5;
-					$post->user->votes_points += 10;
+					$post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
 
 					$user = Users::findFirstById($usersId);
-					$user->karma += 10;
-					$user->votes_points += 10;
+					$user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
 					$user->save();
 				}
 
@@ -650,12 +641,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->votes_up++;
 		if ($post->users_id != $user->id) {
-
-			$post->user->karma += 5;
-			$post->user->votes_points += 5;
-
-			$user->karma += 10;
-			$user->votes_points += 10;
+			$post->user->increaseKarma(Karma::SOMEONE_DID_VOTE_MY_POST);
+			$user->increaseKarma(Karma::VOTE_ON_SOMEONE_ELSE_POST);
 		}
 
 		if ($post->save()) {
@@ -722,12 +709,8 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 
 		$post->votes_down++;
 		if ($post->users_id != $user->id) {
-
-			$post->user->karma -= 5;
-			$post->user->votes_points -= 5;
-
-			$user->karma += 10;
-			$user->votes_points += 10;
+			$post->user->decreaseKarma(Karma::SOMEONE_DID_VOTE_MY_POST);
+			$user->increaseKarma(Karma::VOTE_ON_SOMEONE_ELSE_VOTE);
 		}
 
 		if ($post->save()) {
@@ -880,6 +863,9 @@ class DiscussionsController extends \Phalcon\Mvc\Controller
 		$this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
 	}
 
+	/**
+	 * Allow to change your user settings
+	 */
 	public function settingsAction()
 	{
 

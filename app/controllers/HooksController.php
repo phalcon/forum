@@ -20,6 +20,7 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
+	Phosphorum\Models\Karma,
 	Phalcon\Http\Response;
 
 class HooksController extends \Phalcon\Mvc\Controller
@@ -96,6 +97,9 @@ class HooksController extends \Phalcon\Mvc\Controller
 					continue;
 				}
 
+				/**
+				 * Process replies to remove the base message
+				 */
 				$str = array();
 				$firstNoBaseReplyLine = false;
 				foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
@@ -133,12 +137,9 @@ class HooksController extends \Phalcon\Mvc\Controller
 
 					$post->number_replies++;
 					$post->modified_at = time();
+					$post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
 
-					$post->user->karma += 5;
-					$post->user->votes_points += 10;
-
-					$user->karma += 10;
-					$user->votes_points += 10;
+					$user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
 					$user->save();
 				}
 
@@ -167,6 +168,11 @@ class HooksController extends \Phalcon\Mvc\Controller
 		}
 
 		return $response;
+	}
+
+	public function mailBounceAction()
+	{
+		echo $this->security->hash('kdl#s80918hqd6&&·U·JDK.');
 	}
 
 }

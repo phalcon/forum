@@ -24,6 +24,8 @@ use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
 use Phalcon\Mvc\Model\Metadata\Memory as MemoryMetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Cache\Backend\File as FileCache;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Ciconia\Ciconia;
 
 /**
@@ -31,9 +33,12 @@ use Ciconia\Ciconia;
  */
 $di->set('url', function() use ($config) {
 	$url = new UrlResolver();
-	$url->setBaseUri($config->application->baseUri);
 	if (!$config->application->debug) {
-		$url->setStaticBaseUri('http://static.phosphorum.com/');
+		$url->setBaseUri($config->application->production->baseUri);
+		$url->setStaticBaseUri($config->application->production->staticBaseUri);
+	} else {
+		$url->setBaseUri($config->application->development->baseUri);
+		$url->setStaticBaseUri($config->application->development->staticBaseUri);
 	}
 	return $url;
 }, true);
@@ -46,7 +51,7 @@ $di->set('volt', function($view, $di) use ($config) {
 	$volt = new Volt($view, $di);
 
 	$volt->setOptions(array(
-		"compiledPath"      => __DIR__ . "/../cache/volt/",
+		"compiledPath"      => APP_PATH . "/app/cache/volt/",
 		"compiledSeparator" => "_",
 		"compileAlways"     => $config->application->debug
 	));
@@ -80,7 +85,7 @@ $di->set('db', function() use ($config) {
 
 		$eventsManager = new EventsManager();
 
-		$logger = new FileLogger("../app/logs/db.log");
+		$logger = new FileLogger(APP_PATH . "/app/logs/db.log");
 
 		//Listen all the database events
 		$eventsManager->attach('db', function($event, $connection) use ($logger) {
@@ -110,7 +115,7 @@ $di->set('modelsMetadata', function() use ($config) {
 	}
 
 	return new MetaDataAdapter(array(
-		'metaDataDir' => __DIR__ . '/../cache/metaData/'
+		'metaDataDir' => APP_PATH . '/app/cache/metaData/'
 	));
 
 }, true);
@@ -128,7 +133,7 @@ $di->set('session', function() {
  * Router
  */
 $di->set('router', function() {
-	return include __DIR__ . "/routes.php";
+	return include APP_PATH . "/app/config/routes.php";
 }, true);
 
 /**
@@ -159,7 +164,7 @@ $di->set('flashSession', function() {
 });
 
 $di->set('dispatcher', function() {
-	$dispatcher = new Phalcon\Mvc\Dispatcher();
+	$dispatcher = new MvcDispatcher();
 	$dispatcher->setDefaultNamespace('Phosphorum\Controllers');
 	return $dispatcher;
 });
@@ -178,9 +183,9 @@ $di->set('viewCache', function() use ($config) {
 		));
 	}
 
-	return new \Phalcon\Cache\Backend\File($frontCache, array(
-		"cacheDir" => __DIR__ . "/../cache/views/",
-		"prefix" => "forum-cache-"
+	return new FileCache($frontCache, array(
+		"cacheDir" => APP_PATH . "/app/cache/views/",
+		"prefix"   => "forum-cache-"
 	));
 });
 
@@ -195,8 +200,8 @@ $di->set('modelsCache', function() {
     ));
 
     return new \Phalcon\Cache\Backend\File($frontCache, array(
-        "cacheDir" => __DIR__ . "/../cache/data/",
-        "prefix" => "forum-cache-data-"
+        "cacheDir" => APP_PATH . "/app/cache/data/",
+        "prefix"   => "forum-cache-data-"
     ));
 });
 

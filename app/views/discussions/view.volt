@@ -1,5 +1,7 @@
 {{- content() -}}
 
+{{ flashSession.output() }}
+
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
 
 {%- if (post.votes_up - post.votes_down) <= -10 -%}

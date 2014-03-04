@@ -16,29 +16,52 @@
 */
 
 return new \Phalcon\Config(array(
+
 	'database' => array(
 		'adapter'  => 'Mysql',
 		'host'     => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'dbname'     => 'forum',
+		'dbname'   => 'forum',
+		'charset'  => 'utf8'
 	),
+
 	'application' => array(
-		'controllersDir' => __DIR__ . '/../../app/controllers/',
-		'modelsDir'      => __DIR__ . '/../../app/models/',
-		'viewsDir'       => __DIR__ . '/../../app/views/',
-		'pluginsDir'     => __DIR__ . '/../../app/plugins/',
-		'libraryDir'     => __DIR__ . '/../../app/library/',
-		'baseUri'        => '/forum/',
+		'controllersDir' => APP_PATH . '/app/controllers/',
+		'modelsDir'      => APP_PATH . '/app/models/',
+		'viewsDir'       => APP_PATH . '/app/views/',
+		'pluginsDir'     => APP_PATH . '/app/plugins/',
+		'libraryDir'     => APP_PATH . '/app/library/',
+		'development'        => array(
+			'staticBaseUri'  => '/forum/',
+			'baseUri'        => '/forum/'
+		),
+		'production'         => array(
+			'staticBaseUri'  => 'http://static.phosphorum.com/',
+			'baseUri'        => '/forum/'
+		),
 		'debug'          => false
 	),
-	'github' => array(
-		'clientId' => '',
-		'clientSecret' => '',
-		'redirectUri' => 'http://localhost/forum/login/oauth/access_token'
+
+	'mandrillapp' => array(
+		'secret' => ''
 	),
-	'amazon' => array(
-		'AWSAccessKeyId' => '',
-		'AWSSecretKey' => ''
+
+	'github' => array(
+		'clientId'     => '',
+		'clientSecret' => '',
+		'redirectUri'  => 'http://localhost/forum/login/oauth/access_token'
+	),
+
+	'amazonSns' => array(
+		'secret' => ''
+	),
+
+	'smtp' => array(
+		'host'     => "",
+		'port'     => 25,
+		'security' => "tls",
+		'username' => "",
+		'password' => ""
 	)
 ));

@@ -121,7 +121,7 @@
 					<td><span class="label label-success">+25</span></th>
 				</tr>
 				<tr>
-					<td>Delete an offensive or spammy post or comment</td>
+					<td>Deleting an offensive or spammy post or comment</td>
 					<td><span class="label label-success">+10</span></th>
 				</tr>
 			</thead>

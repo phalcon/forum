@@ -15,48 +15,53 @@
   +------------------------------------------------------------------------+
 */
 
-error_reporting(E_ALL);
-
-if (!isset($_GET['_url'])) {
-	$_GET['_url'] = '/';
-}
-
-define('APP_PATH', realpath('..'));
+namespace Phosphorum\Models;
 
 /**
- * Read the configuration
+ * Karma constants
  */
-$config = include APP_PATH . "/app/config/config.php";
+abstract class Karma
+{
 
-/**
- * Include the loader
- */
-require APP_PATH . "/app/config/loader.php";
+	const ADD_NEW_POST = 10;
 
-/**
- * Include composer autoloader
- */
-require APP_PATH . "/vendor/autoload.php";
+	const DELETE_POST = 15;
 
-try {
+	const SOMEONE_REPLIED_TO_MY_POST = 5;
 
-	/**
-	 * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
-	 */
-	$di = new \Phalcon\DI\FactoryDefault();
+	const REPLY_ON_SOMEONE_ELSE_POST = 10;
 
-	/**
-	 * Include the application services
-	 */
-	require APP_PATH . "/app/config/services.php";
+  const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
 
-	/**
-	 * Handle the request
-	 */
-	$application = new Phalcon\Mvc\Application($di);
+  const DELETE_REPLY_ON_SOMEONE_ELSE_POST = 10;
 
-	echo $application->handle()->getContent();
+	const MODERATE_POST = 25;
 
-} catch (Exception $e) {
-	echo 'Sorry, an error has ocurred :(';
+  const MODERATE_REPLY = 25;
+
+	const MODERATE_DELETE_POST = 10;
+
+  const MODERATE_DELETE_REPLY = 10;
+
+	const VISIT_ON_MY_POST = 1;
+
+	const MODERATE_VISIT_POST = 4;
+
+	const VISIT_POST = 2;
+
+	const SOMEONE_DID_VOTE_MY_POST = 5;
+
+	const VOTE_ON_SOMEONE_ELSE_POST = 10;
+
+  const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
+
+  const VOTE_UP_ON_MY_REPLY = 10;
+
+  const VOTE_UP_ON_SOMEONE_ELSE_REPLY = 10;
+
+  const VOTE_DOWN_ON_SOMEONE_ELSE_REPLY = 10;
+
+  const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
+
+  const VOTE_DOWN_ON_MY_REPLY = 10;
 }

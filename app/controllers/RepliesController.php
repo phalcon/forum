@@ -23,6 +23,7 @@ use Phosphorum\Models\Users,
 	Phosphorum\Models\PostsBounties,
 	Phosphorum\Models\PostsRepliesHistory,
 	Phosphorum\Models\PostsRepliesVotes,
+	Phosphorum\Models\Karma,
 	Phalcon\Http\Response;
 
 class RepliesController extends \Phalcon\Mvc\Controller
@@ -90,7 +91,17 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		if (trim($content)) {
 			$postReply->content = $content;
 			$postReply->edited_at = time();
-			$postReply->save();
+			if ($postReply->save()) {
+				if ($usersId != $postReply->users_id) {
+					$user = Users::findFirstById($usersId);
+					if ($user) {
+						if ($user->moderator == 'Y') {
+							$user->increaseKarma(Karma::MODERATE_REPLY);
+							$user->save();
+						}
+					}
+				}
+			}
 		}
 
 		return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug . '#C' . $postReply->id);
@@ -115,18 +126,37 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		));
 		if ($postReply) {
 
+			if ($usersId == $postReply->users_id) {
+				$user = $postReply->user;
+				if ($user) {
+					$user->decreaseKarma(Karma::DELETE_REPLY_ON_SOMEONE_ELSE_POST);
+					$user->save();
+				}
+			} else {
+				$user = Users::findFirstById($usersId);
+				if ($user) {
+					if ($user->moderator == 'Y') {
+						$user->increaseKarma(Karma::MODERATE_DELETE_REPLY);
+						$user->save();
+					}
+				}
+			}
+
 			if ($postReply->delete()) {
 				if ($usersId != $postReply->post->users_id) {
-
-					$user = Users::findFirstById($postReply->post->users_id);
-					$user->karma -= 15;
-					$user->votes_points -= 15;
-					$user->save();
+					$user = $postReply->post->user;
+					if ($user) {
+						$user->decreaseKarma(Karma::SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST);
+						$user->save();
+					}
 
 					$postReply->post->number_replies--;
 					$postReply->post->save();
 				}
+
+				$this->flashSession->success('Reply was deleted successfully');
 			}
+
 
 			return $this->response->redirect('discussion/' . $postReply->post->id . '/' . $postReply->post->slug);
 		}
@@ -193,19 +223,17 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$postReply->votes_up++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
-				$points = (15 + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + intval(abs($user->karma - $postReply->user->karma)/1000));
 			} else {
-				$points = (10 + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_UP_ON_MY_REPLY + intval(abs($user->karma - $postReply->user->karma)/1000));
 			}
-			$postReply->user->karma += $points;
-			$postReply->user->votes_points += $points;
+			$postReply->user->increaseKarma($points);
 		}
 
 		if ($postReply->save()) {
 
 			if ($postReply->users_id != $user->id) {
-				$user->karma += 10;
-				$user->votes_points += 10;
+				$user->increaseKarma(Karma::VOTE_UP_ON_SOMEONE_ELSE_REPLY);
 			}
 			$user->votes--;
 
@@ -283,19 +311,17 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$postReply->votes_down++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
-				$points = (15 + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + intval(abs($user->karma - $postReply->user->karma)/1000));
 			} else {
-				$points = (10 + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_UP_ON_MY_REPLY + intval(abs($user->karma - $postReply->user->karma)/1000));
 			}
-			$postReply->user->karma -= $points;
-			$postReply->user->votes_points -= $points;
+			$postReply->user->decreaseKarma($points);
 		}
 
 		if ($postReply->save()) {
 
 			if ($postReply->users_id != $user->id) {
-				$user->karma += 10;
-				$user->votes_points += 10;
+				$user->decreaseKarma(Karma::VOTE_DOWN_ON_SOMEONE_ELSE_REPLY);
 			}
 			$user->votes--;
 
@@ -334,7 +360,11 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$a = explode("\n", $postReply->content);
 
 		$first = true;
-		$postHistories = PostsRepliesHistory::find(array('posts_replies_id = ?0', 'bind' => array($postReply->id), 'order' => 'created_at DESC'));
+		$postHistories = PostsRepliesHistory::find(array(
+			'posts_replies_id = ?0',
+			'bind' => array($postReply->id),
+			'order' => 'created_at DESC'
+		));
 		if (count($postHistories) > 1) {
 			foreach ($postHistories as $postHistory) {
 				if ($first) {

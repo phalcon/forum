@@ -64,6 +64,18 @@ class Users extends Model
         )));
 	}
 
+	public function increaseKarma($karma)
+	{
+		$this->karma += $karma;
+		$this->votes_points += $karma;
+	}
+
+	public function decreaseKarma($karma)
+	{
+		$this->karma -= $karma;
+		$this->votes_points -= $karma;
+	}
+
 	public function beforeCreate()
 	{
 		$this->notifications = 'P';

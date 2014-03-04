@@ -67,3 +67,7 @@ CREATE TABLE `posts_bounties` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 alter table posts_replies add in_reply_to_id int unsigned default 0 after users_id;
+
+alter table users add index(email);
+alter table users add index(karma);
+alter table users add index(login);
