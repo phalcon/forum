@@ -60,7 +60,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			$data = array('status' => 'ERROR');
 		}
 
-		$response->setContent(json_encode($data));
+		$response->setJsonContent($data);
 		return $response;
 	}
 
@@ -89,7 +89,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 
 		$content = $this->request->getPost('content');
 		if (trim($content)) {
-			$postReply->content = $content;
+			$postReply->content   = $content;
 			$postReply->edited_at = time();
 			if ($postReply->save()) {
 				if ($usersId != $postReply->users_id) {
@@ -149,7 +149,6 @@ class RepliesController extends \Phalcon\Mvc\Controller
 						$user->decreaseKarma(Karma::SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST);
 						$user->save();
 					}
-
 					$postReply->post->number_replies--;
 					$postReply->post->save();
 				}
