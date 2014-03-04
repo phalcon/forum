@@ -137,7 +137,7 @@
 						{%- if inReplyTo -%}
 						<div class="in-reply-to">
 							<a href="#C{{ reply.in_reply_to_id }}"><span class="glyphicon glyphicon-chevron-up"></span> in reply to
-								<img src="https://secure.gravatar.com/avatar/{{ inReplyTo.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"> {{ inReplyTo.user.name }}</a>
+								<img src="https://secure.gravatar.com/avatar/{{ inReplyTo.user.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded" width="24" height="24"> {{ inReplyTo.user.name }}</a>
 						</div>
 						{%- endif -%}
 					{%- endif -%}

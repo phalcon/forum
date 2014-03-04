@@ -32,6 +32,9 @@ use Ciconia\Ciconia;
 $di->set('url', function() use ($config) {
 	$url = new UrlResolver();
 	$url->setBaseUri($config->application->baseUri);
+	if (!$config->application->debug) {
+		$url->setStaticBaseUri('http://static.phosphorum.com/');
+	}
 	return $url;
 }, true);
 
