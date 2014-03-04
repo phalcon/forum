@@ -98,7 +98,7 @@ class HooksController extends \Phalcon\Mvc\Controller
 
 				$str = array();
 				$firstNoBaseReplyLine = false;
-				foreach (array_reverse(preg_split('/\r\n|\n/', $content)) as $line) {
+				foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
 
 					if (!$firstNoBaseReplyLine) {
 						if (substr($line, 0, 1) == '>') {
@@ -106,6 +106,10 @@ class HooksController extends \Phalcon\Mvc\Controller
 						} else {
 							$firstNoBaseReplyLine = true;
 						}
+					}
+
+					if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? [^:]*:$', $line)) {
+						continue;
 					}
 
 					$str[] = $line;
