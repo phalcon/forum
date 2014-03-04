@@ -37,7 +37,7 @@
 					has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
 					{%- endif -%}
 
-					<span class="date">{{ activity.getHumanCreatedAt() }}</span>
+					<span class="date"> {{ activity.getHumanCreatedAt() }}</span>
 				</div>
 			</td>
 		</tr>
