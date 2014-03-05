@@ -340,9 +340,9 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		$postReply->votes_down++;
 		if ($postReply->users_id != $user->id) {
 			if ($postReply->post->users_id == $user->id) {
-				$points = (Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_DOWN_ON_MY_REPLY_ON_MY_POST + intval(abs($user->karma - $postReply->user->karma)/1000));
 			} else {
-				$points = (Karma::VOTE_UP_ON_MY_REPLY + intval(abs($user->karma - $postReply->user->karma)/1000));
+				$points = (Karma::VOTE_DOWN_ON_MY_REPLY + intval(abs($user->karma - $postReply->user->karma)/1000));
 			}
 			$postReply->user->decreaseKarma($points);
 		}

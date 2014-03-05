@@ -711,7 +711,7 @@ class DiscussionsController extends Controller
 		$post->votes_down++;
 		if ($post->users_id != $user->id) {
 			$post->user->decreaseKarma(Karma::SOMEONE_DID_VOTE_MY_POST);
-			$user->increaseKarma(Karma::VOTE_ON_SOMEONE_ELSE_VOTE);
+			$user->increaseKarma(Karma::VOTE_ON_SOMEONE_ELSE_POST);
 		}
 
 		if ($post->save()) {
