@@ -17,9 +17,10 @@
 
 namespace Phosphorum\Github;
 
+use Phalcon\DI\Injectable;
 use Guzzle\Http\Client as HttpClient;
 
-class OAuth extends \Phalcon\DI\Injectable
+class OAuth extends Injectable
 {
 
 	protected $_endPointAuthorize = 'https://github.com/login/oauth/authorize';

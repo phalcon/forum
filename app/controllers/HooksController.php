@@ -17,17 +17,21 @@
 
 namespace Phosphorum\Controllers;
 
-use Phosphorum\Models\Users,
-	Phosphorum\Models\Posts,
-	Phosphorum\Models\PostsReplies,
-	Phosphorum\Models\Karma,
-	Phalcon\Http\Response;
+use Phosphorum\Models\Users;
+use Phosphorum\Models\Posts;
+use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\Karma;
+use Phosphorum\Models\NotificationsBounces;
+use Phalcon\Http\Response;
+use Phalcon\Mvc\Controller;
+use Aws\Sns\MessageValidator\Message;
+use Aws\Sns\MessageValidator\MessageValidator;
 
-class HooksController extends \Phalcon\Mvc\Controller
+class HooksController extends Controller
 {
 
 	/**
-	 * This implements a webhook from Mandrill and post the content as a comment
+	 * This implements an inbound webhook from MandrillApp to reply to posts using emails
 	 *
 	 */
 	public function mailReplyAction()
@@ -94,6 +98,10 @@ class HooksController extends \Phalcon\Mvc\Controller
 
 				$post = Posts::findFirst($matches[1]);
 				if (!$post) {
+					continue;
+				}
+
+				if ($post->deleted) {
 					continue;
 				}
 
@@ -170,9 +178,62 @@ class HooksController extends \Phalcon\Mvc\Controller
 		return $response;
 	}
 
+	/**
+	 * Amazon SNS endpoint to receive bounces and complains notified by Amazon SES
+	 *
+	 */
 	public function mailBounceAction()
 	{
-		echo $this->security->hash('kdl#s80918hqd6&&·U·JDK.');
+
+		$response = new Response();
+
+		$body = $this->request->getRawBody();
+
+		$data = @json_decode($body, true);
+		if (!is_array($data)) {
+			return $response;
+		}
+
+		$message = Message::fromArray($data);
+
+		$validator = new MessageValidator();
+		if ($validator->isValid($message)) {
+		    $notification = json_decode($message->get('Message'), true);
+			if (is_array($notification)) {
+
+			 	do {
+
+			 		if (!isset($notification['notificationType'])) {
+			 			break;
+			 		}
+
+			 		if ($notification['notificationType'] == 'Bounce') {
+
+			 			if (!isset($notification['bounce'])) {
+			 				break;
+			 			}
+
+			 			$bounce = $notification['bounce'];
+			 			if (!isset($bounce['bouncedRecipients']) || !is_array($bounce['bouncedRecipients'])) {
+			 				break;
+			 			}
+
+			 			foreach ($bounce['bouncedRecipients'] as $recipient) {
+			 				$notificationBounce = new NotificationsBounces();
+			 				$notificationBounce->email = $recipient['emailAddress'];
+			 				$notificationBounce->status = $recipient['status'];
+			 				$notificationBounce->diagnostic = $recipient['diagnosticCode'];
+			 				$notificationBounce->save();
+			 			}
+
+			 		}
+
+			 	} while (0);
+
+			}
+		}
+
+		return $response;
 	}
 
 }

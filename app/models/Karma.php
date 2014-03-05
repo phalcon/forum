@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Models;
@@ -22,6 +22,7 @@ namespace Phosphorum\Models;
  */
 abstract class Karma
 {
+	const LOGIN = 5;
 
 	const ADD_NEW_POST = 10;
 
@@ -31,17 +32,17 @@ abstract class Karma
 
 	const REPLY_ON_SOMEONE_ELSE_POST = 10;
 
-  const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
+	const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
 
-  const DELETE_REPLY_ON_SOMEONE_ELSE_POST = 10;
+	const DELETE_REPLY_ON_SOMEONE_ELSE_POST = 10;
 
 	const MODERATE_POST = 25;
 
-  const MODERATE_REPLY = 25;
+	const MODERATE_REPLY = 25;
 
 	const MODERATE_DELETE_POST = 10;
 
-  const MODERATE_DELETE_REPLY = 10;
+	const MODERATE_DELETE_REPLY = 10;
 
 	const VISIT_ON_MY_POST = 1;
 
@@ -53,15 +54,15 @@ abstract class Karma
 
 	const VOTE_ON_SOMEONE_ELSE_POST = 10;
 
-  const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
+	const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
 
-  const VOTE_UP_ON_MY_REPLY = 10;
+	const VOTE_UP_ON_MY_REPLY = 10;
 
-  const VOTE_UP_ON_SOMEONE_ELSE_REPLY = 10;
+	const VOTE_UP_ON_SOMEONE_ELSE_REPLY = 10;
 
-  const VOTE_DOWN_ON_SOMEONE_ELSE_REPLY = 10;
+	const VOTE_DOWN_ON_SOMEONE_ELSE_REPLY = 10;
 
-  const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
+	const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
 
-  const VOTE_DOWN_ON_MY_REPLY = 10;
+	const VOTE_DOWN_ON_MY_REPLY = 10;
 }

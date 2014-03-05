@@ -1,3 +1,5 @@
+/* Run this script to update your Phosphorum 1.0 to version 2.0 */
+
 alter table posts add locked char(1) default 'N';
 alter table users add moderator char(1) default 'N';
 alter table posts add edited_at int(18) unsigned after modified_at;
@@ -71,3 +73,15 @@ alter table posts_replies add in_reply_to_id int unsigned default 0 after users_
 alter table users add index(email);
 alter table users add index(karma);
 alter table users add index(login);
+alter table users add index(notifications);
+
+CREATE TABLE `notifications_bounces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(120) NOT NULL,
+  `status` varchar(10) DEFAULT NULL,
+  `diagnostic` varchar(120) DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  `reported` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`,`reported`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

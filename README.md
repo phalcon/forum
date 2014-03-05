@@ -20,6 +20,7 @@ This application uses Github as authentication system, you need a client id and 
 to be set up in the configuration (app/config/config.php):
 
 * Curl extension (http://php.net/manual/en/book.curl.php)
+* Openssl extension (http://php.net/manual/en/book.openssl.php)
 
 NOTE
 ----
@@ -36,9 +37,9 @@ Get Started
 
 To run this application on your machine, you need at least:
 
-* >= PHP 5.3.3
+* PHP >= 5.3.9
 * Apache Web Server with mod rewrite enabled or Nginx Web Server
-* Latest Phalcon Framework extension installed/enabled
+* Latest Phalcon Framework extension installed and enabled
 
 Then you'll need to create the database and initialize schema:
 
@@ -47,15 +48,17 @@ Then you'll need to create the database and initialize schema:
 
 Tests
 -----
+Phosphorum use [Codeception](http://codeception.com) functional tests. Execute:
 
-Uses [Codeception](http://codeception.com) functional tests. Execute:
-
-    php codecept.phar run
+```bash
+php codecept.phar run
+```
 
 Detailed output:
 
-    php codecept.phar run --debug
-
+```bash
+php codecept.phar run --debug
+```
 
 License
 -------

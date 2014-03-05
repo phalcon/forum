@@ -20,9 +20,10 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Models\Users,
 	Phosphorum\Models\Posts,
 	Phosphorum\Models\PostsReplies,
-	Phalcon\Http\Response;
+	Phalcon\Http\Response,
+	Phalcon\Mvc\Controller;
 
-class HelpController extends \Phalcon\Mvc\Controller
+class HelpController extends Controller
 {
 
 	public function initialize()
@@ -57,4 +58,3 @@ class HelpController extends \Phalcon\Mvc\Controller
 	}
 
 }
-

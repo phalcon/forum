@@ -74,6 +74,16 @@ class PostsReplies extends Model
 
 	public function beforeCreate()
 	{
+		if ($this->in_reply_to_id > 0) {
+			$postReplyTo = PostsReplies::findFirstById($this->in_reply_to_id);
+			if (!$postReplyTo) {
+				$this->in_reply_to_id = 0;
+			} else {
+				if ($postReplyTo->posts_id != $this->posts_id) {
+					$this->in_reply_to_id = 0;
+				}
+			}
+		}
 		$this->accepted = 'N';
 	}
 
@@ -123,7 +133,7 @@ class PostsReplies extends Model
 			}
 
 			/**
-			 * Notify users that commented in the same post
+			 * Notify users that have commented in the same post
 			 */
 			$postsNotifications = PostsNotifications::findByPostsId($this->posts_id);
 			foreach ($postsNotifications as $postNotification) {

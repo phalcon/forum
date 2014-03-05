@@ -1,5 +1,6 @@
 {
     "require": {
+    	"aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
 		"swiftmailer/swiftmailer": "@stable",
 		"kzykhys/ciconia": "~1.0.0",

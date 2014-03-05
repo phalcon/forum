@@ -28,9 +28,10 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\IrcLog,
 	Phosphorum\Models\Users,
 	Phosphorum\Models\Karma,
-	Phalcon\Http\Response;
+	Phalcon\Http\Response,
+	Phalcon\Mvc\Controller;
 
-class DiscussionsController extends \Phalcon\Mvc\Controller
+class DiscussionsController extends Controller
 {
 
 	/**

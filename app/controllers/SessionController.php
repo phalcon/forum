@@ -20,9 +20,12 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Github\OAuth,
 	Phosphorum\Github\Users as GithubUsers,
 	Phosphorum\Models\Users as ForumUsers,
+	Phosphorum\Models\NotificationsBounces,
+	Phosphorum\Models\Karma,
+	Phalcon\Mvc\Controller,
 	Phalcon\Mvc\Model;
 
-class SessionController extends \Phalcon\Mvc\Controller
+class SessionController extends Controller
 {
 
 	protected function indexRedirect()
@@ -94,8 +97,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$user->login = $githubUser->getLogin();
 			$user->email = $githubUser->getEmail();
 			$user->gravatar_id = $githubUser->getGravatarId();
-			$user->karma += 5;
-			$user->votes_points += 5;
+			$user->increaseKarma(Karma::LOGIN);
 
 			if (!$user->save()) {
 				foreach ($user->getMessages() as $message) {
@@ -118,8 +120,40 @@ class SessionController extends \Phalcon\Mvc\Controller
 			} else {
 				$this->flashSession->success('Welcome back ' . $user->name);
 			}
+
 			if (strpos($user->email, '@users.noreply.github.com') !== false) {
 				$this->flashSession->notice('Your current e-mail: ' . $this->escaper->escapeHtml($user->email) . ' does not allow us to send you e-mail notifications');
+			}
+
+			if ($user->getOperationMade() != Model::OP_CREATE) {
+
+				$bounces = NotificationsBounces::find(array(
+					'email = ?0 AND reported = "N"',
+					'bind' => array($user->email)
+				));
+				if (count($bounces)) {
+
+					foreach ($bounces as $bounce) {
+						$bounce->reported = 'Y';
+						$bounce->save();
+					}
+
+					$this->flashSession->notice('We have failed to deliver you some email notifications,
+						this might be caused by an invalid email associated to your Github account or
+						its mail server is rejecting our emails. Your current e-mail is: ' . $this->escaper->escapeHtml($user->email));
+
+					$bounces = NotificationsBounces::find(array(
+						'email = ?0 AND created_at >= ?1',
+						'bind' => array($user->email, time() - 86400 * 7)
+					));
+					if (count($bounces) >= NotificationsBounces::MAX_BOUNCES) {
+						$this->flashSession->notice('Due to a repeated number of email bounces we have disabled email
+							notifications for your email. You can renable them in your settings');
+						$user->notifications = 'N';
+						$user->save();
+					}
+
+				}
 			}
 
 			return $this->discussionsRedirect();

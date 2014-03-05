@@ -196,6 +196,21 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			));
 		}
 
+		$post = $postReply->post;
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post associated to the reply does not exist'
+			));
+		}
+
+		if ($post->deleted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post associated to the reply is deleted'
+			));
+		}
+
 		$voted = PostsRepliesVotes::count(array(
 			'posts_replies_id = ?0 AND users_id = ?1',
 			'bind' => array($postReply->id, $user->id)
@@ -281,6 +296,21 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			return $response->setJsonContent(array(
 				'status' => 'error',
 				'message' => 'You don\'t have enough votes available'
+			));
+		}
+
+		$post = $postReply->post;
+		if (!$post) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post associated to the reply does not exist'
+			));
+		}
+
+		if ($post->deleted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post associated to the reply is deleted'
 			));
 		}
 
@@ -421,6 +451,13 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			return $response->setJsonContent(array(
 				'status' => 'error',
 				'message' => 'This reply is already accepted as answer'
+			));
+		}
+
+		if ($postReply->post->deleted) {
+			return $response->setJsonContent(array(
+				'status' => 'error',
+				'message' => 'Post associated to the reply is deleted'
 			));
 		}
 
