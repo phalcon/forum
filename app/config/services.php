@@ -26,6 +26,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MemoryMetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Queue\Beanstalk;
 use Ciconia\Ciconia;
 
 /**
@@ -104,6 +105,15 @@ $di->set('db', function() use ($config) {
 
 	return $connection;
 });
+
+/**
+ * Queue to deliver e-mails in real-time
+ */
+$di->set('queue', function() use ($config) {
+	return new Beanstalk(array(
+    	'host' => $config->beanstalk->host
+	));
+}, true);
 
 /**
  * If the configuration specify the use of metadata adapter use it or use memory otherwise

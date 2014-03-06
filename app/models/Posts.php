@@ -117,6 +117,7 @@ class Posts extends Model
 			/**
 			 * Notify users that always want notifications
 			 */
+			$toNotify = array();
 			foreach (Users::find('notifications = "Y"') as $user) {
 				if ($this->users_id != $user->id) {
 					$notification = new Notifications();
@@ -124,6 +125,7 @@ class Posts extends Model
 					$notification->posts_id = $this->id;
 					$notification->type = 'P';
 					$notification->save();
+					$toNotify[$user->id] = $notification->id;
 				}
 			}
 
@@ -132,6 +134,11 @@ class Posts extends Model
 			 */
 			$this->category->number_posts++;
 			$this->category->save();
+
+			/**
+			 * Queue notifications to be sent
+			 */
+			$this->getDI()->getQueue()->put($toNotify);
 		}
 	}
 

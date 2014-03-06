@@ -29,14 +29,10 @@ define('APP_PATH', realpath('..'));
  */
 $config = include APP_PATH . "/app/config/config.php";
 
-$loader = new \Phalcon\Loader();
-
 /**
  * Include the loader
  */
 require APP_PATH . "/app/config/loader.php";
-
-$loader->register();
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework

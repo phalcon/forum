@@ -110,7 +110,7 @@ class PostsReplies extends Model
 					$notification->posts_replies_id = $this->id;
 					$notification->type = 'C';
 					$notification->save();
-					$toNotify[$user->id] = true;
+					$toNotify[$user->id] = $notification->id;
 				}
 			}
 
@@ -145,11 +145,15 @@ class PostsReplies extends Model
 						$notification->posts_replies_id = $this->id;
 						$notification->type = 'C';
 						$notification->save();
-						$toNotify[$postNotification->users_id] = true;
+						$toNotify[$postNotification->users_id] = $notification->id;
 					}
 				}
 			}
 
+			/**
+			 * Queue notifications to be sent
+			 */
+			$this->getDI()->getQueue()->put($toNotify);
 		}
 	}
 

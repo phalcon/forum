@@ -7,21 +7,21 @@ require 'cli-bootstrap.php';
 
 use Phosphorum\Mail\SendSpool;
 
-class SendSpoolTask extends Phalcon\DI\Injectable
+class SendSpoolConsumerTask extends Phalcon\DI\Injectable
 {
 
 	public function run()
 	{
 		$spool = new SendSpool();
-		$spool->sendRemaining();
+		$spool->consumeQueue();
 	}
 
 }
 
 try {
-	$task = new SendSpoolTask($config);
+	$task = new SendSpoolConsumerTask($config);
 	$task->run();
-} catch(Exception $e) {
+} catch (Exception $e) {
 	echo $e->getMessage(), PHP_EOL;
 	echo $e->getTraceAsString();
 }
