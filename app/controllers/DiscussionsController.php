@@ -383,9 +383,9 @@ class DiscussionsController extends Controller
 	{
 		$id = (int) $id;
 
-		if (!$this->request->isPost()) {
+		$usersId = $this->session->get('identity');
 
-			$usersId = $this->session->get('identity');
+		if (!$this->request->isPost()) {
 
 			/**
 			 * Find the post using get
@@ -466,6 +466,11 @@ class DiscussionsController extends Controller
 
 		} else {
 
+			if (!$usersId) {
+				$this->flashSession->error('You must be logged in first to add a comment');
+				return $this->response->redirect();
+			}
+
 			/**
 			 * Find the post using POST
 			 */
@@ -483,12 +488,16 @@ class DiscussionsController extends Controller
 			$content = $this->request->getPost('content', 'trim');
 			if ($content) {
 
-				$usersId = $this->session->get('identity');
-
 				/**
 				 * Check if the question can have a bounty before add the reply
 				 */
 				$canHaveBounty = $post->canHaveBounty();
+
+				$user = Users::findFirstById($usersId);
+				if (!$user) {
+					$this->flashSession->error('You must be logged in first to add a comment');
+					return $this->response->redirect();
+				}
 
 				/**
 				 * Only update the number of replies if the user that commented isn't the same that posted
@@ -499,7 +508,6 @@ class DiscussionsController extends Controller
 					$post->modified_at = time();
 					$post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
 
-					$user = Users::findFirstById($usersId);
 					$user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
 					$user->save();
 				}

@@ -75,7 +75,7 @@ class PostsReplies extends Model
 	public function beforeCreate()
 	{
 		if ($this->in_reply_to_id > 0) {
-			$postReplyTo = self::findFirstById($this->in_reply_to_id);
+			$postReplyTo = self::count(array('id = ?0', 'bind' => array($this->in_reply_to_id)));
 			if (!$postReplyTo) {
 				$this->in_reply_to_id = 0;
 			} else {
