@@ -39,7 +39,7 @@
 				<th class="hidden-xs">Last Reply</th>
 			</tr>
 		{%- for post in posts -%}
-			<tr class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative{% endif %}">
+			<tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% endif %}">
 				<td align="left">
 
 					{%- if post.sticked == "Y" -%}

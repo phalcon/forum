@@ -4,7 +4,7 @@
 
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
 
-{%- if (post.votes_up - post.votes_down) <= -10 -%}
+{%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
 		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data,
@@ -36,7 +36,7 @@
 	<p>
 		<div class="row table-title">
 			<div class="col-md-8">
-				<h1 class="{% if (post.votes_up - post.votes_down) <= -10 %}post-negative-h1{% endif %}">
+				<h1 class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative-h1{% endif %}">
 					{{- post.title|e -}}
 				</h1>
 			</div>
@@ -74,7 +74,7 @@
 				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
 				<span class="karma">{{ post.user.getHumanKarma() }}</span>
 			</div>
-			<div class="col-md-11 post-body{% if (post.votes_up - post.votes_down) <= -10 %} post-negative-body{% endif %}">
+			<div class="col-md-11 post-body{% if (post.votes_up - post.votes_down) <= -3 %} post-negative-body{% endif %}">
 				<div class="posts-buttons" align="right">
 					{% if post.edited_at > 0 %}
 						<span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
@@ -121,7 +121,7 @@
 		</div>
 
 		{%- for reply in post.replies -%}
-			<div class="row{% if (reply.votes_up - reply.votes_down) <= -10 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 10 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
+			<div class="row{% if (reply.votes_up - reply.votes_down) <= -3 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 4 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
 				<div class="col-md-1 small" align="center">
 					<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>

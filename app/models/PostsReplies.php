@@ -102,7 +102,7 @@ class PostsReplies extends Model
 			/**
 			 * Notify users that always want notifications
 			 */
-			foreach (Users::find('notifications = "Y"') as $user) {
+			foreach (Users::find(array('notifications = "Y"', 'columns' => 'id')) as $user) {
 				if ($this->users_id != $user->id) {
 					$notification = new Notifications();
 					$notification->users_id = $user->id;
