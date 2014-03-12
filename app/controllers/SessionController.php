@@ -76,7 +76,7 @@ class SessionController extends Controller
 			$githubUser = new GithubUsers($response['access_token']);
 
 			if (!$githubUser->isValid()) {
-				$this->flashSession->error('Invalid Github response');
+				$this->flashSession->error('Invalid Github response. Please try again');
 				return $this->indexRedirect();
 			}
 
@@ -95,7 +95,14 @@ class SessionController extends Controller
 			 */
 			$user->name = $githubUser->getName();
 			$user->login = $githubUser->getLogin();
-			$user->email = $githubUser->getEmail();
+			$email = $githubUser->getEmail();
+			if (is_string($email)) {
+				$user->email = $email;
+			} else {
+				if (is_array($email)) {
+					$user->email = $email[0];
+				}
+			}
 			$user->gravatar_id = $githubUser->getGravatarId();
 			$user->increaseKarma(Karma::LOGIN);
 
@@ -159,7 +166,7 @@ class SessionController extends Controller
 			return $this->discussionsRedirect();
 		}
 
-		$this->flashSession->error('Invalid Github response');
+		$this->flashSession->error('Invalid Github response. Please try again');
 		return $this->discussionsRedirect();
     }
 
