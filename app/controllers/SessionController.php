@@ -100,7 +100,9 @@ class SessionController extends Controller
 				$user->email = $email;
 			} else {
 				if (is_array($email)) {
-					$user->email = $email[0];
+					if (isset($email['email'])) {
+						$user->email = $email['email'];
+					}
 				}
 			}
 			$user->gravatar_id = $githubUser->getGravatarId();
@@ -128,8 +130,12 @@ class SessionController extends Controller
 				$this->flashSession->success('Welcome back ' . $user->name);
 			}
 
-			if (strpos($user->email, '@users.noreply.github.com') !== false) {
-				$this->flashSession->notice('Your current e-mail: ' . $this->escaper->escapeHtml($user->email) . ' does not allow us to send you e-mail notifications');
+			if ($user->email) {
+				if (strpos($user->email, '@users.noreply.github.com') !== false) {
+					$this->flashSession->notice('Your current e-mail: ' . $this->escaper->escapeHtml($user->email) . ' does not allow us to send you e-mail notifications');
+				}
+			} else {
+				$this->flashSession->notice('We weren\'t able to obtain your e-mail address from Github, we can\'t send you e-mail notifications');
 			}
 
 			if ($user->getOperationMade() != Model::OP_CREATE) {
@@ -155,7 +161,7 @@ class SessionController extends Controller
 					));
 					if (count($bounces) >= NotificationsBounces::MAX_BOUNCES) {
 						$this->flashSession->notice('Due to a repeated number of email bounces we have disabled email
-							notifications for your email. You can renable them in your settings');
+							notifications for your email. You can re-enable them in your settings');
 						$user->notifications = 'N';
 						$user->save();
 					}
