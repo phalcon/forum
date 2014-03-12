@@ -37,8 +37,12 @@ class SendSpool extends Injectable
 		return $text;
 	}
 
-	public function send($notification)
+	public function send(Notifications $notification)
 	{
+		if ($notification->sent == 'Y') {
+			return;
+		}
+
 		$post = $notification->post;
 		$user = $notification->user;
 		if ($notification->type != 'P') {

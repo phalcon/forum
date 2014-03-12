@@ -519,5 +519,4 @@ class RepliesController extends \Phalcon\Mvc\Controller
 		));
 	}
 
-
 }
