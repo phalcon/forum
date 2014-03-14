@@ -14,6 +14,13 @@
   +------------------------------------------------------------------------+
 */
 
+if (typeof String.prototype.trim === "undefined") {
+    String.prototype.trim = function()
+    {
+        return String(this).replace(/^\s+|\s+$/g, '');
+    };
+}
+
 /**
  * Forum
  */
@@ -308,6 +315,18 @@ var Forum = {
 		}
 	},
 
+	reloadCategories: function(event)
+	{
+		if ($('#categories-dropdown').html().trim() == '') {
+			$.ajax({
+				method: 'GET',
+				url: Forum._uri + 'reload-categories',
+			}).done(function(response){
+				$('#categories-dropdown').html(response);
+			});
+		}
+	},
+
 	/**
 	 * Add callbacks to edit/delete buttons
 	 */
@@ -355,6 +374,10 @@ var Forum = {
 
 		$('a.reply-accept').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.acceptAnswer);
+		});
+
+		$('a.categories-link').each(function(position, element) {
+			$(element).bind('click', {element: element}, Forum.reloadCategories);
 		});
 
 		var previewNavLinks = $('ul.preview-nav li');

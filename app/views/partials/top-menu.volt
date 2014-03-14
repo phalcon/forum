@@ -35,31 +35,31 @@
 
 			<li class="dropdown">
 
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Categories">
+				<a href="#" class="dropdown-toggle categories-link" data-toggle="dropdown" title="Categories">
 					<span class="glyphicon glyphicon-th-list"></span> <b class="caret"></b>
 				</a>
 
+				<ul class="dropdown-menu" id="categories-dropdown">
 				{% cache "sidebar" %}
-					<ul class="dropdown-menu">
-						{% if categories is defined %}
-							{% for category in categories %}
+						{%- if categories is defined -%}
+							{%- for category in categories -%}
 								<li>
-									{{ link_to('category/' ~ category.id ~ '/' ~ category.slug,
+									{{- link_to('category/' ~ category.id ~ '/' ~ category.slug,
 										category.name ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
-									}}
+									-}}
 								</li>
-							{% endfor %}
-						{% endif %}
-					</ul>
+							{%- endfor -%}
+						{%- endif -%}
 				{% endcache %}
+				</ul>
 			</li>
 
 			<li>{{ link_to('help', '<span class="glyphicon glyphicon-question-sign"></span>', 'title': 'Help') }}</li>
 
-			{% if session.get('identity') %}
+			{%- if session.get('identity') -%}
 			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Settings') }}</li>
 			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>
-			{% endif %}
+			{%- endif -%}
 		  </ul>
 		</div>
 	  </div>

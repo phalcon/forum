@@ -28,8 +28,10 @@ use Phosphorum\Models\Posts,
 	Phosphorum\Models\IrcLog,
 	Phosphorum\Models\Users,
 	Phosphorum\Models\Karma,
+
 	Phalcon\Http\Response,
-	Phalcon\Mvc\Controller;
+	Phalcon\Mvc\Controller,
+	Phalcon\Mvc\View;
 
 class DiscussionsController extends Controller
 {
@@ -142,7 +144,9 @@ class DiscussionsController extends Controller
 		$itemBuilder->andWhere('p.deleted = 0');
 		$totalBuilder->andWhere('p.deleted = 0');
 
-		$itemBuilder->offset((int) $offset);
+		if ($offset > 0) {
+			$itemBuilder->offset((int) $offset);
+		}
 
 		$this->view->posts = $itemBuilder
 			->getQuery()
@@ -183,7 +187,7 @@ class DiscussionsController extends Controller
 		$posts = $itemBuilder
 			->where('p.categories_id = ?0 AND p.deleted = 0')
 			->orderBy('p.created_at DESC')
-			->offset($offset)
+			->offset((int) $offset)
 			->getQuery()
 			->execute(array($categoryId));
 
@@ -200,7 +204,7 @@ class DiscussionsController extends Controller
 		$this->view->posts = $posts;
 		$this->view->totalPosts = $totalPosts;
 		$this->view->currentOrder = null;
-		$this->view->offset = $offset;
+		$this->view->offset = (int) $offset;
 		$this->view->paginatorUri = 'category/' . $category->id . '/' . $category->slug;
 	}
 
@@ -792,7 +796,7 @@ class DiscussionsController extends Controller
 
 		$q = $this->request->getQuery('q');
 
-		$queryTerms = '%'.preg_replace('/[ \t]+/', '%', $q).'%';
+		$queryTerms = '%' . preg_replace('/[ \t]+/', '%', $q) . '%';
 
 		$totalBuilder->where('p.title LIKE ?0');
 
@@ -817,6 +821,16 @@ class DiscussionsController extends Controller
 		$this->view->currentOrder = null;
 		$this->view->offset = 0;
 		$this->view->paginatorUri = 'search';
+	}
+
+	public function reloadCategoriesAction()
+	{
+		$this->view->categories = Categories::find(array(
+			'order' => 'number_posts DESC, name'
+		));
+
+		$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+		$this->view->getCache()->delete('sidebar');
 	}
 
 	/**

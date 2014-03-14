@@ -67,6 +67,21 @@ $router->add('/hook/mail-reply', array(
 	'action' => 'mailReply'
 ));
 
+$router->add('/search', array(
+	'controller' => 'discussions',
+	'action' => 'search'
+));
+
+$router->add('/settings', array(
+	'controller' => 'discussions',
+	'action' => 'settings'
+));
+
+$router->add('/reload-categories', array(
+	'controller' => 'discussions',
+	'action' => 'reloadCategories'
+));
+
 $router->add('/preview', array(
 	'controller' => 'utils',
 	'action' => 'preview'
@@ -106,16 +121,6 @@ $router->add('/discussion/vote-up/{id:[0-9]+}', array(
 $router->add('/discussion/vote-down/{id:[0-9]+}', array(
 	'controller' => 'discussions',
 	'action' => 'voteDown'
-));
-
-$router->add('/search', array(
-	'controller' => 'discussions',
-	'action' => 'search'
-));
-
-$router->add('/settings', array(
-	'controller' => 'discussions',
-	'action' => 'settings'
 ));
 
 $router->add('/login/oauth/authorize', array(
