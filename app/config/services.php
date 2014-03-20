@@ -111,7 +111,7 @@ $di->set('db', function() use ($config) {
  */
 $di->set('queue', function() use ($config) {
 	return new Beanstalk(array(
-    	'host' => $config->beanstalk->host
+		'host' => $config->beanstalk->host
 	));
 }, true);
 
@@ -224,3 +224,4 @@ $di->set('markdown', function(){
 	$ciconia->addExtension(new \Ciconia\Extension\Gfm\UrlAutoLinkExtension());
 	return $ciconia;
 }, true);
+
