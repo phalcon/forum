@@ -7,7 +7,7 @@
 		{%- if canonical is defined -%}
 		<link rel="canonical" href="//forum.phalconphp.com/{{ canonical }}"/>
 		{%- endif -%}
-		{{- stylesheet_link("//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.1,prettify@0.1", false) -}}
+		{{- stylesheet_link("//cdn.jsdelivr.net/g/bootstrap@3.1(css/bootstrap.min.css),prettify@0.1(prettify.css)", false) -}}
 		{{- stylesheet_link("css/theme.css?v=2.0.0", true) -}}
 		{{- stylesheet_link("css/editor.css?v=2.0.0", true) -}}
 		{{- stylesheet_link("css/diff.css?v=2.0.0", true) -}}
