@@ -63,5 +63,9 @@ return new \Phalcon\Config(array(
 		'security' => "tls",
 		'username' => "",
 		'password' => ""
-	)
+	),
+
+    'beanstalk'=>array(
+        'host'=>'127.0.0.1'
+    )
 ));
