@@ -22,47 +22,47 @@ namespace Phosphorum\Models;
  */
 abstract class Karma
 {
-	const LOGIN = 5;
+    const LOGIN = 5;
 
-	const ADD_NEW_POST = 10;
+    const ADD_NEW_POST = 10;
 
-	const DELETE_POST = 15;
+    const DELETE_POST = 15;
 
-	const SOMEONE_REPLIED_TO_MY_POST = 5;
+    const SOMEONE_REPLIED_TO_MY_POST = 5;
 
-	const REPLY_ON_SOMEONE_ELSE_POST = 10;
+    const REPLY_ON_SOMEONE_ELSE_POST = 10;
 
-	const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
+    const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
 
-	const DELETE_REPLY_ON_SOMEONE_ELSE_POST = 10;
+    const DELETE_REPLY_ON_SOMEONE_ELSE_POST = 10;
 
-	const MODERATE_POST = 25;
+    const MODERATE_POST = 25;
 
-	const MODERATE_REPLY = 25;
+    const MODERATE_REPLY = 25;
 
-	const MODERATE_DELETE_POST = 10;
+    const MODERATE_DELETE_POST = 10;
 
-	const MODERATE_DELETE_REPLY = 10;
+    const MODERATE_DELETE_REPLY = 10;
 
-	const VISIT_ON_MY_POST = 1;
+    const VISIT_ON_MY_POST = 1;
 
-	const MODERATE_VISIT_POST = 4;
+    const MODERATE_VISIT_POST = 4;
 
-	const VISIT_POST = 2;
+    const VISIT_POST = 2;
 
-	const SOMEONE_DID_VOTE_MY_POST = 5;
+    const SOMEONE_DID_VOTE_MY_POST = 5;
 
-	const VOTE_ON_SOMEONE_ELSE_POST = 10;
+    const VOTE_ON_SOMEONE_ELSE_POST = 10;
 
-	const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
+    const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
 
-	const VOTE_UP_ON_MY_REPLY = 10;
+    const VOTE_UP_ON_MY_REPLY = 10;
 
-	const VOTE_UP_ON_SOMEONE_ELSE_REPLY = 10;
+    const VOTE_UP_ON_SOMEONE_ELSE_REPLY = 10;
 
-	const VOTE_DOWN_ON_SOMEONE_ELSE_REPLY = 10;
+    const VOTE_DOWN_ON_SOMEONE_ELSE_REPLY = 10;
 
-	const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
+    const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
 
-	const VOTE_DOWN_ON_MY_REPLY = 10;
+    const VOTE_DOWN_ON_MY_REPLY = 10;
 }
