@@ -1,30 +1,49 @@
 <?php
 
+/*
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
+*/
+
 namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
 
+/**
+ * Class NotificationsBounces
+ *
+ * @package Phosphorum\Models
+ */
 class NotificationsBounces extends Model
 {
 
-	public $id;
+    public $id;
 
-	public $email;
+    public $email;
 
-	public $status;
+    public $status;
 
-	public $diagnostic;
+    public $diagnostic;
 
-	public $created_at;
+    public $created_at;
 
-	public $reported;
+    public $reported;
 
-	const MAX_BOUNCES = 3;
+    const MAX_BOUNCES = 3;
 
-	public function beforeValidationOnCreate()
-	{
-		$this->reported = 'N';
-		$this->created_at = time();
-	}
-
+    public function beforeValidationOnCreate()
+    {
+        $this->reported   = 'N';
+        $this->created_at = time();
+    }
 }
