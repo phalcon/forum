@@ -17,42 +17,58 @@
 
 namespace Phosphorum\Models;
 
-use Phalcon\Mvc\Model,
-	Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
+/**
+ * Class PostsRepliesVotes
+ *
+ * @package Phosphorum\Models
+ */
 class PostsRepliesVotes extends Model
 {
 
-	public $id;
+    public $id;
 
-	public $posts_replies_id;
+    public $posts_replies_id;
 
-	public $users_id;
+    public $users_id;
 
-	public $created_at;
+    public $created_at;
 
-	public function initialize()
-	{
-		$this->belongsTo('posts_replies_id', 'Phosphorum\Models\PostsReplies', 'id', array(
-			'alias' => 'postReply'
-		));
+    public function initialize()
+    {
+        $this->belongsTo(
+            'posts_replies_id',
+            'Phosphorum\Models\PostsReplies',
+            'id',
+            array(
+                'alias' => 'postReply'
+            )
+        );
 
-		$this->belongsTo('users_id', 'Phosphorum\Models\Users', 'id', array(
-			'alias' => 'user'
-		));
+        $this->belongsTo(
+            'users_id',
+            'Phosphorum\Models\Users',
+            'id',
+            array(
+                'alias' => 'user'
+            )
+        );
 
-		$this->addBehavior(new Timestampable(array(
-			'beforeValidationOnCreate' => array(
-				'field' => 'created_at'
-			)
-        )));
-	}
+        $this->addBehavior(
+            new Timestampable(array(
+                'beforeValidationOnCreate' => array(
+                    'field' => 'created_at'
+                )
+            ))
+        );
+    }
 
-	public function afterSave()
-	{
-		if ($this->id) {
-			$this->postReply->clearCache();
-		}
-	}
-
+    public function afterSave()
+    {
+        if ($this->id) {
+            $this->postReply->clearCache();
+        }
+    }
 }
