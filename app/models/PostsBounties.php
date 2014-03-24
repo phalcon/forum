@@ -23,6 +23,9 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class PostsBounties
  *
+ * @property \Phosphorum\Models\Posts post
+ * @property \Phosphorum\Models\Users user
+ *
  * @package Phosphorum\Models
  */
 class PostsBounties extends Model

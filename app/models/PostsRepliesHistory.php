@@ -22,6 +22,8 @@ use Phalcon\Mvc\Model;
 /**
  * Class PostsRepliesHistory
  *
+ * @property \Phosphorum\Models\PostsReplies postReply
+ *
  * @package Phosphorum\Models
  */
 class PostsRepliesHistory extends Model

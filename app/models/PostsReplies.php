@@ -23,6 +23,10 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class PostsReplies
  *
+ * @property \Phosphorum\Models\Posts        post
+ * @property \Phosphorum\Models\PostsReplies postReplyTo
+ * @property \Phosphorum\Models\Users        user
+ *
  * @package Phosphorum\Models
  */
 class PostsReplies extends Model

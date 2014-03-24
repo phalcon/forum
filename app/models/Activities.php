@@ -23,6 +23,9 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class Activities
  *
+ * @property \Phosphorum\Models\Users user
+ * @property \Phosphorum\Models\Posts post
+ *
  * @package Phosphorum\Models
  */
 class Activities extends Model

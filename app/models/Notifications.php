@@ -23,6 +23,10 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class Notifications
  *
+ * @property \Phosphorum\Models\Users        user
+ * @property \Phosphorum\Models\Posts        post
+ * @property \Phosphorum\Models\PostsReplies reply
+ *
  * @package Phosphorum\Models
  */
 class Notifications extends Model

@@ -22,6 +22,8 @@ use Phalcon\Mvc\Model;
 /**
  * Class PostsViews
  *
+ * @property \Phosphorum\Models\Posts post
+ *
  * @package Phosphorum\Models
  */
 class PostsViews extends Model
