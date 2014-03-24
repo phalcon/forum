@@ -6,55 +6,109 @@
 
 require 'cli-bootstrap.php';
 
+$faker = Faker\Factory::create();
+$log   = new Phalcon\Logger\Adapter\Stream('php://stdout');
 
-for ( $i = 0; $i <= 20; $i++ ) {
+$log->info('Start');
 
-    $title   = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 50);
-    $content = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 265);
+/** @var Phalcon\Db\AdapterInterface $database */
+$database = $di->getShared('db');
 
-    $title   = chunk_split($title , rand(3 , 10) , ' ');
-    $content = chunk_split($content , rand(3 , 10) , ' ');
+$database->begin();
 
+for ($i = 0; $i <= 20; $i++) {
 
-    $post       = new Phosphorum\Models\Categories();
-    $post->name = $title;
-    $post->slug = Phalcon\Tag::friendlyTitle($title);
+    $title = $faker->company;
 
-    if ( !$post->save() ) {
+    $category               = new Phosphorum\Models\Categories();
+    $category->name         = $title;
+    $category->slug         = Phalcon\Tag::friendlyTitle($title);
+    $category->number_posts = 0;
 
-        var_dump($post->getMessages());
+    if (!$category->save()) {
+
+        var_dump($category->getMessages());
+        $database->rollback();
         break;
     }
 
+    $log->info('Category: '.$category->name);
 }
 
-for ( $i = 0; $i <= 500; $i++ ) {
+for ($i = 0; $i <= 50; $i++) {
 
-    $title   = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 50);
-    $content = Phalcon\Text::random(Phalcon\Text::RANDOM_ALNUM , 265);
+    $user           = new Phosphorum\Models\Users();
+    $user->name     = $faker->name;
+    $user->login    = $faker->userName;
+    $user->email    = $faker->email;
+    $user->timezone = $faker->timezone;
 
-    $title   = chunk_split($title , rand(3 , 10) , ' ');
-    $content = chunk_split($content , rand(3 , 10) , ' ');
+    if (!$user->save()) {
 
-    $post                = new Phosphorum\Models\Posts();
-    $post->title         = $title;
-    $post->slug          = Phalcon\Tag::friendlyTitle($title);
-    $post->content       = $content;
-    $post->users_id      = 1;
-    $post->categories_id = mt_rand(1 , 20);
+        var_dump($user->getMessages());
+        $database->rollback();
+        break;
+    }
 
-    if ( !$post->save() ) {
+    $log->info('User: '.$user->name);
+}
+$database->commit();
+
+$categoryIds = Phosphorum\Models\Categories::find(['columns' => 'id'])->toArray();
+$userIds    = Phosphorum\Models\Users::find(['columns' => 'id'])->toArray();
+
+$database->begin();
+for ($i = 0; $i <= 500; $i++) {
+
+    $title   = $faker->company;
+    $content = $faker->text();
+
+    $post          = new Phosphorum\Models\Posts();
+    $post->title   = $title;
+    $post->slug    = Phalcon\Tag::friendlyTitle($title);
+    $post->content = $content;
+
+
+    $userRandId     = array_rand($userIds);
+    $post->users_id = $userIds[$userRandId]['id'];
+
+    $categoryRandId      = array_rand($categoryIds);
+    $post->categories_id = $categoryIds[$categoryRandId]['id'];
+
+    if (!$post->save()) {
 
         var_dump($post->getMessages());
+        $database->rollback();
         break;
     }
 
-    $post->category->number_posts++;
+    $log->info('Post: '.$post->title);
+}
+$database->commit();
 
-    if ( !$post->category->save() ) {
+$postIds    = Phosphorum\Models\Posts::find(['columns' => 'id'])->toArray();
 
-        var_dump($post->category->getMessages());
+$database->begin();
+for ($i = 0; $i <= 1000; $i++) {
+
+    $reply = new \Phosphorum\Models\PostsReplies();
+
+    $reply->content = $faker->paragraph();
+
+    $postRandId      = array_rand($postIds);
+    $reply->posts_id= $postIds[$postRandId]['id'];
+
+    $userRandId     = array_rand($userIds);
+    $reply->users_id = $userIds[$userRandId]['id'];
+
+    if (!$reply->save()) {
+
+        var_dump($reply->getMessages());
+        $database->rollback();
         break;
     }
+
+    $log->info('Reply to post: '.$reply->posts_id);
 }
 
+$database->commit();

@@ -17,15 +17,19 @@
 
 namespace Phosphorum\Models;
 
+/**
+ * Class Categories
+ *
+ * @package Phosphorum\Models
+ */
 class Categories extends CacheableModel
 {
 
-	public $id;
+    public $id;
 
-	public $name;
+    public $name;
 
-	public $slug;
+    public $slug;
 
-	public $number_posts;
-
+    public $number_posts;
 }

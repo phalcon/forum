@@ -33,14 +33,14 @@ return new \Phalcon\Config(array(
 		'pluginsDir'     => APP_PATH . '/app/plugins/',
 		'libraryDir'     => APP_PATH . '/app/library/',
 		'development'        => array(
-			'staticBaseUri'  => '/forum/',
-			'baseUri'        => '/forum/'
+			'staticBaseUri'  => '/',
+			'baseUri'        => '/'
 		),
 		'production'         => array(
 			'staticBaseUri'  => 'http://static.phosphorum.com/',
 			'baseUri'        => '/forum/'
 		),
-		'debug'          => false
+		'debug'          => true
 	),
 
 	'mandrillapp' => array(
@@ -63,5 +63,9 @@ return new \Phalcon\Config(array(
 		'security' => "tls",
 		'username' => "",
 		'password' => ""
-	)
+	),
+
+    'beanstalk'=>array(
+        'host'=>'127.0.0.1'
+    )
 ));

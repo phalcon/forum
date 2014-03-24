@@ -17,100 +17,116 @@
 
 namespace Phosphorum\Models;
 
-use Phalcon\Mvc\Model,
-	Phosphorum\Models\Activities,
-	Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
+/**
+ * Class Users
+ *
+ * @package Phosphorum\Models
+ */
 class Users extends Model
 {
 
-	public $id;
+    public $id;
 
-	public $name;
+    public $name;
 
-	public $login;
+    public $login;
 
-	public $token_type;
+    public $email;
 
-	public $access_token;
+    public $token_type;
 
-	public $gravatar_id;
+    public $access_token;
 
-	public $created_at;
+    public $gravatar_id;
 
-	public $modified_at;
+    public $created_at;
 
-	public $notifications;
+    public $modified_at;
 
-	public $timezone;
+    public $notifications;
 
-	public $moderator;
+    public $timezone;
 
-	public $karma;
+    public $moderator;
 
-	public $votes;
+    public $karma;
 
-	public $votes_points;
+    public $votes;
 
-	public function initialize()
-	{
-		$this->addBehavior(new Timestampable(array(
-			'beforeCreate' => array(
-				'field' => 'created_at'
-			),
-			'beforeUpdate' => array(
-				'field' => 'modified_at'
-			)
-        )));
-	}
+    public $votes_points;
 
-	public function increaseKarma($karma)
-	{
-		$this->karma += $karma;
-		$this->votes_points += $karma;
-	}
+    public function initialize()
+    {
+        $this->addBehavior(
+            new Timestampable(array(
+                'beforeCreate' => array(
+                    'field' => 'created_at'
+                ),
+                'beforeUpdate' => array(
+                    'field' => 'modified_at'
+                )
+            ))
+        );
+    }
 
-	public function decreaseKarma($karma)
-	{
-		$this->karma -= $karma;
-		$this->votes_points -= $karma;
-	}
+    /**
+     * @param $karma
+     */
+    public function increaseKarma($karma)
+    {
+        $this->karma += $karma;
+        $this->votes_points += $karma;
+    }
 
-	public function beforeCreate()
-	{
-		$this->notifications = 'P';
-		$this->moderator = 'N';
-		$this->karma += 45;
-		$this->votes_points += 45;
-		$this->votes = 0;
-		$this->timezone = 'Europe/London';
-	}
+    /**
+     * @param $karma
+     */
+    public function decreaseKarma($karma)
+    {
+        $this->karma -= $karma;
+        $this->votes_points -= $karma;
+    }
 
-	public function afterValidation()
-	{
-		if ($this->votes_points >= 50) {
-			$this->votes++;
-			$this->votes_points = 0;
-		}
-	}
+    public function beforeCreate()
+    {
+        $this->notifications = 'P';
+        $this->moderator     = 'N';
+        $this->karma += 45;
+        $this->votes_points += 45;
+        $this->votes    = 0;
+        $this->timezone = 'Europe/London';
+    }
 
-	public function afterCreate()
-	{
-		if ($this->id > 0) {
-			$activity = new Activities();
-			$activity->users_id = $this->id;
-			$activity->type = 'U';
-			$activity->save();
-		}
-	}
+    public function afterValidation()
+    {
+        if ($this->votes_points >= 50) {
+            $this->votes++;
+            $this->votes_points = 0;
+        }
+    }
 
-	public function getHumanKarma()
-	{
-		if ($this->karma >= 1000) {
-			return sprintf("%.1f", $this->karma / 1000) . 'k';
-		} else {
-			return $this->karma;
-		}
-	}
+    public function afterCreate()
+    {
+        if ($this->id > 0) {
+            $activity           = new Activities();
+            $activity->users_id = $this->id;
+            $activity->type     = 'U';
+            $activity->save();
+        }
+    }
 
+    /**
+     * @return string
+     */
+    public function getHumanKarma()
+    {
+        if ($this->karma >= 1000) {
+            return sprintf("%.1f", $this->karma / 1000) . 'k';
+        } else {
+            return $this->karma;
+        }
+    }
 }

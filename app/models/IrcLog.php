@@ -1,24 +1,42 @@
 <?php
 
+/*
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
+*/
+
 namespace Phosphorum\Models;
 
-use Phalcon\Mvc\Model,
-	Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Mvc\Model;
 
+/**
+ * Class IrcLog
+ *
+ * @package Phosphorum\Models
+ */
 class IrcLog extends Model
 {
 
-	public $id;
+    public $id;
 
-	public $who;
+    public $who;
 
-	public $content;
+    public $content;
 
-	public $datelog;
+    public $datelog;
 
-	public function initialize()
-	{
-		$this->setSource('irclog');
-	}
-
+    public function initialize()
+    {
+        $this->setSource('irclog');
+    }
 }
