@@ -27,6 +27,10 @@ use Phalcon\Mvc\Model;
  * @property \Phosphorum\Models\PostsReplies[] replies
  * @property \Phosphorum\Models\PostsViews[]   views
  *
+ * @method static Posts findFirstById
+ * @method static Posts findFirst($parameters=null)
+ * @method static Posts[] find($parameters=null)
+ *
  * @package Phosphorum\Models
  */
 class Posts extends Model

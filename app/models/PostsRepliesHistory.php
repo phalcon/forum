@@ -24,6 +24,8 @@ use Phalcon\Mvc\Model;
  *
  * @property \Phosphorum\Models\PostsReplies postReply
  *
+ * @method static PostsRepliesHistory[] find($parameters = null)
+ *
  * @package Phosphorum\Models
  */
 class PostsRepliesHistory extends Model

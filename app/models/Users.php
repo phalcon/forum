@@ -23,6 +23,12 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class Users
  *
+ * @method static Users findFirstById
+ * @method static Users findFirstByLogin
+ * @method static Users findFirstByName
+ * @method static Users findFirstByEmail
+ * @method static Users[] find($parameters=null)
+ *
  * @package Phosphorum\Models
  */
 class Users extends Model
