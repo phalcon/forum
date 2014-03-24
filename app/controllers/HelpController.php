@@ -17,44 +17,45 @@
 
 namespace Phosphorum\Controllers;
 
-use Phosphorum\Models\Users,
-	Phosphorum\Models\Posts,
-	Phosphorum\Models\PostsReplies,
-	Phalcon\Http\Response,
-	Phalcon\Mvc\Controller;
+use Phalcon\Http\Response;
+use Phalcon\Mvc\Controller;
 
+/**
+ * Class HelpController
+ *
+ * @package Phosphorum\Controllers
+ */
 class HelpController extends Controller
 {
 
-	public function initialize()
-	{
-		$this->tag->setTitle('Help');
-		$this->view->setTemplateBefore(array('discussions'));
-	}
+    public function initialize()
+    {
+        $this->tag->setTitle('Help');
+        $this->view->setTemplateBefore(array('discussions'));
+    }
 
-	public function indexAction()
-	{
+    public function indexAction()
+    {
 
-	}
+    }
 
-	public function karmaAction()
-	{
+    public function karmaAction()
+    {
 
-	}
+    }
 
-	public function markdownAction()
-	{
+    public function markdownAction()
+    {
 
-	}
+    }
 
-	public function votingAction()
-	{
+    public function votingAction()
+    {
 
-	}
+    }
 
-	public function moderatorsAction()
-	{
+    public function moderatorsAction()
+    {
 
-	}
-
+    }
 }

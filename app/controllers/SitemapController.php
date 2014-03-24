@@ -17,78 +17,92 @@
 
 namespace Phosphorum\Controllers;
 
-use Phosphorum\Models\Posts,
-	Phosphorum\Models\PostsReplies,
-	Phalcon\Http\Response;
+use Phalcon\Mvc\Controller;
+use Phosphorum\Models\Posts;
+use Phalcon\Http\Response;
 
-class SitemapController extends \Phalcon\Mvc\Controller
+/**
+ * Class SitemapController
+ *
+ * @package Phosphorum\Controllers
+ */
+class SitemapController extends Controller
 {
 
-	public function initialize()
-	{
-		$this->view->disable();
-	}
+    public function initialize()
+    {
+        $this->view->disable();
+    }
 
-	/**
-	 * Generate the website sitemap
-	 *
-	 */
-	public function indexAction()
-	{
+    /**
+     * Generate the website sitemap
+     *
+     */
+    public function indexAction()
+    {
 
-		$response = new Response();
+        $response = new Response();
 
-		$expireDate = new \DateTime();
-		$expireDate->modify('+1 day');
+        $expireDate = new \DateTime();
+        $expireDate->modify('+1 day');
 
-		$response->setExpires($expireDate);
+        $response->setExpires($expireDate);
 
-		$response->setHeader('Content-Type', "application/xml; charset=UTF-8");
+        $response->setHeader('Content-Type', "application/xml; charset=UTF-8");
 
-		$sitemap = new \DOMDocument("1.0", "UTF-8");
+        $sitemap = new \DOMDocument("1.0", "UTF-8");
 
-		$urlset = $sitemap->createElement('urlset');
-		$urlset->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-		$urlset->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $urlset = $sitemap->createElement('urlset');
+        $urlset->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $urlset->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-		$url = $sitemap->createElement('url');
-		$url->appendChild($sitemap->createElement('loc', 'http://forum.phalconphp.com/'));
-		$url->appendChild($sitemap->createElement('changefreq', 'daily'));
-		$url->appendChild($sitemap->createElement('priority', '1.0'));
-		$urlset->appendChild($url);
+        $url = $sitemap->createElement('url');
+        $url->appendChild($sitemap->createElement('loc', 'http://forum.phalconphp.com/'));
+        $url->appendChild($sitemap->createElement('changefreq', 'daily'));
+        $url->appendChild($sitemap->createElement('priority', '1.0'));
+        $urlset->appendChild($url);
 
-		$posts = Posts::find(array(
-			'columns' => '
+        $parametersPosts = array(
+            'columns' => '
 				id,
 				slug,
 				modified_at,
 				number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies as karma',
-			'order' => 'karma DESC'
-		));
+            'order'   => 'karma DESC'
+        );
+        $posts = Posts::find($parametersPosts);
 
-		$karma = Posts::maximum(array(
-			'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies'
-		));
+        $parametersKarma = array(
+            'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies'
+        );
+        $karma = Posts::maximum($parametersKarma);
 
-		foreach ($posts as $post) {
+        $modifiedAt = new \DateTime();
+        $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
 
-			$modifiedAt = new \DateTime();
-			$modifiedAt->setTimezone(new \DateTimeZone('UTC'));
-			$modifiedAt->setTimestamp($post->modified_at);
+        foreach ($posts as $post) {
 
-			$postKarma = $post->karma / ($karma + 100);
+            $modifiedAt->setTimestamp($post->modified_at);
 
-			$url = $sitemap->createElement('url');
-			$url->appendChild($sitemap->createElement('loc', 'http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug));
-			$url->appendChild($sitemap->createElement('priority', $postKarma > 0.7 ? sprintf("%0.1f", $postKarma) : sprintf("%0.1f", $postKarma + 0.25)));
-			$url->appendChild($sitemap->createElement('lastmod', $modifiedAt->format('Y-m-d\TH:i:s\Z')));
-			$urlset->appendChild($url);
-		}
+            $postKarma = $post->karma / ($karma + 100);
 
-		$sitemap->appendChild($urlset);
+            $url = $sitemap->createElement('url');
+            $href = 'http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug;
+            $url->appendChild(
+                $sitemap->createElement('loc', $href)
+            );
 
-		$response->setContent($sitemap->saveXML());
-		return $response;
-	}
+            $valuePriority = $postKarma > 0.7 ? sprintf("%0.1f", $postKarma) : sprintf("%0.1f", $postKarma + 0.25);
+            $url->appendChild(
+                $sitemap->createElement('priority', $valuePriority)
+            );
+            $url->appendChild($sitemap->createElement('lastmod', $modifiedAt->format('Y-m-d\TH:i:s\Z')));
+            $urlset->appendChild($url);
+        }
 
+        $sitemap->appendChild($urlset);
+
+        $response->setContent($sitemap->saveXML());
+        return $response;
+    }
 }
