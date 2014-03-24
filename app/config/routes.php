@@ -195,7 +195,7 @@ $router->add(
 );
 
 $router->add(
-    '/login/oauth/access_token',
+    '/login/oauth/access_token/',
     array(
        'controller' => 'session',
        'action'     => 'accessToken'
