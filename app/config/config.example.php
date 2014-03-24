@@ -37,7 +37,7 @@ return new \Phalcon\Config(array(
         ),
         'production'     => array(
             'staticBaseUri' => 'http://static.phosphorum.com/',
-            'baseUri'       => '/forum/'
+            'baseUri'       => '/'
         ),
         'debug'          => true
     ),
@@ -47,7 +47,7 @@ return new \Phalcon\Config(array(
     'github'      => array(
         'clientId'     => '',
         'clientSecret' => '',
-        'redirectUri'  => 'http://forum.flycon.loc/login/oauth/access_token/'
+        'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
     ),
     'amazonSns'   => array(
         'secret' => ''
