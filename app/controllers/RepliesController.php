@@ -480,7 +480,7 @@ class RepliesController extends \Phalcon\Mvc\Controller
 			$postReply->post->user->karma += 10;
 			$postReply->post->user->votes_points += 10;
 
-			$points = (30 + intval(abs($user->karma - $post->user->karma)/1000));
+			$points = (30 + intval(abs($user->karma - $postReply->user->karma)/1000));
 
 			$postBounty = PostsBounties::findFirst(array(
 				'users_id = ?0 AND posts_replies_id = ?1',
