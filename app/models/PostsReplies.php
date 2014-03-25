@@ -23,6 +23,14 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class PostsReplies
  *
+ * @property \Phosphorum\Models\Posts        post
+ * @property \Phosphorum\Models\PostsReplies postReplyTo
+ * @property \Phosphorum\Models\Users        user
+ *
+ * @method static PostsReplies findFirstById
+ * @method static PostsReplies findFirst($parameters = null)
+ * @method static PostsReplies[] find($parameters = null)
+ *
  * @package Phosphorum\Models
  */
 class PostsReplies extends Model

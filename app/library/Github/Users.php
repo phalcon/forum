@@ -19,64 +19,95 @@ namespace Phosphorum\Github;
 
 use Guzzle\Http\Client as HttpClient;
 
+/**
+ * Class Users
+ *
+ * @package Phosphorum\Github
+ */
 class Users
 {
 
-	protected $_endPoint = 'https://api.github.com';
+    protected $endPoint = 'https://api.github.com';
 
-	protected $_accessToken;
+    protected $accessToken;
 
-	public function __construct($accessToken)
-	{
-		$this->_accessToken = $accessToken;
-		$this->_response = $this->request('/user');
-	}
+    /**
+     * @param $accessToken
+     */
+    public function __construct($accessToken)
+    {
+        $this->accessToken = $accessToken;
+        $this->_response    = $this->request('/user');
+    }
 
-	public function request($method)
-	{
-		try {
-			$client = new HttpClient();
-			return json_decode($client->get($this->_endPoint . $method . '?access_token=' . $this->_accessToken)->send()->getBody(), true);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
+    /**
+     * @param $method
+     *
+     * @return mixed|null
+     */
+    public function request($method)
+    {
+        try {
+            $client = new HttpClient();
+            return json_decode(
+                $client->get($this->endPoint . $method . '?access_token=' . $this->accessToken)->send()->getBody(),
+                true
+            );
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 
-	public function isValid()
-	{
-		return is_array($this->_response);
-	}
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return is_array($this->_response);
+    }
 
-	public function getName()
-	{
-		if ($this->_response['name']) {
-			return $this->_response['name'];
-		}
-		return $this->_response['login'];
-	}
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        if ($this->_response['name']) {
+            return $this->_response['name'];
+        }
+        return $this->_response['login'];
+    }
 
-	public function getEmail()
-	{
-		if ($this->_response['email']) {
-			return $this->_response['email'];
-		}
+    /**
+     * @return null
+     */
+    public function getEmail()
+    {
+        if ($this->_response['email']) {
+            return $this->_response['email'];
+        }
 
-		$emails = $this->request('/user/emails');
-		if (count($emails)){
-			return $emails[0];
-		}
+        $emails = $this->request('/user/emails');
+        if (count($emails)) {
 
-		return null;
-	}
+            return $emails[0];
+        }
 
-	public function getLogin()
-	{
-		return $this->_response['login'];
-	}
+        return null;
+    }
 
-	public function getGravatarId()
-	{
-		return $this->_response['gravatar_id'];
-	}
+    /**
+     * @return mixed
+     */
+    public function getLogin()
+    {
+        return $this->_response['login'];
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getGravatarId()
+    {
+        return $this->_response['gravatar_id'];
+    }
 }

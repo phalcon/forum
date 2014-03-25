@@ -29,10 +29,10 @@ for ($i = 0; $i <= 20; $i++) {
 
         var_dump($category->getMessages());
         $database->rollback();
-        break;
+        die;
     }
 
-    $log->info('Category: '.$category->name);
+    $log->info('Category: ' . $category->name);
 }
 
 for ($i = 0; $i <= 50; $i++) {
@@ -47,15 +47,15 @@ for ($i = 0; $i <= 50; $i++) {
 
         var_dump($user->getMessages());
         $database->rollback();
-        break;
+        die;
     }
 
-    $log->info('User: '.$user->name);
+    $log->info('User: ' . $user->name);
 }
 $database->commit();
 
 $categoryIds = Phosphorum\Models\Categories::find(['columns' => 'id'])->toArray();
-$userIds    = Phosphorum\Models\Users::find(['columns' => 'id'])->toArray();
+$userIds     = Phosphorum\Models\Users::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 500; $i++) {
@@ -79,14 +79,14 @@ for ($i = 0; $i <= 500; $i++) {
 
         var_dump($post->getMessages());
         $database->rollback();
-        break;
+        die;
     }
 
-    $log->info('Post: '.$post->title);
+    $log->info('Post: ' . $post->title);
 }
 $database->commit();
 
-$postIds    = Phosphorum\Models\Posts::find(['columns' => 'id'])->toArray();
+$postIds = Phosphorum\Models\Posts::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 1000; $i++) {
@@ -96,19 +96,22 @@ for ($i = 0; $i <= 1000; $i++) {
     $reply->content = $faker->paragraph();
 
     $postRandId      = array_rand($postIds);
-    $reply->posts_id= $postIds[$postRandId]['id'];
+    $reply->posts_id = $postIds[$postRandId]['id'];
 
-    $userRandId     = array_rand($userIds);
+    $userRandId      = array_rand($userIds);
     $reply->users_id = $userIds[$userRandId]['id'];
 
     if (!$reply->save()) {
 
         var_dump($reply->getMessages());
         $database->rollback();
-        break;
+        die;
     }
 
-    $log->info('Reply to post: '.$reply->posts_id);
+    $reply->post->number_replies++;
+    $reply->save();
+
+    $log->info('Reply to post: ' . $reply->posts_id);
 }
 
 $database->commit();

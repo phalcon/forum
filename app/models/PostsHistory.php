@@ -23,6 +23,8 @@ use Phalcon\Mvc\Model;
 /**
  * Class PostsHistory
  *
+ * @property \Phosphorum\Models\Posts post
+ *
  * @package Phosphorum\Models
  */
 class PostsHistory extends Model

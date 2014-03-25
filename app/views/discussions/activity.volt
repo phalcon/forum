@@ -2,9 +2,7 @@
 
 <div class="view-discussion container">
 
-	<p>
-		<h1>Recent Activity</h1>
-	</p>
+    <h1>Recent Activity</h1>
 
 	<ul class="nav nav-tabs">
 		{%- set orders = ['': 'Forum', '/irc': 'IRC'] %}

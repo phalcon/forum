@@ -30,75 +30,75 @@
 			<tbody>
 				<tr>
 					<td>Signing up on the forum</td>
-					<td><span class="label label-success">+45</span></th>
+					<td><span class="label label-success">+45</span></td>
 				</tr>
 				<tr>
 					<td>Logging in on the forum</td>
-					<td><span class="label label-success">+5</span></th>
+					<td><span class="label label-success">+5</span></td>
 				</tr>
 				<tr>
 					<td>Viewing someone else's post</td>
-					<td><span class="label label-success">+2</span></th>
+					<td><span class="label label-success">+2</span></td>
 				</tr>
 				<tr>
 					<td>Getting a visit on your post</td>
-					<td><span class="label label-success">+1</span></th>
+					<td><span class="label label-success">+1</span></td>
 				</tr>
 				<tr>
 					<td>Submitting a new post</td>
-					<td><span class="label label-success">+10</span></th>
+					<td><span class="label label-success">+10</span></td>
 				</tr>
 				<tr>
 					<td>Adding a reply on someone else's post</td>
-					<td><span class="label label-success">+15</span></th>
+					<td><span class="label label-success">+15</span></td>
 				</tr>
 				<tr>
 					<td>Getting a reply by someone else on your post</td>
-					<td><span class="label label-success">+5</span></th>
+					<td><span class="label label-success">+5</span></td>
 				</tr>
 				<tr>
 					<td>Getting an own reply as 'accepted answer' by someone else</td>
-					<td><span class="label label-success">30 + abs(user_karma - your_karma) / 1000</span></th>
+					<td><span class="label label-success">30 + abs(user_karma - your_karma) / 1000</span></td>
 				</tr>
 				<tr>
 					<td>Accepting someone else's reply as 'accepted answer'</td>
-					<td><span class="label label-success">+10</span></th>
+					<td><span class="label label-success">+10</span></td>
 				</tr>
 				<tr>
 					<td>Voting someone else's post (positive or negative)</td>
-					<td><span class="label label-success">+10</span></th>
+					<td><span class="label label-success">+10</span></td>
 				</tr>
 				<tr>
 					<td>Getting a positive vote by someone else on your post</td>
-					<td><span class="label label-success">5 + abs(user_karma - your_karma) / 1000</span></th>
+					<td><span class="label label-success">5 + abs(user_karma - your_karma) / 1000</span></td>
 				</tr>
 				<tr>
 					<td>Getting a negative vote by someone else on your post</td>
-					<td><span class="label label-danger">-(5 + abs(user_karma - your_karma) / 1000)</span></th>
+					<td><span class="label label-danger">-(5 + abs(user_karma - your_karma) / 1000)</span></td>
 				</tr>
 				<tr>
 					<td>Getting a positive vote by original poster on your comment</td>
-					<td><span class="label label-success">15 + abs(user_karma - your_karma) / 1000</span></th>
+					<td><span class="label label-success">15 + abs(user_karma - your_karma) / 1000</span></td>
 				</tr>
 				<tr>
 					<td>Getting a negative vote by original poster on your comment</td>
-					<td><span class="label label-danger">-(15 + abs(user_karma - your_karma) / 1000)</span></th>
+					<td><span class="label label-danger">-(15 + abs(user_karma - your_karma) / 1000)</span></td>
 				</tr>
 				<tr>
 					<td>Getting a positive vote by someone else on your comment</td>
-					<td><span class="label label-success">10 + abs(user_karma - your_karma) / 1000</span></th>
+					<td><span class="label label-success">10 + abs(user_karma - your_karma) / 1000</span></td>
 				</tr>
 				<tr>
 					<td>Getting a negative vote by someone else on your comment</td>
-					<td><span class="label label-danger">-(10 + abs(user_karma - your_karma) / 1000)</span></th>
+					<td><span class="label label-danger">-(10 + abs(user_karma - your_karma) / 1000)</span></td>
 				</tr>
 				<tr>
 					<td>Deleting a post</td>
-					<td><span class="label label-danger">-15</span></th>
+					<td><span class="label label-danger">-15</span></td>
 				</tr>
 				<tr>
 					<td>Deleting a reply</td>
-					<td><span class="label label-danger">-15</span></th>
+					<td><span class="label label-danger">-15</span></td>
 				</tr>
 			</tbody>
 		</table>
@@ -118,11 +118,11 @@
 				</tr>
 				<tr>
 					<td>Improving a post or commentary, moving a post to the right category</td>
-					<td><span class="label label-success">+25</span></th>
+					<td><span class="label label-success">+25</span></td>
 				</tr>
 				<tr>
 					<td>Deleting an offensive or spammy post or comment</td>
-					<td><span class="label label-success">+10</span></th>
+					<td><span class="label label-success">+10</span></td>
 				</tr>
 			</thead>
 		</table>

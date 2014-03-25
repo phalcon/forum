@@ -23,6 +23,9 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class PostsVotes
  *
+ * @property \Phosphorum\Models\Posts post
+ * @property \Phosphorum\Models\Users user
+ *
  * @package Phosphorum\Models
  */
 class PostsVotes extends Model

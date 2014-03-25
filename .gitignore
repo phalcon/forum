@@ -12,3 +12,4 @@ vendor/
 .idea/
 composer.lock
 composer.phar
+app/config/config.php

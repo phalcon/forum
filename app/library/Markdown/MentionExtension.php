@@ -4,14 +4,20 @@ namespace Phosphorum\Markdown;
 
 use Ciconia\Common\Text;
 use Ciconia\Extension\ExtensionInterface;
+use Ciconia\Markdown;
 
+/**
+ * Class MentionExtension
+ *
+ * @package Phosphorum\Markdown
+ */
 class MentionExtension implements ExtensionInterface
 {
 
     /**
      * {@inheritdoc}
      */
-    public function register(\Ciconia\Markdown $markdown)
+    public function register(Markdown $markdown)
     {
         $markdown->on('inline', [$this, 'processMentions']);
     }

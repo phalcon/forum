@@ -22,6 +22,8 @@ use Phalcon\Mvc\Model;
 /**
  * Class PostsNotifications
  *
+ * @property \Phosphorum\Models\Posts post
+ *
  * @package Phosphorum\Models
  */
 class PostsNotifications extends Model
