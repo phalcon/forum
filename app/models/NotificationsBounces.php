@@ -22,6 +22,8 @@ use Phalcon\Mvc\Model;
 /**
  * Class NotificationsBounces
  *
+ * @method static NotificationsBounces[] find($parameters=null)
+ *
  * @package Phosphorum\Models
  */
 class NotificationsBounces extends Model
