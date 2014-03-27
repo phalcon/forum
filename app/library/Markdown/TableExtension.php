@@ -64,7 +64,8 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
     {
         $lessThanTab = $options['tabWidth'] - 1;
 
-        $text->replace('/
+        $text->replace(
+            '/
             (?:\n\n|\A)
             (?:[ ]{0,' . $lessThanTab . '}      #  table header
                 (?:\|?)                         #  optional outer pipe
@@ -77,29 +78,31 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
                 (?:\|?)                         #  optional outer pipe
             )\n
             (.*?)\n{2,}                         #3 table body
-        /smx', function (Text $w, Text $header, Text $rule, Text $body) use ($options) {
-            // Escape pipe to hash, so you can include pipe in cells by escaping it like this: `\\|`
-            $this->escapePipes($header);
-            $this->escapePipes($rule);
-            $this->escapePipes($body);
+            /smx',
+            function (Text $w, Text $header, Text $rule, Text $body) use ($options) {
+                // Escape pipe to hash, so you can include pipe in cells by escaping it like this: `\\|`
+                $this->escapePipes($header);
+                $this->escapePipes($rule);
+                $this->escapePipes($body);
 
-            try {
-                $baseTags    = $this->createBaseTags($rule->split('/\|/'));
-                $headerCells = $this->parseHeader($header, $baseTags);
-                $bodyRows    = $this->parseBody($body, $baseTags);
-            } catch (SyntaxError $e) {
-                if ($options['strict']) {
-                    throw $e;
+                try {
+                    $baseTags    = $this->createBaseTags($rule->split('/\|/'));
+                    $headerCells = $this->parseHeader($header, $baseTags);
+                    $bodyRows    = $this->parseBody($body, $baseTags);
+                } catch (SyntaxError $e) {
+                    if ($options['strict']) {
+                        throw $e;
+                    }
+
+                    return $w;
                 }
 
-                return $w;
+                $html = $this->createView($headerCells, $bodyRows);
+                $this->unescapePipes($html);
+
+                return "\n\n" . $html . "\n\n";
             }
-
-            $html = $this->createView($headerCells, $bodyRows);
-            $this->unescapePipes($html);
-
-            return "\n\n" . $html . "\n\n";
-        });
+        );
     }
 
     /**
@@ -183,17 +186,11 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
                 $cells->add($tag);
             });
         } catch (\OutOfBoundsException $e) {
-            throw new SyntaxError(
-                'Too much cells on table header.',
-                $this, $header, $this->markdown, $e
-            );
+            throw new SyntaxError('Too much cells on table header.', $this, $header, $this->markdown, $e);
         }
 
         if ($baseTags->count() != $cells->count()) {
-            throw new SyntaxError(
-                'Unexpected number of table cells in header.',
-                $this, $header, $this->markdown
-            );
+            throw new SyntaxError('Unexpected number of table cells in header.', $this, $header, $this->markdown);
         }
 
         return $cells;
@@ -226,15 +223,15 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
             } catch (\OutOfBoundsException $e) {
                 throw new SyntaxError(
                     sprintf('Too much cells on table body (row #%d).', $index),
-                    $this, $row, $this->markdown, $e
+                    $this,
+                    $row,
+                    $this->markdown,
+                    $e
                 );
             }
 
             if ($baseTags->count() != $cells->count()) {
-                throw new SyntaxError(
-                    'Unexpected number of table cells in body.',
-                    $this, $row, $this->markdown
-                );
+                throw new SyntaxError('Unexpected number of table cells in body.', $this, $row, $this->markdown);
             }
 
             $rows->add($cells);
@@ -258,5 +255,4 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
     {
         $text->replaceString($this->hash, '|');
     }
-
 }
