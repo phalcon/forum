@@ -43,27 +43,31 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
      */
     public function processBlockQuote(Text $text)
     {
-        $text->replace('{
-          (?:
+        $text->replace(
+            '{
+            (?:
             (?:
               ^[ \t]*&gt;[ \t]? # \'>\' at the start of a line
                 .+\n         # rest of the first line
               (?:.+\n)*      # subsequent consecutive lines
               \n*            # blanks
             )+
-          )
-        }mx', function (Text $bq) {
-            $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
-            $bq->replace('/^[ \t]+$/m', '');
+            )
+            }
+            mx',
+            function (Text $bq) {
+                $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
+                $bq->replace('/^[ \t]+$/m', '');
 
-            $this->markdown->emit('block', array($bq));
+                $this->markdown->emit('block', array($bq));
 
-            $bq->replace('|\s*<pre>.+?</pre>|s', function (Text $pre) {
-                return $pre->replace('/^  /m', '');
-            });
+                $bq->replace('|\s*<pre>.+?</pre>|s', function (Text $pre) {
+                    return $pre->replace('/^  /m', '');
+                });
 
-            return $this->getRenderer()->renderBlockQuote($bq) . "\n\n";
-        });
+                return $this->getRenderer()->renderBlockQuote($bq) . "\n\n";
+            }
+        );
     }
 
     /**
@@ -73,5 +77,4 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
     {
         return 'blockquote';
     }
-
 }

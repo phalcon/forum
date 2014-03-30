@@ -1,5 +1,8 @@
 Phosphorum 2
 ============
+
+[![Build Status](https://secure.travis-ci.org/phalcon/forum.svg?branch=master)](http://travis-ci.org/phalcon/forum)
+
 This is the official Phalcon Forum you can adapt it to your own needs or improve it if you want.
 
 Please write us if you have any feedback.

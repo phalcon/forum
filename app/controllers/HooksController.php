@@ -29,212 +29,209 @@ use Aws\Sns\MessageValidator\MessageValidator;
 
 class HooksController extends Controller
 {
+    /**
+     * This implements an inbound webhook from MandrillApp to reply to posts using emails
+     *
+     */
+    public function mailReplyAction()
+    {
 
-	/**
-	 * This implements an inbound webhook from MandrillApp to reply to posts using emails
-	 *
-	 */
-	public function mailReplyAction()
-	{
+        $response = new Response();
+        if ($this->request->isPost()) {
 
-		$response = new Response();
-		if ($this->request->isPost()) {
+            if ($this->config->mandrillapp->secret != $this->request->getQuery('secret')) {
+                return $response;
+            }
 
-			if ($this->config->mandrillapp->secret != $this->request->getQuery('secret')) {
-				return $response;
-			}
+            $events = @json_decode($this->request->getPost('mandrill_events'), true);
+            if (!is_array($events)) {
+                return $response;
+            }
 
-			$events = @json_decode($this->request->getPost('mandrill_events'), true);
-			if (!is_array($events)) {
-				return $response;
-			}
+            foreach ($events as $event) {
 
-			foreach ($events as $event) {
+                if (!isset($event['event'])) {
+                    continue;
+                }
 
-				if (!isset($event['event'])) {
-					continue;
-				}
+                $type = $event['event'];
+                if ($type != 'inbound') {
+                    continue;
+                }
 
-				$type = $event['event'];
-				if ($type != 'inbound') {
-					continue;
-				}
+                if (!isset($event['msg'])) {
+                    continue;
+                }
 
-				if (!isset($event['msg'])) {
-					continue;
-				}
+                $msg = $event['msg'];
+                if (!isset($msg['dkim'])) {
+                    continue;
+                }
 
-				$msg = $event['msg'];
-				if (!isset($msg['dkim'])) {
-					continue;
-				}
+                if (!isset($msg['from_email'])) {
+                    continue;
+                }
 
-				if (!isset($msg['from_email'])) {
-					continue;
-				}
+                if (!isset($msg['email'])) {
+                    continue;
+                }
 
-				if (!isset($msg['email'])) {
-					continue;
-				}
+                if (!isset($msg['text'])) {
+                    continue;
+                }
 
-				if (!isset($msg['text'])) {
-					continue;
-				}
+                $content = $msg['text'];
+                if (!trim($content)) {
+                    continue;
+                }
 
-				$content = $msg['text'];
-				if (!trim($content)) {
-					continue;
-				}
+                $user = Users::findFirstByEmail($msg['from_email']);
+                if (!$user) {
+                    continue;
+                }
 
-				$user = Users::findFirstByEmail($msg['from_email']);
-				if (!$user) {
-					continue;
-				}
+                $email = $msg['email'];
+                if (!preg_match('#^reply-i([0-9]+)-([0-9]+)@phosphorum.com$#', $email, $matches)) {
+                    continue;
+                }
 
-				$email = $msg['email'];
-				if (!preg_match('#^reply-i([0-9]+)-([0-9]+)@phosphorum.com$#', $email, $matches)) {
-					continue;
-				}
+                $post = Posts::findFirst($matches[1]);
+                if (!$post) {
+                    continue;
+                }
 
-				$post = Posts::findFirst($matches[1]);
-				if (!$post) {
-					continue;
-				}
+                if ($post->deleted) {
+                    continue;
+                }
 
-				if ($post->deleted) {
-					continue;
-				}
+                /**
+                 * Process replies to remove the base message
+                 */
+                $str = array();
+                $firstNoBaseReplyLine = false;
+                foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
 
-				/**
-				 * Process replies to remove the base message
-				 */
-				$str = array();
-				$firstNoBaseReplyLine = false;
-				foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
+                    if (!$firstNoBaseReplyLine) {
+                        if (substr($line, 0, 1) == '>') {
+                            continue;
+                        } else {
+                            $firstNoBaseReplyLine = true;
+                        }
+                    }
 
-					if (!$firstNoBaseReplyLine) {
-						if (substr($line, 0, 1) == '>') {
-							continue;
-						} else {
-							$firstNoBaseReplyLine = true;
-						}
-					}
+                    if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? ([^:]*):$/u', $line)) {
+                        continue;
+                    }
 
-					if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? ([^:]*):$/u', $line)) {
-						continue;
-					}
+                    if (preg_match('/^On [A-Za-z]{3} [0-9]{1,2}, [0-9]{4} [0-9]{1,2}:[0-9]{2} [AP]M, ([^:]*):$/u', $line)) {
+                        continue;
+                    }
 
-					if (preg_match('/^On [A-Za-z]{3} [0-9]{1,2}, [0-9]{4} [0-9]{1,2}:[0-9]{2} [AP]M, ([^:]*):$/u', $line)) {
-						continue;
-					}
+                    $str[] = $line;
+                }
 
-					$str[] = $line;
-				}
+                $content = join("\r\n", array_reverse($str));
 
-				$content = join("\r\n", array_reverse($str));
+                /**
+                 * Check if the question can have a bounty before add the reply
+                 */
+                $canHaveBounty = $post->canHaveBounty();
 
-				/**
-				 * Check if the question can have a bounty before add the reply
-				 */
-				$canHaveBounty = $post->canHaveBounty();
+                /**
+                 * Only update the number of replies if the user that commented isn't the same that posted
+                 */
+                if ($post->users_id != $user->id) {
 
-				/**
-				 * Only update the number of replies if the user that commented isn't the same that posted
-				 */
-				if ($post->users_id != $user->id) {
+                    $post->number_replies++;
+                    $post->modified_at = time();
+                    $post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
 
-					$post->number_replies++;
-					$post->modified_at = time();
-					$post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
+                    $user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
+                    $user->save();
+                }
 
-					$user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
-					$user->save();
-				}
+                $postReply = new PostsReplies();
+                $postReply->post = $post;
+                $postReply->users_id = $user->id;
+                $postReply->content = $content;
 
-				$postReply = new PostsReplies();
-				$postReply->post = $post;
-				$postReply->users_id = $user->id;
-				$postReply->content = $content;
+                if ($postReply->save()) {
 
-				if ($postReply->save()) {
+                    if ($post->users_id != $user->id && $canHaveBounty) {
+                        $bounty = $post->getBounty();
+                        $postBounty = new PostsBounties();
+                        $postBounty->posts_id = $post->id;
+                        $postBounty->users_id = $users->id;
+                        $postBounty->posts_replies_id = $postReply->id;
+                        $postBounty->points = $bounty['value'];
+                        if (!$postBounty->save()) {
+                            foreach ($postBounty->getMessages() as $message) {
+                                $this->flash->error($message);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-					if ($post->users_id != $user->id && $canHaveBounty) {
-						$bounty = $post->getBounty();
-						$postBounty = new PostsBounties();
-						$postBounty->posts_id = $post->id;
-						$postBounty->users_id = $users->id;
-						$postBounty->posts_replies_id = $postReply->id;
-						$postBounty->points = $bounty['value'];
-						if (!$postBounty->save()) {
-							foreach ($postBounty->getMessages() as $message) {
-								$this->flash->error($message);
-							}
-						}
-					}
-				}
-			}
-		}
+        return $response;
+    }
 
-		return $response;
-	}
+    /**
+     * Amazon SNS endpoint to receive bounces and complains notified by Amazon SES
+     *
+     */
+    public function mailBounceAction()
+    {
 
-	/**
-	 * Amazon SNS endpoint to receive bounces and complains notified by Amazon SES
-	 *
-	 */
-	public function mailBounceAction()
-	{
+        $response = new Response();
 
-		$response = new Response();
+        $body = $this->request->getRawBody();
 
-		$body = $this->request->getRawBody();
+        $data = @json_decode($body, true);
+        if (!is_array($data)) {
+            return $response;
+        }
 
-		$data = @json_decode($body, true);
-		if (!is_array($data)) {
-			return $response;
-		}
+        $message = Message::fromArray($data);
 
-		$message = Message::fromArray($data);
+        $validator = new MessageValidator();
+        if ($validator->isValid($message)) {
+            $notification = json_decode($message->get('Message'), true);
+            if (is_array($notification)) {
 
-		$validator = new MessageValidator();
-		if ($validator->isValid($message)) {
-		    $notification = json_decode($message->get('Message'), true);
-			if (is_array($notification)) {
+                do {
 
-			 	do {
+                    if (!isset($notification['notificationType'])) {
+                        break;
+                    }
 
-			 		if (!isset($notification['notificationType'])) {
-			 			break;
-			 		}
+                    if ($notification['notificationType'] == 'Bounce') {
 
-			 		if ($notification['notificationType'] == 'Bounce') {
+                        if (!isset($notification['bounce'])) {
+                            break;
+                        }
 
-			 			if (!isset($notification['bounce'])) {
-			 				break;
-			 			}
+                        $bounce = $notification['bounce'];
+                        if (!isset($bounce['bouncedRecipients']) || !is_array($bounce['bouncedRecipients'])) {
+                            break;
+                        }
 
-			 			$bounce = $notification['bounce'];
-			 			if (!isset($bounce['bouncedRecipients']) || !is_array($bounce['bouncedRecipients'])) {
-			 				break;
-			 			}
+                        foreach ($bounce['bouncedRecipients'] as $recipient) {
+                            $notificationBounce = new NotificationsBounces();
+                            $notificationBounce->email = $recipient['emailAddress'];
+                            $notificationBounce->status = $recipient['status'];
+                            $notificationBounce->diagnostic = $recipient['diagnosticCode'];
+                            $notificationBounce->save();
+                        }
 
-			 			foreach ($bounce['bouncedRecipients'] as $recipient) {
-			 				$notificationBounce = new NotificationsBounces();
-			 				$notificationBounce->email = $recipient['emailAddress'];
-			 				$notificationBounce->status = $recipient['status'];
-			 				$notificationBounce->diagnostic = $recipient['diagnosticCode'];
-			 				$notificationBounce->save();
-			 			}
+                    }
 
-			 		}
+                } while (0);
 
-			 	} while (0);
+            }
+        }
 
-			}
-		}
-
-		return $response;
-	}
-
+        return $response;
+    }
 }
-
