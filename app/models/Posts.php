@@ -28,8 +28,9 @@ use Phalcon\Mvc\Model;
  * @property \Phosphorum\Models\PostsViews[]   views
  *
  * @method static Posts findFirstById
- * @method static Posts findFirst($parameters=null)
- * @method static Posts[] find($parameters=null)
+ * @method static Posts findFirst($parameters = null)
+ * @method static Posts[] find($parameters = null)
+ * @method PostsReplies[] getReplies
  *
  * @package Phosphorum\Models
  */
@@ -226,15 +227,11 @@ class Posts extends Model
      */
     public function getRecentUsers()
     {
-        $number = 0;
+
         $users  = array($this->user->id => array($this->user->login, $this->user->gravatar_id));
-        foreach ($this->getReplies(['order' => 'created_at DESC']) as $reply) {
+        foreach ($this->getReplies(['order' => 'created_at DESC', 'limit' => 3]) as $reply) {
             if (!isset($users[$reply->user->id])) {
                 $users[$reply->user->id] = array($reply->user->login, $reply->user->gravatar_id);
-                $number++;
-            }
-            if ($number > 2) {
-                break;
             }
         }
         return $users;

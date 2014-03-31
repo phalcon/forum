@@ -41,6 +41,8 @@ use Phalcon\Mvc\View;
 class DiscussionsController extends Controller
 {
 
+    const POSTS_IN_PAGE = 40;
+
     /**
      * This initializes the timezone in each request
      */
@@ -76,20 +78,10 @@ class DiscussionsController extends Controller
 
         $itemBuilder
             ->columns(array('p.*'))
-            ->limit(40);
+            ->limit(self::POSTS_IN_PAGE);
 
         $totalBuilder
             ->columns('COUNT(*) AS count');
-
-        /**
-         * Query the categories ordering them by number_posts
-         */
-        if (!$this->view->getCache()->exists('sidebar')) {
-            $parameters             = array(
-                'order' => 'number_posts DESC, name'
-            );
-            $this->view->categories = Categories::find($parameters);
-        }
 
         return array($itemBuilder, $totalBuilder);
     }
@@ -97,7 +89,7 @@ class DiscussionsController extends Controller
     /**
      * Shows latest posts using an order clause
      */
-    public function indexAction($order = null, $offset = 0)
+    public function 8($order = null, $offset = 0)
     {
 
         /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
@@ -121,30 +113,32 @@ class DiscussionsController extends Controller
             case 'hot':
                 $this->tag->setTitle('Hot Discussions');
                 $itemBuilder->orderBy('p.modified_at DESC');
-                $totalBuilder->orderBy('p.modified_at DESC');
                 break;
 
             case 'my':
                 $this->tag->setTitle('My Discussions');
                 if ($userId) {
-                    $params = array($userId);
-                    $itemBuilder->where('p.users_id = ?0');
-                    $totalBuilder->where('p.users_id = ?0');
+                    $params       = array($userId);
+                    $myConditions = 'p.users_id = ?0';
+                    $itemBuilder->where($myConditions);
+                    $totalBuilder->where($myConditions);
                 }
                 break;
 
             case 'unanswered':
                 $this->tag->setTitle('Unanswered Discussions');
-                $itemBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
-                $totalBuilder->where('p.number_replies = 0 AND p.accepted_answer <> "Y"');
+                $unansweredConditions = 'p.number_replies = 0 AND p.accepted_answer <> "Y"';
+                $itemBuilder->where($unansweredConditions);
+                $totalBuilder->where($unansweredConditions);
                 break;
 
             case 'answers':
                 $this->tag->setTitle('My Answers');
                 if ($userId) {
-                    $params = array($userId);
-                    $itemBuilder->where('r.users_id = ?0');
-                    $totalBuilder->where('r.users_id = ?0');
+                    $params            = array($userId);
+                    $answersConditions = 'r.users_id = ?0';
+                    $itemBuilder->where($answersConditions);
+                    $totalBuilder->where($answersConditions);
                 }
                 break;
 
@@ -152,14 +146,15 @@ class DiscussionsController extends Controller
                 $this->tag->setTitle('Discussions');
         }
 
-        $itemBuilder->andWhere('p.deleted = 0');
-        $totalBuilder->andWhere('p.deleted = 0');
+        $notDeleteConditions = 'p.deleted = 0';
+        $itemBuilder->andWhere($notDeleteConditions);
+        $totalBuilder->andWhere($notDeleteConditions);
 
         if ($offset > 0) {
             $itemBuilder->offset((int)$offset);
         }
 
-        $this->view->posts = $itemBuilder->getQuery()->execute($params);
+        $this->view->posts      = $itemBuilder->getQuery()->execute($params);
         $this->view->totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
 
         if (!$order) {
@@ -815,7 +810,7 @@ class DiscussionsController extends Controller
 
         $parameters             = array(
             'order' => 'created_at DESC',
-            'limit' => array('number' => 40, 'offset' => 0)
+            'limit' => array('number' => self::POSTS_IN_PAGE, 'offset' => 0)
         );
         $this->view->activities = Activities::find($parameters);
 
