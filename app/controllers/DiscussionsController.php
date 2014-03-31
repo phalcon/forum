@@ -89,7 +89,7 @@ class DiscussionsController extends Controller
     /**
      * Shows latest posts using an order clause
      */
-    public function 8($order = null, $offset = 0)
+    public function indexAction($order = null, $offset = 0)
     {
 
         /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
