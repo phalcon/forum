@@ -4,10 +4,10 @@
         "guzzle/guzzle": "~3.7",
 		"swiftmailer/swiftmailer": "@stable",
 		"kzykhys/ciconia": "~1.0.0",
-		"phpspec/php-diff": "dev-master",
-        "squizlabs/php_codesniffer": "1.5.2"
+		"phpspec/php-diff": "dev-master"
     },
     "require-dev": {
-        "fzaninotto/faker": "1.4.*@dev"
+        "fzaninotto/faker": "1.4.*@dev",
+        "squizlabs/php_codesniffer": "1.5.2"
     }
 }

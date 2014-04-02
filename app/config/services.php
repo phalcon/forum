@@ -235,17 +235,18 @@ $di->set(
 
         if ($config->application->debug) {
             $frontCache = new \Phalcon\Cache\Frontend\None();
+            return new Phalcon\Cache\Backend\Memory($frontCache);
         } else {
             //Cache data for one day by default
             $frontCache = new \Phalcon\Cache\Frontend\Output(array(
                 "lifetime" => 86400 * 30
             ));
-        }
 
-        return new FileCache($frontCache, array(
-            "cacheDir" => APP_PATH . "/app/cache/views/",
-            "prefix"   => "forum-cache-"
-        ));
+            return new FileCache($frontCache, array(
+                "cacheDir" => APP_PATH . "/app/cache/views/",
+                "prefix"   => "forum-cache-"
+            ));
+        }
     }
 );
 
@@ -254,17 +255,24 @@ $di->set(
  */
 $di->set(
     'modelsCache',
-    function () {
+    function () use ($config) {
 
-        //Cache data for one day by default
-        $frontCache = new \Phalcon\Cache\Frontend\Data(array(
-            "lifetime" => 86400 * 30
-        ));
+        if ($config->application->debug) {
 
-        return new \Phalcon\Cache\Backend\File($frontCache, array(
-            "cacheDir" => APP_PATH . "/app/cache/data/",
-            "prefix"   => "forum-cache-data-"
-        ));
+            $frontCache = new \Phalcon\Cache\Frontend\None();
+            return new Phalcon\Cache\Backend\Memory($frontCache);
+        } else {
+
+            //Cache data for one day by default
+            $frontCache = new \Phalcon\Cache\Frontend\Data(array(
+                "lifetime" => 86400 * 30
+            ));
+
+            return new \Phalcon\Cache\Backend\File($frontCache, array(
+                "cacheDir" => APP_PATH . "/app/cache/data/",
+                "prefix"   => "forum-cache-data-"
+            ));
+        }
     }
 );
 
