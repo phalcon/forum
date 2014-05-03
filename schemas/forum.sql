@@ -304,8 +304,27 @@ CREATE TABLE `users` (
   KEY `login` (`login`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1145 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+--
+-- Table structure for table `notifications_bounces`
+--
+
+DROP TABLE IF EXISTS `notifications_bounces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications_bounces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(120) NOT NULL,
+  `status` varchar(10) DEFAULT NULL,
+  `diagnostic` varchar(120) DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  `reported` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`,`reported`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
