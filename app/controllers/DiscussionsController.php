@@ -956,7 +956,7 @@ class DiscussionsController extends Controller
         $this->tag->setAutoEscape(false);
 
         $this->view->user      = $user;
-        $this->view->timezones = APP_PATH .'/app/config/timezones.php';
+        $this->view->timezones = require APP_PATH .'/app/config/timezones.php';
 
         $parametersNumberPosts   = array(
             'users_id = ?0 AND deleted = 0',
