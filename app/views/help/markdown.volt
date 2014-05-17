@@ -101,12 +101,14 @@ Nulla neque nisl, fringilla sed blandit non, pretium eu odio.
 		<h3>Code Blocks</h3>
 	</p>
 
+**Preferred method**
 <p>
 <pre>
-Lorem ipsum dolor sit amet
+```php
+&lt;?php
 
-    consectetur adipiscing elit.
-    Nulla neque nisl, fringilla sed blandit non, pretium eu odio.
+require __DIR__ . '/vendor/autoload.php';
+```
 </pre>
 </p>
 
@@ -121,13 +123,15 @@ $ sudo ./install
 
 <p>
 <pre>
-```php
-&lt;?php
+Lorem ipsum dolor sit amet
 
-require __DIR__ . '/vendor/autoload.php';
-```
+    consectetur adipiscing elit.
+    Nulla neque nisl, fringilla sed blandit non, pretium eu odio.
 </pre>
 </p>
+
+
+
 
 <p>
 	<h3>Inline Code</h3>
