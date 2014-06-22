@@ -97,7 +97,7 @@
 </div>
 
 {%- else -%}
-<div class="container">
+<div class="container" align="center">
 	<div class="alert alert-info">There are no posts here</div>
 </div>
 {%- endif -%}
