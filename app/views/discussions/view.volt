@@ -7,10 +7,19 @@
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
-		<p>This post has too many negative votes. The cause of this may be irrelevant information, inconsistent data,
-		 spam or aggressive vocabulary or tone, etc.</p>
+		<p>This post has too many negative votes. The cause of this may be irrelevant or controversial information
+			inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
+	</div>
+{% else %}
+	<div class="bs-callout bs-callout-success">
+		<h4>Solved thread</h4>
+		<p>This post </p>
 	</div>
 {%- endif -%}
+
+
+
+accepted_answer
 
 {%- if post.canHaveBounty() -%}
 {%- set bounty = post.getBounty() -%}

@@ -203,6 +203,14 @@ $router->add(
 );
 
 $router->add(
+    '/login/oauth/access_token',
+    array(
+       'controller' => 'session',
+       'action'     => 'accessToken'
+    )
+);
+
+$router->add(
     '/logout',
     array(
        'controller' => 'session',
