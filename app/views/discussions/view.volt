@@ -11,15 +11,14 @@
 			inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
 	</div>
 {% else %}
-	<div class="bs-callout bs-callout-success">
-		<h4>Solved thread</h4>
-		<p>This post </p>
-	</div>
+	{%- if post.accepted_answer == 'Y' -%}
+		<div class="bs-callout bs-callout-success">
+			<h4>Solved thread</h4>
+			<p>This post is marked as solved. If you think informations contained on this thread could help others by improving
+				the documentation, please collaborate submitting a pull request to its <a href="https://github.com/phalcon/docs">repository</a></p>
+		</div>
+	{%- endif -%}
 {%- endif -%}
-
-
-
-accepted_answer
 
 {%- if post.canHaveBounty() -%}
 {%- set bounty = post.getBounty() -%}

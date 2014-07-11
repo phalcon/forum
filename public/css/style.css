@@ -177,6 +177,11 @@ pre.prettyprint {
     border-color: #5bc0de;
 }
 
+.bs-callout-success {
+    background-color: #dff0d8;
+    border-color: #3c763d;
+}
+
 .bs-callout-danger {
     background-color: #fdf7f7;
     border-color: #d9534f;
