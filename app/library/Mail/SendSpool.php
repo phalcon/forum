@@ -74,45 +74,51 @@ class SendSpool extends Injectable
 
                 if (trim($escapedContent)) {
 
-                    $prerifiedContent = $this->_prerify($escapedContent);
-                    $htmlContent = nl2br($prerifiedContent);
+                    try {
 
-                    $textContent = $originalContent;
+                        $prerifiedContent = $this->_prerify($escapedContent);
+                        $htmlContent = nl2br($prerifiedContent);
 
-                    $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
-                    if ($notification->type == 'P') {
-                        $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                            PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">Phosphorum</a>. ';
-                    } else {
-                        $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                            PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
+                        $textContent = $originalContent;
+
+                        $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
+                        if ($notification->type == 'P') {
+                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
+                                PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">Phosphorum</a>. ';
+                        } else {
+                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
+                                PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
+                        }
+                        $htmlContent .= PHP_EOL . 'Change your e-mail preferences <a href="http://forum.phalconphp.com/settings">here</a></p>';
+
+                        $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
+                        $bodyMessage->setCharset('UTF-8');
+                        $message->attach($bodyMessage);
+
+                        $bodyMessage = new \Swift_MimePart($textContent, 'text/plain');
+                        $bodyMessage->setCharset('UTF-8');
+                        $message->attach($bodyMessage);
+
+                        if (!$this->transport) {
+
+                            $this->transport = \Swift_SmtpTransport::newInstance(
+                                $this->config->smtp->host,
+                                $this->config->smtp->port,
+                                $this->config->smtp->security
+                            );
+                            $this->transport->setUsername($this->config->smtp->username);
+                            $this->transport->setPassword($this->config->smtp->password);
+                        }
+
+                        if (!$this->mailer) {
+                            $this->mailer = \Swift_Mailer::newInstance($this->transport);
+                        }
+
+                        $this->mailer->send($message);
+
+                    } catch (\Exception $e) {
+                        echo $e->getMessage(), PHP_EOL;
                     }
-                    $htmlContent .= PHP_EOL . 'Change your e-mail preferences <a href="http://forum.phalconphp.com/settings">here</a></p>';
-
-                    $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
-                    $bodyMessage->setCharset('UTF-8');
-                    $message->attach($bodyMessage);
-
-                    $bodyMessage = new \Swift_MimePart($textContent, 'text/plain');
-                    $bodyMessage->setCharset('UTF-8');
-                    $message->attach($bodyMessage);
-
-                    if (!$this->transport) {
-
-                        $this->transport = \Swift_SmtpTransport::newInstance(
-                            $this->config->smtp->host,
-                            $this->config->smtp->port,
-                            $this->config->smtp->security
-                        );
-                        $this->transport->setUsername($this->config->smtp->username);
-                        $this->transport->setPassword($this->config->smtp->password);
-                    }
-
-                    if (!$this->mailer) {
-                        $this->mailer = \Swift_Mailer::newInstance($this->transport);
-                    }
-
-                    $this->mailer->send($message);
                 }
             }
 
