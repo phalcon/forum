@@ -26,6 +26,14 @@ $router->add(
 );
 
 $router->add(
+    '/help/about',
+    array(
+       'controller' => 'help',
+       'action'     => 'about'
+    )
+);
+
+$router->add(
     '/help/moderators',
     array(
        'controller' => 'help',

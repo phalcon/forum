@@ -14,8 +14,9 @@
 	{%- if post.accepted_answer == 'Y' -%}
 		<div class="bs-callout bs-callout-success">
 			<h4>Solved thread</h4>
-			<p>This post is marked as solved. If you think informations contained on this thread could help others by improving
-				the documentation, please collaborate submitting a pull request to its <a href="https://github.com/phalcon/docs">repository</a></p>
+			<p>This post is marked as solved. If you think the information contained on this thread must be part of the
+				the documentation, please collaborate submitting a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a> to its <a href="https://github.com/phalcon/docs">repository</a>.
+			</p>
 		</div>
 	{%- endif -%}
 {%- endif -%}

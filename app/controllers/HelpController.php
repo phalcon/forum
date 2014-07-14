@@ -58,4 +58,9 @@ class HelpController extends Controller
     {
 
     }
+
+    public function aboutAction()
+    {
+
+    }
 }

@@ -6,10 +6,13 @@
 		<li>{{ link_to('help', 'Help') }}</a></li>
 	</ol>
 
-	<h1>About Phalcon</h1>
+	<h1>About Phalcon/Phosphorum</h1>
 
 	<p>
-		Phalcon is an open source project and depends on volunteer efforts.
+		Phalcon/Phosphorum is an open source project and depends on volunteer efforts.
+		If you want to improve this forum please submit a
+		<a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>
+		to its <a href="https://github.com/phalcon/forum">repository</a>.
 	</p>
 
 </div>
