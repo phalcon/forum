@@ -57,24 +57,24 @@ class SendSpool extends Injectable
 
             if ($user->email && $user->notifications != 'N' && strpos($user->email, '@users.noreply.github.com') === false) {
 
-                $message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
-                $message->setTo(array($user->email => $user->name));
-                $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
+                try {
 
-                if ($notification->type == 'P') {
-                    $originalContent = $post->content;
-                    $escapedContent = $this->escaper->escapeHtml($post->content);
-                    $message->setFrom(array($from => $post->user->name));
-                } else {
-                    $reply = $notification->reply;
-                    $originalContent = $reply->content;
-                    $escapedContent = $this->escaper->escapeHtml($reply->content);
-                    $message->setFrom(array($from => $reply->user->name));
-                }
+                    $message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
+                    $message->setTo(array($user->email => $user->name));
+                    $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
 
-                if (trim($escapedContent)) {
+                    if ($notification->type == 'P') {
+                        $originalContent = $post->content;
+                        $escapedContent = $this->escaper->escapeHtml($post->content);
+                        $message->setFrom(array($from => $post->user->name));
+                    } else {
+                        $reply = $notification->reply;
+                        $originalContent = $reply->content;
+                        $escapedContent = $this->escaper->escapeHtml($reply->content);
+                        $message->setFrom(array($from => $reply->user->name));
+                    }
 
-                    try {
+                    if (trim($escapedContent)) {
 
                         $prerifiedContent = $this->_prerify($escapedContent);
                         $htmlContent = nl2br($prerifiedContent);
@@ -115,10 +115,9 @@ class SendSpool extends Injectable
                         }
 
                         $this->mailer->send($message);
-
-                    } catch (\Exception $e) {
-                        echo $e->getMessage(), PHP_EOL;
                     }
+                } catch (\Exception $e) {
+                    echo $e->getMessage(), PHP_EOL;
                 }
             }
 
