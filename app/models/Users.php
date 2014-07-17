@@ -100,7 +100,11 @@ class Users extends Model
     public function beforeSave()
     {
         if (!trim($this->name)) {
-            $this->name = 'No Name';
+            if ($this->login) {
+                $this->name = $this->login;
+            } else {
+                $this->name = 'No Name';
+            }
         }
     }
 
