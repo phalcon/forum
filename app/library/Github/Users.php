@@ -72,7 +72,9 @@ class Users
     public function getName()
     {
         if (isset($this->_response['name'])) {
-            return $this->_response['name'];
+            if ($this->_response['name']) {
+                return $this->_response['name'];
+            }
         }
         return $this->_response['login'];
     }
@@ -83,12 +85,13 @@ class Users
     public function getEmail()
     {
         if (isset($this->_response['email'])) {
-            return $this->_response['email'];
+            if ($this->_response['email'] && strpos($this->_response['email'], '@') !== false) {
+                return $this->_response['email'];
+            }
         }
 
         $emails = $this->request('/user/emails');
         if (count($emails)) {
-
             return $emails[0];
         }
 

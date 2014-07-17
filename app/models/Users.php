@@ -97,6 +97,13 @@ class Users extends Model
         $this->votes_points -= $karma;
     }
 
+    public function beforeSave()
+    {
+        if (!trim($user->name)) {
+            $user->name = 'No Name';
+        }
+    }
+
     public function beforeCreate()
     {
         $this->notifications = 'P';
