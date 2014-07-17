@@ -99,8 +99,8 @@ class Users extends Model
 
     public function beforeSave()
     {
-        if (!trim($user->name)) {
-            $user->name = 'No Name';
+        if (!trim($this->name)) {
+            $this->name = 'No Name';
         }
     }
 
