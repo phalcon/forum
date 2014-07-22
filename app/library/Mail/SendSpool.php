@@ -65,19 +65,19 @@ class SendSpool extends Injectable
 
                     if ($notification->type == 'P') {
                         $originalContent = $post->content;
-                        $escapedContent = $this->escaper->escapeHtml($post->content);
+                        $htmlContent = $this->markdown->render($post->content);
                         $message->setFrom(array($from => $post->user->name));
                     } else {
                         $reply = $notification->reply;
                         $originalContent = $reply->content;
-                        $escapedContent = $this->escaper->escapeHtml($reply->content);
+                        $htmlContent = $this->markdown->render($reply->content);
                         $message->setFrom(array($from => $reply->user->name));
                     }
 
                     if (trim($escapedContent)) {
 
-                        $prerifiedContent = $this->_prerify($escapedContent);
-                        $htmlContent = nl2br($prerifiedContent);
+                        //$prerifiedContent = $this->_prerify($escapedContent);
+                        //$htmlContent = nl2br($prerifiedContent);
 
                         $textContent = $originalContent;
 

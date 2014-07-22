@@ -22,6 +22,8 @@ namespace Phosphorum\Models;
  */
 abstract class Karma
 {
+    const INITIAL_KARMA = 45;
+
     const LOGIN = 5;
 
     const ADD_NEW_POST = 10;

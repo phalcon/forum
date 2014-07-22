@@ -65,6 +65,10 @@ $di->set(
             )
         );
 
+        $volt->getCompiler()->addFunction('number_format', function($resolvedArgs) {
+            return 'number_format(' . $resolvedArgs . ')';
+        });
+
         return $volt;
     },
     true
@@ -134,6 +138,11 @@ $di->set(
 $di->set(
     'queue',
     function () use ($config) {
+
+        if (!isset($config->beanstalk->host)) {
+            throw new \Exception('Beanstalk is not configured');
+        }
+
         return new Beanstalk(array(
             'host' => $config->beanstalk->host
         ));

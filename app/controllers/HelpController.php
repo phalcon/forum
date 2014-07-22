@@ -19,6 +19,10 @@ namespace Phosphorum\Controllers;
 
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
+use Phosphorum\Models\Posts;
+use Phosphorum\Models\Users;
+use Phosphorum\Models\Notifications;
+use Phosphorum\Models\IrcLog;
 
 /**
  * Class HelpController
@@ -62,5 +66,17 @@ class HelpController extends Controller
     public function aboutAction()
     {
 
+    }
+
+    public function statsAction()
+    {
+        $this->view->threads         = Posts::count();
+        $this->view->replies         = Posts::sum(array('column' => 'number_replies'));
+        $this->view->votes           = Posts::sum(array('column' => 'votes_up + votes_down'));
+        $this->view->users           = Users::count();
+        $this->view->karma           = Users::sum(array('column' => 'karma'));
+        $this->view->notifications   = Notifications::count();
+        $this->view->views           = Posts::sum(array('column' => 'number_views'));
+        $this->view->irc             = IrcLog::count();
     }
 }
