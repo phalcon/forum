@@ -18,9 +18,9 @@
 	<body>
 		{{ content() }}
 		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.1,prettify@0.1(prettify.js+lang-css.js+lang-sql.js)"></script>
-		{{ javascript_include("js/editor.js?v=2.0.2") }}
-		{{ javascript_include("js/forum.js?v=2.0.2") }}
-		{{ javascript_include("js/gs.js?v=2.0.2") }}
+		{{ javascript_include("js/editor.js?v=2.0.3") }}
+		{{ javascript_include("js/forum.js?v=2.0.3") }}
+		{{ javascript_include("js/gs.js?v=2.0.3") }}
 		<script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 	</body>
 </html>
