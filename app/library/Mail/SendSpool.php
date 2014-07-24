@@ -74,7 +74,7 @@ class SendSpool extends Injectable
                         $message->setFrom(array($from => $reply->user->name));
                     }
 
-                    if (trim($escapedContent)) {
+                    if (trim($originalContent)) {
 
                         //$prerifiedContent = $this->_prerify($escapedContent);
                         //$htmlContent = nl2br($prerifiedContent);
