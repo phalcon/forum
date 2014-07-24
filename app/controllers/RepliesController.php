@@ -477,7 +477,7 @@ class RepliesController extends Controller
     }
 
     /**
-     * Accepts a reply as answer
+     * Accepts a reply as correct answer
      */
     public function acceptAction($id = 0)
     {
@@ -538,8 +538,8 @@ class RepliesController extends Controller
 
         if ($postReply->post->users_id != $postReply->users_id) {
 
-            $postReply->post->user->karma += 10;
-            $postReply->post->user->votes_points += 10;
+            $postReply->post->user->karma += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
+            $postReply->post->user->votes_points += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
 
             $points = (30 + intval(abs($user->karma - $postReply->user->karma) / 1000));
 
@@ -557,8 +557,8 @@ class RepliesController extends Controller
             $postReply->user->votes_points += $points;
 
             if ($postReply->users_id != $user->id && $postReply->post->users_id != $user->id) {
-                $user->karma += 10;
-                $user->votes_points += 10;
+                $user->karma += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
+                $user->votes_points += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
             }
         }
 
@@ -576,6 +576,16 @@ class RepliesController extends Controller
                     return $response->setJsonContent($contentError);
                 }
             }
+        }
+
+        if ($user->id != $postReply->users_id) {
+            $activity                       = new ActivityNotifications();
+            $activity->users_id             = $postReply->users_id;
+            $activity->posts_id             = $postReply->post->id;
+            $activity->posts_replies_id     = $postReply->id;
+            $activity->users_origin_id      = $user->id;
+            $activity->type                 = 'A';
+            $activity->save();
         }
 
         $contentOk = array(

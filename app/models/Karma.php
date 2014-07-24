@@ -67,4 +67,6 @@ abstract class Karma
     const VOTE_DOWN_ON_MY_REPLY_ON_MY_POST = 15;
 
     const VOTE_DOWN_ON_MY_REPLY = 10;
+
+    const SOMEONE_ELSE_ACCEPT_YOUR_REPLY = 10;
 }

@@ -32,7 +32,11 @@
 							{%- endif -%}
 
 							{%- if activity.type == 'R' -%}
-								has upvoted in your reply in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug ~ '#C' ~ activity.posts_replies_id, activity.post.title|e) }}
+							has upvoted in your reply in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug ~ '#C' ~ activity.posts_replies_id, activity.post.title|e) }}
+							{%- endif -%}
+
+							{%- if activity.type == 'A' -%}
+							has accepted your reply in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug ~ '#C' ~ activity.posts_replies_id, activity.post.title|e) }}
 							{%- endif -%}
 
 							<span class="date"> {{ activity.getHumanCreatedAt() }}</span>

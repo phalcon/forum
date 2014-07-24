@@ -13,6 +13,7 @@
 		<li>{{ link_to('help/markdown', 'Using Markdown') }}</li>
 		<li>{{ link_to('help/voting', 'Feedback system') }}</li>
 		<li>{{ link_to('help/moderators', 'Posts/Comments Moderation') }}</li>
+		<li>{{ link_to('help/stats', 'Forum Statistics') }}</li>
 		<li>{{ link_to('help/about', 'About Phalcon/Phosphorum') }}</li>
 	</ul>
 
