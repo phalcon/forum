@@ -153,7 +153,7 @@ class Posts extends Model
             $activity           = new Activities();
             $activity->users_id = $this->users_id;
             $activity->posts_id = $this->id;
-            $activity->type     = 'P';
+            $activity->type     = Activities::NEW_POST;
             $activity->save();
 
             /**

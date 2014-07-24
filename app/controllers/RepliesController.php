@@ -23,6 +23,7 @@ use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\PostsRepliesHistory;
 use Phosphorum\Models\PostsRepliesVotes;
+use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\Karma;
 use Phalcon\Http\Response;
 
@@ -287,6 +288,16 @@ class RepliesController extends Controller
                     return $response->setJsonContent($contentError);
                 }
             }
+        }
+
+        if ($user->id != $postReply->users_id) {
+            $activity                       = new ActivityNotifications();
+            $activity->users_id             = $postReply->users_id;
+            $activity->posts_id             = $post->id;
+            $activity->posts_replies_id     = $postReply->id;
+            $activity->users_origin_id      = $user->id;
+            $activity->type                 = 'R';
+            $activity->save();
         }
 
         $contentOk = array(

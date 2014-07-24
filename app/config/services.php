@@ -27,6 +27,7 @@ use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Queue\Beanstalk;
+use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Ciconia\Ciconia;
 
 /**
@@ -285,6 +286,9 @@ $di->set(
     }
 );
 
+/**
+ * Markdown renderer
+ */
 $di->set(
     'markdown',
     function () {
@@ -295,6 +299,17 @@ $di->set(
         $ciconia->addExtension(new \Ciconia\Extension\Gfm\FencedCodeBlockExtension());
         $ciconia->addExtension(new \Ciconia\Extension\Gfm\UrlAutoLinkExtension());
         return $ciconia;
+    },
+    true
+);
+
+/**
+ * Real-Time notifications checker
+ */
+$di->set(
+    'notifications',
+    function () {
+        return new NotificationsChecker();
     },
     true
 );

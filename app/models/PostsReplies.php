@@ -124,7 +124,7 @@ class PostsReplies extends Model
             $activity           = new Activities();
             $activity->users_id = $this->users_id;
             $activity->posts_id = $this->posts_id;
-            $activity->type     = 'C';
+            $activity->type     = Activities::NEW_REPLY;
             $activity->save();
 
             $toNotify = array();
@@ -134,12 +134,22 @@ class PostsReplies extends Model
              */
             foreach (Users::find(array('notifications = "Y"', 'columns' => 'id')) as $user) {
                 if ($this->users_id != $user->id) {
+
                     $notification                   = new Notifications();
                     $notification->users_id         = $user->id;
                     $notification->posts_id         = $this->posts_id;
                     $notification->posts_replies_id = $this->id;
                     $notification->type             = 'C';
                     $notification->save();
+
+                    $activity                       = new ActivityNotifications();
+                    $activity->users_id             = $user->id;
+                    $activity->posts_id             = $this->posts_id;
+                    $activity->posts_replies_id     = $this->id;
+                    $activity->users_origin_id      = $this->users_id;
+                    $activity->type                 = 'C';
+                    $activity->save();
+
                     $toNotify[$user->id] = $notification->id;
                 }
             }
@@ -170,16 +180,30 @@ class PostsReplies extends Model
             foreach ($postsNotifications as $postNotification) {
                 if (!isset($toNotify[$postNotification->users_id])) {
                     if ($postNotification->users_id != $this->users_id) {
+
+                        /**
+                         * Generate an e-mail notification
+                         */
                         $notification                   = new Notifications();
                         $notification->users_id         = $postNotification->users_id;
                         $notification->posts_id         = $this->posts_id;
                         $notification->posts_replies_id = $this->id;
                         $notification->type             = 'C';
                         $notification->save();
+
+                        $activity                       = new ActivityNotifications();
+                        $activity->users_id             = $postNotification->users_id;
+                        $activity->posts_id             = $this->posts_id;
+                        $activity->posts_replies_id     = $this->id;
+                        $activity->users_origin_id      = $this->users_id;
+                        $activity->type                 = 'C';
+                        $activity->save();
+
                         $toNotify[$postNotification->users_id] = $notification->id;
                     }
                 }
             }
+
 
             /**
              * Queue notifications to be sent

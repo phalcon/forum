@@ -169,7 +169,6 @@ $router->add(
     )
 );
 
-
 $router->add(
     '/reply/history/{id:[0-9]+}',
     array(
@@ -231,6 +230,14 @@ $router->add(
     array(
        'controller' => 'session',
        'action'     => 'logout'
+    )
+);
+
+$router->add(
+    '/notifications',
+    array(
+       'controller' => 'discussions',
+       'action'     => 'notifications'
     )
 );
 

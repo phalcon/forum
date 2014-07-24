@@ -20,8 +20,9 @@ namespace Phosphorum\Controllers;
 use Phosphorum\Github\OAuth;
 use Phosphorum\Github\Users as GithubUsers;
 use Phosphorum\Models\Users as ForumUsers;
-use Phosphorum\Models\NotificationsBounces;
 use Phosphorum\Models\Karma;
+use Phosphorum\Models\NotificationsBounces;
+use Phosphorum\Models\ActivityNotifications;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Model;
 

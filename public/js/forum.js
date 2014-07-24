@@ -176,6 +176,7 @@ var Forum = {
 	 */
 	votePostDown: function(event)
 	{
+		alert(Forum._uri + 'discussion/vote-down/' + element.data('id'))
 		var element = $(event.data.element);
 		$.ajax({
 			dataType: 'json',

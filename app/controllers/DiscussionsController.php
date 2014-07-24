@@ -25,6 +25,7 @@ use Phosphorum\Models\PostsHistory;
 use Phosphorum\Models\PostsVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
+use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
@@ -695,6 +696,16 @@ class DiscussionsController extends Controller
             }
         }
 
+        if ($post->users_id != $user->id) {
+            $activity                       = new ActivityNotifications();
+            $activity->users_id             = $post->users_id;
+            $activity->posts_id             = $post->id;
+            $activity->posts_replies_id     = null;
+            $activity->users_origin_id      = $user->id;
+            $activity->type                 = 'P';
+            $activity->save();
+        }
+
         $contentOk = array(
             'status' => 'OK'
         );
@@ -969,6 +980,34 @@ class DiscussionsController extends Controller
             'bind' => array($user->id)
         );
         $this->view->numberReplies = PostsReplies::count($parametersNumberReplies);
+    }
+
+    /**
+     * Shows the latest notifications for the current user
+     */
+    public function notificationsAction($offset = 0)
+    {
+        $usersId = $this->session->get('identity');
+        if (!$usersId) {
+            $this->flashSession->error('You must be logged first');
+            return $this->response->redirect();
+        }
+
+        $user = Users::findFirstById($usersId);
+        if (!$user) {
+            $this->flashSession->error('The user does not exist');
+            return $this->response->redirect();
+        }
+
+        $this->view->user = $user;
+
+        $this->view->notifications = ActivityNotifications::find(array(
+            'users_id = ?0',
+            'bind'  => array($usersId),
+            'order' => 'created_at DESC'
+        ));
+
+        $this->tag->setTitle('Notifications');
     }
 
     /**

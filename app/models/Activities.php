@@ -41,6 +41,10 @@ class Activities extends Model
 
     public $created_at;
 
+    const NEW_POST = 'P';
+
+    const NEW_REPLY = 'C';
+
     public function initialize()
     {
         $this->belongsTo(

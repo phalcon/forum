@@ -25,18 +25,20 @@
 					</p>
 					<p>
 						<table class="table table-striped">
-						{% for activity in activities %}
-							<tr><td>
-								{% if activity.type == 'U' %}
-								has joined the forum
-								{% elseif activity.type == 'P' %}
-								has posted {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-								{% elseif activity.type == 'C' %}
-								has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
-								{% endif %}
-								<span class="date">{{ activity.getHumanCreatedAt() }}</span>
-							</td></tr>
-						{% endfor %}
+						{%- for activity in activities -%}
+							{%- if activity.post and activity.post.deleted != 1 -%}
+								<tr><td>
+									{%- if activity.type == 'U' -%}
+									has joined the forum
+									{%- elseif activity.type == 'P' -%}
+									has posted {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
+									{%- elseif activity.type == 'C' -%}
+									has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
+									{%- endif -%}
+									&nbsp;<span class="date">{{ activity.getHumanCreatedAt() }}</span>
+								</td></tr>
+							{%- endif -%}
+						{%- endfor -%}
 						</table>
 					</p>
 				</td>

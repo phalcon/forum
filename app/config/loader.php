@@ -22,11 +22,12 @@ $loader = new \Phalcon\Loader();
  */
 $loader->registerNamespaces(
     array(
-       'Phosphorum\Models'      => $config->application->modelsDir,
-       'Phosphorum\Controllers' => $config->application->controllersDir,
-       'Phosphorum\Markdown'    => $config->application->libraryDir . '/Markdown',
-       'Phosphorum\Github'      => $config->application->libraryDir . '/Github',
-       'Phosphorum\Mail'        => $config->application->libraryDir . '/Mail',
+       'Phosphorum\Models'        => $config->application->modelsDir,
+       'Phosphorum\Controllers'   => $config->application->controllersDir,
+       'Phosphorum\Markdown'      => $config->application->libraryDir . '/Markdown',
+       'Phosphorum\Github'        => $config->application->libraryDir . '/Github',
+       'Phosphorum\Mail'          => $config->application->libraryDir . '/Mail',
+       'Phosphorum\Notifications' => $config->application->libraryDir . '/Notifications'
     )
 );
 

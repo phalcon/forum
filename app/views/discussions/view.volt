@@ -76,6 +76,12 @@
 		</div>
 	</p>
 
+	{%- if moderator == 'Y' -%}
+		<ul class="nav navbar-nav navbar-right">
+
+		</ul>
+	{%- endif -%}
+
 	<div class="discussion">
 		<div class="row">
 			<div class="col-md-1 small" align="center">
