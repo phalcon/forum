@@ -79,7 +79,7 @@ class SendSpool extends Injectable
                         //$prerifiedContent = $this->_prerify($escapedContent);
                         //$htmlContent = nl2br($prerifiedContent);
 
-                        $textContent = $originalContent;
+                        $textContent = nl2br($originalContent);
 
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
                         if ($notification->type == 'P') {
@@ -120,12 +120,12 @@ class SendSpool extends Injectable
                     echo $e->getMessage(), PHP_EOL;
                 }
             }
+        }
 
-            $notification->sent = 'Y';
-            if ($notification->save() == false) {
-                foreach ($notification->getMessages() as $message) {
-                    echo $message->getMessage(), PHP_EOL;
-                }
+        $notification->sent = 'Y';
+        if ($notification->save() == false) {
+            foreach ($notification->getMessages() as $message) {
+                echo $message->getMessage(), PHP_EOL;
             }
         }
 
