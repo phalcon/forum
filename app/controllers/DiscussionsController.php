@@ -105,7 +105,6 @@ class DiscussionsController extends Controller
         /**
          * Create the conditions according to the parameter order
          */
-
         $userId = $this->session->get('identity');
 
         $params = null;
@@ -1004,6 +1003,7 @@ class DiscussionsController extends Controller
         $this->view->notifications = ActivityNotifications::find(array(
             'users_id = ?0',
             'bind'  => array($usersId),
+            'limit' => 100,
             'order' => 'created_at DESC'
         ));
 

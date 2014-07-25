@@ -8,6 +8,7 @@
 
 	<h1>Statistics</h1>
 
+	{% cache "stats" 3600 %}
 	<p>
 		<table class="table table-stripped" align="center" style="width:300px">
 			<tr>
@@ -44,5 +45,6 @@
 			</tr>
 		</table>
 	</p>
+	{% endcache %}
 
 </div>
