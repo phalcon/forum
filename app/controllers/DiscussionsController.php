@@ -481,6 +481,7 @@ class DiscussionsController extends Controller
              * Generate cannonical meta
              */
             $this->view->canonical = 'discussion/' . $post->id . '/' . $post->slug;
+            $this->view->author    = $post->user;
 
         } else {
 
