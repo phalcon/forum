@@ -46,4 +46,12 @@ class PostsViews extends Model
             )
         );
     }
+
+    public function clearCache()
+    {
+        if ($this->id) {
+            $viewCache = $this->getDI()->getViewCache();
+            $viewCache->delete('post-' . $this->posts_id);
+        }
+    }
 }
