@@ -43,8 +43,8 @@
 						</div>
 					</td>
 				</tr>
-				{% do activity.markAsRead() %}
 			{%- endif -%}
+			{% do activity.markAsRead() %}
 			{%- else -%}
 			<tr>
 				<td colspan="2" align="center">
