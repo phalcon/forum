@@ -68,6 +68,11 @@ class HelpController extends Controller
 
     }
 
+    public function createAction()
+    {
+
+    }
+
     public function statsAction()
     {
         $this->view->threads         = Posts::count();

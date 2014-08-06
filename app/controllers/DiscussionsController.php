@@ -219,7 +219,6 @@ class DiscussionsController extends Controller
             return $this->response->redirect();
         }
 
-
         $this->tag->setTitle('Start a Discussion');
 
         if ($this->request->isPost()) {
@@ -245,8 +244,13 @@ class DiscussionsController extends Controller
             foreach ($post->getMessages() as $message) {
                 $this->flash->error($message);
             }
-        }
 
+            $this->view->firstTime = false;
+
+        } else {
+
+            $this->view->firstTime = Posts::countByUsersId($usersId) == 0;
+        }
 
         $parameters = array(
             'order' => 'name'

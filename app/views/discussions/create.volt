@@ -22,6 +22,19 @@
                     suggest a new feature, please post it on <a href="https://github.com/phalcon/cphalcon/issues">Github</a> issues.</p>
             </div>
 
+            {% if firstTime %}
+                <div class="bs-callout bs-callout-warning">
+                    <h4>Your first post</h4>
+
+                    <p>
+                        You're about to create your first post in the forum.
+                        Please take a few minutes to read {{ link_to('help/create-post', 'some recommendations') }}
+                        to help others understand your problem and increase your chances of getting good answers
+                        that help you solve it more effectively.
+                    </p>
+                </div>
+            {% endif %}
+
             <form method="post" autocomplete="off" role="form">
 
                 <div class="form-group">

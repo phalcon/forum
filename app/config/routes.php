@@ -74,6 +74,14 @@ $router->add(
 );
 
 $router->add(
+    '/help/create-post',
+    array(
+       'controller' => 'help',
+       'action'     => 'create'
+    )
+);
+
+$router->add(
     '/help',
     array(
        'controller' => 'help',

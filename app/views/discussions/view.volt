@@ -7,8 +7,13 @@
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
-		<p>This post has too many negative votes. The cause of this may be irrelevant or controversial information
-			inconsistent data, spam or aggressive vocabulary or tone, etc.</p>
+		<p>This post has too many negative votes. The cause of this could be:
+			<ul>
+				<li>Irrelevant or controversial information</li>
+				<li>confusing question or not a real question</li>
+				<li>Aggressive vocabulary or xenophobic content</li>
+			</ul>
+		</p>
 	</div>
 {% else %}
 	{%- if post.accepted_answer == 'Y' -%}
@@ -338,4 +343,4 @@
 		</form>
 	</div>
 </div>
-{% endif %}
+{%- endif -%}
