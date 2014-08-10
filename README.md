@@ -19,6 +19,8 @@ php composer.phar install
 
 Requirements
 ------------
+Change the owner of `app/logs` and `app/cache` to whatever user your web server is running as.
+
 This application uses Github as authentication system, you need a client id and secret id
 to be set up in the configuration (app/config/config.php):
 
