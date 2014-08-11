@@ -11,7 +11,7 @@
 			<ul>
 				<li>Irrelevant or controversial information</li>
 				<li>confusing question or not a real question</li>
-				<li>Aggressive vocabulary or xenophobic content</li>
+				<li>Aggressive vocabulary, excesive rudeness, etc.</li>
 			</ul>
 		</p>
 	</div>

@@ -64,3 +64,4 @@ class Checker extends Injectable
     }
 
 }
+

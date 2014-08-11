@@ -233,7 +233,8 @@ $di->set(
         $dispatcher = new MvcDispatcher();
         $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
         return $dispatcher;
-    }
+    },
+    true
 );
 
 /**
