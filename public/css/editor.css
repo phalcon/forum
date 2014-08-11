@@ -16,11 +16,11 @@
 
 @font-face {
 	font-family: 'icomoon';
-	src:url('../fonts/icomoon.eot?v=2.0.4');
-	src:url('../fonts/icomoon.eot?#iefix&v=2.0.4') format('embedded-opentype'),
-		url('../fonts/icomoon.woff?v=2.0.4') format('woff'),
-		url('../fonts/icomoon.ttf?v=2.0.4') format('truetype'),
-		url('../fonts/icomoon.svg#icomoon&v=2.0.4') format('svg');
+	src:url('http://forum.phalconphp.com/fonts/icomoon.wofficomoon.eot?v=2.0.4');
+	src:url('http://forum.phalconphp.com/fonts/icomoon.eot?#iefix&v=2.0.4') format('embedded-opentype'),
+		url('http://forum.phalconphp.com/fonts/icomoon.woff?v=2.0.4') format('woff'),
+		url('http://forum.phalconphp.com/fonts/icomoon.ttf?v=2.0.4') format('truetype'),
+		url('http://forum.phalconphp.com/fonts/icomoon.svg#icomoon&v=2.0.4') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
