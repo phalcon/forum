@@ -237,7 +237,7 @@
 					<ul class="nav nav-tabs preview-nav">
 						<li class="active"><a href="#" onclick="return false">Comment</a></li>
 						<li><a href="#" onclick="return false">Preview</a></li>
-						<li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
+						<li class="pull-right">{{ link_to('help/markdown', 'Help', 'target': '_blank') }}</li>
 					</ul>
 
 					<form method="post" autocomplete="off" role="form">
