@@ -309,7 +309,8 @@
 </div>
 
 {%- if currentUser -%}
-<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true" data-backdrop="static"
+   data-keyboard="false">
 	<div class="modal-dialog">
 		<form method="post" autocomplete="off" role="form">
 			<div class="modal-content">

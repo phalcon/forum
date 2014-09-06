@@ -59,8 +59,8 @@ class RepliesController extends Controller
         }
 
         $parametersReply = array(
-            'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
-            'bind' => array($id, $usersId, $this->session->get('identity-moderator'))
+            'id = ?0',
+            'bind' => array($id)
         );
         $postReply = PostsReplies::findFirst($parametersReply);
         if ($postReply) {

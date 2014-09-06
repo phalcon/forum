@@ -15,8 +15,7 @@
 */
 
 if (typeof String.prototype.trim === "undefined") {
-    String.prototype.trim = function()
-    {
+    String.prototype.trim = function() {
         return String(this).replace(/^\s+|\s+$/g, '');
     };
 }
@@ -30,6 +29,9 @@ var Forum = {
 
 	_editor: null,
 
+	/**
+	 * Transform a comment into a editable box
+	 */
 	makeCommentEditable: function(response)
 	{
 		if (response.status == 'OK') {
@@ -78,6 +80,9 @@ var Forum = {
 		}
 	},
 
+	/**
+	 * Shows the reply box
+	 */
 	addBaseComment: function(response)
 	{
 		if (response.status == 'OK') {
@@ -128,7 +133,7 @@ var Forum = {
 	editComment: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			var content = $('div.post-content', element.parents()[2]);
 			$('div.posts-buttons', element.parents()[2]).hide();
 			if (content.is(':visible')) {
@@ -149,7 +154,7 @@ var Forum = {
 	replyReply: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$('#reply-id').val(element.data('id'))
 			$.ajax({
 				dataType: 'json',
@@ -166,7 +171,7 @@ var Forum = {
 	votePostUp: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'discussion/vote-up/' + element.data('id')
@@ -189,7 +194,7 @@ var Forum = {
 	votePostDown: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'discussion/vote-down/' + element.data('id')
@@ -212,7 +217,7 @@ var Forum = {
 	voteReplyUp: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'reply/vote-up/' + element.data('id')
@@ -235,7 +240,7 @@ var Forum = {
 	voteReplyDown: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'reply/vote-down/' + element.data('id')
@@ -258,7 +263,7 @@ var Forum = {
 	acceptAnswer: function(event)
 	{
 		var element = $(event.data.element);
-		if (element) {
+		if (element.length) {
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'reply/accept/' + element.data('id')
@@ -289,11 +294,13 @@ var Forum = {
 	postHistory: function(event)
 	{
 		var element = $(event.data.element);
-		$.ajax({
-			url: Forum._uri + 'discussion/history/' + element.data('id'),
-		}).done(function(response){
-			$('#historyBody').html(response);
-		});
+		if (element.length) {
+			$.ajax({
+				url: Forum._uri + 'discussion/history/' + element.data('id'),
+			}).done(function(response){
+				$('#historyBody').html(response);
+			});
+		}
 	},
 
 	/**

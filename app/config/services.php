@@ -27,6 +27,7 @@ use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Queue\Beanstalk;
+use Phalcon\Cache\Frontend\None as FrontendNone;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Ciconia\Ciconia;
 
@@ -245,8 +246,10 @@ $di->set(
     function () use ($config) {
 
         if ($config->application->debug) {
-            $frontCache = new \Phalcon\Cache\Frontend\None();
+
+            $frontCache = new FrontendNone();
             return new Phalcon\Cache\Backend\Memory($frontCache);
+
         } else {
             //Cache data for one day by default
             $frontCache = new \Phalcon\Cache\Frontend\Output(array(
@@ -270,8 +273,9 @@ $di->set(
 
         if ($config->application->debug) {
 
-            $frontCache = new \Phalcon\Cache\Frontend\None();
+            $frontCache = new FrontendNone();
             return new Phalcon\Cache\Backend\Memory($frontCache);
+
         } else {
 
             //Cache data for one day by default
