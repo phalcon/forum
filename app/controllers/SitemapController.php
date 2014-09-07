@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Controllers;
@@ -63,17 +63,15 @@ class SitemapController extends Controller
         $urlset->appendChild($url);
 
         $parametersPosts = array(
-            'columns' => '
-				id,
-				slug,
-				modified_at,
-				number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies as karma',
-            'order'   => 'karma DESC'
+            'conditions' => 'deleted != 1',
+            'columns'    => 'id, slug, modified_at, number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies AS karma',
+            'order'      => 'karma DESC'
         );
         $posts = Posts::find($parametersPosts);
 
         $parametersKarma = array(
-            'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies'
+            'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies',
+            'conditions' => 'deleted != 1'
         );
         $karma = Posts::maximum($parametersKarma);
 

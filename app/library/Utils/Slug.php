@@ -12,24 +12,27 @@
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
  | to license@phalconphp.com so we can send you a copy immediately.       |
-+------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
 */
 
-$loader = new \Phalcon\Loader();
+namespace Phosphorum\Utils;
 
 /**
- * We're a registering a set of directories taken from the configuration file
+ * Transforms a string or part thereof using an ICU transliterator.
  */
-$loader->registerNamespaces(
-    array(
-       'Phosphorum\Models'        => $config->application->modelsDir,
-       'Phosphorum\Controllers'   => $config->application->controllersDir,
-       'Phosphorum\Markdown'      => $config->application->libraryDir . '/Markdown',
-       'Phosphorum\Github'        => $config->application->libraryDir . '/Github',
-       'Phosphorum\Mail'          => $config->application->libraryDir . '/Mail',
-       'Phosphorum\Notifications' => $config->application->libraryDir . '/Notifications',
-       'Phosphorum\Utils'         => $config->application->libraryDir . '/Utils'
-    )
-);
-
-$loader->register();
+class Slug
+{
+    /**
+     * Creates a slug to be used for pretty URLs
+     *
+     * @param         $string
+     * @param  string $delimiter
+     * @return mixed
+     */
+    public static function generate($string, $delimiter = '-')
+    {
+        $string = transliterator_transliterate('Any-Latin; Latin-ASCII; [:Punctuation:] Remove; Lower()', $string);
+        $string = preg_replace('/[-\s]+/', $delimiter, $string);
+        return trim($string, $delimiter);
+    }
+}

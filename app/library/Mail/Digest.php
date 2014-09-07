@@ -17,8 +17,9 @@
 
 namespace Phosphorum\Mail;
 
-use Phosphorum\Models\Notifications;
 use Phalcon\Di\Injectable;
+use Phosphorum\Models\Posts;
+use Phosphorum\Models\Users;
 
 class Digest extends Injectable
 {
@@ -27,96 +28,107 @@ class Digest extends Injectable
 
     protected $mailer;
 
-    private function _prerify($text)
-    {
-        if (preg_match_all('#```([a-z]+)(.+)```([\n\r]+)?#m', $text, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $text = str_replace($match[0], '<pre>' . $match[2] . '</pre>', $text);
-            }
-        }
-        return $text;
-    }
-
     public function send()
     {
+        $lastMonths = new \DateTime();
+        $lastMonths->modify('-6 month');
 
-        $from = 'phosphorum-digest@phalconphp.com';
+        $parameters = array(
+            'modified_at >= ?0 AND digest = "Y" AND notifications <> "N" AND login = "andresgutierrez"',
+            'bind'  => array($lastMonths->getTimestamp())
+        );
 
-        $subject = 'Top Stories from Phosphorum';
-
-            /*if ($user->email && $user->notifications != 'N' && strpos($user->email, '@users.noreply.github.com') === false) {
-
-                try {
-
-                    /*$message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
-                    $message->setTo(array($user->email => $user->name));
-                    $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
-
-                    if ($notification->type == 'P') {
-                        $originalContent = $post->content;
-                        $htmlContent = $this->markdown->render($post->content);
-                        $message->setFrom(array($from => $post->user->name));
-                    } else {
-                        $reply = $notification->reply;
-                        $originalContent = $reply->content;
-                        $htmlContent = $this->markdown->render($reply->content);
-                        $message->setFrom(array($from => $reply->user->name));
-                    }
-
-                    if (trim($originalContent)) {
-
-                        //$prerifiedContent = $this->_prerify($escapedContent);
-                        //$htmlContent = nl2br($prerifiedContent);
-
-                        $textContent = nl2br($originalContent);
-
-                        $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
-                        if ($notification->type == 'P') {
-                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">Phosphorum</a>. ';
-                        } else {
-                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
-                        }
-                        $htmlContent .= PHP_EOL . 'Change your e-mail preferences <a href="http://forum.phalconphp.com/settings">here</a></p>';
-
-                        $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
-                        $bodyMessage->setCharset('UTF-8');
-                        $message->attach($bodyMessage);
-
-                        $bodyMessage = new \Swift_MimePart($textContent, 'text/plain');
-                        $bodyMessage->setCharset('UTF-8');
-                        $message->attach($bodyMessage);
-
-                        if (!$this->transport) {
-
-                            $this->transport = \Swift_SmtpTransport::newInstance(
-                                $this->config->smtp->host,
-                                $this->config->smtp->port,
-                                $this->config->smtp->security
-                            );
-                            $this->transport->setUsername($this->config->smtp->username);
-                            $this->transport->setPassword($this->config->smtp->password);
-                        }
-
-                        if (!$this->mailer) {
-                            $this->mailer = \Swift_Mailer::newInstance($this->transport);
-                        }
-
-                        $this->mailer->send($message);
-                    }
-                } catch (\Exception $e) {
-                    echo $e->getMessage(), PHP_EOL;
-                }
+        $users = array();
+        foreach (Users::find($parameters) as $user) {
+            if ($user->email && strpos($user->email, '@users.noreply.github.com') === false) {
+                $users[trim($user->email)] = $user->name;
             }
         }
 
-        $notification->sent = 'Y';
-        if ($notification->save() == false) {
-            foreach ($notification->getMessages() as $message) {
-                echo $message->getMessage(), PHP_EOL;
+        $from = 'phosphorum@phalconphp.com';
+
+        $subject = 'Top Stories from Phosphorum ' . date('d/m/y');
+
+        $lastWeek = new \DateTime();
+        $lastWeek->modify('-1 week');
+
+        $parameters = array(
+            'created_at >= ?0 AND deleted != 1 AND categories_id <> 4',
+            'bind'  => array($lastWeek->getTimestamp()),
+            'order' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies DESC',
+            'limit' => 10
+        );
+
+        $content = '<html><head></head><body><p><h1 style="font-size:19px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:bold;padding:16px 0;border-bottom:1px solid #e2e2e2">Top Stories from Phosphorum</h1></p>';
+
+        foreach (Posts::find($parameters) as $post) {
+
+            $user = $post->user;
+            if ($user == false) {
+                continue;
             }
-        }*/
+
+            $content .= '<p><a style="text-decoration:none;display:block;font-size:19px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:bold;color:#155fad" href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">' . $post->title . '</a></p>';
+
+            $content .= '<p><table width="100%"><td><table><tr><td>' .
+                            '<img src="https://secure.gravatar.com/avatar/' . $user->gravatar_id . '?s=32&amp;r=pg&amp;d=identicon" width="32" height="32" alt="' . $user->name . ' icon">' .
+                            '</td><td><a href="http://forum.phalconphp.com/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
+                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Created</label><br>' . $post->getHumanCreatedAt() . '</td>' .
+                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Replies</label><br>' . $post->number_replies . '</td>' .
+                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Views</label><br>' . $post->number_views . '</td>' .
+                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Votes</label><br>' . ($post->votes_up - $post->votes_down) . '</td>' .
+                            '</tr></table></td></tr></table></p>';
+
+            $content .= $this->markdown->render($post->content);
+
+            $content .= '<p><a style="color:#155fad" href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">Read more</a></p>';
+
+            $content .= '<hr style="border: 1px solid #dadada">';
+
+        }
+
+        $textContent = nl2br($content);
+
+        $htmlContent = $content . '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
+        $htmlContent .= PHP_EOL . 'This email was sent by Phalcon Framework. Change your e-mail preferences <a href="http://forum.phalconphp.com/settings">here</a></p>';
+
+        foreach ($users as $email => $name) {
+
+            try {
+
+                $message = new \Swift_Message('[Phalcon Forum] ' . $subject);
+                $message->setTo(array($email => $name));
+                $message->setFrom(array($from => 'Phalcon Framework'));
+
+                $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
+                $bodyMessage->setCharset('UTF-8');
+                $message->attach($bodyMessage);
+
+                $bodyMessage = new \Swift_MimePart($textContent, 'text/plain');
+                $bodyMessage->setCharset('UTF-8');
+                $message->attach($bodyMessage);
+
+                if (!$this->transport) {
+
+                    $this->transport = \Swift_SmtpTransport::newInstance(
+                        $this->config->smtp->host,
+                        $this->config->smtp->port,
+                        $this->config->smtp->security
+                    );
+                    $this->transport->setUsername($this->config->smtp->username);
+                    $this->transport->setPassword($this->config->smtp->password);
+                }
+
+                if (!$this->mailer) {
+                    $this->mailer = \Swift_Mailer::newInstance($this->transport);
+                }
+
+                $this->mailer->send($message);
+
+            } catch (\Exception $e) {
+                echo $e->getMessage(), PHP_EOL;
+            }
+        }
 
     }
 }

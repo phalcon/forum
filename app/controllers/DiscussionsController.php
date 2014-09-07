@@ -29,6 +29,7 @@ use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
+use Phosphorum\Utils\Slug;
 
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
@@ -234,7 +235,7 @@ class DiscussionsController extends Controller
             $post->users_id      = $usersId;
             $post->categories_id = $this->request->getPost('categoryId');
             $post->title         = $title;
-            $post->slug          = $this->tag->friendlyTitle($title);
+            $post->slug          = Slug::generate($title);
             $post->content       = $this->request->getPost('content');
 
             if ($post->save()) {
@@ -957,6 +958,7 @@ class DiscussionsController extends Controller
         if ($this->request->isPost()) {
             $user->timezone      = $this->request->getPost('timezone');
             $user->notifications = $this->request->getPost('notifications');
+            $user->digest        = $this->request->getPost('digest');
             if ($user->save()) {
                 $this->session->get('timezone', $user->timezone);
                 $this->flashSession->success('Settings were successfully updated');
@@ -965,6 +967,7 @@ class DiscussionsController extends Controller
         } else {
             $this->tag->displayTo('timezone', $user->timezone);
             $this->tag->displayTo('notifications', $user->notifications);
+            $this->tag->displayTo('digest', $user->digest);
         }
 
         $this->tag->setTitle('My Settings');

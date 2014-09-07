@@ -55,6 +55,8 @@ class Users extends Model
 
     public $notifications;
 
+    public $digest;
+
     public $timezone;
 
     public $moderator;
@@ -111,6 +113,7 @@ class Users extends Model
     public function beforeCreate()
     {
         $this->notifications = 'P';
+        $this->digest        = 'Y';
         $this->moderator     = 'N';
         $this->karma        += Karma::INITIAL_KARMA;
         $this->votes_points += Karma::INITIAL_KARMA;

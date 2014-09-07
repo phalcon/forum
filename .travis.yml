@@ -7,9 +7,9 @@ php:
 
 install:
  - composer --prefer-source install
- 
+
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 app/
+ - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
 
 notifications:
   email:

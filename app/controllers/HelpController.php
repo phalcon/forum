@@ -22,6 +22,7 @@ use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Notifications;
+use Phosphorum\Models\PostsNotifications;
 use Phosphorum\Models\IrcLog;
 
 /**
@@ -81,6 +82,7 @@ class HelpController extends Controller
         $this->view->users           = Users::count();
         $this->view->karma           = Users::sum(array('column' => 'karma'));
         $this->view->notifications   = Notifications::count();
+        $this->view->unotifications  = PostsNotifications::count();
         $this->view->views           = Posts::sum(array('column' => 'number_views'));
         $this->view->irc             = IrcLog::count();
     }

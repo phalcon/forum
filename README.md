@@ -26,6 +26,7 @@ to be set up in the configuration (app/config/config.php):
 
 * Curl extension (http://php.net/manual/en/book.curl.php)
 * Openssl extension (http://php.net/manual/en/book.openssl.php)
+* Internationalization (intl) extension (http://php.net/manual/en/book.intl.php)
 
 NOTE
 ----

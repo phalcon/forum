@@ -36,9 +36,16 @@
 									<div class="form-group">
 										<label for="notifications">E-Mail Notifications</label>
 										{{ select_static('notifications', [
-											'N': 'Never',
-											'Y': 'Always',
+											'N': 'Never receive an e-mail notification',
+											'Y': 'Receive e-mail notifications from all new threads and comments',
 											'P': 'When someone replies to a discussion that I started or replied to'
+										], 'class': 'form-control') }}
+									</div>
+									<div class="form-group">
+										<label for="digest">Weekly Digest</label>
+										{{ select_static('digest', [
+											'Y': 'Yes',
+											'N': 'No'
 										], 'class': 'form-control') }}
 									</div>
 									<div class="form-group">

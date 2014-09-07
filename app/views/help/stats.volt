@@ -36,6 +36,10 @@
 				<td align="right">{{ number_format(views) }}</td>
 			</tr>
 			<tr>
+				<td>User Notifications</td>
+				<td align="right">{{ number_format(unotifications) }}</td>
+			</tr>
+			<tr>
 				<td>E-Mail Notifications</td>
 				<td align="right">{{ number_format(notifications) }}</td>
 			</tr>

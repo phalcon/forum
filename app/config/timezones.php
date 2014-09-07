@@ -26,7 +26,7 @@ return array(
     'America/Denver'                 => '(GMT-07:00) Mountain Time (US &amp; Canada)',
     'America/Managua'                => '(GMT-06:00) Central America',
     'America/Chicago'                => '(GMT-06:00) Central Time (US &amp; Canada)',
-    'America/Mexico_City'            => '(GMT-06:00) Ciudad de Mexico',
+    'America/Mexico_City'            => '(GMT-06:00) Ciudad de México',
     'America/Regina'                 => '(GMT-06:00) Saskatchewan',
     'America/Bogota'                 => '(GMT-05:00) Bogotá/Lima/Quito',
     'America/New_York'               => '(GMT-05:00) Eastern Time (US &amp; Canada)',
