@@ -34,7 +34,7 @@ class Digest extends Injectable
         $lastMonths->modify('-6 month');
 
         $parameters = array(
-            'modified_at >= ?0 AND digest = "Y" AND notifications <> "N" AND login = "andresgutierrez"',
+            'modified_at >= ?0 AND digest = "Y" AND notifications <> "N"',
             'bind'  => array($lastMonths->getTimestamp())
         );
 
