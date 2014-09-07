@@ -11,7 +11,7 @@ Thanks.
 
 Requirements
 ------------
-You can clone the repository and then install dependencies using composer:
+You must clone the repository and then install dependencies using composer:
 
 ```bash
 php composer.phar install
@@ -33,7 +33,7 @@ The master branch will always contain the latest stable version. If you wish
 to check older versions or newer ones currently under development, please
 switch to the relevant branch.
 
-Required version: >= 1.2.6
+Required version: >= 1.3.0
 
 Get Started
 -----------
@@ -42,14 +42,31 @@ Get Started
 
 To run this application on your machine, you need at least:
 
-* PHP >= 5.3.9
+* PHP >= 5.4.0
 * Apache Web Server with mod rewrite enabled or Nginx Web Server
 * Latest Phalcon Framework extension installed and enabled
+* [Beanstalkd](http://kr.github.io/beanstalkd/) server
 
 Then you'll need to create the database and initialize schema:
 
     echo 'CREATE DATABASE forum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
     cat schemas/forum.sql | mysql -u root forum
+
+Starting the Beanstalkd client
+------------------------------
+A PHP client to deliver e-mails must be enabled in background:
+
+```bash
+php scripts/send-notifications-consumer.php &
+```
+
+Initial Test Data
+-----------------
+You can create fake entries on an empty Phosphorum installation by running:
+
+```bash
+php scripts/random-entries.php
+```
 
 Tests
 -----
