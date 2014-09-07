@@ -1,13 +1,13 @@
 {
     "require": {
-    	"aws/aws-sdk-php": "~2.5",
+        "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
-		"swiftmailer/swiftmailer": "@stable",
-		"kzykhys/ciconia": "~1.0.0",
-		"phpspec/php-diff": "dev-master"
+        "swiftmailer/swiftmailer": "@stable",
+        "kzykhys/ciconia": "~1.0.0",
+        "phpspec/php-diff": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "1.4.*@dev",
-        "squizlabs/php_codesniffer": "1.5.2"
+        "squizlabs/php_codesniffer": "1.*"
     }
 }

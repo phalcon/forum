@@ -15,29 +15,28 @@
  +------------------------------------------------------------------------+
 */
 
-
 /**
  * This scripts generates random posts
  */
 require 'cli-bootstrap.php';
 
-use Phosphorum\Mail\SendSpool;
+use Phosphorum\Mail\Digest;
 
-class SendSpoolConsumerTask extends Phalcon\DI\Injectable
+class SendSpoolTask extends Phalcon\DI\Injectable
 {
 
 	public function run()
 	{
-		$spool = new SendSpool();
-		$spool->consumeQueue();
+		$digest = new Digest();
+		$digest->send();
 	}
 
 }
 
 try {
-	$task = new SendSpoolConsumerTask($config);
+	$task = new SendSpoolTask($config);
 	$task->run();
-} catch (Exception $e) {
+} catch(Exception $e) {
 	echo $e->getMessage(), PHP_EOL;
 	echo $e->getTraceAsString();
 }
