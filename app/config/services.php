@@ -29,6 +29,7 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Cache\Frontend\None as FrontendNone;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
+use Phosphorum\Queue\DummyServer;
 use Ciconia\Ciconia;
 
 /**
@@ -140,6 +141,10 @@ $di->set(
 $di->set(
     'queue',
     function () use ($config) {
+
+        if (isset($config->beanstalk->disabled) && $config->beanstalk->disabled) {
+            return new DummyServer();
+        }
 
         if (!isset($config->beanstalk->host)) {
             throw new \Exception('Beanstalk is not configured');

@@ -28,7 +28,8 @@ $loader->registerNamespaces(
        'Phosphorum\Github'        => $config->application->libraryDir . '/Github',
        'Phosphorum\Mail'          => $config->application->libraryDir . '/Mail',
        'Phosphorum\Notifications' => $config->application->libraryDir . '/Notifications',
-       'Phosphorum\Utils'         => $config->application->libraryDir . '/Utils'
+       'Phosphorum\Utils'         => $config->application->libraryDir . '/Utils',
+       'Phosphorum\Queue'         => $config->application->libraryDir . '/Queue'
     )
 );
 

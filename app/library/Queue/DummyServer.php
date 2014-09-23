@@ -15,24 +15,22 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Queue;
 
 /**
- * Class Categories
+ * DummyServer
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * This classs replaces Beanstalkd by a dummy server
  */
-class Categories extends CacheableModel
+class DummyServer
 {
 
-    public $id;
+	/**
+	 * Simulates putting a job in the queue
+	 */
+	public function put()
+	{
 
-    public $name;
+	}
 
-    public $slug;
-
-    public $number_posts;
 }

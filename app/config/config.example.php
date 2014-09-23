@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 return new \Phalcon\Config(array(
@@ -25,6 +25,7 @@ return new \Phalcon\Config(array(
         'dbname'   => 'forum',
         'charset'  => 'utf8'
     ),
+
     'application' => array(
         'controllersDir' => APP_PATH . '/app/controllers/',
         'modelsDir'      => APP_PATH . '/app/models/',
@@ -41,17 +42,21 @@ return new \Phalcon\Config(array(
         ),
         'debug'          => true
     ),
+
     'mandrillapp' => array(
         'secret' => ''
     ),
+
     'github'      => array(
         'clientId'     => '',
         'clientSecret' => '',
         'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
     ),
+
     'amazonSns'   => array(
         'secret' => ''
     ),
+
     'smtp'        => array(
         'host'     => "",
         'port'     => 25,
@@ -59,7 +64,9 @@ return new \Phalcon\Config(array(
         'username' => "",
         'password' => ""
     ),
+
     'beanstalk'   => array(
-        'host' => '127.0.0.1'
+        'disabled' => true,
+        'host'     => '127.0.0.1'
     )
 ));

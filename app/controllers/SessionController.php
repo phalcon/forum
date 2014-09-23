@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Controllers;
@@ -111,6 +111,7 @@ class SessionController extends Controller
             $user->name  = $githubUser->getName();
             $user->login = $githubUser->getLogin();
             $email       = $githubUser->getEmail();
+
             if (is_string($email)) {
                 $user->email = $email;
             } else {
@@ -120,7 +121,14 @@ class SessionController extends Controller
                     }
                 }
             }
+
             $user->gravatar_id = $githubUser->getGravatarId();
+            if (!$user->gravatar_id) {
+                if ($user->email && strpos($user->email, '@') !== false) {
+                    $user->gravatar_id = md5(strtolower($user->email));
+                }
+            }
+
             $user->increaseKarma(Karma::LOGIN);
 
             if (!$user->save()) {
@@ -145,7 +153,8 @@ class SessionController extends Controller
                 $this->flashSession->success('Welcome back ' . $user->name);
             }
 
-            if ($user->email) {
+            if ($user->email && strpos($user->email, '@') !== false) {
+
                 if (strpos($user->email, '@users.noreply.github.com') !== false) {
                     $messageNotAlllow = 'Your current e-mail: ' . $this->escaper->escapeHtml($user->email)
                         . ' does not allow us to send you e-mail notifications';
@@ -215,6 +224,7 @@ class SessionController extends Controller
         $this->session->remove('identity');
         $this->session->remove('identity-name');
         $this->session->remove('identity-moderator');
+        $this->session->remove('identity-gravatar');
 
         $this->flashSession->success('Goodbye!');
         return $this->discussionsRedirect();

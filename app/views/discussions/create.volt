@@ -60,6 +60,7 @@
                             {{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
                         </div>
                     </div>
+
                     <div id="preview-box" style="display:none"></div>
                 </div>
 

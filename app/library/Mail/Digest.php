@@ -71,13 +71,13 @@ class Digest extends Injectable
             $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">' . $post->title . '</a></p>';
 
             $content .= '<p><table width="100%"><td><table><tr><td>' .
-                            '<img src="https://secure.gravatar.com/avatar/' . $user->gravatar_id . '?s=32&amp;r=pg&amp;d=identicon" width="32" height="32" alt="' . $user->name . ' icon">' .
-                            '</td><td><a style="text-decoration:none;color:#155fad" href="http://forum.phalconphp.com/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999;text-decoration:none">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
-                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Created</label><br>' . $post->getHumanCreatedAt() . '</td>' .
-                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Replies</label><br>' . $post->number_replies . '</td>' .
-                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Views</label><br>' . $post->number_views . '</td>' .
-                            '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Votes</label><br>' . ($post->votes_up - $post->votes_down) . '</td>' .
-                            '</tr></table></td></tr></table></p>';
+                        '<img src="https://secure.gravatar.com/avatar/' . $user->gravatar_id . '?s=32&amp;r=pg&amp;d=identicon" width="32" height="32" alt="' . $user->name . ' icon">' .
+                        '</td><td><a style="text-decoration:none;color:#155fad" href="http://forum.phalconphp.com/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999;text-decoration:none">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
+                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Created</label><br>' . $post->getHumanCreatedAt() . '</td>' .
+                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Replies</label><br>' . $post->number_replies . '</td>' .
+                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Views</label><br>' . $post->number_views . '</td>' .
+                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Votes</label><br>' . ($post->votes_up - $post->votes_down) . '</td>' .
+                        '</tr></table></td></tr></table></p>';
 
             $content .= $this->markdown->render($post->content);
 
