@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>{{ get_title(false) }} - Phalcon Framework</title>
+		{% set url = url() %}
+
+		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 		{%- if canonical is defined -%}
-		<link rel="canonical" href="//forum.phalconphp.com/{{ canonical }}"/>
+		<link rel="canonical" href="{{ config.site.url }}{{ canonical }}"/>
 		{%- endif -%}
 
 		{%- if post is defined -%}
 		<link rel="author" href="https://github.com/{{ post.user.login }}">
-		<link rel="publisher" href="https://forum.phalconphp.com/">
+		<link rel="publisher" href="http://{{ config.site.url }}/">
 		{%- endif -%}
 
 		{%- if canonical is defined -%}
-		<meta property="og:url" content="//forum.phalconphp.com/{{ canonical }}">
+		<meta property="og:url" content="{{ config.site.url }}/{{ canonical }}">
 		<meta property="og:site_name" content="Phosphorum">
 		{%- endif -%}
+
+		<style type="text/css">
+			@font-face {
+				font-family: 'icomoon';
+					src:url('{{ url }}fonts/icomoon.wofficomoon.eot');
+					src:url('{{ url }}/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+					url('{{ url }}/fonts/icomoon.woff') format('woff'),
+					url('{{ url }}/fonts/icomoon.ttf') format('truetype'),
+					url('{{ url }}/fonts/icomoon.svg#icomoon') format('svg');
+				font-weight: normal;
+				font-style: normal;
+			}
+		</style>
 
 		{#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
 		{{- stylesheet_link("//cdn.jsdelivr.net/bootstrap/3.1.1/css/bootstrap.min.css", false) -}}

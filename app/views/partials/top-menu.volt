@@ -8,7 +8,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  {{ link_to('', 'Phosphorum', 'class': 'navbar-brand') }}
+		  {{ link_to('', config.site.name, 'class': 'navbar-brand') }}
 		</div>
 
 		<div class="collapse navbar-collapse">
@@ -72,8 +72,6 @@
 			{%- else -%}
 				{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-info navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- endif -%}
-
-
 		</div>
 	  </div>
 	</nav>

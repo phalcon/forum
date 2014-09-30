@@ -39,6 +39,10 @@ class HooksController extends Controller
         $response = new Response();
         if ($this->request->isPost()) {
 
+            if (!isset($this->config->mandrillapp->secret)) {
+                return $response;
+            }
+
             if ($this->config->mandrillapp->secret != $this->request->getQuery('secret')) {
                 return $response;
             }

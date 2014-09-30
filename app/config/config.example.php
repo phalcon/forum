@@ -17,6 +17,14 @@
 
 return new \Phalcon\Config(array(
 
+    'site' => array(
+        'name'      => 'Phalcon Framework',
+        'url'       => 'http://forum.phalconphp.com',
+        'project'   => 'Phalcon',
+        'software'  => 'Phosphorum',
+        'repo'      => 'https://github.com/phalcon/cphalcon/issues'
+    ),
+
     'database'    => array(
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
