@@ -32,7 +32,7 @@ CREATE TABLE `activities` (
   KEY `created_at` (`created_at`),
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9583 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16774 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,7 +53,7 @@ CREATE TABLE `activity_notifications` (
   `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`was_read`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16785 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `categories` (
   `number_posts` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `number_posts` (`number_posts`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `notifications` (
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`),
   KEY `sent` (`sent`)
-) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=156621 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +130,7 @@ CREATE TABLE `notifications_bounces` (
   `reported` char(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `email` (`email`,`reported`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=976 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +168,7 @@ CREATE TABLE `posts` (
   KEY `created_at` (`created_at`),
   KEY `sticked` (`sticked`,`created_at`),
   KEY `deleted` (`deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=1859 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3386 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +188,7 @@ CREATE TABLE `posts_bounties` (
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_replies_id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=616 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +206,7 @@ CREATE TABLE `posts_history` (
   `content` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5390 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37033 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +222,7 @@ CREATE TABLE `posts_notifications` (
   `posts_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4597 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8168 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +247,7 @@ CREATE TABLE `posts_replies` (
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6416 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11114 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +265,7 @@ CREATE TABLE `posts_replies_history` (
   `content` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `posts_replies_id` (`posts_replies_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10249 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80483 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -281,7 +281,7 @@ CREATE TABLE `posts_replies_votes` (
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1098 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +297,7 @@ CREATE TABLE `posts_views` (
   `ipaddress` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`,`ipaddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=244009 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=721709 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,7 +313,7 @@ CREATE TABLE `posts_votes` (
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +326,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) DEFAULT NULL,
-  `login` varchar(32) DEFAULT NULL,
+  `login` varchar(72) CHARACTER SET ascii NOT NULL,
   `email` varchar(70) DEFAULT NULL,
   `gravatar_id` char(32) DEFAULT NULL,
   `token_type` varchar(16) DEFAULT NULL,
@@ -334,6 +334,7 @@ CREATE TABLE `users` (
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
   `notifications` char(1) DEFAULT 'N',
+  `digest` char(1) DEFAULT 'Y',
   `timezone` varchar(48) DEFAULT NULL,
   `moderator` char(1) DEFAULT 'N',
   `karma` int(11) DEFAULT NULL,
@@ -346,7 +347,7 @@ CREATE TABLE `users` (
   KEY `karma` (`karma`),
   KEY `login_2` (`login`),
   KEY `notifications` (`notifications`)
-) ENGINE=InnoDB AUTO_INCREMENT=1310 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2256 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -358,4 +359,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-05 13:50:12
+-- Dump completed on 2014-09-29 20:30:24
