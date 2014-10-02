@@ -24,13 +24,11 @@ namespace Phosphorum\Queue;
  */
 class DummyServer
 {
+    /**
+     * Simulates putting a job in the queue
+     */
+    public function put()
+    {
 
-	/**
-	 * Simulates putting a job in the queue
-	 */
-	public function put()
-	{
-
-	}
-
+    }
 }
