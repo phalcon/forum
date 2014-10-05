@@ -22,7 +22,8 @@ return new \Phalcon\Config(array(
         'url'       => 'http://forum.phalconphp.com',
         'project'   => 'Phalcon',
         'software'  => 'Phosphorum',
-        'repo'      => 'https://github.com/phalcon/cphalcon/issues'
+        'repo'      => 'https://github.com/phalcon/cphalcon/issues',
+        'docs'      => 'https://github.com/phalcon/docs',
     ),
 
     'database'    => array(

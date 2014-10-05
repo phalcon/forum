@@ -172,7 +172,6 @@ class RepliesController extends Controller
                 $this->flashSession->success('Reply was deleted successfully');
             }
 
-
             $href = 'discussion/' . $postReply->post->id . '/' . $postReply->post->slug;
             return $this->response->redirect($href);
         }

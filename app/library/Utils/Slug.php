@@ -18,6 +18,8 @@
 namespace Phosphorum\Utils;
 
 /**
+ * Slug
+ *
  * Transforms a string or part thereof using an ICU transliterator.
  */
 class Slug

@@ -354,8 +354,8 @@ class DiscussionsController extends Controller
             "id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
             "bind" => array($id, $usersId, $this->session->get('identity-moderator'))
         );
-        $post = Posts::findFirst($parameters);
 
+        $post = Posts::findFirst($parameters);
         if (!$post) {
             $this->flashSession->error('The discussion does not exist');
             return $this->response->redirect();

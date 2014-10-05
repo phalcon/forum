@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{% set url = url(), version = '2.0.7' %}
+		{% set url = url(), version = '2.0.8' %}
 
 		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,10 +26,10 @@
 			@font-face {
 				font-family: 'icomoon';
 					src:url('{{ url }}fonts/icomoon.wofficomoon.eot');
-					src:url('{{ url }}/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
-					url('{{ url }}/fonts/icomoon.woff') format('woff'),
-					url('{{ url }}/fonts/icomoon.ttf') format('truetype'),
-					url('{{ url }}/fonts/icomoon.svg#icomoon') format('svg');
+					src:url('{{ url }}fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+					url('{{ url }}fonts/icomoon.woff') format('woff'),
+					url('{{ url }}fonts/icomoon.ttf') format('truetype'),
+					url('{{ url }}fonts/icomoon.svg#icomoon') format('svg');
 				font-weight: normal;
 				font-style: normal;
 			}

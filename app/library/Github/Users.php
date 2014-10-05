@@ -31,13 +31,17 @@ class Users
 
     protected $accessToken;
 
+    protected $response;
+
     /**
-     * @param $accessToken
+     * Users constructor
+     *
+     * @param string $accessToken
      */
     public function __construct($accessToken)
     {
         $this->accessToken = $accessToken;
-        $this->_response    = $this->request('/user');
+        $this->response   = $this->request('/user');
     }
 
     /**
@@ -63,7 +67,7 @@ class Users
      */
     public function isValid()
     {
-        return is_array($this->_response);
+        return is_array($this->response);
     }
 
     /**
@@ -71,12 +75,12 @@ class Users
      */
     public function getName()
     {
-        if (isset($this->_response['name'])) {
-            if ($this->_response['name']) {
-                return $this->_response['name'];
+        if (isset($this->response['name'])) {
+            if ($this->response['name']) {
+                return $this->response['name'];
             }
         }
-        return $this->_response['login'];
+        return $this->response['login'];
     }
 
     /**
@@ -84,9 +88,10 @@ class Users
      */
     public function getEmail()
     {
-        if (isset($this->_response['email'])) {
-            if ($this->_response['email'] && strpos($this->_response['email'], '@') !== false) {
-                return $this->_response['email'];
+
+        if (isset($this->response['email'])) {
+            if ($this->response['email'] && strpos($this->response['email'], '@') !== false) {
+                return $this->response['email'];
             }
         }
 
@@ -103,7 +108,7 @@ class Users
      */
     public function getLogin()
     {
-        return $this->_response['login'];
+        return $this->response['login'];
     }
 
     /**
@@ -111,6 +116,6 @@ class Users
      */
     public function getGravatarId()
     {
-        return $this->_response['gravatar_id'];
+        return $this->response['gravatar_id'];
     }
 }
