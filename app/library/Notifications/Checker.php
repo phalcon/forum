@@ -20,6 +20,11 @@ namespace Phosphorum\Notifications;
 use Phosphorum\Models\ActivityNotifications;
 use Phalcon\Di\Injectable;
 
+/**
+ * Checker
+ *
+ * Checks if the user has unread notifications or not
+ */
 class Checker extends Injectable
 {
 
@@ -43,7 +48,7 @@ class Checker extends Injectable
         return $number > 0;
     }
 
-     /**
+    /**
      * Check whether there are unread notifications or not
      *
      * @return integer

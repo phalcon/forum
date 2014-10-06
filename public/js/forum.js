@@ -29,6 +29,8 @@ var Forum = {
 
 	_editor: null,
 
+	_search: false,
+
 	/**
 	 * Transform a comment into a editable box
 	 */
@@ -362,6 +364,60 @@ var Forum = {
 		}
 	},
 
+	updateRecommendedPosts: function(response) {
+		Forum._search = false;
+		var data = JSON.parse(response);
+		var content = $('#recommended-posts-create-content')[0];
+		if (data.results.length > 0) {
+			content.innerHTML = '';
+			for (var i = 0; i < data.results.length; i++) {
+				var result = data.results[i];
+
+				var div = document.createElement('DIV');
+				div.className = 'recommended-post-create';
+
+				var a = document.createElement('A');
+				a.innerHTML = result.title + '<br>';
+				a.href = Forum._uri + result.slug;
+				div.appendChild(a);
+
+				var span = document.createElement('SPAN');
+				span.innerHTML = result.created;
+				div.appendChild(span);
+
+				content.appendChild(div);
+			}
+		} else {
+			content.innerHTML = 'There are no suggested posts';
+		}
+	},
+
+	getRelatedCreate: function()
+	{
+		if (this.value.length > 2 && Forum._search == false) {
+			Forum._search = true;
+			$.ajax({
+				method: 'POST',
+				url: Forum._uri + 'find-related',
+				data: { 'title': this.value }
+			}).done(Forum.updateRecommendedPosts);
+		}
+	},
+
+	updateSuggestedPosts: function(response)
+	{
+		$('#suggested-posts').html(response);
+	},
+
+	showSuggestedPosts: function()
+	{
+		$.ajax({
+			method: 'POST',
+			url: Forum._uri + 'show-related',
+			data: { 'id': $('#post-id').val() }
+		}).done(Forum.updateSuggestedPosts);
+	},
+
 	/**
 	 * Add callbacks to edit/delete buttons
 	 */
@@ -424,6 +480,14 @@ var Forum = {
 			var editor = new Editor();
 			editor.render();
 		}
+
+		$('#recommended-posts-create').each(function(position, element){
+			$('#title').on('keyup', null, Forum.getRelatedCreate);
+		});
+
+		$('#suggested-posts').each(function(position, element){
+			window.setTimeout(Forum.showSuggestedPosts, 1500);
+		});
 	},
 
 	/**

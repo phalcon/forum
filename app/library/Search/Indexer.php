@@ -1,0 +1,124 @@
+<?php
+
+/*
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
+*/
+
+namespace Phosphorum\Search;
+
+use Elasticsearch\Client;
+use Phosphorum\Models\Posts;
+
+/**
+ * Indexer
+ *
+ * This component uses ElasticSearch to search items in the forum
+ */
+class Indexer
+{
+    /**
+     * Simulates putting a job in the queue
+     */
+    public function index()
+    {
+
+    }
+
+    public function search(array $fields, $limit = 10, $returnPosts = false)
+    {
+        //try {
+            $client = new Client();
+
+            $searchParams['index'] = 'phosphorum';
+            $searchParams['type']  = 'post';
+
+            $searchParams['body']['fields'] = array('id', 'karma');
+
+            if (count($fields) == 1) {
+                $searchParams['body']['query']['match'] = $fields;
+            } else {
+                $terms = array();
+                foreach ($fields as $field => $value) {
+                    $terms[] = array('term' => array($field => $value));
+                }
+                $searchParams['body']['query']['bool']['must'] = $terms;
+            }
+
+            $searchParams['body']['from'] = 0;
+            $searchParams['body']['size'] = $limit;
+
+            $queryResponse = $client->search($searchParams);
+
+            $results = array();
+            if (is_array($queryResponse['hits'])) {
+                foreach ($queryResponse['hits']['hits'] as $hit) {
+                    $post = Posts::findFirstById($hit['fields']['id'][0]);
+                    if ($post) {
+                        $score = $hit['_score'] * 250 + $hit['fields']['karma'][0];
+                        if (!$returnPosts) {
+                            $results[$score] = array(
+                                'slug'    => 'discussion/' . $post->id . '/' . $post->slug,
+                                'title'   => $post->title,
+                                'created' => $post->getHumanCreatedAt()
+                            );
+                        } else {
+                            $results[$score] = $post;
+                        }
+                    }
+                }
+            }
+
+            krsort($results);
+
+            return array_values($results);
+
+        //} catch (\Exception $e) {
+            return array();
+        //}
+    }
+
+    /**
+     * Indexes all posts in the forum in ES
+     */
+    public function indexAll()
+    {
+        $client = new Client();
+
+        try  {
+            $deleteParams['index'] = 'phosphorum';
+            $client->indices()->delete($deleteParams);
+        } catch (\Exception $e) {
+            // the index does not exist yet
+        }
+
+        foreach (Posts::find('deleted != 1') as $post) {
+            $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
+            if ($karma > 0) {
+                $params = array();
+                $params['body']  = array(
+                    'id'       => $post->id,
+                    'title'    => $post->title,
+                    'category' => $post->categories_id,
+                    'content'  => $post->content,
+                    'karma'    => $karma
+                );
+                $params['index'] = 'phosphorum';
+                $params['type']  = 'post';
+                $params['id']    = 'post-' . $post->id;
+                $ret = $client->index($params);
+                var_dump($ret);
+            }
+        }
+    }
+}

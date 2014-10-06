@@ -17,7 +17,7 @@
 
 
 /**
- * This scripts generates random posts
+ * This script generates random posts
  */
 
 require 'cli-bootstrap.php';

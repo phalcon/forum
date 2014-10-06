@@ -238,6 +238,19 @@ class Posts extends Model
     }
 
     /**
+     * @return string
+     */
+    public function getHumanNumberViews()
+    {
+        $number = $this->number_views;
+        if ($number > 1000) {
+            return ((int) ($number / 1000)) . 'k';
+        } else {
+            return $number;
+        }
+    }
+
+    /**
      * @return bool|string
      */
     public function getHumanCreatedAt()

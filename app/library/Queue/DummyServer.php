@@ -29,6 +29,6 @@ class DummyServer
      */
     public function put()
     {
-
+    	return true;
     }
 }

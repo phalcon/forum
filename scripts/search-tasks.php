@@ -15,21 +15,29 @@
  +------------------------------------------------------------------------+
 */
 
-$modelsDir      = $config->application->modelsDir;
-$controllersDir = $config->application->controllersDir;
-$libraryDir     = $config->application->libraryDir;
-
-$loader = new \Phalcon\Loader();
-
 /**
- * We're a registering a set of directories taken from the configuration file
+ * This script sends a weekly digest to users
  */
-$loader->registerNamespaces(
-    array(
-       'Phosphorum\Models'        => $modelsDir,
-       'Phosphorum\Controllers'   => $controllersDir,
-       'Phosphorum'               => $libraryDir
-    )
-);
+require 'cli-bootstrap.php';
 
-$loader->register();
+use Phosphorum\Search\Indexer;
+use Phalcon\DI\Injectable;
+
+class SearchTasks extends Injectable
+{
+
+	public function run()
+	{
+		$search = new Indexer();
+		//$search->indexAll();
+		print_r($search->search(array('title' => 'ubuntu', 'category' => 6)));
+	}
+}
+
+try {
+	$task = new SearchTasks($config);
+	$task->run();
+} catch(Exception $e) {
+	echo $e->getMessage(), PHP_EOL;
+	echo $e->getTraceAsString();
+}

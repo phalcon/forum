@@ -78,8 +78,9 @@ p {
 }
 
 .CodeMirror {
-    height: 200px;
+    height: 150px;
     border: 1px solid #c0c0c0;
+    margin-right: 15px;
 }
 
 pre.prettyprint {
@@ -286,6 +287,11 @@ div#footer .version {
     font-size: 12px;
 }
 
+div#footer a {
+    color: #c0c0c0;
+    font-size: 12px;
+}
+
 .posts-buttons .btn-default {
     color: #919191;
 }
@@ -439,3 +445,34 @@ pre,
     margin-left: -15px;
 }
 
+div#recommended-posts-create {
+    background: #fefefe;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+div#recommended-posts-create-content {
+    margin-top: 10px;
+}
+
+div.recommended-post-create {
+    margin-bottom: 10px;
+}
+
+div.recommended-post-create span {
+    font-size: 12px;
+    color: #c0c0c0;
+}
+
+ul.preview-nav {
+    margin-top: 10px;
+}
+
+div.login-comment {
+    margin-top: 20px;
+}
+
+div#suggested-posts h3 {
+    margin: 0px;
+    font-size: 16px;
+}

@@ -1,30 +1,5 @@
-<div class="container">
-
-	<ul class="nav nav-tabs">
-		{%- set orders = [
-			'new': 'All discussions',
-			'hot': 'Hot',
-			'unanswered': 'Unanswered',
-			'my': 'My discussions',
-			'answers':'My answers'
-		] -%}
-		{%- for order, label in orders -%}
-			{%- if (order == 'my' or order == 'answers') and !session.get('identity') -%}
-				{%- continue -%}
-			{% endif -%}
-			{%- if order == currentOrder -%}
-				<li class="active">
-			{%- else -%}
-				<li>
-			{%- endif -%}
-				{{ link_to('discussions/' ~ order, label) }}
-			</li>
-		{%- endfor -%}
-	</ul>
-</div>
 
 {%- if posts|length -%}
-<div class="container">
 	<br/>
 	<div align="center">
 		<table class="table table-striped list-discussions" width="90%">
@@ -82,22 +57,4 @@
 		{%- endfor -%}
 		</table>
 	</div>
-</div>
-
-<div class="container">
-	<ul class="pager">
-		{%- if offset > 0 -%}
-			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 40), 'Prev', 'rel': 'prev') }}</li>
-		{%- endif -%}
-
-		{%- if totalPosts.count > 40 -%}
-			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 40), 'Next', 'rel': 'next') }}</li>
-		{%- endif -%}
-	</ul>
-</div>
-
-{%- else -%}
-<div class="container">
-	<div class="alert alert-info">There are no posts here</div>
-</div>
 {%- endif -%}

@@ -4,7 +4,8 @@
         "guzzle/guzzle": "~3.7",
         "swiftmailer/swiftmailer": "@stable",
         "kzykhys/ciconia": "~1.0.0",
-        "phpspec/php-diff": "dev-master"
+        "phpspec/php-diff": "dev-master",
+	"elasticsearch/elasticsearch": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "1.4.*@dev",

@@ -29,7 +29,9 @@ use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
+
 use Phosphorum\Utils\Slug;
+use Phosphorum\Search\Indexer;
 
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
@@ -1019,10 +1021,47 @@ class DiscussionsController extends Controller
     }
 
     /**
-     *
+     * Finds related posts
      */
-    public function helpAction()
+    public function findRelatedAction()
     {
-        $this->response->redirect('discussion/1/welcome-to-the-forum');
+        $response = new Response();
+
+        $indexer = new Indexer();
+        $results = $indexer->search(array(
+            'title' => $this->request->getPost('title')
+        ), 5);
+
+        $contentOk = array(
+            'status'  => 'OK',
+            'results' => $results
+        );
+        return $response->setJsonContent($contentOk);
     }
+
+    /**
+     * Finds related posts
+     */
+    public function showRelatedAction()
+    {
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+
+        $post = Posts::findFirstById($this->request->getPost('id'));
+        if ($post) {
+            $indexer = new Indexer();
+            $posts = $indexer->search(array(
+                'title'    => $post->title,
+                'category' => $post->categories_id
+            ), 5, true);
+            if (count($posts) == 0) {
+                $posts = $indexer->search(array(
+                    'title'    => $post->title
+                ), 5, true);
+            }
+            $this->view->posts = $posts;
+        } else {
+            $this->view->posts = array();
+        }
+    }
+
 }

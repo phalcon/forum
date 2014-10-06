@@ -20,6 +20,11 @@ namespace Phosphorum\Mail;
 use Phosphorum\Models\Notifications;
 use Phalcon\Di\Injectable;
 
+/**
+ * SendSpool
+ *
+ * Sends e-mails to users in the spool
+ */
 class SendSpool extends Injectable
 {
 

@@ -68,9 +68,9 @@
 		  </ul>
 
 			{%- if session.get('identity') -%}
-				{{ link_to('post/discussion', 'Start a Discussion', 'class': 'btn btn-default btn-info navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('post/discussion', 'Start a Discussion', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- else -%}
-				{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-info navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- endif -%}
 		</div>
 	  </div>

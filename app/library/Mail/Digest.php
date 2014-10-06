@@ -21,6 +21,11 @@ use Phalcon\Di\Injectable;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 
+/**
+ * Digest
+ *
+ * Sends a weekly digest to subscribed users
+ */
 class Digest extends Injectable
 {
 
@@ -28,6 +33,9 @@ class Digest extends Injectable
 
     protected $mailer;
 
+    /**
+     * Sends the digest
+     */
     public function send()
     {
         $lastMonths = new \DateTime();

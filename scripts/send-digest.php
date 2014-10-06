@@ -16,13 +16,14 @@
 */
 
 /**
- * This scripts generates random posts
+ * This script sends a weekly digest to users
  */
 require 'cli-bootstrap.php';
 
 use Phosphorum\Mail\Digest;
+use Phalcon\DI\Injectable;
 
-class SendSpoolTask extends Phalcon\DI\Injectable
+class SendDigest extends Injectable
 {
 
 	public function run()
@@ -30,11 +31,10 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 		$digest = new Digest();
 		$digest->send();
 	}
-
 }
 
 try {
-	$task = new SendSpoolTask($config);
+	$task = new SendDigest($config);
 	$task->run();
 } catch(Exception $e) {
 	echo $e->getMessage(), PHP_EOL;
