@@ -244,7 +244,7 @@ class Posts extends Model
     {
         $number = $this->number_views;
         if ($number > 1000) {
-            return ((int) ($number / 1000)) . 'k';
+            return round($number / 1000, 1) . 'k';
         } else {
             return $number;
         }

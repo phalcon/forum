@@ -843,27 +843,24 @@ class DiscussionsController extends Controller
 
         $this->tag->setTitle('Search Results');
 
-        list($itemBuilder, $totalBuilder) = $this->prepareQueries();
-
         $q = $this->request->getQuery('q');
 
-        $queryTerms = '%' . preg_replace('/[ \t]+/', '%', $q) . '%';
+        $indexer = new Indexer();
 
-        $totalBuilder->where('p.title LIKE ?0');
-
-        $itemBuilder->where('p.title LIKE ?0')->orderBy('p.created_at DESC');
-
-        $posts = $itemBuilder->getQuery()->execute(array($queryTerms));
-
+        $posts = $indexer->search(array('title' => $q, 'content' => $q), 50, true);
         if (!count($posts)) {
-            $this->flashSession->notice('There are no search results');
-            return $this->response->redirect();
+            $posts = $indexer->search(array('title' => $q), 50, true);
+            if (!count($posts)) {
+                $this->flashSession->notice('There are no search results');
+                return $this->response->redirect();
+            }
         }
 
-        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute(array($queryTerms));
+        $paginator = new \stdClass;
+        $paginator->count = 0;
 
         $this->view->posts        = $posts;
-        $this->view->totalPosts   = $totalPosts;
+        $this->view->totalPosts   = $paginator;
         $this->view->currentOrder = null;
         $this->view->offset       = 0;
         $this->view->paginatorUri = 'search';

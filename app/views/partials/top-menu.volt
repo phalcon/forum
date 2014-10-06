@@ -20,9 +20,18 @@
           			<span class="glyphicon glyphicon-search"></span> <b class="caret"></b>
           		</a>
           		<ul class="dropdown-menu">
+
 					<li>
-						<div style="width:300px">
-							<gcse:searchbox-only></gcse:searchbox-only>
+						<div style="width:300px;padding: 20px">
+							{{ form('search', 'method': 'get', 'autocomplete': 'off') }}
+								<table width="100%">
+									<tr>
+										<td><input type="text" class="form-control" name="q"></td>
+										<td>&nbsp;<input type="submit" class="btn btn-primary" value="Search"></td>
+									</tr>
+								</table>
+							</form>
+							<!--<gcse:searchbox-only></gcse:searchbox-only>-->
 						</div>
 					</li>
 				</ul>

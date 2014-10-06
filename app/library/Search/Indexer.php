@@ -62,10 +62,11 @@ class Indexer
 
             $results = array();
             if (is_array($queryResponse['hits'])) {
+                $d = 0.5;
                 foreach ($queryResponse['hits']['hits'] as $hit) {
                     $post = Posts::findFirstById($hit['fields']['id'][0]);
                     if ($post) {
-                        $score = $hit['_score'] * 250 + $hit['fields']['karma'][0];
+                        $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
                         if (!$returnPosts) {
                             $results[$score] = array(
                                 'slug'    => 'discussion/' . $post->id . '/' . $post->slug,
@@ -75,6 +76,7 @@ class Indexer
                         } else {
                             $results[$score] = $post;
                         }
+                        $d += 0.05;
                     }
                 }
             }
