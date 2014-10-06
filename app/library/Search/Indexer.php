@@ -126,7 +126,7 @@ class Indexer
     {
         $client = new Client();
 
-        try  {
+        try {
             $deleteParams['index'] = 'phosphorum';
             $client->indices()->delete($deleteParams);
         } catch (\Exception $e) {

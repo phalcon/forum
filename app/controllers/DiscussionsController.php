@@ -1063,5 +1063,4 @@ class DiscussionsController extends Controller
             $this->view->posts = array();
         }
     }
-
 }

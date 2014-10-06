@@ -31,6 +31,6 @@ class DummyServer
      */
     public function put($job)
     {
-    	return true;
+        return true;
     }
 }
