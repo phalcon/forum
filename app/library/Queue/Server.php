@@ -18,12 +18,23 @@
 namespace Phosphorum\Queue;
 
 /**
- * DummyServer
+ * Server
  *
- * This classs replaces Beanstalkd by a dummy server
+ * Facade to Phalcon\Queue\Beanstalkd
  */
-class DummyServer
+class Server
 {
+
+    /**
+     * Server constructor
+     *
+     * @param Phalcon\Queue\Beanstalkd $queue
+     */
+    public function __construct($queue)
+    {
+        $this->queue = $queue;
+    }
+
     /**
      * Simulates putting a job in the queue
      *
@@ -31,6 +42,6 @@ class DummyServer
      */
     public function put($job)
     {
-    	return true;
+        return true;
     }
 }

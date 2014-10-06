@@ -27,17 +27,17 @@ use Phosphorum\Models\Posts;
  */
 class Indexer
 {
+
     /**
-     * Simulates putting a job in the queue
+     * Search documents in ElasticSearch by the specified criteria
+     *
+     * @param array $fields
+     * @param int $limit
+     * @param boolean $returnPosts
      */
-    public function index()
-    {
-
-    }
-
     public function search(array $fields, $limit = 10, $returnPosts = false)
     {
-        //try {
+        try {
             $client = new Client();
 
             $searchParams['index'] = 'phosphorum';
@@ -83,9 +83,40 @@ class Indexer
 
             return array_values($results);
 
-        //} catch (\Exception $e) {
+        } catch (\Exception $e) {
             return array();
-        //}
+        }
+    }
+
+    protected function _doIndex($client, $post)
+    {
+        $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
+        if ($karma > 0) {
+            $params = array();
+            $params['body']  = array(
+                'id'       => $post->id,
+                'title'    => $post->title,
+                'category' => $post->categories_id,
+                'content'  => $post->content,
+                'karma'    => $karma
+            );
+            $params['index'] = 'phosphorum';
+            $params['type']  = 'post';
+            $params['id']    = 'post-' . $post->id;
+            $ret = $client->index($params);
+            var_dump($ret);
+        }
+    }
+
+    /**
+     * Puts a post in the search server
+     *
+     * @param Posts $post
+     */
+    public function index($post)
+    {
+        $client = new Client();
+        $this->_doIndex($client, $post);
     }
 
     /**
@@ -103,22 +134,7 @@ class Indexer
         }
 
         foreach (Posts::find('deleted != 1') as $post) {
-            $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
-            if ($karma > 0) {
-                $params = array();
-                $params['body']  = array(
-                    'id'       => $post->id,
-                    'title'    => $post->title,
-                    'category' => $post->categories_id,
-                    'content'  => $post->content,
-                    'karma'    => $karma
-                );
-                $params['index'] = 'phosphorum';
-                $params['type']  = 'post';
-                $params['id']    = 'post-' . $post->id;
-                $ret = $client->index($params);
-                var_dump($ret);
-            }
+            $this->_doIndex($client, $post);
         }
     }
 }
