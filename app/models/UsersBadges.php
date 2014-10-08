@@ -50,4 +50,28 @@ class UsersBadges extends Model
             ))
         );
     }
+
+    public function afterCreate()
+    {
+        $activity                       = new ActivityNotifications();
+        $activity->users_id             = $this->users_id;
+        if ($this->type == 'P') {
+            $activity->type                 = 'O';
+            $activity->posts_id             = $this->code;
+            $activity->posts_replies_id     = 1;
+        } else {
+            if ($this->type == 'C') {
+                $activity->type             = 'V';
+                $activity->posts_id         = 1;
+                $activity->posts_replies_id = $this->code;
+            } else {
+                $activity->type             = 'B';
+                $activity->posts_id         = 1;
+                $activity->posts_replies_id = 1;
+            }
+        }
+        $activity->extra                = $this->badge;
+        $activity->users_origin_id      = $this->users_id;
+        var_dump($activity->save());
+    }
 }

@@ -265,7 +265,6 @@ class RepliesController extends Controller
                 $karmaCount     = intval(abs($user->karma - $postReply->user->karma) / 1000);
                 $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karmaCount;
             } else {
-
                 $points = (Karma::VOTE_UP_ON_MY_REPLY + intval(abs($user->karma - $postReply->user->karma) / 1000));
             }
             $postReply->user->increaseKarma($points);

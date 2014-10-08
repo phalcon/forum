@@ -67,6 +67,8 @@ class Users extends Model
 
     public $votes_points;
 
+    const SYSTEM_USER = 1;
+
     public function initialize()
     {
         $this->hasMany(

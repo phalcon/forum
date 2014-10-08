@@ -28,7 +28,7 @@ use Phosphorum\Badges\BadgeBase;
 class Maven extends BadgeBase
 {
 
-    protected $name = 'Pundit';
+    protected $name = 'Maven';
 
     /**
      * Check whether the user can have the badge

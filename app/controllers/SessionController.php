@@ -105,6 +105,8 @@ class SessionController extends Controller
                 $user->access_token = $response['access_token'];
             }
 
+            //$user = ForumUsers::findFirst();
+
             /**
              * Update the user information
              */

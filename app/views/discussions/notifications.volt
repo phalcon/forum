@@ -39,6 +39,18 @@
 							has accepted your reply in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug ~ '#C' ~ activity.posts_replies_id, activity.post.title|e) }}
 							{%- endif -%}
 
+							{%- if activity.type == 'B' -%}
+							you've earned the "{{ activity.extra }}" badge
+							{%- endif -%}
+
+							{%- if activity.type == 'O' -%}
+							you've earned the "{{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.extra) }}" badge
+							{%- endif -%}
+
+							{% if activity.type == 'V' %}
+							you've earned the "{{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug ~ '#C' ~ activity.posts_replies_id, activity.extra) }}" badge
+							{%- endif -%}
+
 							<span class="date"> {{ activity.getHumanCreatedAt() }}</span>
 						</div>
 					</td>

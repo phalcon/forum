@@ -28,7 +28,7 @@ use Phosphorum\Badges\BadgeBase;
 class Guru extends BadgeBase
 {
 
-    protected $name = 'Enlightened';
+    protected $name = 'Guru';
 
     /**
      * Check whether the user can have the badge
