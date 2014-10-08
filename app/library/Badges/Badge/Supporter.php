@@ -15,28 +15,42 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Models\UsersBadges;
+use Phosphorum\Models\PostsVotes;
+use Phosphorum\Models\PostsRepliesVotes;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Supporter
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * First positive vote to another user
  */
-class Categories extends CacheableModel
+class Supporter extends BadgeBase
 {
 
-    public $id;
+	protected $name = 'Supporter';
 
-    public $name;
+	/**
+	 * Check whether the user can have the badge
+	 *
+	 * @param Users $user
+	 * @return boolean
+	 */
+	public function canHave(Users $user)
+	{
+		$canHave = PostsRepliesVotes::count(array(
+			'users_id = ?0 AND vote = 1',
+			'bind' => array($user->id)
+		)) > 0;
 
-    public $slug;
+		$canHave = $canHave || PostsVotes::count(array(
+			'users_id = ?0 AND vote = 1',
+			'bind' => array($user->id)
+		)) > 0;
 
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+		return $canHave;
+	}
 }

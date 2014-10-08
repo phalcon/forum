@@ -37,7 +37,13 @@ class PostsRepliesVotes extends Model
 
     public $users_id;
 
+    public $vote;
+
     public $created_at;
+
+    const VOTE_UP = 1;
+
+    const VOTE_DOWN = 1;
 
     public function initialize()
     {

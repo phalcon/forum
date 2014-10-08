@@ -15,28 +15,29 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Scholar
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * Asked a question and accepted an answer
  */
-class Categories extends CacheableModel
+class Scholar extends BadgeBase
 {
 
-    public $id;
+	protected $name = 'Scholar';
 
-    public $name;
-
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+	/**
+	 * Check whether the user can have the badge
+	 *
+	 * @param Users $user
+	 * @return boolean
+	 */
+	public function canHave(Users $user)
+	{
+		return $user->countPosts('accepted_answer = "Y"') >= 1;
+	}
 }

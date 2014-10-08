@@ -15,28 +15,28 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
-
 /**
- * Class Categories
- *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * This script processes badges for users
  */
-class Categories extends CacheableModel
+require 'cli-bootstrap.php';
+
+use Phosphorum\Badges\Manager as BadgesManager;
+use Phalcon\DI\Injectable;
+
+class ProcessBadges extends Injectable
 {
 
-    public $id;
+	public function run()
+	{
+		$manager = new BadgesManager;
+		$manager->process();
+	}
+}
 
-    public $name;
-
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+try {
+	$task = new ProcessBadges($config);
+	$task->run();
+} catch(Exception $e) {
+	echo $e->getMessage(), PHP_EOL;
+	echo $e->getTraceAsString();
 }

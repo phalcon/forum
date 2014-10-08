@@ -90,6 +90,12 @@ class Indexer
         }
     }
 
+    /**
+     * Index a single document
+     *
+     * @param Client $client
+     * @param Posts $post
+     */
     protected function _doIndex($client, $post)
     {
         $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
@@ -108,6 +114,35 @@ class Indexer
             $ret = $client->index($params);
             var_dump($ret);
         }
+    }
+
+    public function searchCommon()
+    {
+        $client = new Client();
+
+        $searchParams['index'] = 'phosphorum';
+        $searchParams['type']  = 'post';
+
+        /*
+
+  "common": {
+    "body": {
+      "query":                "nelly the elephant not as a cartoon",
+      "cutoff_frequency":     0.001,
+      "minimum_should_match": {
+          "low_freq" : 2,
+          "high_freq" : 3
+       }
+    }
+  }
+}
+        */
+
+        $searchParams['body']['common']['body']['fields'] = array('id', 'karma');
+        $searchParams['body']['common']['body']['query'] = "nelly the elephant not as a cartoon";
+        $searchParams['body']['common']['body']["cutoff_frequency"] = 0.001;
+
+        $queryResponse = $client->search($searchParams);
     }
 
     /**

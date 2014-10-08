@@ -29,8 +29,8 @@ class SearchTasks extends Injectable
 	public function run()
 	{
 		$search = new Indexer();
-		$search->indexAll();
-		//print_r($search->search(array('title' => 'ubuntu', 'category' => 6)));
+		//$search->indexAll();
+		print_r($search->searchCommon(array('title' => 'ubuntu', 'category' => 6)));
 	}
 }
 

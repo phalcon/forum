@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Models;
@@ -69,6 +69,36 @@ class Users extends Model
 
     public function initialize()
     {
+        $this->hasMany(
+            'id',
+            'Phosphorum\Models\UsersBadges',
+            'users_id',
+            array(
+                'alias' => 'badges',
+                'reusable' => true
+            )
+        );
+
+        $this->hasMany(
+            'id',
+            'Phosphorum\Models\Posts',
+            'users_id',
+            array(
+                'alias' => 'posts',
+                'reusable' => true
+            )
+        );
+
+        $this->hasMany(
+            'id',
+            'Phosphorum\Models\PostsReplies',
+            'users_id',
+            array(
+                'alias' => 'replies',
+                'reusable' => true
+            )
+        );
+
         $this->addBehavior(
             new Timestampable(array(
                 'beforeCreate' => array(

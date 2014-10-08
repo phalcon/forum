@@ -15,28 +15,31 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Veteran
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * More than one year in the forum and more than 1000 of karma
  */
-class Categories extends CacheableModel
+class Veteran extends BadgeBase
 {
 
-    public $id;
+	protected $name = 'Veteran';
 
-    public $name;
-
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+	/**
+	 * Check whether the user can have the badge
+	 *
+	 * @param Users $user
+	 * @return boolean
+	 */
+	public function canHave(Users $user)
+	{
+		$date = new \DateTime();
+		$date->modify('-1 year');
+		return $user->karma >= 1000 && $user->created_at < $date->getTimestamp();
+	}
 }

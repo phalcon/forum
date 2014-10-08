@@ -17,26 +17,37 @@
 
 namespace Phosphorum\Models;
 
+use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
+
 /**
- * Class Categories
- *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
+ * Class UsersBadges
  *
  * @package Phosphorum\Models
  */
-class Categories extends CacheableModel
+class UsersBadges extends Model
 {
 
     public $id;
 
-    public $name;
+    public $users_id;
 
-    public $slug;
+    public $badge;
 
-    public $number_posts;
+    public $type;
 
-    public $no_bounty;
+    public $code;
 
-    public $no_digest;
+    public $created_at;
+
+    public function initialize()
+    {
+        $this->addBehavior(
+            new Timestampable(array(
+                'beforeValidationOnCreate' => array(
+                    'field' => 'created_at'
+                )
+            ))
+        );
+    }
 }

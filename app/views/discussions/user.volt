@@ -19,6 +19,11 @@
 						<a href="https://github.com/{{ user.login }}">Github Profile</a>
 					</p>
 					<p>
+						{% for badge in user.badges %}
+							<button type="button" class="btn btn-default btn-sm">{{ badge.badge }}</button>
+						{% endfor %}
+					</p>
+					<p>
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#">Recent Activity</a><li>
 						</ul>

@@ -674,6 +674,7 @@ class DiscussionsController extends Controller
         $postVote           = new PostsVotes();
         $postVote->posts_id = $post->id;
         $postVote->users_id = $user->id;
+        $postVote->vote     = PostsVotes::VOTE_UP;
         if (!$postVote->save()) {
             foreach ($postVote->getMessages() as $message) {
                 $contentError = array(
@@ -766,6 +767,7 @@ class DiscussionsController extends Controller
         $postVote           = new PostsVotes();
         $postVote->posts_id = $post->id;
         $postVote->users_id = $user->id;
+        $postVote->vote     = PostsVotes::VOTE_DOWN;
         $postVote->save();
 
         $post->votes_down++;

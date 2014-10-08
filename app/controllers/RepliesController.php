@@ -248,6 +248,7 @@ class RepliesController extends Controller
         $postReplyVote                   = new PostsRepliesVotes();
         $postReplyVote->posts_replies_id = $postReply->id;
         $postReplyVote->users_id         = $user->id;
+        $postReplyVote->vote             = PostsRepliesVotes::VOTE_UP;
         if (!$postReplyVote->save()) {
             foreach ($postReplyVote->getMessages() as $message) {
                 $contentError = array(
@@ -261,7 +262,6 @@ class RepliesController extends Controller
         $postReply->votes_up++;
         if ($postReply->users_id != $user->id) {
             if ($postReply->post->users_id == $user->id) {
-
                 $karmaCount     = intval(abs($user->karma - $postReply->user->karma) / 1000);
                 $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karmaCount;
             } else {
@@ -374,6 +374,7 @@ class RepliesController extends Controller
         $postReplyVote                   = new PostsRepliesVotes();
         $postReplyVote->posts_replies_id = $postReply->id;
         $postReplyVote->users_id         = $user->id;
+        $postReplyVote->vote             = PostsRepliesVotes::VOTE_DOWN;
         if (!$postReplyVote->save()) {
             foreach ($postReplyVote->getMessages() as $message) {
                 $contentError = array(
