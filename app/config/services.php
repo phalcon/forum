@@ -31,6 +31,8 @@ use Phalcon\Cache\Frontend\None as FrontendNone;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Phosphorum\Queue\DummyServer;
 use Ciconia\Ciconia;
+use Phalcon\DI;
+use Phosphorum\Translate\Adapter\Gettext;
 
 /**
  * The URL component is used to generate all kind of urls in the application
@@ -70,6 +72,9 @@ $di->set(
 
         $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
             return 'number_format(' . $resolvedArgs . ')';
+        });
+        $volt->getCompiler()->addFunction('t', function($string){
+            return '$this->translate->_('.($string) . ')';
         });
 
         return $volt;
@@ -323,3 +328,35 @@ $di->set(
     },
     true
 );
+
+/**
+ * This adapter uses gettext as translation frontend.
+ * 
+ */
+$di->set(
+    'translate',
+    function () use ($di) {
+
+        $translate = new Gettext([
+            'locale' => 'vi_VN',
+            'file' => 'messages',
+            'directory' =>  APP_PATH . '/app/lang',
+        ]);
+
+        return $translate;
+    }
+);
+
+
+/**
+ * Translation function
+ *
+ * @param $string
+ *
+ * @return mixed
+ */
+function t($string)
+{
+    $translation = DI::getDefault()->get('translate');
+    return $translation->_($string);
+}
