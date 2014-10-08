@@ -49,7 +49,7 @@ class Populist extends BadgeBase
         $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
         foreach ($posts as $post) {
             $has |= (UsersBadges::count(array(
-                'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
+                'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
                 'bind' => array($user->id, $this->getName(), $post->id)
             )) == 0);
         }
@@ -70,7 +70,7 @@ class Populist extends BadgeBase
         $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
         foreach ($posts as $post) {
             $have = UsersBadges::count(array(
-                'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
+                'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
                 'bind' => array($user->id, $this->getName(), $post->id)
             ));
             if (!$have) {
@@ -94,7 +94,7 @@ class Populist extends BadgeBase
             $userBadge->users_id = $user->id;
             $userBadge->badge    = $name;
             $userBadge->type     = 'P';
-            $userBadge->code     = $id;
+            $userBadge->code1    = $id;
             var_dump($userBadge->save());
         }
     }

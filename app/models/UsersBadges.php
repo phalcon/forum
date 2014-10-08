@@ -36,7 +36,9 @@ class UsersBadges extends Model
 
     public $type;
 
-    public $code;
+    public $code1;
+
+    public $code2;
 
     public $created_at;
 
@@ -57,13 +59,13 @@ class UsersBadges extends Model
         $activity->users_id             = $this->users_id;
         if ($this->type == 'P') {
             $activity->type                 = 'O';
-            $activity->posts_id             = $this->code;
-            $activity->posts_replies_id     = 1;
+            $activity->posts_id             = $this->code1;
+            $activity->posts_replies_id     = 0;
         } else {
             if ($this->type == 'C') {
                 $activity->type             = 'V';
-                $activity->posts_id         = 1;
-                $activity->posts_replies_id = $this->code;
+                $activity->posts_id         = $this->code2;
+                $activity->posts_replies_id = $this->code1;
             } else {
                 $activity->type             = 'B';
                 $activity->posts_id         = 1;

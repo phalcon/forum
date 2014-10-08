@@ -1012,7 +1012,7 @@ class DiscussionsController extends Controller
         $this->view->notifications = ActivityNotifications::find(array(
             'users_id = ?0',
             'bind'  => array($usersId),
-            'limit' => 100,
+            'limit' => 128,
             'order' => 'created_at DESC'
         ));
 
