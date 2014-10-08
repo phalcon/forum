@@ -73,7 +73,7 @@ $di->set(
         $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
             return 'number_format(' . $resolvedArgs . ')';
         });
-        $volt->getCompiler()->addFunction('t', function($string){
+        $volt->getCompiler()->addFunction('t', function ($string) {
             return '$this->translate->_('.($string) . ')';
         });
 
@@ -115,7 +115,6 @@ $di->set(
 
         $debug = $config->application->debug;
         if ($debug) {
-
             $eventsManager = new EventsManager();
 
             $logger = new FileLogger(APP_PATH . "/app/logs/db.log");
@@ -256,7 +255,6 @@ $di->set(
     function () use ($config) {
 
         if ($config->application->debug) {
-
             $frontCache = new FrontendNone();
             return new Phalcon\Cache\Backend\Memory($frontCache);
 
@@ -282,12 +280,10 @@ $di->set(
     function () use ($config) {
 
         if ($config->application->debug) {
-
             $frontCache = new FrontendNone();
             return new Phalcon\Cache\Backend\Memory($frontCache);
 
         } else {
-
             //Cache data for one day by default
             $frontCache = new \Phalcon\Cache\Frontend\Data(array(
                 "lifetime" => 86400 * 30
@@ -331,7 +327,6 @@ $di->set(
 
 /**
  * This adapter uses gettext as translation frontend.
- * 
  */
 $di->set(
     'translate',
