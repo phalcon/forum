@@ -24,6 +24,7 @@ use Phosphorum\Models\Users;
 use Phosphorum\Models\Notifications;
 use Phosphorum\Models\PostsNotifications;
 use Phosphorum\Models\IrcLog;
+use Phosphorum\Badges\Manager as BadgeManager;
 
 /**
  * Class HelpController
@@ -74,6 +75,12 @@ class HelpController extends Controller
 
     }
 
+    public function badgesAction()
+    {
+        $manager = new BadgeManager;
+        $this->view->badges = $manager->getBadges();
+    }
+
     public function statsAction()
     {
         $this->view->threads         = Posts::count();
@@ -82,7 +89,7 @@ class HelpController extends Controller
         $this->view->users           = Users::count();
         $this->view->karma           = Users::sum(array('column' => 'karma'));
         $this->view->notifications   = Notifications::count();
-        $this->view->unotifications  = PostsNotifications::count();
+        $this->view->unotifications  = ActivityNotifications::count();
         $this->view->views           = Posts::sum(array('column' => 'number_views'));
         $this->view->irc             = IrcLog::count();
     }

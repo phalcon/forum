@@ -35,6 +35,8 @@ class NotableQuestion extends BadgeBase
 
     protected $name = 'Notable Question';
 
+    protected $description = 'Asked a question with more than 2500 views';
+
     /**
      * Check whether the user already have this badge
      *

@@ -30,6 +30,8 @@ class Guru extends BadgeBase
 
     protected $name = 'Guru';
 
+    protected $description = 'Reached 15000 or more of Karma';
+
     /**
      * Check whether the user can have the badge
      *

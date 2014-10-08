@@ -74,6 +74,14 @@ $router->add(
 );
 
 $router->add(
+    '/help/badges',
+    array(
+       'controller' => 'help',
+       'action'     => 'badges'
+    )
+);
+
+$router->add(
     '/help/create-post',
     array(
        'controller' => 'help',

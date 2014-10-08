@@ -30,6 +30,8 @@ class Moderator extends BadgeBase
 
     protected $name = 'Moderator';
 
+    protected $description = 'User is a moderator';
+
     /**
      * Check whether the user can have the badge
      *

@@ -30,6 +30,8 @@ class Pundit extends BadgeBase
 
     protected $name = 'Pundit';
 
+    protected $description = 'More than 50 replies in the forum';
+
     /**
      * Check whether the user can have the badge
      *

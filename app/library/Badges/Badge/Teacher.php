@@ -30,6 +30,8 @@ class Teacher extends BadgeBase
 
     protected $name = 'Teacher';
 
+    protected $description = 'First accepted answer';
+
     /**
      * Check whether the user can have the badge
      *

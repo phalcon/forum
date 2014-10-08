@@ -35,6 +35,8 @@ class Populist extends BadgeBase
 
     protected $name = 'Populist';
 
+    protected $description = 'Asked a question with more than 15 replies';
+
     /**
      * Check whether the user already have this badge
      *

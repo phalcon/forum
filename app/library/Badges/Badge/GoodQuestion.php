@@ -35,6 +35,8 @@ class GoodQuestion extends BadgeBase
 
     protected $name = 'Good Question';
 
+    protected $description = 'Awarded one time per every question with more than 5 positive votes';
+
     /**
      * Check whether the user already have this badge
      *

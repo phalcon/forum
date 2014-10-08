@@ -35,6 +35,8 @@ class Virtuoso extends BadgeBase
 
     protected $name = 'Virtuoso';
 
+    protected $description = 'More than 5 accepted answers in specific categories';
+
     protected $query;
 
     public function getExpertQuery(Users $user)

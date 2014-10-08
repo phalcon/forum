@@ -56,6 +56,16 @@ class BadgeBase
     }
 
     /**
+     * Returns the description of the badge
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Add the badge to ther user
      *
      * @param Users $user

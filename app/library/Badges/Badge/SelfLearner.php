@@ -35,6 +35,8 @@ class SelfLearner extends BadgeBase
 
     protected $name = 'Self-Learner';
 
+    protected $description = 'Asked a question and accepted his/her own answer';
+
     /**
      * Check whether the user can have the badge
      *

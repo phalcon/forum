@@ -40,7 +40,7 @@
 							{%- endif -%}
 
 							{%- if activity.type == 'B' -%}
-							you've earned the "{{ activity.extra }}" badge
+							you've earned the "{{ link_to('help/badges', activity.extra) }}" badge
 							{%- endif -%}
 
 							{%- if activity.type == 'O' -%}

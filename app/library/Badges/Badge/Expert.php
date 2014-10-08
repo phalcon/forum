@@ -35,6 +35,8 @@ class Expert extends BadgeBase
 
     protected $name = 'Expert';
 
+    protected $description = 'More than 10 accepted answers in specific categories';
+
     protected $query;
 
     public function getExpertQuery(Users $user)

@@ -35,6 +35,8 @@ class FamousQuestion extends BadgeBase
 
     protected $name = 'Famous Question';
 
+    protected $description = 'Asked a question with more than 10000 views';
+
     /**
      * Check whether the user already have this badge
      *

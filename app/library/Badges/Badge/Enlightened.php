@@ -30,6 +30,8 @@ class Enlightened extends BadgeBase
 
     protected $name = 'Enlightened';
 
+    protected $description = 'Reached 5000 or more of Karma';
+
     /**
      * Check whether the user can have the badge
      *

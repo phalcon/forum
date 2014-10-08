@@ -30,6 +30,8 @@ class Veteran extends BadgeBase
 
     protected $name = 'Veteran';
 
+    protected $description = 'More than one year in the forum and more than 1000 of karma';
+
     /**
      * Check whether the user can have the badge
      *

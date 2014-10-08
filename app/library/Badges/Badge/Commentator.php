@@ -33,6 +33,8 @@ class Commentator extends BadgeBase
 
     protected $name = 'Commentator';
 
+    protected $description = 'More than 10 replies on different threads';
+
     /**
      * Check whether the user can have the badge
      *

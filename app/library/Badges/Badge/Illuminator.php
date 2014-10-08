@@ -30,6 +30,8 @@ class Illuminator extends BadgeBase
 
     protected $name = 'Illuminator';
 
+    protected $description = 'More than 50 accepted answers';
+
     /**
      * Check whether the user can have the badge
      *

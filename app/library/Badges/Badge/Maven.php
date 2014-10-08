@@ -30,6 +30,8 @@ class Maven extends BadgeBase
 
     protected $name = 'Maven';
 
+    protected $description = 'More than 15 accepted answers';
+
     /**
      * Check whether the user can have the badge
      *

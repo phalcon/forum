@@ -33,6 +33,8 @@ class Critic extends BadgeBase
 
     protected $name = 'Critic';
 
+    protected $description = 'First negative vote';
+
     /**
      * Check whether the user can have the badge
      *

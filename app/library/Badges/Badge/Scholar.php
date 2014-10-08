@@ -30,6 +30,8 @@ class Scholar extends BadgeBase
 
     protected $name = 'Scholar';
 
+    protected $description = 'Asked a question and accepted an answer';
+
     /**
      * Check whether the user can have the badge
      *

@@ -33,6 +33,8 @@ class Supporter extends BadgeBase
 
     protected $name = 'Supporter';
 
+    protected $description = 'First positive vote to another user';
+
     /**
      * Check whether the user can have the badge
      *

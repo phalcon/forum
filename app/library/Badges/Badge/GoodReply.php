@@ -35,6 +35,8 @@ class GoodReply extends BadgeBase
 
     protected $name = 'Good Reply';
 
+    protected $description = 'Awarded one time per every answer with more than 5 positive votes';
+
     /**
      * Check whether the user already have this badge
      *
