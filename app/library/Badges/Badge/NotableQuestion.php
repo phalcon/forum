@@ -33,69 +33,69 @@ use Phosphorum\Badges\BadgeBase;
 class NotableQuestion extends BadgeBase
 {
 
-	protected $name = 'Notable Question';
+    protected $name = 'Notable Question';
 
-	/**
-	 * Check whether the user already have this badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function has(Users $user)
-	{
-		$has = false;
-		$noBountyCategories = $this->getNoBountyCategories();
-		$conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 2500';
-		$posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
-		foreach ($posts as $post) {
-			$has |= (UsersBadges::count(array(
-				'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
-				'bind' => array($user->id, $this->getName(), $post->id)
-			)) == 0);
-		}
-		return !$has;
-	}
+    /**
+     * Check whether the user already have this badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function has(Users $user)
+    {
+        $has = false;
+        $noBountyCategories = $this->getNoBountyCategories();
+        $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 2500';
+        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        foreach ($posts as $post) {
+            $has |= (UsersBadges::count(array(
+                'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
+                'bind' => array($user->id, $this->getName(), $post->id)
+            )) == 0);
+        }
+        return !$has;
+    }
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param  Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		$ids = array();
-		$noBountyCategories = $this->getNoBountyCategories();
-		$conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 2500';
-		$posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
-		foreach ($posts as $post) {
-			$have = UsersBadges::count(array(
-				'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
-				'bind' => array($user->id, $this->getName(), $post->id)
-			));
-			if (!$have) {
-				$ids[] = $post->id;
-			}
-		}
-		return $ids;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param  Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        $ids = array();
+        $noBountyCategories = $this->getNoBountyCategories();
+        $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 2500';
+        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        foreach ($posts as $post) {
+            $have = UsersBadges::count(array(
+                'users_id = ?0 AND badge = ?1 AND type = "P" AND code = ?2',
+                'bind' => array($user->id, $this->getName(), $post->id)
+            ));
+            if (!$have) {
+                $ids[] = $post->id;
+            }
+        }
+        return $ids;
+    }
 
-	/**
-	 * Add the badge to ther user
-	 *
-	 * @param Users $user
-	 * @param array $extra
-	 */
-	public function add(Users $user, $extra = NULL)
-	{
-		$name = $this->getName();
-		foreach ($extra as $id) {
-			$userBadge = new UsersBadges();
-			$userBadge->users_id = $user->id;
-			$userBadge->badge    = $name;
-			$userBadge->type     = 'P';
-			$userBadge->code     = $id;
-			var_dump($userBadge->save());
-		}
-	}
+    /**
+     * Add the badge to ther user
+     *
+     * @param Users $user
+     * @param array $extra
+     */
+    public function add(Users $user, $extra = null)
+    {
+        $name = $this->getName();
+        foreach ($extra as $id) {
+            $userBadge = new UsersBadges();
+            $userBadge->users_id = $user->id;
+            $userBadge->badge    = $name;
+            $userBadge->type     = 'P';
+            $userBadge->code     = $id;
+            var_dump($userBadge->save());
+        }
+    }
 }

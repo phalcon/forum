@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Illuminator extends BadgeBase
 {
 
-	protected $name = 'Illuminator';
+    protected $name = 'Illuminator';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->countReplies('accepted = "Y"') >= 50;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies('accepted = "Y"') >= 50;
+    }
 }

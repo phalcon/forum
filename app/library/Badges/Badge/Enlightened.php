@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Enlightened extends BadgeBase
 {
 
-	protected $name = 'Enlightened';
+    protected $name = 'Enlightened';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->karma >= 5000;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->karma >= 5000;
+    }
 }

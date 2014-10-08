@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Pundit extends BadgeBase
 {
 
-	protected $name = 'Pundit';
+    protected $name = 'Pundit';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->countReplies() >= 50;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies() >= 50;
+    }
 }

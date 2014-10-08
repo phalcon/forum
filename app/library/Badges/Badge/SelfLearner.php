@@ -33,28 +33,28 @@ use Phosphorum\Badges\BadgeBase;
 class SelfLearner extends BadgeBase
 {
 
-	protected $name = 'Self-Learner';
+    protected $name = 'Self-Learner';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		$noBountyCategories = $this->getNoBountyCategories();
-		$conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND accepted_answer = "Y"';
-		$posts = $user->getPosts(array($conditions, 'order' => 'created_at DESC'));
-		foreach ($posts as $post) {
-			$ownReply = $post->countReplies(array(
-				"accepted = 'Y' AND users_id = ?0",
-				'bind' => array($user->id)
-			));
-			if ($ownReply) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        $noBountyCategories = $this->getNoBountyCategories();
+        $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND accepted_answer = "Y"';
+        $posts = $user->getPosts(array($conditions, 'order' => 'created_at DESC'));
+        foreach ($posts as $post) {
+            $ownReply = $post->countReplies(array(
+                "accepted = 'Y' AND users_id = ?0",
+                'bind' => array($user->id)
+            ));
+            if ($ownReply) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

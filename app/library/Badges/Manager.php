@@ -25,53 +25,53 @@ use Phosphorum\Models\UsersBadges;
  */
 class Manager
 {
-	/**
-	 * Returns instances of all available badges
-	 *
-	 * @return array
-	 */
-	public function getBadges()
-	{
-		$badges = array();
-		$directory = new \RecursiveDirectoryIterator(__DIR__ . '/Badge');
-		foreach ($directory as $item) {
-			if (!$item->isDir()) {
+    /**
+     * Returns instances of all available badges
+     *
+     * @return array
+     */
+    public function getBadges()
+    {
+        $badges = array();
+        $directory = new \RecursiveDirectoryIterator(__DIR__ . '/Badge');
+        foreach ($directory as $item) {
+            if (!$item->isDir()) {
 
-				$path = $item->getPathname();
-				$baseClassName = str_replace('.php', '', basename($path));
-				$className = 'Phosphorum\Badges\Badge\\' . $baseClassName;
+                $path = $item->getPathname();
+                $baseClassName = str_replace('.php', '', basename($path));
+                $className = 'Phosphorum\Badges\Badge\\' . $baseClassName;
 
-				$badges[] = new $className();
-			}
-		}
+                $badges[] = new $className();
+            }
+        }
 
-		return $badges;
-	}
+        return $badges;
+    }
 
-	/**
-	 *
-	 */
-	public function process()
-	{
-		$badges = $this->getBadges();
-		foreach (Users::find() as $user) {
-			$this->processUserBadges($user, $badges);
-		}
-	}
+    /**
+     *
+     */
+    public function process()
+    {
+        $badges = $this->getBadges();
+        foreach (Users::find() as $user) {
+            $this->processUserBadges($user, $badges);
+        }
+    }
 
-	/**
-	 * @param Users $user
-	 * @param array $badges
-	 */
-	public function processUserBadges(Users $user, $badges)
-	{
-		foreach ($badges as $badge) {
-			if (!$badge->has($user)) {
-				$extra = $badge->canHave($user);
-				if ($extra) {
-					$badge->add($user, $extra);
-				}
-			}
-		}
-	}
+    /**
+     * @param Users $user
+     * @param array $badges
+     */
+    public function processUserBadges(Users $user, $badges)
+    {
+        foreach ($badges as $badge) {
+            if (!$badge->has($user)) {
+                $extra = $badge->canHave($user);
+                if ($extra) {
+                    $badge->add($user, $extra);
+                }
+            }
+        }
+    }
 }

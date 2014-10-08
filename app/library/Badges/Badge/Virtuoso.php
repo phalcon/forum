@@ -33,82 +33,82 @@ use Phosphorum\Badges\BadgeBase;
 class Virtuoso extends BadgeBase
 {
 
-	protected $name = 'Virtuoso';
+    protected $name = 'Virtuoso';
 
-	protected $query;
+    protected $query;
 
-	public function getExpertQuery(Users $user)
-	{
-		if (!$this->query) {
-			$this->query = $user->getModelsManager()->createBuilder()
-				->columns(array('p.categories_id', 'COUNT(*)'))
-				->from(array('r' => 'Phosphorum\Models\PostsReplies'))
-				->join('Phosphorum\Models\Posts', null, 'p')
-				->where('r.users_id = ?0 AND r.accepted = "Y"')
-				->notInWhere('p.categories_id', $this->getNoBountyCategories())
-				->groupBy('p.categories_id')
-				->having('COUNT(*) >= 5')
-				->getQuery();
-		}
-		return $this->query;
-	}
+    public function getExpertQuery(Users $user)
+    {
+        if (!$this->query) {
+            $this->query = $user->getModelsManager()->createBuilder()
+                ->columns(array('p.categories_id', 'COUNT(*)'))
+                ->from(array('r' => 'Phosphorum\Models\PostsReplies'))
+                ->join('Phosphorum\Models\Posts', null, 'p')
+                ->where('r.users_id = ?0 AND r.accepted = "Y"')
+                ->notInWhere('p.categories_id', $this->getNoBountyCategories())
+                ->groupBy('p.categories_id')
+                ->having('COUNT(*) >= 5')
+                ->getQuery();
+        }
+        return $this->query;
+    }
 
-	/**
-	 * Check whether the user already have this badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function has(Users $user)
-	{
-		$has = false;
-		$categories = $this->getExpertQuery($user)->execute(array($user->id));
-		foreach ($categories as $categoryRow) {
-			$category = Categories::findFirstById($categoryRow->categories_id);
-			if ($category) {
-				$badgeName = $category->name . ' / ' . $this->getName();
-				$has |= (UsersBadges::count(array(
-					'users_id = ?0 AND badge = ?1',
-					'bind' => array($user->id, $badgeName)
-				)) == 0);
-			}
-		}
-		return (boolean) !$has;
-	}
+    /**
+     * Check whether the user already have this badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function has(Users $user)
+    {
+        $has = false;
+        $categories = $this->getExpertQuery($user)->execute(array($user->id));
+        foreach ($categories as $categoryRow) {
+            $category = Categories::findFirstById($categoryRow->categories_id);
+            if ($category) {
+                $badgeName = $category->name . ' / ' . $this->getName();
+                $has |= (UsersBadges::count(array(
+                    'users_id = ?0 AND badge = ?1',
+                    'bind' => array($user->id, $badgeName)
+                )) == 0);
+            }
+        }
+        return (boolean) !$has;
+    }
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param  Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		$ids = array();
-		$categories = $this->getExpertQuery($user)->execute(array($user->id));
-		foreach ($categories as $categoryRow) {
-			$category = Categories::findFirstById($categoryRow->categories_id);
-			if ($category) {
-				$ids[] = $category;
-			}
-		}
-		return $ids;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param  Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        $ids = array();
+        $categories = $this->getExpertQuery($user)->execute(array($user->id));
+        foreach ($categories as $categoryRow) {
+            $category = Categories::findFirstById($categoryRow->categories_id);
+            if ($category) {
+                $ids[] = $category;
+            }
+        }
+        return $ids;
+    }
 
-	/**
-	 * Add the badge to ther user
-	 *
-	 * @param Users $user
-	 * @param array $extra
-	 */
-	public function add(Users $user, $extra = NULL)
-	{
-		$name = $this->getName();
-		foreach ($extra as $category) {
-			$userBadge = new UsersBadges();
-			$userBadge->users_id = $user->id;
-			$userBadge->badge    = $category->name . ' / ' . $this->getName();
-			var_dump($userBadge->save());
-		}
-	}
+    /**
+     * Add the badge to ther user
+     *
+     * @param Users $user
+     * @param array $extra
+     */
+    public function add(Users $user, $extra = null)
+    {
+        $name = $this->getName();
+        foreach ($extra as $category) {
+            $userBadge = new UsersBadges();
+            $userBadge->users_id = $user->id;
+            $userBadge->badge    = $category->name . ' / ' . $this->getName();
+            var_dump($userBadge->save());
+        }
+    }
 }

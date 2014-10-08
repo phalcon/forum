@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Scholar extends BadgeBase
 {
 
-	protected $name = 'Scholar';
+    protected $name = 'Scholar';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->countPosts('accepted_answer = "Y"') >= 1;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countPosts('accepted_answer = "Y"') >= 1;
+    }
 }

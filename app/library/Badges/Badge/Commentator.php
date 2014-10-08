@@ -31,16 +31,16 @@ use Phosphorum\Badges\BadgeBase;
 class Commentator extends BadgeBase
 {
 
-	protected $name = 'Commentator';
+    protected $name = 'Commentator';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->countReplies() >= 10;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies() >= 10;
+    }
 }

@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Moderator extends BadgeBase
 {
 
-	protected $name = 'Moderator';
+    protected $name = 'Moderator';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->moderator == 'Y';
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->moderator == 'Y';
+    }
 }

@@ -28,16 +28,16 @@ use Phosphorum\Badges\BadgeBase;
 class Maven extends BadgeBase
 {
 
-	protected $name = 'Pundit';
+    protected $name = 'Pundit';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		return $user->countReplies('accepted = "Y"') >= 15;
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies('accepted = "Y"') >= 15;
+    }
 }

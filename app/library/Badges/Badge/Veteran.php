@@ -28,18 +28,18 @@ use Phosphorum\Badges\BadgeBase;
 class Veteran extends BadgeBase
 {
 
-	protected $name = 'Veteran';
+    protected $name = 'Veteran';
 
-	/**
-	 * Check whether the user can have the badge
-	 *
-	 * @param Users $user
-	 * @return boolean
-	 */
-	public function canHave(Users $user)
-	{
-		$date = new \DateTime();
-		$date->modify('-1 year');
-		return $user->karma >= 1000 && $user->created_at < $date->getTimestamp();
-	}
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        $date = new \DateTime();
+        $date->modify('-1 year');
+        return $user->karma >= 1000 && $user->created_at < $date->getTimestamp();
+    }
 }
