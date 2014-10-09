@@ -22,7 +22,7 @@ use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Notifications;
-use Phosphorum\Models\PostsNotifications;
+use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\IrcLog;
 use Phosphorum\Badges\Manager as BadgeManager;
 
