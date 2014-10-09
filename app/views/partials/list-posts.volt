@@ -17,7 +17,7 @@
 			{%- else -%}
 				<li>
 			{%- endif -%}
-				{{ link_to('discussions/' ~ order, label) }}
+				{{ link_to('discussions/' ~ order, t(label)) }}
 			</li>
 		{%- endfor -%}
 	</ul>
@@ -30,12 +30,12 @@
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
 				<th width="50%">{{t('Topic')}}</th>
-				<th class="hidden-xs">Users</th>
-				<th class="hidden-xs">Category</th>
-				<th class="hidden-xs">Replies</th>
-				<th class="hidden-xs">Views</th>
-				<th class="hidden-xs">Created</th>
-				<th class="hidden-xs">Last Reply</th>
+				<th width="10%"class="hidden-xs">{{t('Users')}}</th>
+				<th width="10%"class="hidden-xs">{{t('Category')}}</th>
+				<th width="10%"class="hidden-xs">{{t('Replies')}}</th>
+				<th class="hidden-xs">{{t('Views')}}</th>
+				<th width="10%"class="hidden-xs">{{t('Created')}}</th>
+				<th width="10%"class="hidden-xs">{{t('Last Reply')}}</th>
 			</tr>
 		{%- for post in posts -%}
 			<tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% endif %}">
@@ -64,7 +64,7 @@
 					{%- endcache -%}
 				</td>
 				<td class="hidden-xs">
-					<span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
+					<span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, t(post.category.name)) }}</span>
 				</td>
 				<td class="hidden-xs" align="center">
 					<span class="big-number">{% if post.number_replies > 0 %}{{ post.number_replies }}{%endif %}</span>

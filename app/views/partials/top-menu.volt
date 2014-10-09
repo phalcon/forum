@@ -27,7 +27,7 @@
 								<table width="100%">
 									<tr>
 										<td><input type="text" class="form-control" name="q"></td>
-										<td>&nbsp;<input type="submit" class="btn btn-primary" value="Search"></td>
+										<td>&nbsp;<input type="submit" class="btn btn-primary" value="{{t('Search')}}"></td>
 									</tr>
 								</table>
 							</form>
@@ -59,7 +59,7 @@
 							{%- for category in categories -%}
 								<li>
 									{{- link_to('category/' ~ category.id ~ '/' ~ category.slug,
-										category.name ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
+										t(category.name) ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
 									-}}
 								</li>
 							{%- endfor -%}
@@ -71,15 +71,15 @@
 			<li>{{ link_to('help', '<span class="glyphicon glyphicon-question-sign"></span>', 'title': 'Help') }}</li>
 
 			{%- if session.get('identity') -%}
-			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Settings') }}</li>
-			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>
+			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': t('Settings')) }}</li>
+			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': t('Logout')) }}</li>
 			{%- endif -%}
 		  </ul>
 
 			{%- if session.get('identity') -%}
-				{{ link_to('post/discussion', 'Start a Discussion', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('post/discussion', t('Start a Discussion'), 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- else -%}
-				{{ link_to('login/oauth/authorize', 'Log In with Github', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('login/oauth/authorize', t('Log In with Github'), 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- endif -%}
 		</div>
 	  </div>
