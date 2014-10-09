@@ -48,6 +48,8 @@ msgid   "Logout"
 msgstr  "Thoát"
 msgid   "Search"
 msgstr  "Tìm kiếm"
+msgid   "Home"
+msgstr  "Trang chủ"
 
 msgid  "News/Announcements"
 msgstr "Thông báo"
