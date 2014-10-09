@@ -29,7 +29,7 @@
 	<div align="center">
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
-				<th width="50%">Topic</th>
+				<th width="50%">{{t('Topic')}}</th>
 				<th class="hidden-xs">Users</th>
 				<th class="hidden-xs">Category</th>
 				<th class="hidden-xs">Replies</th>
