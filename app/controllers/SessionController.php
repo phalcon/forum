@@ -106,7 +106,7 @@ class SessionController extends Controller
             }
 
             if ($user->banned == 'Y') {
-                $this->flashSession->error('You have been banned from the forum');
+                $this->flashSession->error('You have been banned from the forum.');
                 return $this->indexRedirect();
             }
 

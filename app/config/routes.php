@@ -322,6 +322,22 @@ $router->add(
 );
 
 $router->add(
+    '/subscribe/discussion/{id:[0-9]+}',
+    array(
+       'controller' => 'discussions',
+       'action'     => 'subscribe'
+    )
+);
+
+$router->add(
+    '/unsubscribe/discussion/{id:[0-9]+}',
+    array(
+       'controller' => 'discussions',
+       'action'     => 'unsubscribe'
+    )
+);
+
+$router->add(
     '/user/{id:[0-9]+}/{login}',
     array(
        'controller' => 'discussions',
