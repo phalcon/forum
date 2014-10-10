@@ -67,6 +67,8 @@ class Users extends Model
 
     public $votes_points;
 
+    public $banned;
+
     const SYSTEM_USER = 1;
 
     public function initialize()
@@ -151,6 +153,7 @@ class Users extends Model
         $this->votes_points += Karma::INITIAL_KARMA;
         $this->votes         = 0;
         $this->timezone      = 'Europe/London';
+        $this->banned        = 'N';
     }
 
     public function afterValidation()

@@ -105,6 +105,11 @@ class SessionController extends Controller
                 $user->access_token = $response['access_token'];
             }
 
+            if ($user->banned == 'Y') {
+                $this->flashSession->error('You have been banned from the forum');
+                return $this->indexRedirect();
+            }
+
             //$user = ForumUsers::findFirst();
 
             /**
