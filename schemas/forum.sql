@@ -1,107 +1,142 @@
--- phpMyAdmin SQL Dump
--- version 4.2.6
--- http://www.phpmyadmin.net
+-- MySQL dump 10.14  Distrib 5.5.39-MariaDB, for Linux (x86_64)
 --
--- Host: localhost
--- Generation Time: Oct 09, 2014 at 12:52 PM
--- Server version: 5.5.38-MariaDB
--- PHP Version: 5.5.17
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: forum
+-- ------------------------------------------------------
+-- Server version	5.5.39-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `forum`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `activities`
 --
 
-CREATE TABLE IF NOT EXISTS `activities` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `activities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activities` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `type` char(1) NOT NULL,
   `posts_id` int(10) unsigned DEFAULT NULL,
-  `created_at` int(18) unsigned DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `created_at` int(18) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `created_at` (`created_at`),
+  KEY `users_id` (`users_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `activities`
 --
 
-INSERT INTO `activities` (`id`, `users_id`, `type`, `posts_id`, `created_at`) VALUES
-(1, 1, 'U', NULL, 1412742974),
-(2, 1, 'P', 1, 1412743026),
-(3, 2, 'U', NULL, 1412756737);
-
--- --------------------------------------------------------
+LOCK TABLES `activities` WRITE;
+/*!40000 ALTER TABLE `activities` DISABLE KEYS */;
+INSERT INTO `activities` VALUES (1,1,'U',NULL,1412742974),(2,1,'P',1,1412743026),(3,2,'U',NULL,1412756737),(4,2,'P',2,1412870272),(5,3,'U',NULL,1412873122);
+/*!40000 ALTER TABLE `activities` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `activity_notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `activity_notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `activity_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity_notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `posts_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned DEFAULT NULL,
   `type` char(1) COLLATE utf8_unicode_ci NOT NULL,
   `users_origin_id` int(10) unsigned DEFAULT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
-  `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`was_read`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `activity_notifications`
+--
+
+LOCK TABLES `activity_notifications` WRITE;
+/*!40000 ALTER TABLE `activity_notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activity_notifications` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) NOT NULL,
   `slug` varchar(32) DEFAULT NULL,
-  `number_posts` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `number_posts` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `number_posts` (`number_posts`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `slug`, `number_posts`) VALUES
-(1, 'News Announcements', 'news-announcements', 1),
-(2, 'General', 'general', 0);
-
--- --------------------------------------------------------
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'News/Announcements','news-announcements',1),(2,'General','general',0),(3,'Installation','installation',1),(4,'Development Tool','development-tool',NULL),(5,'Beginners','beginners',NULL),(6,'Paginator','paginator',NULL),(7,'Configuration','configuration',NULL),(8,'Security','security',NULL),(9,'Annotations','annotations',NULL),(10,'Jobs','jobs',NULL);
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `irclog`
 --
 
-CREATE TABLE IF NOT EXISTS `irclog` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `irclog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `irclog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `who` varchar(64) NOT NULL,
   `content` text,
-  `datelog` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `datelog` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `datelog` (`datelog`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `irclog`
+--
+
+LOCK TABLES `irclog` WRITE;
+/*!40000 ALTER TABLE `irclog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `irclog` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `posts_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned DEFAULT NULL,
@@ -109,32 +144,60 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
   `message_id` char(60) DEFAULT NULL,
-  `sent` char(1) NOT NULL DEFAULT 'N'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sent` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `posts_id` (`posts_id`),
+  KEY `sent` (`sent`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `notifications_bounces`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications_bounces` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `notifications_bounces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications_bounces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(120) NOT NULL,
   `status` varchar(10) DEFAULT NULL,
   `diagnostic` varchar(120) DEFAULT NULL,
   `created_at` int(10) unsigned NOT NULL,
-  `reported` char(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `reported` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`,`reported`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `notifications_bounces`
+--
+
+LOCK TABLES `notifications_bounces` WRITE;
+/*!40000 ALTER TABLE `notifications_bounces` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications_bounces` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts`
 --
 
-CREATE TABLE IF NOT EXISTS `posts` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
   `title` varchar(128) NOT NULL,
@@ -151,80 +214,121 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `status` char(1) DEFAULT 'A',
   `locked` char(1) DEFAULT 'N',
   `deleted` int(3) DEFAULT '0',
-  `accepted_answer` char(1) DEFAULT 'N'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `accepted_answer` char(1) DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `categories_id` (`categories_id`),
+  KEY `title` (`title`),
+  KEY `number_replies` (`number_replies`),
+  KEY `modified_at` (`modified_at`),
+  KEY `created_at` (`created_at`),
+  KEY `sticked` (`sticked`,`created_at`),
+  KEY `deleted` (`deleted`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `users_id`, `categories_id`, `title`, `slug`, `content`, `number_views`, `number_replies`, `votes_up`, `votes_down`, `sticked`, `created_at`, `modified_at`, `edited_at`, `status`, `locked`, `deleted`, `accepted_answer`) VALUES
-(1, 1, 1, 'Chào mừng bạn đến diễn đàn Phalcon', 'chao-mung-ban-den-dien-dan-phalcon', 'nice', 1, 0, NULL, NULL, 'Y', 1412743026, 1412743026, NULL, 'A', NULL, 0, 'N');
-
--- --------------------------------------------------------
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,1,1,'Chào mừng bạn đến diễn đàn Phalcon','ch-o-m-ng-b-n-n-di-n-n-phalcon','Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn cũng có  thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			 {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }}  //sữa thành \r\n			 {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nĐể có thể comment bạn cần phải có tài khoản [Github](http://github.com).  Ok như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!',10,0,NULL,NULL,'Y',1412743026,1412743026,1412876293,'A',NULL,0,'N'),(2,2,3,'Hướng dẫn cài đặt Phalcon trên Heroku','huong-dan-cai-dat-phalcon-tren-heroku','Hi all\r\n\r\nCác bạn có thể hướng dẫn cài Phalcon trên Heroku được không, mình làm theo tut này mà không được  http://www.sitepoint.com/install-custom-php-extensions-heroku/\r\n\r\nThanks',7,0,NULL,NULL,'N',1412870272,1412870272,NULL,'A',NULL,0,'N');
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_bounties`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_bounties` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_bounties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_bounties` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `points` int(10) unsigned NOT NULL,
-  `created_at` int(18) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` int(18) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_replies_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `posts_bounties`
+--
+
+LOCK TABLES `posts_bounties` WRITE;
+/*!40000 ALTER TABLE `posts_bounties` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_bounties` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_history`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_history` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `posts_history`
 --
 
-INSERT INTO `posts_history` (`id`, `posts_id`, `users_id`, `created_at`, `content`) VALUES
-(1, 1, 1, 1412743026, 'nice'),
-(2, 1, 1, 1412743026, 'nice');
-
--- --------------------------------------------------------
+LOCK TABLES `posts_history` WRITE;
+/*!40000 ALTER TABLE `posts_history` DISABLE KEYS */;
+INSERT INTO `posts_history` VALUES (1,1,1,1412743026,'nice'),(2,1,1,1412743026,'nice'),(3,1,1,1412847767,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\nXin cảm ơn!!!!'),(4,1,1,1412848491,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\ni- [Hỗ trợ giải đáp các câu hỏi](/)\r\n- [Đóng góp mã nguồn cho forum này](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po)\r\n\r\nXin cảm ơn!!!!'),(5,1,1,1412848510,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n- [Đóng góp mã nguồn cho forum này](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po)\r\n\r\nXin cảm ơn!!!!'),(6,2,2,1412870272,'Hi all\r\n\r\nCác bạn có thể hướng dẫn cài Phalcon trên Heroku được không, mình làm theo tut này mà không được  http://www.sitepoint.com/install-custom-php-extensions-heroku/\r\n\r\nThanks'),(7,2,2,1412870272,'Hi all\r\n\r\nCác bạn có thể hướng dẫn cài Phalcon trên Heroku được không, mình làm theo tut này mà không được  http://www.sitepoint.com/install-custom-php-extensions-heroku/\r\n\r\nThanks'),(8,1,1,1412871658,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn củng cố thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			{{ {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }} thành \r\n			{{ {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nOk như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!'),(9,1,1,1412871702,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn cũng có  thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			{{ {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }} thành \r\n			{{ {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nOk như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!'),(10,2,3,1412873128,'Hi all\r\n\r\nCác bạn có thể hướng dẫn cài Phalcon trên Heroku được không, mình làm theo tut này mà không được  http://www.sitepoint.com/install-custom-php-extensions-heroku/\r\n\r\nThanks'),(11,1,3,1412873168,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn cũng có  thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			{{ {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }} thành \r\n			{{ {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nOk như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!'),(12,1,1,1412873273,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn cũng có  thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			 {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }}  //sữa thành \r\n			 {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nOk như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!'),(13,1,1,1412876293,'Xin chào tất cả mọi người !!!\r\n\r\nTrước hết xin cảm ơn các bạn đã ghé thăm diền Forum này, mục đích của Forum này là dùng để chia sẽ những kinh nghiệp sử dụng Phalcon hay đặt những câu hỏi của các bạn khi gặp phải trong quá trình sử dụng Phalcon. Những gì mà bạn có thể đóng góp\r\n\r\n- [Dịch tài liệu Phalcon](https://www.transifex.com/projects/p/phalcon/)\r\n- [Chia sẽ các tut](/)\r\n- [Hỗ trợ giải đáp các câu hỏi](/)\r\n\r\n\r\nDo tôi dùng mã nguồn của Forum Phalcon nên hiện tại có một số xuất hiện tiếng anh và tiếng việt mong các bạn thông cảm, các bạn cũng có  thể giúp tôi nếu có thể bằng cách [fork](https://github.com/duythien/forum/), sau đó PR cho tôi, ví dụ trong tập tin [List-post](https://github.com/duythien/forum/blob/master/app/views/partials/top-menu.volt#L83)\r\n\r\n\r\n			 {{ link_to(\'login/oauth/authorize\', \'Log In with Github\' }}  //sữa thành \r\n			 {{ link_to(\'login/oauth/authorize\', t(\'Log In with Github\') }}\r\n\r\n\r\nsau đó vào tập tin ngôn ngữ [tiếng việt](https://github.com/duythien/forum/blob/master/app/lang/vi_VN/LC_MESSAGES/messages.po) thêm vào như sau\r\n\r\n			msgid  \"Log In with Github\"\r\n			msgstr \"Đặng nhập với Github\"\r\n\r\nĐể có thể comment bạn cần phải có tài khoản [Github](http://github.com).  Ok như vậy là xong, các bạn có thắc mắc gì comment bên dưới\r\n\r\nXin cảm ơn!!!!'),(14,2,1,1412909773,'Hi all\r\n\r\nCác bạn có thể hướng dẫn cài Phalcon trên Heroku được không, mình làm theo tut này mà không được  http://www.sitepoint.com/install-custom-php-extensions-heroku/\r\n\r\nThanks');
+/*!40000 ALTER TABLE `posts_history` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
-  `posts_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `posts_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `posts_notifications`
 --
 
-INSERT INTO `posts_notifications` (`id`, `users_id`, `posts_id`) VALUES
-(1, 1, 1);
-
--- --------------------------------------------------------
+LOCK TABLES `posts_notifications` WRITE;
+/*!40000 ALTER TABLE `posts_notifications` DISABLE KEYS */;
+INSERT INTO `posts_notifications` VALUES (1,1,1),(2,2,2);
+/*!40000 ALTER TABLE `posts_notifications` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_replies`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `in_reply_to_id` int(10) unsigned DEFAULT '0',
@@ -234,76 +338,134 @@ CREATE TABLE IF NOT EXISTS `posts_replies` (
   `edited_at` int(18) unsigned DEFAULT NULL,
   `votes_up` int(10) unsigned DEFAULT NULL,
   `votes_down` int(10) unsigned DEFAULT NULL,
-  `accepted` char(1) DEFAULT 'N'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `accepted` char(1) DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `posts_replies`
+--
+
+LOCK TABLES `posts_replies` WRITE;
+/*!40000 ALTER TABLE `posts_replies` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_replies` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_replies_history`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies_history` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_replies_id` (`posts_replies_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `posts_replies_history`
+--
+
+LOCK TABLES `posts_replies_history` WRITE;
+/*!40000 ALTER TABLE `posts_replies_history` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_replies_history` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_replies_votes`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies_votes` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created_at` int(18) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `posts_replies_votes`
+--
+
+LOCK TABLES `posts_replies_votes` WRITE;
+/*!40000 ALTER TABLE `posts_replies_votes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_replies_votes` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_views`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_views` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_views`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_views` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
-  `ipaddress` varchar(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `ipaddress` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`,`ipaddress`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `posts_views`
 --
 
-INSERT INTO `posts_views` (`id`, `posts_id`, `ipaddress`) VALUES
-(1, 1, '127.0.0.1');
-
--- --------------------------------------------------------
+LOCK TABLES `posts_views` WRITE;
+/*!40000 ALTER TABLE `posts_views` DISABLE KEYS */;
+INSERT INTO `posts_views` VALUES (4,1,'115.79.194.53'),(2,1,'115.79.34.167'),(12,1,'118.68.189.217'),(3,1,'118.69.52.129'),(1,1,'127.0.0.1'),(13,1,'14.169.15.146'),(5,1,'14.169.60.53'),(10,1,'183.81.10.99'),(14,1,'42.117.54.241'),(8,1,'42.118.50.0'),(17,2,'115.79.34.167'),(11,2,'118.68.189.217'),(16,2,'118.69.52.129'),(6,2,'14.169.60.53'),(9,2,'183.81.10.99'),(15,2,'42.117.54.241'),(7,2,'42.118.50.0');
+/*!40000 ALTER TABLE `posts_views` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `posts_votes`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_votes` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created_at` int(18) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `posts_votes`
+--
+
+LOCK TABLES `posts_votes` WRITE;
+/*!40000 ALTER TABLE `posts_votes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_votes` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) DEFAULT NULL,
   `login` varchar(72) CHARACTER SET ascii NOT NULL,
   `email` varchar(70) DEFAULT NULL,
@@ -318,201 +480,34 @@ CREATE TABLE IF NOT EXISTS `users` (
   `moderator` char(1) DEFAULT 'N',
   `karma` int(11) DEFAULT NULL,
   `votes` int(10) unsigned DEFAULT NULL,
-  `votes_points` int(11) DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `votes_points` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `access_token` (`access_token`),
+  KEY `login` (`login`),
+  KEY `email` (`email`),
+  KEY `karma` (`karma`),
+  KEY `login_2` (`login`),
+  KEY `notifications` (`notifications`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `login`, `email`, `gravatar_id`, `token_type`, `access_token`, `created_at`, `modified_at`, `notifications`, `digest`, `timezone`, `moderator`, `karma`, `votes`, `votes_points`) VALUES
-(1, 'Duy Thiện', 'duythien', 'fcduythien@gmail.com', '97cfdb3586f82c3e1e4fe562bda688b8', 'bearer', '36326fb099b942450487df821acdc2e830c49d5f', 1412742974, 1412743026, 'P', 'Y', 'Europe/London', 'N', 60, 1, 0),
-(2, 'Nhi', 'stackphysics', 'fcopensuse@gmail.com', '93bafae90377f79ffc801d91badf9142', 'bearer', '6b58de5caa1924182a20679daf41d0505037c8f6', 1412756736, NULL, 'P', 'Y', 'Europe/London', 'N', 50, 0, 50);
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Duy Thiện','duythien','fcduythien@gmail.com','97cfdb3586f82c3e1e4fe562bda688b8','bearer','36326fb099b942450487df821acdc2e830c49d5f',1412742974,1412909773,'P','Y','Europe/London','N',91,1,31),(2,'Nhi','stackphysics','fcopensuse@gmail.com','93bafae90377f79ffc801d91badf9142','bearer','6b58de5caa1924182a20679daf41d0505037c8f6',1412756736,1412909773,'P','Y','Europe/London','N',171,3,6),(3,'thanhvn-57','thanhvn-57','vungocthanh.2408@gmail.com','0ee42623631f5dfa80b2b71d274386e4','bearer','ec9c8b0c3cd9c249b261689cc129eaa6ba4b9042',1412873122,1412873168,'P','Y','Europe/London','N',54,1,2);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `activities`
---
-ALTER TABLE `activities`
- ADD PRIMARY KEY (`id`), ADD KEY `created_at` (`created_at`), ADD KEY `users_id` (`users_id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `activity_notifications`
---
-ALTER TABLE `activity_notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`was_read`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
- ADD PRIMARY KEY (`id`), ADD KEY `number_posts` (`number_posts`);
-
---
--- Indexes for table `irclog`
---
-ALTER TABLE `irclog`
- ADD PRIMARY KEY (`id`), ADD KEY `datelog` (`datelog`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`), ADD KEY `posts_id` (`posts_id`), ADD KEY `sent` (`sent`);
-
---
--- Indexes for table `notifications_bounces`
---
-ALTER TABLE `notifications_bounces`
- ADD PRIMARY KEY (`id`), ADD KEY `email` (`email`,`reported`);
-
---
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`), ADD KEY `categories_id` (`categories_id`), ADD KEY `title` (`title`), ADD KEY `number_replies` (`number_replies`), ADD KEY `modified_at` (`modified_at`), ADD KEY `created_at` (`created_at`), ADD KEY `sticked` (`sticked`,`created_at`), ADD KEY `deleted` (`deleted`);
-
---
--- Indexes for table `posts_bounties`
---
-ALTER TABLE `posts_bounties`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`posts_replies_id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `posts_history`
---
-ALTER TABLE `posts_history`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `posts_notifications`
---
-ALTER TABLE `posts_notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`posts_id`);
-
---
--- Indexes for table `posts_replies`
---
-ALTER TABLE `posts_replies`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`), ADD KEY `users_id` (`users_id`);
-
---
--- Indexes for table `posts_replies_history`
---
-ALTER TABLE `posts_replies_history`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_replies_id` (`posts_replies_id`);
-
---
--- Indexes for table `posts_replies_votes`
---
-ALTER TABLE `posts_replies_votes`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `posts_views`
---
-ALTER TABLE `posts_views`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`,`ipaddress`);
-
---
--- Indexes for table `posts_votes`
---
-ALTER TABLE `posts_votes`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD KEY `access_token` (`access_token`), ADD KEY `login` (`login`), ADD KEY `email` (`email`), ADD KEY `karma` (`karma`), ADD KEY `login_2` (`login`), ADD KEY `notifications` (`notifications`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `activities`
---
-ALTER TABLE `activities`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `activity_notifications`
---
-ALTER TABLE `activity_notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `irclog`
---
-ALTER TABLE `irclog`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `notifications_bounces`
---
-ALTER TABLE `notifications_bounces`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_bounties`
---
-ALTER TABLE `posts_bounties`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_history`
---
-ALTER TABLE `posts_history`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `posts_notifications`
---
-ALTER TABLE `posts_notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_replies`
---
-ALTER TABLE `posts_replies`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_replies_history`
---
-ALTER TABLE `posts_replies_history`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_replies_votes`
---
-ALTER TABLE `posts_replies_votes`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_views`
---
-ALTER TABLE `posts_views`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_votes`
---
-ALTER TABLE `posts_votes`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-10-09 23:02:26
