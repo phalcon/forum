@@ -148,10 +148,11 @@ class SessionController extends Controller
             /**
              * Store the user data in session
              */
-            $this->session->set('identity', $user->id);
-            $this->session->set('identity-name', $user->name);
-            $this->session->set('identity-gravatar', $user->gravatar_id);
-            $this->session->set('identity-timezone', $user->timezone);
+            $this->session->set('identity',           $user->id);
+            $this->session->set('identity-name',      $user->name);
+            $this->session->set('identity-gravatar',  $user->gravatar_id);
+            $this->session->set('identity-timezone',  $user->timezone);
+            $this->session->set('identity-theme',     $user->theme);
             $this->session->set('identity-moderator', $user->moderator);
 
             if ($user->getOperationMade() == Model::OP_CREATE) {
@@ -241,6 +242,7 @@ class SessionController extends Controller
         $this->session->remove('identity-name');
         $this->session->remove('identity-moderator');
         $this->session->remove('identity-gravatar');
+        $this->session->remove('identity-theme');
 
         $this->flashSession->success('Goodbye!');
         return $this->discussionsRedirect();

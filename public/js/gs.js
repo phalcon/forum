@@ -28,7 +28,7 @@ $(window).on("load", function(){
 		})();
 	}
 
-  	(function() {
+  	/*(function() {
 	    var cx = '009733439235723428699:lh9ltjgvdz8';
 	    var gcse = document.createElement('script');
 	    gcse.type = 'text/javascript';
@@ -37,5 +37,5 @@ $(window).on("load", function(){
 	        '//www.google.com/cse/cse.js?cx=' + cx;
 	    var s = document.getElementsByTagName('script')[0];
 	    s.parentNode.insertBefore(gcse, s);
-  	})();
+  	})();*/
 });

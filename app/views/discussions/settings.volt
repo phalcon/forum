@@ -49,6 +49,13 @@
 										], 'class': 'form-control') }}
 									</div>
 									<div class="form-group">
+										<label for="digest">Code Highlight Theme</label>
+										{{ select_static('theme', [
+											'D': 'Dark',
+											'L': 'Light'
+										], 'class': 'form-control') }}
+									</div>
+									<div class="form-group">
 										<a href="https://en.gravatar.com/">Change your avatar at Gravatar</a>
 									</div>
 									<div class="form-group">
