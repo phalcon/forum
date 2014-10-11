@@ -26,18 +26,17 @@ use Phosphorum\Mail\SendSpool;
 class SendSpoolConsumerTask extends Phalcon\DI\Injectable
 {
 
-	public function run()
-	{
-		$spool = new SendSpool();
-		$spool->consumeQueue();
-	}
-
+    public function run()
+    {
+        $spool = new SendSpool();
+        $spool->consumeQueue();
+    }
 }
 
 try {
-	$task = new SendSpoolConsumerTask($config);
-	$task->run();
+    $task = new SendSpoolConsumerTask($config);
+    $task->run();
 } catch (Exception $e) {
-	echo $e->getMessage(), PHP_EOL;
-	echo $e->getTraceAsString();
+    echo $e->getMessage(), PHP_EOL;
+    echo $e->getTraceAsString();
 }

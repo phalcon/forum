@@ -1,18 +1,18 @@
 <?php
 
 /*
-  +------------------------------------------------------------------------+
-  | Phosphorum                                                             |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Models;
@@ -155,6 +155,31 @@ class PostsReplies extends Model
             }
 
             /**
+             * Register users subscribed to the post
+             */
+            foreach (PostsSubscribers::findByPostsId($this->posts_id) as $subscriber) {
+                if (!isset($toNotify[$subscriber->users_id])) {
+
+                    $notification                   = new Notifications();
+                    $notification->users_id         = $subscriber->users_id;
+                    $notification->posts_id         = $this->posts_id;
+                    $notification->posts_replies_id = $this->id;
+                    $notification->type             = 'C';
+                    $notification->save();
+
+                    $activity                       = new ActivityNotifications();
+                    $activity->users_id             = $subscriber->users_id;
+                    $activity->posts_id             = $this->posts_id;
+                    $activity->posts_replies_id     = $this->id;
+                    $activity->users_origin_id      = $this->users_id;
+                    $activity->type                 = 'C';
+                    $activity->save();
+
+                    $toNotify[$subscriber->users_id] = $notification->id;
+                }
+            }
+
+            /**
              * Register the user in the post's notifications
              */
             if (!isset($toNotify[$this->users_id])) {
@@ -203,7 +228,6 @@ class PostsReplies extends Model
                     }
                 }
             }
-
 
             /**
              * Queue notifications to be sent

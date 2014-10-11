@@ -58,7 +58,7 @@
 				</tr>
 				<tr>
 					<td>Getting an own reply as 'accepted answer' by someone else</td>
-					<td><span class="label label-success">30 + abs(user_karma - your_karma) / 1000</span></td>
+					<td><span class="label label-success">50 + abs(user_karma - your_karma) / 1000</span></td>
 				</tr>
 				<tr>
 					<td>Accepting someone else's reply as 'accepted answer'</td>

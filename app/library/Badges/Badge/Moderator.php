@@ -15,28 +15,31 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Moderator
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * To users that are moderators
  */
-class Categories extends CacheableModel
+class Moderator extends BadgeBase
 {
 
-    public $id;
+    protected $name = 'Moderator';
 
-    public $name;
+    protected $description = 'User is a moderator';
 
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->moderator == 'Y';
+    }
 }

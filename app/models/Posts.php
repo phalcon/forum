@@ -67,6 +67,8 @@ class Posts extends Model
 
     public $status;
 
+    public $locked;
+
     public $deleted;
 
     public $accepted_answer;
@@ -78,7 +80,7 @@ class Posts extends Model
             'Phosphorum\Models\Users',
             'id',
             array(
-             'alias'    => 'user',
+                'alias'    => 'user',
                 'reusable' => true
             )
         );
@@ -114,6 +116,15 @@ class Posts extends Model
             )
         );
 
+        $this->hasMany(
+            'id',
+            'Phosphorum\Models\PostsSubscribers',
+            'posts_id',
+            array(
+                'alias' => 'subscribers'
+            )
+        );
+
     }
 
     public function beforeValidationOnCreate()
@@ -123,6 +134,7 @@ class Posts extends Model
         $this->number_replies  = 0;
         $this->sticked         = 'N';
         $this->accepted_answer = 'N';
+        $this->locked          = 'N';
         $this->status          = 'A';
     }
 
@@ -350,6 +362,8 @@ class Posts extends Model
     }
 
     /**
+     * Calculates a bounty for the post
+     *
      * @return array|bool
      */
     public function getBounty()
@@ -367,6 +381,20 @@ class Posts extends Model
         return false;
     }
 
+    /**
+     * Checks whether a specific user is subscribed to the post
+     *
+     * @param int $userId
+     */
+    public function isSubscribed($userId)
+    {
+        return $this->countSubscribers(array('users_id = :userId:', 'bind' => array('userId' => $userId))) > 0;
+    }
+
+    /**
+     * Clears the cache related to this post
+     *
+     */
     public function clearCache()
     {
         if ($this->id) {

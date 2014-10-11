@@ -26,17 +26,17 @@ use Phalcon\DI\Injectable;
 class SendDigest extends Injectable
 {
 
-	public function run()
-	{
-		$digest = new Digest();
-		$digest->send();
-	}
+    public function run()
+    {
+        $digest = new Digest();
+        $digest->send();
+    }
 }
 
 try {
-	$task = new SendDigest($config);
-	$task->run();
+    $task = new SendDigest($config);
+    $task->run();
 } catch(Exception $e) {
-	echo $e->getMessage(), PHP_EOL;
-	echo $e->getTraceAsString();
+    echo $e->getMessage(), PHP_EOL;
+    echo $e->getTraceAsString();
 }

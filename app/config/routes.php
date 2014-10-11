@@ -74,6 +74,14 @@ $router->add(
 );
 
 $router->add(
+    '/help/badges',
+    array(
+       'controller' => 'help',
+       'action'     => 'badges'
+    )
+);
+
+$router->add(
     '/help/create-post',
     array(
        'controller' => 'help',
@@ -310,6 +318,22 @@ $router->add(
     array(
        'controller' => 'discussions',
        'action'     => 'edit'
+    )
+);
+
+$router->add(
+    '/subscribe/discussion/{id:[0-9]+}',
+    array(
+       'controller' => 'discussions',
+       'action'     => 'subscribe'
+    )
+);
+
+$router->add(
+    '/unsubscribe/discussion/{id:[0-9]+}',
+    array(
+       'controller' => 'discussions',
+       'action'     => 'unsubscribe'
     )
 );
 

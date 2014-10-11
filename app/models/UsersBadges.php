@@ -21,50 +21,29 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
- * Class PostsRepliesVotes
- *
- * @property \Phosphorum\Models\PostsReplies postReply
- * @property \Phosphorum\Models\Users        user
+ * Class UsersBadges
  *
  * @package Phosphorum\Models
  */
-class PostsRepliesVotes extends Model
+class UsersBadges extends Model
 {
 
     public $id;
 
-    public $posts_replies_id;
-
     public $users_id;
 
-    public $vote;
+    public $badge;
+
+    public $type;
+
+    public $code1;
+
+    public $code2;
 
     public $created_at;
 
-    const VOTE_UP = 1;
-
-    const VOTE_DOWN = 1;
-
     public function initialize()
     {
-        $this->belongsTo(
-            'posts_replies_id',
-            'Phosphorum\Models\PostsReplies',
-            'id',
-            array(
-                'alias' => 'postReply'
-            )
-        );
-
-        $this->belongsTo(
-            'users_id',
-            'Phosphorum\Models\Users',
-            'id',
-            array(
-                'alias' => 'user'
-            )
-        );
-
         $this->addBehavior(
             new Timestampable(array(
                 'beforeValidationOnCreate' => array(
@@ -74,10 +53,27 @@ class PostsRepliesVotes extends Model
         );
     }
 
-    public function afterSave()
+    public function afterCreate()
     {
-        if ($this->id) {
-            $this->postReply->clearCache();
+        $activity                       = new ActivityNotifications();
+        $activity->users_id             = $this->users_id;
+        if ($this->type == 'P') {
+            $activity->type                 = 'O';
+            $activity->posts_id             = $this->code1;
+            $activity->posts_replies_id     = 0;
+        } else {
+            if ($this->type == 'C') {
+                $activity->type             = 'V';
+                $activity->posts_id         = $this->code2;
+                $activity->posts_replies_id = $this->code1;
+            } else {
+                $activity->type             = 'B';
+                $activity->posts_id         = 1;
+                $activity->posts_replies_id = 1;
+            }
         }
+        $activity->extra                = $this->badge;
+        $activity->users_origin_id      = $this->users_id;
+        var_dump($activity->save());
     }
 }

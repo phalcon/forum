@@ -14,3 +14,5 @@ composer.lock
 composer.phar
 app/config/config.php
 sftp-config.json
+app/config/backup.app
+app/config/backup.auth
