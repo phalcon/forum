@@ -39,6 +39,8 @@ class Slug
             $string = mb_strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $string));
         }
         $string = preg_replace('/[-\s]+/', $delimiter, $string);
+        $string = preg_replace('/^[-\s]+/', '', $string);
+        $string = preg_replace('/[-\s]+$/', '', $string);
         return trim($string, $delimiter);
     }
 }

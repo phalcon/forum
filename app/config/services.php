@@ -31,6 +31,7 @@ use Phalcon\Cache\Frontend\None as FrontendNone;
 use Phalcon\Cache\Backend\Memory as MemoryBackend;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Phosphorum\Queue\DummyServer;
+use Phalcon\Cache\Frontend\Output as FrontendOutput;
 use Ciconia\Ciconia;
 
 /**
@@ -263,7 +264,7 @@ $di->set(
 
         } else {
             //Cache data for one day by default
-            $frontCache = new \Phalcon\Cache\Frontend\Output(array(
+            $frontCache = new FrontendOutput(array(
                 "lifetime" => 86400 * 30
             ));
 

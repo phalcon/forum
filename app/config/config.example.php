@@ -77,5 +77,9 @@ return new \Phalcon\Config(array(
     'beanstalk'   => array(
         'disabled' => true,
         'host'     => '127.0.0.1'
+    ),
+
+    'elasticsearch' => array(
+        'index'    => 'phosphorum'
     )
 ));

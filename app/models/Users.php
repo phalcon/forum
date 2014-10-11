@@ -144,6 +144,11 @@ class Users extends Model
         }
     }
 
+    public function beforeValidationOnCreate()
+    {
+        $this->banned        = 'N';
+    }
+
     public function beforeCreate()
     {
         $this->notifications = 'P';
@@ -153,7 +158,6 @@ class Users extends Model
         $this->votes_points += Karma::INITIAL_KARMA;
         $this->votes         = 0;
         $this->timezone      = 'Europe/London';
-        $this->banned        = 'N';
     }
 
     public function afterValidation()
