@@ -28,6 +28,7 @@ use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Cache\Frontend\None as FrontendNone;
+use Phalcon\Cache\Backend\Memory as MemoryBackend;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Phosphorum\Queue\DummyServer;
 use Ciconia\Ciconia;
@@ -258,7 +259,7 @@ $di->set(
         if ($config->application->debug) {
 
             $frontCache = new FrontendNone();
-            return new Phalcon\Cache\Backend\Memory($frontCache);
+            return new MemoryBackend($frontCache);
 
         } else {
             //Cache data for one day by default
@@ -284,7 +285,7 @@ $di->set(
         if ($config->application->debug) {
 
             $frontCache = new FrontendNone();
-            return new Phalcon\Cache\Backend\Memory($frontCache);
+            return new MemoryBackend($frontCache);
 
         } else {
 
@@ -311,8 +312,8 @@ $di->set(
         $ciconia->addExtension(new \Phosphorum\Markdown\TableExtension());
         $ciconia->addExtension(new \Phosphorum\Markdown\MentionExtension());
         $ciconia->addExtension(new \Phosphorum\Markdown\BlockQuoteExtension());
+        $ciconia->addExtension(new \Phosphorum\Markdown\UrlAutoLinkExtension());
         $ciconia->addExtension(new \Ciconia\Extension\Gfm\FencedCodeBlockExtension());
-        $ciconia->addExtension(new \Ciconia\Extension\Gfm\UrlAutoLinkExtension());
         return $ciconia;
     },
     true
