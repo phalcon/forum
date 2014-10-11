@@ -16,24 +16,25 @@
 */
 
 /**
- * This scripts generates random posts
+ * This script generates backup and uploads it to Dropbox
  */
 require 'cli-bootstrap.php';
 
-use Phosphorum\Mail\SendSpool;
+use Phosphorum\Utils\Backup;
+use Phalcon\DI\Injectable;
 
-class SendSpoolTask extends Phalcon\DI\Injectable
+class GenerateBackup extends Injectable
 {
 
     public function run()
     {
-        $spool = new SendSpool();
-        $spool->sendRemaining();
+        $backup = new Backup;
+        $backup->generate();
     }
 }
 
 try {
-    $task = new SendSpoolTask($config);
+    $task = new GenerateBackup($config);
     $task->run();
 } catch(Exception $e) {
     echo $e->getMessage(), PHP_EOL;

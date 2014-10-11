@@ -26,17 +26,17 @@ use Phalcon\DI\Injectable;
 class ProcessBadges extends Injectable
 {
 
-	public function run()
-	{
-		$manager = new BadgesManager;
-		$manager->process();
-	}
+    public function run()
+    {
+        $manager = new BadgesManager;
+        $manager->process();
+    }
 }
 
 try {
-	$task = new ProcessBadges($config);
-	$task->run();
+    $task = new ProcessBadges($config);
+    $task->run();
 } catch(Exception $e) {
-	echo $e->getMessage(), PHP_EOL;
-	echo $e->getTraceAsString();
+    echo $e->getMessage(), PHP_EOL;
+    echo $e->getTraceAsString();
 }
