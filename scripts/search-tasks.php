@@ -16,7 +16,7 @@
 */
 
 /**
- * This script sends a weekly digest to users
+ * Index all existing documents to elastic search
  */
 require 'cli-bootstrap.php';
 
@@ -29,8 +29,8 @@ class SearchTasks extends Injectable
     public function run()
     {
         $search = new Indexer();
-        //$search->indexAll();
-        print_r($search->searchCommon(array('title' => 'ubuntu', 'category' => 6)));
+        $search->indexAll();
+        //print_r($search->searchCommon(array('title' => 'ubuntu', 'category' => 6)));
     }
 }
 

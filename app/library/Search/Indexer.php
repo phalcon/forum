@@ -66,17 +66,19 @@ class Indexer
                 foreach ($queryResponse['hits']['hits'] as $hit) {
                     $post = Posts::findFirstById($hit['fields']['id'][0]);
                     if ($post) {
-                        $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
-                        if (!$returnPosts) {
-                            $results[$score] = array(
-                                'slug'    => 'discussion/' . $post->id . '/' . $post->slug,
-                                'title'   => $post->title,
-                                'created' => $post->getHumanCreatedAt()
-                            );
-                        } else {
-                            $results[$score] = $post;
+                        if ($hit['fields']['karma'][0] > 0 && ($post->number_replies > 0 || $post->accepted_answer == 'Y')) {
+                            $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
+                            if (!$returnPosts) {
+                                $results[$score] = array(
+                                    'slug'    => 'discussion/' . $post->id . '/' . $post->slug,
+                                    'title'   => $post->title,
+                                    'created' => $post->getHumanCreatedAt()
+                                );
+                            } else {
+                                $results[$score] = $post;
+                            }
+                            $d += 0.05;
                         }
-                        $d += 0.05;
                     }
                 }
             }
@@ -122,21 +124,6 @@ class Indexer
 
         $searchParams['index'] = 'phosphorum';
         $searchParams['type']  = 'post';
-
-        /*
-
-  "common": {
-    "body": {
-      "query":                "nelly the elephant not as a cartoon",
-      "cutoff_frequency":     0.001,
-      "minimum_should_match": {
-          "low_freq" : 2,
-          "high_freq" : 3
-       }
-    }
-  }
-}
-        */
 
         $searchParams['body']['common']['body']['fields'] = array('id', 'karma');
         $searchParams['body']['common']['body']['query'] = "nelly the elephant not as a cartoon";
