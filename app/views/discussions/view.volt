@@ -279,6 +279,7 @@
 
 		{{- hidden_field('post-id', 'value': post.id) -}}
 		<div id="suggested-posts"></div>
+		<div id="sticky-progress" style='display:none'></div>
 
 	</div>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{% set url = url(), version = '2.1.0', theme = session.get('identity-theme') %}
+		{% set url = url(), version = '2.1.1', theme = session.get('identity-theme') %}
 
 		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
