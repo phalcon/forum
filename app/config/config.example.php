@@ -81,5 +81,10 @@ return new \Phalcon\Config(array(
 
     'elasticsearch' => array(
         'index'    => 'phosphorum'
+    ),
+    
+    'mail'     => array(
+        'fromName'     => 'Phalcon',
+        'fromEmail'    => 'phosphorum@phalconphp.com',
     )
 ));
