@@ -27,18 +27,36 @@ class Slug
     /**
      * Creates a slug to be used for pretty URLs
      *
+     * @link http://cubiq.org/the-perfect-php-clean-url-generator
      * @param         $string
+     * @param  array  $replace
      * @param  string $delimiter
-     * @return string
+     * @return mixed
      */
-    public static function generate($string, $delimiter = '-')
+    public static function generate($string, $replace = array(), $delimiter = '-')
     {
-        if (function_exists('transliterator_transliterate')) {
-            $string = transliterator_transliterate('Any-Latin; Latin-ASCII; [:Punctuation:] Remove; Lower()', $string);
-        } else {
-            $string = mb_strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $string));
+
+        if (!extension_loaded('iconv')) {
+            throw new \Phalcon\Exception('iconv module not loaded');
         }
-        $string = preg_replace('/[-\s]+/', $delimiter, $string);
-        return trim($string, $delimiter);
+
+        // Save the old locale and set the new locale to UTF-8
+        $oldLocale = setlocale(LC_ALL, 'en_US.UTF-8');
+
+        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        if (!empty($replace)) {
+            $clean = str_replace((array) $replace, ' ', $clean);
+        }
+
+        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+        $clean = strtolower($clean);
+        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+        $clean = trim($clean, $delimiter);
+
+        // Revert back to the old locale
+        setlocale(LC_ALL, $oldLocale);
+
+        return $clean;
     }
 }
