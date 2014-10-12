@@ -53,7 +53,8 @@ class Digest extends Injectable
             }
         }
 
-        $from = 'phosphorum@phalconphp.com';
+        $from = $this->config->mail->fromEmail;
+        $url  = $this->config->site->url;
 
         $subject = 'Top Stories from Phosphorum ' . date('d/m/y');
 
@@ -76,11 +77,11 @@ class Digest extends Injectable
                 continue;
             }
 
-            $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">' . $post->title . '</a></p>';
+            $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="'. $url .'/discussion/' . $post->id . '/' . $post->slug . '">' . $post->title . '</a></p>';
 
             $content .= '<p><table width="100%"><td><table><tr><td>' .
                         '<img src="https://secure.gravatar.com/avatar/' . $user->gravatar_id . '?s=32&amp;r=pg&amp;d=identicon" width="32" height="32" alt="' . $user->name . ' icon">' .
-                        '</td><td><a style="text-decoration:none;color:#155fad" href="http://forum.phalconphp.com/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999;text-decoration:none">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
+                        '</td><td><a style="text-decoration:none;color:#155fad" href="' . $url .'/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999;text-decoration:none">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
                         '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Created</label><br>' . $post->getHumanCreatedAt() . '</td>' .
                         '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Replies</label><br>' . $post->number_replies . '</td>' .
                         '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Views</label><br>' . $post->number_views . '</td>' .
@@ -89,7 +90,7 @@ class Digest extends Injectable
 
             $content .= $this->markdown->render($post->content);
 
-            $content .= '<p><a style="color:#155fad" href="http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug . '">Read more</a></p>';
+            $content .= '<p><a style="color:#155fad" href="' . $url . '/discussion/' . $post->id . '/' . $post->slug . '">Read more</a></p>';
 
             $content .= '<hr style="border: 1px solid #dadada">';
 
@@ -98,7 +99,7 @@ class Digest extends Injectable
         $textContent = nl2br($content);
 
         $htmlContent = $content . '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
-        $htmlContent .= PHP_EOL . 'This email was sent by Phalcon Framework. Change your e-mail preferences <a href="http://forum.phalconphp.com/settings">here</a></p>';
+        $htmlContent .= PHP_EOL . 'This email was sent by Phalcon Framework. Change your e-mail preferences <a href="' .$url . '/settings">here</a></p>';
 
         foreach ($users as $email => $name) {
 
