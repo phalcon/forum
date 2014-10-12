@@ -78,7 +78,7 @@ class SitemapController extends Controller
         $modifiedAt = new \DateTime();
         $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
 
-        $baseUrl = $config->site->url;
+        $baseUrl = $this->config->site->url;
         foreach ($posts as $post) {
 
             $modifiedAt->setTimestamp($post->modified_at);
