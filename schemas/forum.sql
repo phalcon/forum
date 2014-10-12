@@ -32,7 +32,7 @@ CREATE TABLE `activities` (
   KEY `created_at` (`created_at`),
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16774 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,9 +51,10 @@ CREATE TABLE `activity_notifications` (
   `users_origin_id` int(10) unsigned DEFAULT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
   `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `extra` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`was_read`)
-) ENGINE=InnoDB AUTO_INCREMENT=16785 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,9 +69,11 @@ CREATE TABLE `categories` (
   `name` varchar(72) NOT NULL,
   `slug` varchar(32) DEFAULT NULL,
   `number_posts` int(10) unsigned DEFAULT NULL,
+  `no_bounty` char(1) NOT NULL DEFAULT 'N',
+  `no_digest` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`),
   KEY `number_posts` (`number_posts`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,7 +90,7 @@ CREATE TABLE `irclog` (
   `datelog` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `datelog` (`datelog`)
-) ENGINE=InnoDB AUTO_INCREMENT=22696 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +114,7 @@ CREATE TABLE `notifications` (
   KEY `users_id` (`users_id`),
   KEY `posts_id` (`posts_id`),
   KEY `sent` (`sent`)
-) ENGINE=InnoDB AUTO_INCREMENT=156621 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +133,7 @@ CREATE TABLE `notifications_bounces` (
   `reported` char(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `email` (`email`,`reported`)
-) ENGINE=InnoDB AUTO_INCREMENT=976 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +171,7 @@ CREATE TABLE `posts` (
   KEY `created_at` (`created_at`),
   KEY `sticked` (`sticked`,`created_at`),
   KEY `deleted` (`deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=3386 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +191,7 @@ CREATE TABLE `posts_bounties` (
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_replies_id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=616 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +209,7 @@ CREATE TABLE `posts_history` (
   `content` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37033 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +225,7 @@ CREATE TABLE `posts_notifications` (
   `posts_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`,`posts_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8168 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +250,7 @@ CREATE TABLE `posts_replies` (
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11114 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +268,7 @@ CREATE TABLE `posts_replies_history` (
   `content` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `posts_replies_id` (`posts_replies_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80483 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,9 +282,27 @@ CREATE TABLE `posts_replies_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
+  `vote` int(3) NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1098 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_subscribers`
+--
+
+DROP TABLE IF EXISTS `posts_subscribers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_subscribers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +318,7 @@ CREATE TABLE `posts_views` (
   `ipaddress` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `posts_id` (`posts_id`,`ipaddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=721709 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,9 +332,10 @@ CREATE TABLE `posts_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
+  `vote` int(3) NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +348,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) DEFAULT NULL,
-  `login` varchar(72) CHARACTER SET ascii NOT NULL,
+  `login` varchar(32) DEFAULT NULL,
   `email` varchar(70) DEFAULT NULL,
   `gravatar_id` char(32) DEFAULT NULL,
   `token_type` varchar(16) DEFAULT NULL,
@@ -340,6 +362,8 @@ CREATE TABLE `users` (
   `karma` int(11) DEFAULT NULL,
   `votes` int(10) unsigned DEFAULT NULL,
   `votes_points` int(11) DEFAULT NULL,
+  `banned` char(1) DEFAULT 'N',
+  `theme` char(1) DEFAULT 'D',
   PRIMARY KEY (`id`),
   KEY `access_token` (`access_token`),
   KEY `login` (`login`),
@@ -347,7 +371,27 @@ CREATE TABLE `users` (
   KEY `karma` (`karma`),
   KEY `login_2` (`login`),
   KEY `notifications` (`notifications`)
-) ENGINE=InnoDB AUTO_INCREMENT=2256 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users_badges`
+--
+
+DROP TABLE IF EXISTS `users_badges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_badges` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `users_id` int(10) unsigned NOT NULL,
+  `badge` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+  `type` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code1` int(10) unsigned DEFAULT NULL,
+  `code2` int(10) unsigned DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`badge`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -359,4 +403,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-29 20:30:24
+-- Dump completed on 2014-10-12  8:14:37
