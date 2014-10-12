@@ -493,14 +493,14 @@ var Forum = {
 			$(window).scroll(function() {
 				$('#sticky-progress').show();
 				var windowTop = $(window).scrollTop();
-				var rows = $('div.row'), position, number = 0;
-				for (var i = 0; i < rows.length; i++) {
+				var rows = $('div.row'), total = rows.length - 1, position, number = 0;
+				for (var i = 0; i < total; i++) {
 					position = $(rows[i]).offset();
 					if (position.top < windowTop) {
 						number++;
 					}
 				};
-				$('#sticky-progress').html((number + 1) + ' / ' + rows.length);
+				$('#sticky-progress').html((number + 1) + ' / ' + total);
 	  		});
 	  	}
 	},
