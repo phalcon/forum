@@ -15,28 +15,31 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Maven
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * More than 15 accepted replies
  */
-class Categories extends CacheableModel
+class Maven extends BadgeBase
 {
 
-    public $id;
+    protected $name = 'Maven';
 
-    public $name;
+    protected $description = 'More than 15 accepted answers';
 
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies('accepted = "Y"') >= 15;
+    }
 }

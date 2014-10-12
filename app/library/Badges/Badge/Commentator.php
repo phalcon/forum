@@ -15,28 +15,34 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
+namespace Phosphorum\Badges\Badge;
+
+use Phosphorum\Models\Users;
+use Phosphorum\Models\UsersBadges;
+use Phosphorum\Models\PostsVotes;
+use Phosphorum\Models\PostsRepliesVotes;
+use Phosphorum\Badges\BadgeBase;
 
 /**
- * Class Categories
+ * Phosphorum\Badges\Badge\Commentator
  *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * More than 10 replies
  */
-class Categories extends CacheableModel
+class Commentator extends BadgeBase
 {
 
-    public $id;
+    protected $name = 'Commentator';
 
-    public $name;
+    protected $description = 'More than 10 replies on different threads';
 
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+    /**
+     * Check whether the user can have the badge
+     *
+     * @param Users $user
+     * @return boolean
+     */
+    public function canHave(Users $user)
+    {
+        return $user->countReplies() >= 10;
+    }
 }

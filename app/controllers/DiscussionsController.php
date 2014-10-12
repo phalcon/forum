@@ -23,6 +23,7 @@ use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\PostsHistory;
 use Phosphorum\Models\PostsVotes;
+use Phosphorum\Models\PostsSubscribers;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
 use Phosphorum\Models\ActivityNotifications;
@@ -394,6 +395,75 @@ class DiscussionsController extends Controller
     }
 
     /**
+     * Subscribe to a post to receive e-mail notifications
+     *
+     * @param string $id
+     */
+    public function subscribeAction($id)
+    {
+
+        $usersId = $this->session->get('identity');
+        if (!$usersId) {
+            $this->flashSession->error('You must be logged first');
+            return $this->response->redirect();
+        }
+
+        $post = Posts::findFirstById($id);
+        if (!$post) {
+            $this->flashSession->error('The discussion does not exist');
+            return $this->response->redirect();
+        }
+
+        $subscription = PostsSubscribers::findFirst(array(
+            'posts_id = ?0 AND users_id = ?1',
+            'bind' => array($post->id, $usersId)
+        ));
+        if (!$subscription) {
+            $subscription             = new PostsSubscribers();
+            $subscription->posts_id   = $post->id;
+            $subscription->users_id   = $usersId;
+            $subscription->created_at = time();
+            if ($subscription->save()) {
+                $this->flashSession->notice('You are now subscribed to this post');
+            }
+        }
+
+        return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
+    }
+
+    /**
+     * Unsubscribe from a post of receiving e-mail notifications
+     *
+     * @param string $id
+     */
+    public function unsubscribeAction($id)
+    {
+
+        $usersId = $this->session->get('identity');
+        if (!$usersId) {
+            $this->flashSession->error('You must be logged first');
+            return $this->response->redirect();
+        }
+
+        $post = Posts::findFirstById($id);
+        if (!$post) {
+            $this->flashSession->error('The discussion does not exist');
+            return $this->response->redirect();
+        }
+
+        $subscription = PostsSubscribers::findFirst(array(
+            'posts_id = ?0 AND users_id = ?1',
+            'bind' => array($post->id, $usersId)
+        ));
+        if ($subscription) {
+            $this->flashSession->notice('You were successfully unsubscribed from this post');
+            $subscription->delete();
+        }
+
+        return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
+    }
+
+    /**
      * Displays a post and its comments
      *
      * @param $id
@@ -674,6 +744,7 @@ class DiscussionsController extends Controller
         $postVote           = new PostsVotes();
         $postVote->posts_id = $post->id;
         $postVote->users_id = $user->id;
+        $postVote->vote     = PostsVotes::VOTE_UP;
         if (!$postVote->save()) {
             foreach ($postVote->getMessages() as $message) {
                 $contentError = array(
@@ -766,6 +837,7 @@ class DiscussionsController extends Controller
         $postVote           = new PostsVotes();
         $postVote->posts_id = $post->id;
         $postVote->users_id = $user->id;
+        $postVote->vote     = PostsVotes::VOTE_DOWN;
         $postVote->save();
 
         $post->votes_down++;
@@ -1010,7 +1082,7 @@ class DiscussionsController extends Controller
         $this->view->notifications = ActivityNotifications::find(array(
             'users_id = ?0',
             'bind'  => array($usersId),
-            'limit' => 100,
+            'limit' => 128,
             'order' => 'created_at DESC'
         ));
 

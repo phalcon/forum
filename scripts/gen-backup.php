@@ -15,28 +15,28 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Models;
-
 /**
- * Class Categories
- *
- * @method static Categories findFirstById
- * @method static Categories[] find($parameters = null)
- *
- * @package Phosphorum\Models
+ * This script generates backup and uploads it to Dropbox
  */
-class Categories extends CacheableModel
+require 'cli-bootstrap.php';
+
+use Phosphorum\Utils\Backup;
+use Phalcon\DI\Injectable;
+
+class GenerateBackup extends Injectable
 {
 
-    public $id;
+    public function run()
+    {
+        $backup = new Backup;
+        $backup->generate();
+    }
+}
 
-    public $name;
-
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
+try {
+    $task = new GenerateBackup($config);
+    $task->run();
+} catch(Exception $e) {
+    echo $e->getMessage(), PHP_EOL;
+    echo $e->getTraceAsString();
 }

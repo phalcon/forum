@@ -11,6 +11,7 @@
 	<ul>
 		<li>{{ link_to('help/create-post', 'How do I ask a good question?') }}</li>
 		<li>{{ link_to('help/karma', 'How Karma/Reputation works?') }}</li>
+		<li>{{ link_to('help/badges', 'What are badges?') }}</li>
 		<li>{{ link_to('help/markdown', 'How to use Markdown?') }}</li>
 		<li>{{ link_to('help/voting', 'How does the feedback system work?') }}</li>
 		<li>{{ link_to('help/moderators', 'Posts/Comments Moderation') }}</li>

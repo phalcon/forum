@@ -126,7 +126,12 @@ $di->set(
                     /** @var Phalcon\Events\Event $event */
                     if ($event->getType() == 'beforeQuery') {
                         /** @var DatabaseConnection $connection */
-                        $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+                        $variables = $connection->getSQLVariables();
+                        if ($variables) {
+                            $logger->log($connection->getSQLStatement() . ' [' . join(',', $variables) . ']', \Phalcon\Logger::INFO);
+                        } else {
+                            $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+                        }
                     }
                 }
             );

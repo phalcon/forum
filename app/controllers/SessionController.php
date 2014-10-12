@@ -105,6 +105,13 @@ class SessionController extends Controller
                 $user->access_token = $response['access_token'];
             }
 
+            if ($user->banned == 'Y') {
+                $this->flashSession->error('You have been banned from the forum.');
+                return $this->indexRedirect();
+            }
+
+            //$user = ForumUsers::findFirst();
+
             /**
              * Update the user information
              */
@@ -170,6 +177,9 @@ class SessionController extends Controller
 
             if ($user->getOperationMade() != Model::OP_CREATE) {
 
+                /**
+                 * Show a notification to users that have e-mail bounces
+                 */
                 $parametersBounces = array(
                     'email = ?0 AND reported = "N"',
                     'bind' => array($user->email)
@@ -205,7 +215,13 @@ class SessionController extends Controller
                         $user->notifications = 'N';
                         $user->save();
                     }
+                }
 
+                /**
+                 * Show a notification to users that haven't spend their votes
+                 */
+                if ($user->votes >= 10 && mt_rand(1, 5) == 3) {
+                    $this->flashSession->notice('You have ' . $user->votes . ' votes remaining to spend. If you find something useful in this forum do not hesitate to give others some votes.');
                 }
             }
 

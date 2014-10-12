@@ -118,6 +118,11 @@
 						{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
 					{%- endif %}
 					{%- if currentUser -%}
+						{% if post.isSubscribed(currentUser) %}
+							{{ link_to('unsubscribe/discussion/' ~ post.id, '<span class="glyphicon glyphicon glyphicon-eye-close"></span>&nbsp;Unsubscribe', "class": "btn btn-default btn-xs") }}
+						{% else %}
+							{{ link_to('subscribe/discussion/' ~ post.id, '<span class="glyphicon glyphicon-eye-open"></span>&nbsp;Subscribe', "class": "btn btn-default btn-xs") }}
+						{% endif %}
 						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
 							<span class="glyphicon glyphicon-thumbs-down"></span>
 							{{ post.votes_down }}

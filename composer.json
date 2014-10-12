@@ -5,7 +5,8 @@
         "swiftmailer/swiftmailer": "@stable",
         "kzykhys/ciconia": "~1.0.0",
         "phpspec/php-diff": "dev-master",
-	"elasticsearch/elasticsearch": "~1.0"
+        "elasticsearch/elasticsearch": "~1.0",
+        "dropbox/dropbox-sdk": "1.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "1.4.*@dev",

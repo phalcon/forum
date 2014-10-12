@@ -16,7 +16,7 @@
 */
 
 /**
- * This script sends a weekly digest to users
+ * Index all existing documents to elastic search
  */
 require 'cli-bootstrap.php';
 
@@ -26,18 +26,18 @@ use Phalcon\DI\Injectable;
 class SearchTasks extends Injectable
 {
 
-	public function run()
-	{
-		$search = new Indexer();
-		$search->indexAll();
-		//print_r($search->search(array('title' => 'ubuntu', 'category' => 6)));
-	}
+    public function run()
+    {
+        $search = new Indexer();
+        $search->indexAll();
+        //print_r($search->searchCommon(array('title' => 'ubuntu', 'category' => 6)));
+    }
 }
 
 try {
-	$task = new SearchTasks($config);
-	$task->run();
+    $task = new SearchTasks($config);
+    $task->run();
 } catch(Exception $e) {
-	echo $e->getMessage(), PHP_EOL;
-	echo $e->getTraceAsString();
+    echo $e->getMessage(), PHP_EOL;
+    echo $e->getTraceAsString();
 }

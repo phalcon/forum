@@ -77,5 +77,10 @@ return new \Phalcon\Config(array(
     'beanstalk'   => array(
         'disabled' => true,
         'host'     => '127.0.0.1'
+    ),
+
+    'mail'     => array(
+        'fromName'     => 'Phalcon',
+        'fromEmail'    => 'phosphorum@phalconphp.com',
     )
 ));
