@@ -1033,7 +1033,7 @@ class DiscussionsController extends Controller
             $user->theme         = $this->request->getPost('theme');
             $user->digest        = $this->request->getPost('digest');
             if ($user->save()) {
-                $this->session->set('identity-theme',     $user->theme);
+                $this->session->set('identity-theme', $user->theme);
                 $this->session->get('identity-timezone', $user->timezone);
                 $this->flashSession->success('Settings were successfully updated');
                 return $this->response->redirect();
@@ -1042,7 +1042,7 @@ class DiscussionsController extends Controller
         } else {
             $this->tag->displayTo('timezone', $user->timezone);
             $this->tag->displayTo('notifications', $user->notifications);
-            $this->tag->displayTo('theme',  $user->theme);
+            $this->tag->displayTo('theme', $user->theme);
             $this->tag->displayTo('digest', $user->digest);
         }
 

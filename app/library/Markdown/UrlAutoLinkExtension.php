@@ -54,5 +54,4 @@ class UrlAutoLinkExtension implements ExtensionInterface
     {
         return 'urlAutoLink';
     }
-
 }
