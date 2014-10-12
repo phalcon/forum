@@ -493,7 +493,7 @@ var Forum = {
 			$(window).scroll(function() {
 				$('#sticky-progress').show();
 				var windowTop = $(window).scrollTop();
-				var rows = $('div.row'), total = rows.length - 1, position, number = 0;
+				var rows = $('div.reply-block'), total = rows.length, position, number = 0;
 				for (var i = 0; i < total; i++) {
 					position = $(rows[i]).offset();
 					if (position.top < windowTop) {
