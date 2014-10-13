@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{% set url = url(), version = '2.0.9' %}
+		{% set url = url(), version = '2.1.1', theme = session.get('identity-theme') %}
 
 		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 		{%- if canonical is defined -%}
-		<link rel="canonical" href="{{ config.site.url }}{{ canonical }}"/>
+		<link rel="canonical" href="{{ config.site.url }}/{{ canonical }}"/>
 		{%- endif -%}
 
 		{%- if post is defined -%}
@@ -38,7 +38,11 @@
 		{#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
 		{{- stylesheet_link("//cdn.jsdelivr.net/bootstrap/3.1.1/css/bootstrap.min.css", false) -}}
 		{{- stylesheet_link("//cdn.jsdelivr.net/prettify/0.1/prettify.css", false) -}}
+		{%- if theme == 'L' -%}
+		{{- stylesheet_link("css/theme-white.css?v=" ~ version, true) -}}
+		{%- else -%}
 		{{- stylesheet_link("css/theme.css?v=" ~ version, true) -}}
+		{%- endif -%}
 		{{- stylesheet_link("css/editor.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/diff.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/style.css?v=" ~ version, true) -}}

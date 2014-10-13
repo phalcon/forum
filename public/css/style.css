@@ -476,3 +476,14 @@ div#suggested-posts h3 {
     margin: 0px;
     font-size: 16px;
 }
+
+div#sticky-progress {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    color: #08c;
+    background: #e0f5ff;
+    font-size: 16px;
+    padding: 15px;
+    border: 1px solid #fff;
+}

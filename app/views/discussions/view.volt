@@ -88,7 +88,7 @@
 	{%- endif -%}
 
 	<div class="discussion">
-		<div class="row">
+		<div class="row reply-block">
 			<div class="col-md-1 small" align="center">
 				<img src="https://secure.gravatar.com/avatar/{{ post.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"><br>
 				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
@@ -146,7 +146,7 @@
 		</div>
 
 		{%- for reply in post.replies -%}
-			<div class="row{% if (reply.votes_up - reply.votes_down) <= -3 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 4 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
+			<div class="reply-block row{% if (reply.votes_up - reply.votes_down) <= -3 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 4 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
 				<div class="col-md-1 small" align="center">
 					<img src="https://secure.gravatar.com/avatar/{{ reply.user.gravatar_id }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded"><br>
 					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
@@ -279,6 +279,7 @@
 
 		{{- hidden_field('post-id', 'value': post.id) -}}
 		<div id="suggested-posts"></div>
+		<div id="sticky-progress" style='display:none'></div>
 
 	</div>
 
