@@ -79,6 +79,10 @@ return new \Phalcon\Config(array(
         'host'     => '127.0.0.1'
     ),
 
+    'elasticsearch' => array(
+        'index'    => 'phosphorum'
+    ),
+    
     'mail'     => array(
         'fromName'     => 'Phalcon',
         'fromEmail'    => 'phosphorum@phalconphp.com',

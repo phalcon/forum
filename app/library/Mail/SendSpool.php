@@ -82,9 +82,6 @@ class SendSpool extends Injectable
 
                     if (trim($originalContent)) {
 
-                        //$prerifiedContent = $this->_prerify($escapedContent);
-                        //$htmlContent = nl2br($prerifiedContent);
-
                         $textContent = nl2br($originalContent);
 
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';

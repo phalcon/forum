@@ -488,6 +488,21 @@ var Forum = {
 		$('#suggested-posts').each(function(position, element){
 			window.setTimeout(Forum.showSuggestedPosts, 1500);
 		});
+
+		if ($('div.row').length > 4) {
+			$(window).scroll(function() {
+				$('#sticky-progress').show();
+				var windowTop = $(window).scrollTop();
+				var rows = $('div.reply-block'), total = rows.length, position, number = 0;
+				for (var i = 0; i < total; i++) {
+					position = $(rows[i]).offset();
+					if (position.top < windowTop) {
+						number++;
+					}
+				};
+				$('#sticky-progress').html((number + 1) + ' / ' + total);
+	  		});
+	  	}
 	},
 
 	/**

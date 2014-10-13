@@ -153,6 +153,7 @@ class Users extends Model
         $this->votes_points += Karma::INITIAL_KARMA;
         $this->votes         = 0;
         $this->timezone      = 'Europe/London';
+        $this->theme         = 'D';
         $this->banned        = 'N';
     }
 

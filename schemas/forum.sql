@@ -1,107 +1,107 @@
--- phpMyAdmin SQL Dump
--- version 4.2.6
--- http://www.phpmyadmin.net
+-- MySQL dump 10.13  Distrib 5.5.36, for osx10.9 (i386)
 --
--- Host: localhost
--- Generation Time: Oct 09, 2014 at 12:52 PM
--- Server version: 5.5.38-MariaDB
--- PHP Version: 5.5.17
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: forum
+-- ------------------------------------------------------
+-- Server version 5.5.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `forum`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `activities`
 --
 
-CREATE TABLE IF NOT EXISTS `activities` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `activities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activities` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `type` char(1) NOT NULL,
   `posts_id` int(10) unsigned DEFAULT NULL,
-  `created_at` int(18) unsigned DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `activities`
---
-
-INSERT INTO `activities` (`id`, `users_id`, `type`, `posts_id`, `created_at`) VALUES
-(1, 1, 'U', NULL, 1412742974),
-(2, 1, 'P', 1, 1412743026),
-(3, 2, 'U', NULL, 1412756737);
-
--- --------------------------------------------------------
+  `created_at` int(18) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `created_at` (`created_at`),
+  KEY `users_id` (`users_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `activity_notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `activity_notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `activity_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity_notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `posts_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned DEFAULT NULL,
   `type` char(1) COLLATE utf8_unicode_ci NOT NULL,
   `users_origin_id` int(10) unsigned DEFAULT NULL,
   `created_at` int(18) unsigned DEFAULT NULL,
-  `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `was_read` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `extra` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`was_read`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) NOT NULL,
   `slug` varchar(32) DEFAULT NULL,
-  `number_posts` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `categories`
---
-
-INSERT INTO `categories` (`id`, `name`, `slug`, `number_posts`) VALUES
-(1, 'News Announcements', 'news-announcements', 1),
-(2, 'General', 'general', 0);
-
--- --------------------------------------------------------
+  `number_posts` int(10) unsigned DEFAULT NULL,
+  `no_bounty` char(1) NOT NULL DEFAULT 'N',
+  `no_digest` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `number_posts` (`number_posts`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `irclog`
 --
 
-CREATE TABLE IF NOT EXISTS `irclog` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `irclog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `irclog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `who` varchar(64) NOT NULL,
   `content` text,
-  `datelog` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `datelog` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `datelog` (`datelog`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `posts_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned DEFAULT NULL,
@@ -109,32 +109,42 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `created_at` int(18) unsigned DEFAULT NULL,
   `modified_at` int(18) unsigned DEFAULT NULL,
   `message_id` char(60) DEFAULT NULL,
-  `sent` char(1) NOT NULL DEFAULT 'N'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `sent` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `posts_id` (`posts_id`),
+  KEY `sent` (`sent`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `notifications_bounces`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications_bounces` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `notifications_bounces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications_bounces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(120) NOT NULL,
   `status` varchar(10) DEFAULT NULL,
   `diagnostic` varchar(120) DEFAULT NULL,
   `created_at` int(10) unsigned NOT NULL,
-  `reported` char(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `reported` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`,`reported`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts`
 --
 
-CREATE TABLE IF NOT EXISTS `posts` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
   `title` varchar(128) NOT NULL,
@@ -151,80 +161,82 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `status` char(1) DEFAULT 'A',
   `locked` char(1) DEFAULT 'N',
   `deleted` int(3) DEFAULT '0',
-  `accepted_answer` char(1) DEFAULT 'N'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `posts`
---
-
-INSERT INTO `posts` (`id`, `users_id`, `categories_id`, `title`, `slug`, `content`, `number_views`, `number_replies`, `votes_up`, `votes_down`, `sticked`, `created_at`, `modified_at`, `edited_at`, `status`, `locked`, `deleted`, `accepted_answer`) VALUES
-(1, 1, 1, 'Chào mừng bạn đến diễn đàn Phalcon', 'chao-mung-ban-den-dien-dan-phalcon', 'nice', 1, 0, NULL, NULL, 'Y', 1412743026, 1412743026, NULL, 'A', NULL, 0, 'N');
-
--- --------------------------------------------------------
+  `accepted_answer` char(1) DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `categories_id` (`categories_id`),
+  KEY `title` (`title`),
+  KEY `number_replies` (`number_replies`),
+  KEY `modified_at` (`modified_at`),
+  KEY `created_at` (`created_at`),
+  KEY `sticked` (`sticked`,`created_at`),
+  KEY `deleted` (`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_bounties`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_bounties` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_bounties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_bounties` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `points` int(10) unsigned NOT NULL,
-  `created_at` int(18) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `created_at` int(18) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_replies_id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_history`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_history` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `posts_history`
---
-
-INSERT INTO `posts_history` (`id`, `posts_id`, `users_id`, `created_at`, `content`) VALUES
-(1, 1, 1, 1412743026, 'nice'),
-(2, 1, 1, 1412743026, 'nice');
-
--- --------------------------------------------------------
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_notifications` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned NOT NULL,
-  `posts_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `posts_notifications`
---
-
-INSERT INTO `posts_notifications` (`id`, `users_id`, `posts_id`) VALUES
-(1, 1, 1);
-
--- --------------------------------------------------------
+  `posts_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_replies`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `in_reply_to_id` int(10) unsigned DEFAULT '0',
@@ -234,78 +246,109 @@ CREATE TABLE IF NOT EXISTS `posts_replies` (
   `edited_at` int(18) unsigned DEFAULT NULL,
   `votes_up` int(10) unsigned DEFAULT NULL,
   `votes_down` int(10) unsigned DEFAULT NULL,
-  `accepted` char(1) DEFAULT 'N'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `accepted` char(1) DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_replies_history`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies_history` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `created_at` int(18) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `content` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `posts_replies_id` (`posts_replies_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_replies_votes`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_replies_votes` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_replies_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_replies_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_replies_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created_at` int(18) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `vote` int(3) NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Table structure for table `posts_subscribers`
+--
+
+DROP TABLE IF EXISTS `posts_subscribers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_subscribers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `posts_id` int(10) unsigned NOT NULL,
+  `users_id` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_views`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_views` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_views`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_views` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
-  `ipaddress` varchar(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `posts_views`
---
-
-INSERT INTO `posts_views` (`id`, `posts_id`, `ipaddress`) VALUES
-(1, 1, '127.0.0.1');
-
--- --------------------------------------------------------
+  `ipaddress` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_id` (`posts_id`,`ipaddress`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `posts_votes`
 --
 
-CREATE TABLE IF NOT EXISTS `posts_votes` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `posts_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created_at` int(18) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+  `vote` int(3) NOT NULL,
+  `created_at` int(18) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-`id` int(10) unsigned NOT NULL,
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) DEFAULT NULL,
-  `login` varchar(72) CHARACTER SET ascii NOT NULL,
+  `login` varchar(32) DEFAULT NULL,
   `email` varchar(70) DEFAULT NULL,
   `gravatar_id` char(32) DEFAULT NULL,
   `token_type` varchar(16) DEFAULT NULL,
@@ -318,201 +361,46 @@ CREATE TABLE IF NOT EXISTS `users` (
   `moderator` char(1) DEFAULT 'N',
   `karma` int(11) DEFAULT NULL,
   `votes` int(10) unsigned DEFAULT NULL,
-  `votes_points` int(11) DEFAULT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `votes_points` int(11) DEFAULT NULL,
+  `banned` char(1) DEFAULT 'N',
+  `theme` char(1) DEFAULT 'D',
+  PRIMARY KEY (`id`),
+  KEY `access_token` (`access_token`),
+  KEY `login` (`login`),
+  KEY `email` (`email`),
+  KEY `karma` (`karma`),
+  KEY `login_2` (`login`),
+  KEY `notifications` (`notifications`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Table structure for table `users_badges`
 --
 
-INSERT INTO `users` (`id`, `name`, `login`, `email`, `gravatar_id`, `token_type`, `access_token`, `created_at`, `modified_at`, `notifications`, `digest`, `timezone`, `moderator`, `karma`, `votes`, `votes_points`) VALUES
-(1, 'Duy Thiện', 'duythien', 'fcduythien@gmail.com', '97cfdb3586f82c3e1e4fe562bda688b8', 'bearer', '36326fb099b942450487df821acdc2e830c49d5f', 1412742974, 1412743026, 'P', 'Y', 'Europe/London', 'N', 60, 1, 0),
-(2, 'Nhi', 'stackphysics', 'fcopensuse@gmail.com', '93bafae90377f79ffc801d91badf9142', 'bearer', '6b58de5caa1924182a20679daf41d0505037c8f6', 1412756736, NULL, 'P', 'Y', 'Europe/London', 'N', 50, 0, 50);
+DROP TABLE IF EXISTS `users_badges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_badges` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `users_id` int(10) unsigned NOT NULL,
+  `badge` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+  `type` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code1` int(10) unsigned DEFAULT NULL,
+  `code2` int(10) unsigned DEFAULT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`,`badge`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `activities`
---
-ALTER TABLE `activities`
- ADD PRIMARY KEY (`id`), ADD KEY `created_at` (`created_at`), ADD KEY `users_id` (`users_id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `activity_notifications`
---
-ALTER TABLE `activity_notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`was_read`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
- ADD PRIMARY KEY (`id`), ADD KEY `number_posts` (`number_posts`);
-
---
--- Indexes for table `irclog`
---
-ALTER TABLE `irclog`
- ADD PRIMARY KEY (`id`), ADD KEY `datelog` (`datelog`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`), ADD KEY `posts_id` (`posts_id`), ADD KEY `sent` (`sent`);
-
---
--- Indexes for table `notifications_bounces`
---
-ALTER TABLE `notifications_bounces`
- ADD PRIMARY KEY (`id`), ADD KEY `email` (`email`,`reported`);
-
---
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`), ADD KEY `categories_id` (`categories_id`), ADD KEY `title` (`title`), ADD KEY `number_replies` (`number_replies`), ADD KEY `modified_at` (`modified_at`), ADD KEY `created_at` (`created_at`), ADD KEY `sticked` (`sticked`,`created_at`), ADD KEY `deleted` (`deleted`);
-
---
--- Indexes for table `posts_bounties`
---
-ALTER TABLE `posts_bounties`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`posts_replies_id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `posts_history`
---
-ALTER TABLE `posts_history`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`);
-
---
--- Indexes for table `posts_notifications`
---
-ALTER TABLE `posts_notifications`
- ADD PRIMARY KEY (`id`), ADD KEY `users_id` (`users_id`,`posts_id`);
-
---
--- Indexes for table `posts_replies`
---
-ALTER TABLE `posts_replies`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`), ADD KEY `users_id` (`users_id`);
-
---
--- Indexes for table `posts_replies_history`
---
-ALTER TABLE `posts_replies_history`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_replies_id` (`posts_replies_id`);
-
---
--- Indexes for table `posts_replies_votes`
---
-ALTER TABLE `posts_replies_votes`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `posts_views`
---
-ALTER TABLE `posts_views`
- ADD PRIMARY KEY (`id`), ADD KEY `posts_id` (`posts_id`,`ipaddress`);
-
---
--- Indexes for table `posts_votes`
---
-ALTER TABLE `posts_votes`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD KEY `access_token` (`access_token`), ADD KEY `login` (`login`), ADD KEY `email` (`email`), ADD KEY `karma` (`karma`), ADD KEY `login_2` (`login`), ADD KEY `notifications` (`notifications`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `activities`
---
-ALTER TABLE `activities`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `activity_notifications`
---
-ALTER TABLE `activity_notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `irclog`
---
-ALTER TABLE `irclog`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `notifications_bounces`
---
-ALTER TABLE `notifications_bounces`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_bounties`
---
-ALTER TABLE `posts_bounties`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_history`
---
-ALTER TABLE `posts_history`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `posts_notifications`
---
-ALTER TABLE `posts_notifications`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_replies`
---
-ALTER TABLE `posts_replies`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_replies_history`
---
-ALTER TABLE `posts_replies_history`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_replies_votes`
---
-ALTER TABLE `posts_replies_votes`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `posts_views`
---
-ALTER TABLE `posts_views`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `posts_votes`
---
-ALTER TABLE `posts_votes`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-10-12  8:14:37

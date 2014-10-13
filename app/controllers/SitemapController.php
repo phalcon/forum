@@ -78,6 +78,7 @@ class SitemapController extends Controller
         $modifiedAt = new \DateTime();
         $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
 
+        $baseUrl = $this->config->site->url;
         foreach ($posts as $post) {
 
             $modifiedAt->setTimestamp($post->modified_at);
@@ -85,7 +86,7 @@ class SitemapController extends Controller
             $postKarma = $post->karma / ($karma + 100);
 
             $url = $sitemap->createElement('url');
-            $href = 'http://forum.phalconphp.com/discussion/' . $post->id . '/' . $post->slug;
+            $href = $baseUrl . '/discussion/' . $post->id . '/' . $post->slug;
             $url->appendChild(
                 $sitemap->createElement('loc', $href)
             );

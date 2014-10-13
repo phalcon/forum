@@ -1027,17 +1027,22 @@ class DiscussionsController extends Controller
         }
 
         if ($this->request->isPost()) {
+
             $user->timezone      = $this->request->getPost('timezone');
             $user->notifications = $this->request->getPost('notifications');
+            $user->theme         = $this->request->getPost('theme');
             $user->digest        = $this->request->getPost('digest');
             if ($user->save()) {
-                $this->session->get('timezone', $user->timezone);
+                $this->session->set('identity-theme', $user->theme);
+                $this->session->get('identity-timezone', $user->timezone);
                 $this->flashSession->success('Settings were successfully updated');
                 return $this->response->redirect();
             }
+
         } else {
             $this->tag->displayTo('timezone', $user->timezone);
             $this->tag->displayTo('notifications', $user->notifications);
+            $this->tag->displayTo('theme', $user->theme);
             $this->tag->displayTo('digest', $user->digest);
         }
 
