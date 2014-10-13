@@ -296,7 +296,7 @@ class DiscussionsController extends Controller
 
             $post->categories_id = $this->request->getPost('categoryId');
             $post->title         = $title;
-            $post->slug          = $this->tag->friendlyTitle($title);
+            $post->slug          = Slug::generate($title);
             $post->content       = $content;
             $post->edited_at     = time();
 
