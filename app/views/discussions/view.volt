@@ -43,8 +43,8 @@
 <div class="container">
 
 	<ol class="breadcrumb">
-		<li>{{ link_to('', t('Home')) }}</a></li>
-		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, t(post.category.name)) }}</a></li>
+		<li>{{ link_to('', t('Home')) }}</li>
+		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, t(post.category.name)) }}</li>
 	</ol>
 
 	<p>
@@ -56,26 +56,28 @@
 			</div>
 			<div class="col-md-4">
 				<table class="table-stats">
-					<td>
-						<label>Created</label><br>
-						{{- post.getHumanCreatedAt() -}}
-					</td>
-					<td>
-						<label>Last Reply</label><br>
-						{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
-					</td>
-					<td>
-						<label>Replies</label><br>
-						{{- post.number_replies -}}
-					</td>
-					<td>
-						<label>Views</label><br>
-						{{- post.number_views -}}
-					</td>
-					<td>
-						<label>Votes</label><br>
-						{{- post.votes_up - post.votes_down -}}
-					</td>
+					<tr>
+						<td>
+							<label>Created</label><br>
+							{{- post.getHumanCreatedAt() -}}
+						</td>
+						<td>
+							<label>Last Reply</label><br>
+							{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
+						</td>
+						<td>
+							<label>Replies</label><br>
+							{{- post.number_replies -}}
+						</td>
+						<td>
+							<label>Views</label><br>
+							{{- post.number_views -}}
+						</td>
+						<td>
+							<label>Votes</label><br>
+							{{- post.votes_up - post.votes_down -}}
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
