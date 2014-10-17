@@ -5,7 +5,7 @@
 #
 #, fuzzy
 msgid   ""
-msgstr  "Project-Id-Version: tutplus.vn Example Translations 0.0.1\n"
+msgstr  "Project-Id-Version: zphalcon.com Example Translations 0.0.1\n"
         "Report-Msgid-Bugs-To: fcduythien@gmail.com\n"
         "POT-Creation-Date: 2013-12-01 06:18-0500\n"
         "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -48,7 +48,7 @@ msgid   "Logout"
 msgstr  "Thoát"
 msgid   "Search"
 msgstr  "Tìm kiếm"
-#####view.volt
+#.view.volt
 msgid   "Home"
 msgstr  "Trang chủ"
 msgid   "Log In to Comment"
@@ -65,7 +65,17 @@ msgid   "Comment"
 msgstr  "Bình luận"
 msgid   "Preview"
 msgstr  "Xem trước"
-####category
+msgid   "Bounty available!"
+msgstr  "Tiền thưởng có sẵn!"
+msgid   "It has been a while and this question still"
+"does not have any answers. Answer this question and get additional"
+msgstr  "Nó đã được một thời gian và câu hỏi này vẫn"
+"chưa có câu trả lời nào. Trả lời câu hỏi này và nhận được thêm"
+msgid   "points of karma/reputation if the"
+"original poster accepts your reply as correct answer"
+msgstr  "điểm/uy tín nếu các poster ban đầu chấp nhận"
+"trả lời của bạn là câu trả lời đúng"
+#.category
 msgid  "News/Announcements"
 msgstr "Thông báo"
 msgid  "Installation"
