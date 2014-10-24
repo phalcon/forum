@@ -31,7 +31,7 @@ use Phalcon\Mvc\Model;
  *
  * @package Phosphorum\Controllers
  */
-class SessionController extends Controller
+class SessionController extends ControllerBase
 {
 
     /**

@@ -31,7 +31,7 @@ use Phosphorum\Badges\Manager as BadgeManager;
  *
  * @package Phosphorum\Controllers
  */
-class HelpController extends Controller
+class HelpController extends ControllerBase
 {
 
     public function initialize()

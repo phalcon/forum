@@ -24,7 +24,7 @@ use Phalcon\Mvc\Controller;
  *
  * @package Phosphorum\Controllers
  */
-class IndexController extends Controller
+class IndexController extends ControllerBase
 {
 
     /**

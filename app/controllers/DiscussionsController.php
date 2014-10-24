@@ -43,7 +43,7 @@ use Phalcon\Mvc\View;
  *
  * @package Phosphorum\Controllers
  */
-class DiscussionsController extends Controller
+class DiscussionsController extends ControllerBase
 {
 
     const POSTS_IN_PAGE = 40;
