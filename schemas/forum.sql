@@ -67,6 +67,7 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) NOT NULL,
+  `description` text NOT NULL,
   `slug` varchar(32) DEFAULT NULL,
   `number_posts` int(10) unsigned DEFAULT NULL,
   `no_bounty` char(1) NOT NULL DEFAULT 'N',
