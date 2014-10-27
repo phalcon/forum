@@ -490,7 +490,7 @@ class DiscussionsController extends ControllerBase
 			
 			$check_topic = new TopicTracking();
 			$check_topic->user_id = $usersId;
-			$check_topic->topic_id = '19532';
+			$check_topic->topic_id = $id;
 			if ($check_topic->create() == false) {
 			  
 			  $sql     = "UPDATE topic_tracking SET topic_id=IF(topic_id='',{$id}, CONCAT(topic_id,',{$id}')) WHERE user_id=:user_id AND NOT (FIND_IN_SET('{$id}', topic_id) OR FIND_IN_SET(' {$id}', topic_id));";
