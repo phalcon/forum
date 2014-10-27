@@ -30,6 +30,7 @@ use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
+use Phosphorum\Models\TopicTracking;
 
 use Phosphorum\Utils\Slug;
 use Phosphorum\Search\Indexer;
@@ -177,6 +178,12 @@ class DiscussionsController extends ControllerBase
     public function categoryAction($categoryId, $slug, $offset = 0)
     {
         $this->tag->setTitle('Discussions');
+
+		$userId = $this->session->get('identity');
+		if ($userId != '') {
+			$ur = TopicTracking::findFirst("user_id='".$userId."'");
+			$this->view->readposts   = explode(",",$ur->topic_id);		
+		}
 
         $category = Categories::findFirstById($categoryId);
         if (!$category) {
@@ -474,8 +481,27 @@ class DiscussionsController extends ControllerBase
     public function viewAction($id, $slug)
     {
         $id = (int)$id;
-
+		
         $usersId = $this->session->get('identity');
+
+		#Check read / unread topic
+
+		if($usersId !='') {
+			
+			$check_topic = new TopicTracking();
+			$check_topic->user_id = $usersId;
+			$check_topic->topic_id = '19532';
+			if ($check_topic->create() == false) {
+			  
+			  $sql     = "UPDATE topic_tracking SET topic_id=IF(topic_id='',{$id}, CONCAT(topic_id,',{$id}')) WHERE user_id=:user_id AND NOT (FIND_IN_SET('{$id}', topic_id) OR FIND_IN_SET(' {$id}', topic_id));";
+			  $this->db->query($sql, array("user_id" => $usersId));
+			  
+			 } else {}
+
+		}
+			
+				
+		
 
         if (!$this->request->isPost()) {
 

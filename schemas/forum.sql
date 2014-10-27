@@ -376,6 +376,21 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Struktura tabeli dla tabeli `topic_tracking`
+--
+
+CREATE TABLE IF NOT EXISTS `topic_tracking` (
+  `user_id` int(11) NOT NULL,
+  `topic_id` text NOT NULL
+) ENGINE=InnoDB;
+
+--
+-- Indexes for table `topic_tracking`
+--
+ALTER TABLE `topic_tracking`
+ ADD PRIMARY KEY (`user_id`);
+
+--
 -- Table structure for table `users_badges`
 --
 
