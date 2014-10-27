@@ -20,7 +20,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			->columns(array('p.title as title_post', 'p.id as id_post', 'p.slug as slug_post', 'r.name as name_category', 'u.name as name_user'))
 			->limit(3)
 			->getQuery()
-			->execute();			
+			->execute();
 			
 			$users = Users::find()->getLast();
 			$this->view->setVar("threads", Posts::count());
