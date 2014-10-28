@@ -17,7 +17,13 @@
 		
 		{%- for categorie in categories -%}
           <tr>
-            <td>{{ categorie.id }}</td>
+            <td>
+            <?php if ($not_read[$categorie->id]->numRows() == 0) { ?> 
+			 {{ image_input("src": "/icon/new_none.png", "class": "img-rounded") }}
+			<?php } else { ?>
+			 {{ image_input("src": "/icon/new_some.png", "class": "img-rounded") }}
+			<?php } ?>
+            </td>
             <td>{{ link_to('category/' ~ categorie.id ~ '/' ~ categorie.slug, categorie.name) }}
 			<br><small>{{ categorie.description }}</small></td>
             <td><?php echo count(\Phosphorum\Models\Posts::find("categories_id=".$categorie->id)); ?> Theards</td>
