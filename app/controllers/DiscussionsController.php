@@ -216,6 +216,7 @@ class DiscussionsController extends ControllerBase
         $this->view->currentOrder = null;
         $this->view->offset       = (int)$offset;
         $this->view->paginatorUri = 'category/' . $category->id . '/' . $category->slug;
+		$this->view->logged = $this->session->get('identity');
     }
 
     /**

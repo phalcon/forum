@@ -21,6 +21,7 @@ use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\TopicTracking;
 
 /**
  * Class IndexController
@@ -61,8 +62,17 @@ class CategoriesController extends ControllerBase
 			
 		}
 		
+		$userId = $this->session->get('identity');
+		if($userId !='') {
+			$check_topic = new TopicTracking();
+			$check_topic->user_id = ''.$this->session->get('identity').'';
+			$check_topic->topic_id = '9999999';
+			$check_topic->create();
+		}
+		
 		$this->view->last_author = $last_author;
 		$this->view->not_read = $not_read;
+		$this->view->logged = $this->session->get('identity');
 		$this->view->categories = Categories::find();
     }
 	

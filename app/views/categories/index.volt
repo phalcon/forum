@@ -18,11 +18,15 @@
 		{%- for categorie in categories -%}
           <tr>
             <td>
+            {%- if logged != '' -%}
             <?php if ($not_read[$categorie->id]->numRows() == 0) { ?> 
 			 {{ image_input("src": "/icon/new_none.png", "class": "img-rounded") }}
 			<?php } else { ?>
 			 {{ image_input("src": "/icon/new_some.png", "class": "img-rounded") }}
 			<?php } ?>
+            {%- else -%}
+             {{ image_input("src": "/icon/new_none.png", "class": "img-rounded") }}
+            {%- endif -%}
             </td>
             <td>{{ link_to('category/' ~ categorie.id ~ '/' ~ categorie.slug, categorie.name) }}
 			<br><small>{{ categorie.description }}</small></td>
