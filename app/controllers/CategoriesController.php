@@ -37,6 +37,7 @@ class CategoriesController extends ControllerBase
     public function indexAction()
     {
         $this->tag->setTitle('Forum');
+		$userId = $this->session->get('identity');
 		
 		foreach(Categories::find() as $category) {
 			if(count(\Phosphorum\Models\Posts::find("categories_id=".$category->id)) > 0) {
@@ -57,12 +58,11 @@ class CategoriesController extends ControllerBase
 			
 			//SQL 
 						
-			$sql[$category->id] = "SELECT * FROM `posts` JOIN topic_tracking ON topic_tracking.topic_id WHERE concat(posts.id) AND NOT(FIND_IN_SET(posts.id, topic_tracking.topic_id)) AND categories_id = '{$category->id}' ";
+			$sql[$category->id] = "SELECT * FROM `posts` JOIN topic_tracking ON topic_tracking.topic_id WHERE concat(posts.id) AND NOT(FIND_IN_SET(posts.id, topic_tracking.topic_id)) AND categories_id = '{$category->id}' AND topic_tracking.user_id = '{$userId}'";
 			$not_read[$category->id] = $this->db->query($sql[$category->id]);
 			
 		}
 		
-		$userId = $this->session->get('identity');
 		if($userId !='') {
 			$check_topic = new TopicTracking();
 			$check_topic->user_id = ''.$this->session->get('identity').'';
