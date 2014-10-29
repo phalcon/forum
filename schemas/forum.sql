@@ -77,6 +77,8 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+INSERT INTO `categories` (`id`, `name`, `description`, `slug`, `number_posts`, `no_bounty`, `no_digest`) VALUES (1, 'First Category', 'Description Category', 'first', 1, 'N', 'N');
+
 --
 -- Table structure for table `irclog`
 --

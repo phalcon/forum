@@ -1,3 +1,5 @@
+{{ flashSession.output() }}
+
 <div class="clearfix">
 	<div class="col-lg-9  center-block">
 		<div class="panel panel-default">
