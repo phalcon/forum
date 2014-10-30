@@ -182,7 +182,7 @@ class DiscussionsController extends ControllerBase
         $userId = $this->session->get('identity');
         if ($userId != '') {
             $ur = TopicTracking::findFirst("user_id='".$userId."'");
-            $this->view->readposts   = explode(",",$ur->topic_id);		
+            $this->view->readposts = explode(",", $ur->topic_id);	
         }
 
         $category = Categories::findFirstById($categoryId);
@@ -497,7 +497,7 @@ class DiscussionsController extends ControllerBase
             } else {
             }
         }
-	
+
 
         if (!$this->request->isPost()) {
 
