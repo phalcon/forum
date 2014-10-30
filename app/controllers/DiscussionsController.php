@@ -179,11 +179,11 @@ class DiscussionsController extends ControllerBase
     {
         $this->tag->setTitle('Discussions');
 
-		$userId = $this->session->get('identity');
-		if ($userId != '') {
-			$ur = TopicTracking::findFirst("user_id='".$userId."'");
-			$this->view->readposts   = explode(",",$ur->topic_id);		
-		}
+        $userId = $this->session->get('identity');
+         if ($userId != '') {
+           $ur = TopicTracking::findFirst("user_id='".$userId."'");
+           $this->view->readposts   = explode(",",$ur->topic_id);		
+         }
 
         $category = Categories::findFirstById($categoryId);
         if (!$category) {
@@ -216,7 +216,7 @@ class DiscussionsController extends ControllerBase
         $this->view->currentOrder = null;
         $this->view->offset       = (int)$offset;
         $this->view->paginatorUri = 'category/' . $category->id . '/' . $category->slug;
-		$this->view->logged = $this->session->get('identity');
+        $this->view->logged = $this->session->get('identity');
     }
 
     /**
@@ -482,27 +482,21 @@ class DiscussionsController extends ControllerBase
     public function viewAction($id, $slug)
     {
         $id = (int)$id;
-		
+
         $usersId = $this->session->get('identity');
 
-		#Check read / unread topic
+        #Check read / unread topic
 
-		if($usersId !='') {
-			
-			$check_topic = new TopicTracking();
-			$check_topic->user_id = $usersId;
-			$check_topic->topic_id = $id;
-			if ($check_topic->create() == false) {
-			  
-			  $sql     = "UPDATE topic_tracking SET topic_id=IF(topic_id='',{$id}, CONCAT(topic_id,',{$id}')) WHERE user_id=:user_id AND NOT (FIND_IN_SET('{$id}', topic_id) OR FIND_IN_SET(' {$id}', topic_id));";
-			  $this->db->query($sql, array("user_id" => $usersId));
-			  
-			 } else {}
-
-		}
-			
-				
-		
+        if($usersId !='') {
+          $check_topic = new TopicTracking();
+          $check_topic->user_id = $usersId;
+          $check_topic->topic_id = $id;
+            if ($check_topic->create() == false) {
+              $sql     = "UPDATE topic_tracking SET topic_id=IF(topic_id='',{$id}, CONCAT(topic_id,',{$id}')) WHERE user_id=:user_id AND NOT (FIND_IN_SET('{$id}', topic_id) OR FIND_IN_SET(' {$id}', topic_id));";
+              $this->db->query($sql, array("user_id" => $usersId));
+            } else {}
+        }
+	
 
         if (!$this->request->isPost()) {
 
