@@ -33,6 +33,6 @@ class IndexController extends ControllerBase
     public function indexAction()
     {
         $this->flashSession->error('Page not found: ' . $this->escaper->escapeHtml($this->router->getRewriteUri()));
-        return $this->response->redirect('discussions');
+        return $this->response->redirect('categories');
     }
 }
