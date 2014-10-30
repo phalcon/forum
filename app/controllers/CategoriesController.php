@@ -76,4 +76,3 @@ class CategoriesController extends ControllerBase
           $this->view->categories = Categories::find();
     }
 }
-?>
