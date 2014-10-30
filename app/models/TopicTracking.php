@@ -35,10 +35,10 @@ class TopicTracking extends Model
     public $topic_id;
 
     public $users_id;
-	
-	public function initialize()
+
+    public function initialize()
     {
         $this->setSource('topic_tracking');
     }
-	
+
 }
