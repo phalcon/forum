@@ -42,4 +42,3 @@ class TopicTracking extends Model
     }
 
 }
-
