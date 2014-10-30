@@ -9,7 +9,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 {
 
     public function onConstruct()
-        {
+    {
             $last_threads = $this
             ->modelsManager
             ->createBuilder()
@@ -28,5 +28,5 @@ class ControllerBase extends \Phalcon\Mvc\Controller
             $this->view->setVar("users", Users::count());
             $this->view->setVar("users_latest", $users->login);
             $this->view->actionName = $this->dispatcher->getActionName();
-    }	
+    }
 }
