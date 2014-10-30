@@ -26,7 +26,7 @@ use Phalcon\Http\Response;
  *
  * @package Phosphorum\Controllers
  */
-class SitemapController extends Controller
+class SitemapController extends ControllerBase
 {
 
     public function initialize()
