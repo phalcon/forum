@@ -7,7 +7,7 @@ use Phosphorum\Models\Users;
 
 class ControllerBase extends \Phalcon\Mvc\Controller
 {
-	
+
         public function onConstruct()
         {
 			$last_threads = $this
