@@ -40,6 +40,4 @@ class TopicTracking extends Model
     {
         $this->setSource('topic_tracking');
     }
-
-
 }
