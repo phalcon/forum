@@ -40,7 +40,7 @@ class CategoriesController extends ControllerBase
         $userId = $this->session->get('identity');
 
         foreach (Categories::find() as $category) {
-          if (count(\Phosphorum\Models\Posts::find("categories_id=".$category->id)) > 0) {
+            if (count(\Phosphorum\Models\Posts::find("categories_id=".$category->id)) > 0) {
                 $last_author[$category->id] = $this
                 ->modelsManager
                 ->createBuilder()
@@ -56,7 +56,7 @@ class CategoriesController extends ControllerBase
                 $last_author[$category->id] = 0;
             }
 
-          //SQL 
+          //SQL
 
             $sql[$category->id] = "SELECT * FROM `posts` JOIN topic_tracking ON topic_tracking.topic_id WHERE concat(posts.id) AND NOT(FIND_IN_SET(posts.id, topic_tracking.topic_id)) AND categories_id = '{$category->id}' AND topic_tracking.user_id = '{$userId}'";
             $not_read[$category->id] = $this->db->query($sql[$category->id]);
@@ -64,10 +64,10 @@ class CategoriesController extends ControllerBase
         }
 
           if ($userId !='') {
-            $check_topic = new TopicTracking();
-            $check_topic->user_id = ''.$this->session->get('identity').'';
-            $check_topic->topic_id = '9999999';
-            $check_topic->create();
+          $check_topic = new TopicTracking();
+          $check_topic->user_id = ''.$this->session->get('identity').'';
+          $check_topic->topic_id = '9999999';
+          $check_topic->create();
           }
 
           $this->view->last_author = $last_author;
@@ -75,5 +75,5 @@ class CategoriesController extends ControllerBase
           $this->view->logged = $this->session->get('identity');
           $this->view->categories = Categories::find();
     }
-
 }
+?>
