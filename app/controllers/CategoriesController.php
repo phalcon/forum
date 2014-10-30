@@ -63,12 +63,12 @@ class CategoriesController extends ControllerBase
 
         }
 
-          if ($userId !='') {
-          $check_topic = new TopicTracking();
-          $check_topic->user_id = ''.$this->session->get('identity').'';
-          $check_topic->topic_id = '9999999';
-          $check_topic->create();
-          }
+        if ($userId !='') {
+            $check_topic = new TopicTracking();
+            $check_topic->user_id = ''.$this->session->get('identity').'';
+            $check_topic->topic_id = '9999999';
+            $check_topic->create();
+        }
 
           $this->view->last_author = $last_author;
           $this->view->not_read = $not_read;
