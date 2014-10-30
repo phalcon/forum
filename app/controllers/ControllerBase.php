@@ -21,7 +21,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
             ->limit(3)
             ->getQuery()
             ->execute();
-			
+
             $users = Users::find()->getLast();
             $this->view->setVar("threads", Posts::count());
             $this->view->setVar("last_threads", $last_threads);
