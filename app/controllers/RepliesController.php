@@ -32,7 +32,7 @@ use Phalcon\Http\Response;
  *
  * @package Phosphorum\Controllers
  */
-class RepliesController extends Controller
+class RepliesController extends ControllerBase
 {
 
     public function initialize()

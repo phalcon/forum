@@ -67,6 +67,7 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(72) NOT NULL,
+  `description` text NOT NULL,
   `slug` varchar(32) DEFAULT NULL,
   `number_posts` int(10) unsigned DEFAULT NULL,
   `no_bounty` char(1) NOT NULL DEFAULT 'N',
@@ -75,6 +76,8 @@ CREATE TABLE `categories` (
   KEY `number_posts` (`number_posts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `categories` (`id`, `name`, `description`, `slug`, `number_posts`, `no_bounty`, `no_digest`) VALUES (1, 'First Category', 'Description Category', 'first', 1, 'N', 'N');
 
 --
 -- Table structure for table `irclog`
@@ -373,6 +376,21 @@ CREATE TABLE `users` (
   KEY `notifications` (`notifications`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Struktura tabeli dla tabeli `topic_tracking`
+--
+
+CREATE TABLE IF NOT EXISTS `topic_tracking` (
+  `user_id` int(11) NOT NULL,
+  `topic_id` text NOT NULL
+) ENGINE=InnoDB;
+
+--
+-- Indexes for table `topic_tracking`
+--
+ALTER TABLE `topic_tracking`
+ ADD PRIMARY KEY (`user_id`);
 
 --
 -- Table structure for table `users_badges`

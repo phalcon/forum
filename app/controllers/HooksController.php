@@ -27,7 +27,7 @@ use Phalcon\Mvc\Controller;
 use Aws\Sns\MessageValidator\Message;
 use Aws\Sns\MessageValidator\MessageValidator;
 
-class HooksController extends Controller
+class HooksController extends ControllerBase
 {
     /**
      * This implements an inbound webhook from MandrillApp to reply to posts using emails

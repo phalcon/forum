@@ -487,3 +487,10 @@ div#sticky-progress {
     padding: 15px;
     border: 1px solid #fff;
 }
+
+.center-block {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    float:none;
+}
