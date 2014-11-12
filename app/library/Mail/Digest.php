@@ -97,7 +97,7 @@ class Digest extends Injectable
 
         }
 
-        $textContent = nl2br($content);
+        $textContent = strip_tags($content);
 
         $htmlContent = $content . '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
         $htmlContent .= PHP_EOL . 'This email was sent by Phalcon Framework. Change your e-mail preferences <a href="' . $url . '/settings">here</a></p>';
