@@ -58,6 +58,7 @@ class DiscussionsController extends ControllerBase
         if ($timezone) {
             date_default_timezone_set($timezone);
         }
+        $this->view->limitPost  = self::POSTS_IN_PAGE;
     }
 
     /**

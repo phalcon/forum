@@ -101,11 +101,11 @@
 <div class="container">
 	<ul class="pager">
 		{%- if offset > 0 -%}
-			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - 40), 'Prev', 'rel': 'prev') }}</li>
+			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - limitPost), 'Prev', 'rel': 'prev') }}</li>
 		{%- endif -%}
 
-		{%- if totalPosts.count > 40 -%}
-			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + 40), 'Next', 'rel': 'next') }}</li>
+		{%- if totalPosts.count > limitPost -%}
+			<li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + limitPost), 'Next', 'rel': 'next') }}</li>
 		{%- endif -%}
 	</ul>
 </div>
