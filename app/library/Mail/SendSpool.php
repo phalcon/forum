@@ -82,7 +82,7 @@ class SendSpool extends Injectable
 
                     if (trim($originalContent)) {
 
-                        $textContent = nl2br($originalContent);
+                        $textContent = strip_tags($originalContent);
 
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
                         if ($notification->type == 'P') {
