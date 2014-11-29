@@ -38,6 +38,7 @@ for ($i = 0; $i <= 20; $i++) {
 
     $category               = new Phosphorum\Models\Categories();
     $category->name         = $title;
+    $category->description  = $faker->sentence;
     $category->slug         = Phalcon\Tag::friendlyTitle($title);
     $category->number_posts = 0;
 

@@ -17,6 +17,8 @@
 
 namespace Phosphorum\Models;
 
+use Phalcon\Db\RawValue;
+
 /**
  * Class Categories
  *
@@ -39,4 +41,15 @@ class Categories extends CacheableModel
     public $no_bounty;
 
     public $no_digest;
+
+    public function beforeValidation()
+    {
+        if (! $this->no_bounty) {
+            $this->no_bounty = new RawValue('default');
+        }
+
+        if (! $this->no_digest) {
+            $this->no_digest = new RawValue('default');
+        }
+    }
 }
