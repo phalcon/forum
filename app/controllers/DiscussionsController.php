@@ -112,6 +112,15 @@ class DiscussionsController extends ControllerBase
          * Create the conditions according to the parameter order
          */
         $userId = $this->session->get('identity');
+        $this->view->logged = $userId;
+        if ($userId != '') {
+            $ur = TopicTracking::findFirst("user_id='".$userId."'");
+            if ($ur === false) {
+                $this->view->readposts = array();
+            } else {
+                $this->view->readposts = explode(",", $ur->topic_id);
+            }
+        }
 
         $params = null;
         switch ($order) {

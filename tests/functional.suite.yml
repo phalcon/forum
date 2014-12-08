@@ -11,4 +11,4 @@ modules:
     enabled: [Filesystem, Phalcon1, TestHelper]
     config:
         Phalcon1:
-            application: app/config/application.php
+            bootstrap: app/config/application.php

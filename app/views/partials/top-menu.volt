@@ -14,7 +14,7 @@
 		<div class="collapse navbar-collapse">
 		  <ul class="nav navbar-nav navbar-right">
 
-			<li>{{ link_to('', '<span class="glyphicon glyphicon-comment"></span>', 'title': 'Discussions') }}</li>
+			<li>{{ link_to('discussions', '<span class="glyphicon glyphicon-comment"></span>', 'title': 'Discussions') }}</li>
 			<li class="dropdown">
           		<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Search">
           			<span class="glyphicon glyphicon-search"></span> <b class="caret"></b>
