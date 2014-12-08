@@ -18,6 +18,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
             ->join('Phosphorum\Models\Categories', "r.id = p.categories_id", 'r')
             ->join('Phosphorum\Models\Users', "u.id = p.users_id", 'u')
             ->columns(array('p.title as title_post', 'p.id as id_post', 'p.slug as slug_post', 'r.name as name_category', 'u.name as name_user'))
+            ->orderBy('p.created_at DESC')
             ->limit(3)
             ->getQuery()
             ->execute();
