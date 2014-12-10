@@ -16,6 +16,7 @@
         </div>
         <div class="col-md-10">
             <form method="post" autocomplete="off" role="form">
+                {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
 
                 <div class="form-group">
                     {{ hidden_field("id") }}

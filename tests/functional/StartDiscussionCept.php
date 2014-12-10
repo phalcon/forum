@@ -2,10 +2,10 @@
 $I = new TestGuy\UserSteps($scenario);
 $I->wantTo('start a discussion');
 $I->amAdmin();
-$I->haveCategory(['name' => 'Testing', 'slug' => 'test']);
+$I->haveCategory(['name' => 'Testing', 'slug' => 'test', 'description' => 'codeception functional test']);
 $I->amOnPage('/');
 $I->see('Start a Discussion');
-$I->click('Discussions');
+$I->click('');
 $I->click('Start a Discussion');
 $I->see('Start a Discussion', 'h1');
 $I->seeRecord('Phosphorum\Models\Categories', ['name' => 'Testing']);

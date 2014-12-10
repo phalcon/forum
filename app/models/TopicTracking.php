@@ -15,24 +15,29 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
+namespace Phosphorum\Models;
+
+use Phalcon\Mvc\Model;
 
 /**
- * Class IndexController
+ * Class PostsHistory
  *
- * @package Phosphorum\Controllers
+ * @property \Phosphorum\Models\Posts post
+ *
+ * @package Phosphorum\Models
  */
-class IndexController extends ControllerBase
+class TopicTracking extends Model
 {
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
-    public function indexAction()
+    public $id;
+
+    public $topic_id;
+
+    public $users_id;
+
+    public function initialize()
     {
-        $this->flashSession->error('Page not found: ' . $this->escaper->escapeHtml($this->router->getRewriteUri()));
-        return $this->response->redirect('categories');
+        $this->setSource('topic_tracking');
     }
 }

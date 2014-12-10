@@ -69,6 +69,8 @@ class Digest extends Injectable
             'limit' => 10
         );
 
+        $e = $this->escaper;
+
         $content = '<html><head></head><body><p><h1 style="font-size:22px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;padding:16px 0;border-bottom:1px solid #e2e2e2">Top Stories from Phosphorum</h1></p>';
 
         foreach (Posts::find($parameters) as $post) {
@@ -78,7 +80,7 @@ class Digest extends Injectable
                 continue;
             }
 
-            $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="'. $url .'/discussion/' . $post->id . '/' . $post->slug . '">' . $post->title . '</a></p>';
+            $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="'. $url .'/discussion/' . $post->id . '/' . $post->slug . '">' . $e->escapeHtml($post->title) . '</a></p>';
 
             $content .= '<p><table width="100%"><td><table><tr><td>' .
                         '<img src="https://secure.gravatar.com/avatar/' . $user->gravatar_id . '?s=32&amp;r=pg&amp;d=identicon" width="32" height="32" alt="' . $user->name . ' icon">' .
@@ -89,7 +91,7 @@ class Digest extends Injectable
                         '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Votes</label><br>' . ($post->votes_up - $post->votes_down) . '</td>' .
                         '</tr></table></td></tr></table></p>';
 
-            $content .= $this->markdown->render($post->content);
+            $content .= $this->markdown->render($e->escapeHtml($post->content));
 
             $content .= '<p><a style="color:#155fad" href="' . $url . '/discussion/' . $post->id . '/' . $post->slug . '">Read more</a></p>';
 

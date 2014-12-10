@@ -100,7 +100,7 @@ $router->add(
 $router->add(
     '/index.html',
     array(
-       'controller' => 'discussions',
+       'controller' => 'categories',
        'action'     => 'index'
     )
 );
@@ -404,7 +404,7 @@ $router->add(
 $router->add(
     '/',
     array(
-       'controller' => 'discussions',
+       'controller' => 'categories',
        'action'     => 'index'
     )
 );

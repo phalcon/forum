@@ -17,6 +17,8 @@
 
 namespace Phosphorum\Models;
 
+use Phalcon\Db\RawValue;
+
 /**
  * Class Categories
  *
