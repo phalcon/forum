@@ -29,6 +29,7 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="settings">
 								<form method="post" role="form">
+									{{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
 									<div class="form-group">
 										<label for="timezone">Timezone</label>
 										{{ select_static('timezone', timezones, 'class': 'form-control') }}

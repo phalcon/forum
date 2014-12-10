@@ -78,6 +78,10 @@ class RepliesController extends ControllerBase
      */
     public function updateAction()
     {
+        if (!$this->security->checkToken()) {
+            $this->flashSession->error('Token error. This might be CSRF attack.');
+            return $this->response->redirect();
+        }
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
@@ -129,6 +133,12 @@ class RepliesController extends ControllerBase
      */
     public function deleteAction($id)
     {
+        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
+        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
+            $this->flashSession->error('Token error. This might be CSRF attack.');
+            return $this->response->redirect();
+        }
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
@@ -179,12 +189,30 @@ class RepliesController extends ControllerBase
         return $this->response->redirect();
     }
 
+    protected function checkTokenGetJson()
+    {
+        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
+        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Votes a post up
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
+
+        if (!$this->checkTokenGetJson()) {
+            $csrfTokenError = array(
+                'status'  => 'error',
+                'message' => 'Token error. This might be CSRF attack.'
+            );
+            return $response->setJsonContent($csrfTokenError);
+        }
 
         /**
          * Find the post using get
@@ -310,6 +338,15 @@ class RepliesController extends ControllerBase
     public function voteDownAction($id = 0)
     {
         $response = new Response();
+
+        if (!$this->checkTokenGetJson()) {
+            $csrfTokenError = array(
+                'status'  => 'error',
+                'message' => 'Token error. This might be CSRF attack.'
+            );
+            return $response->setJsonContent($csrfTokenError);
+        }
+
 
         /**
          * Find the post using get
@@ -481,6 +518,14 @@ class RepliesController extends ControllerBase
     public function acceptAction($id = 0)
     {
         $response = new Response();
+
+        if (!$this->checkTokenGetJson()) {
+            $csrfTokenError = array(
+                'status'  => 'error',
+                'message' => 'Token error. This might be CSRF attack.'
+            );
+            return $response->setJsonContent($csrfTokenError);
+        }
 
         /**
          * Find the post using get

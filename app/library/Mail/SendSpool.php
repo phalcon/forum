@@ -69,14 +69,16 @@ class SendSpool extends Injectable
                     $message->setTo(array($user->email => $user->name));
                     $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
 
+                    $e = $this->escaper;
+
                     if ($notification->type == 'P') {
                         $originalContent = $post->content;
-                        $htmlContent = $this->markdown->render($post->content);
+                        $htmlContent = $this->markdown->render($e->escapeHtml($post->content));
                         $message->setFrom(array($from => $post->user->name));
                     } else {
                         $reply = $notification->reply;
                         $originalContent = $reply->content;
-                        $htmlContent = $this->markdown->render($reply->content);
+                        $htmlContent = $this->markdown->render($e->escapeHtml($reply->content));
                         $message->setFrom(array($from => $reply->user->name));
                     }
 
