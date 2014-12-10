@@ -229,6 +229,15 @@ class DiscussionsController extends ControllerBase
         $this->view->logged = $this->session->get('identity');
     }
 
+    protected function checkTokenPost()
+    {
+        if (!$this->security->checkToken()) {
+            $this->flashSession->error('Token error. This might be CSRF attack.');
+            return false;
+        }
+        return true;
+    }
+
     /**
      * This shows the create post form and also store the related post
      */
@@ -244,6 +253,9 @@ class DiscussionsController extends ControllerBase
         $this->tag->setTitle('Start a Discussion');
 
         if ($this->request->isPost()) {
+            if (!$this->checkTokenPost()) {
+                return $this->response->redirect();
+            }
 
             $title = $this->request->getPost('title', 'trim');
 
@@ -308,6 +320,9 @@ class DiscussionsController extends ControllerBase
         }
 
         if ($this->request->isPost()) {
+            if (!$this->checkTokenPost()) {
+                return $this->response->redirect();
+            }
 
             $title   = $this->request->getPost('title', 'trim');
             $content = $this->request->getPost('content');
@@ -356,11 +371,25 @@ class DiscussionsController extends ControllerBase
         $this->view->post = $post;
     }
 
+    protected function checkTokenGet()
+    {
+        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
+        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
+            $this->flashSession->error('Token error. This might be CSRF attack.');
+            return false;
+        }
+        return true;
+    }
+
     /**
      * This shows the create post form and also store the related post
      */
     public function deleteAction($id)
     {
+        if (!$this->checkTokenGet()) {
+            return $this->response->redirect();
+        }
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
@@ -419,6 +448,9 @@ class DiscussionsController extends ControllerBase
      */
     public function subscribeAction($id)
     {
+        if (!$this->checkTokenGet()) {
+            return $this->response->redirect();
+        }
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
@@ -456,6 +488,9 @@ class DiscussionsController extends ControllerBase
      */
     public function unsubscribeAction($id)
     {
+        if (!$this->checkTokenGet()) {
+            return $this->response->redirect();
+        }
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
@@ -594,6 +629,10 @@ class DiscussionsController extends ControllerBase
 
         } else {
 
+            if (!$this->checkTokenPost()) {
+                return $this->response->redirect();
+            }
+
             if (!$usersId) {
                 $this->flashSession->error('You must be logged in first to add a comment');
                 return $this->response->redirect();
@@ -729,12 +768,30 @@ class DiscussionsController extends ControllerBase
         }
     }
 
+    protected function checkTokenGetJson()
+    {
+        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
+        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Votes a post up
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
+
+        if (!$this->checkTokenGetJson()) {
+            $csrfTokenError = array(
+                'status'  => 'error',
+                'message' => 'Token error. This might be CSRF attack.'
+            );
+            return $response->setJsonContent($csrfTokenError);
+        }
 
         /**
          * Find the post using get
@@ -828,6 +885,14 @@ class DiscussionsController extends ControllerBase
     public function voteDownAction($id = 0)
     {
         $response = new Response();
+
+        if (!$this->checkTokenGetJson()) {
+            $csrfTokenError = array(
+                'status'  => 'error',
+                'message' => 'Token error. This might be CSRF attack.'
+            );
+            return $response->setJsonContent($csrfTokenError);
+        }
 
         /**
          * Find the post using get
@@ -1059,6 +1124,9 @@ class DiscussionsController extends ControllerBase
         }
 
         if ($this->request->isPost()) {
+            if (!$this->checkTokenPost()) {
+                return $this->response->redirect();
+            }
 
             $user->timezone      = $this->request->getPost('timezone');
             $user->notifications = $this->request->getPost('notifications');

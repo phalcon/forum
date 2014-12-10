@@ -4,6 +4,9 @@
 
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
 
+{% set tokenKey = security.getTokenKey() %}
+{% set token = security.getToken() %}
+
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
@@ -117,13 +120,13 @@
 				<div class="posts-buttons" align="right">
 					{%- if post.users_id == currentUser or moderator == 'Y' -%}
 						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
-						{{ link_to('delete/discussion/' ~ post.id, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
+						{{ link_to('delete/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
 					{%- endif %}
 					{%- if currentUser -%}
 						{% if post.isSubscribed(currentUser) %}
-							{{ link_to('unsubscribe/discussion/' ~ post.id, '<span class="glyphicon glyphicon glyphicon-eye-close"></span>&nbsp;Unsubscribe', "class": "btn btn-default btn-xs") }}
+							{{ link_to('unsubscribe/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon glyphicon-eye-close"></span>&nbsp;Unsubscribe', "class": "btn btn-default btn-xs") }}
 						{% else %}
-							{{ link_to('subscribe/discussion/' ~ post.id, '<span class="glyphicon glyphicon-eye-open"></span>&nbsp;Subscribe', "class": "btn btn-default btn-xs") }}
+							{{ link_to('subscribe/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-eye-open"></span>&nbsp;Subscribe', "class": "btn btn-default btn-xs") }}
 						{% endif %}
 						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
 							<span class="glyphicon glyphicon-thumbs-down"></span>
@@ -249,6 +252,7 @@
 						</ul>
 
 						<form method="post" autocomplete="off" role="form">
+							{{ hidden_field(tokenKey, "value": token, "id": "csrf-token") }}
 							<p>
 								<div id="comment-box">
 									{{- hidden_field('id', 'value': post.id) -}}
@@ -325,6 +329,7 @@
    data-keyboard="false">
 	<div class="modal-dialog">
 		<form method="post" autocomplete="off" role="form">
+			{{ hidden_field(tokenKey, "value": token) }}
 			<div class="modal-content">
 
 				<div class="modal-header">

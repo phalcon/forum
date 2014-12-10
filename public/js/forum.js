@@ -56,6 +56,12 @@ var Forum = {
 			hidden.value = response.id;
 			form.appendChild(hidden);
 
+			var token = document.createElement('INPUT');
+			token.name = $('#csrf-token').attr('name');
+			token.type = 'hidden';
+			token.value = $('#csrf-token').attr('value');
+			form.appendChild(token);
+
 			var cancel = document.createElement('INPUT');
 			cancel.type = 'button';
 			cancel.className = 'btn btn-default btn-sm pull-left';
@@ -125,7 +131,7 @@ var Forum = {
 	{
 		if (confirm('Are you sure you want to delete this?')) {
 			var element = $(event.data.element);
-			window.location = Forum._uri + 'reply/delete/' + element.data('id');
+			window.location = Forum._uri + 'reply/delete/' + element.data('id') + '?' + $('#csrf-token').attr('name') + '=' + $('#csrf-token').attr('value');
 		}
 	},
 
@@ -174,9 +180,12 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 		if (element.length) {
+			var csrf = {}
+			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
 			$.ajax({
 				dataType: 'json',
-				url: Forum._uri + 'discussion/vote-up/' + element.data('id')
+				url: Forum._uri + 'discussion/vote-up/' + element.data('id'),
+				data: csrf
 			}).done(function(response){
 				if (response.status == "error") {
 					$('#errorModal .modal-body').html(response.message);
@@ -197,9 +206,12 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 		if (element.length) {
+			var csrf = {}
+			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
 			$.ajax({
 				dataType: 'json',
-				url: Forum._uri + 'discussion/vote-down/' + element.data('id')
+				url: Forum._uri + 'discussion/vote-down/' + element.data('id'),
+				data: csrf
 			}).done(function(response){
 				if (response.status == "error") {
 					$('#errorModal .modal-body').html(response.message);
@@ -220,9 +232,12 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 		if (element.length) {
+			var csrf = {}
+			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
 			$.ajax({
 				dataType: 'json',
-				url: Forum._uri + 'reply/vote-up/' + element.data('id')
+				url: Forum._uri + 'reply/vote-up/' + element.data('id'),
+				data: csrf
 			}).done(function(response){
 				if (response.status == "error") {
 					$('#errorModal .modal-body').html(response.message);
@@ -243,9 +258,12 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 		if (element.length) {
+			var csrf = {}
+			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
 			$.ajax({
 				dataType: 'json',
-				url: Forum._uri + 'reply/vote-down/' + element.data('id')
+				url: Forum._uri + 'reply/vote-down/' + element.data('id'),
+				data: csrf
 			}).done(function(response){
 				if (response.status == "error") {
 					$('#errorModal .modal-body').html(response.message);
@@ -266,9 +284,12 @@ var Forum = {
 	{
 		var element = $(event.data.element);
 		if (element.length) {
+			var csrf = {}
+			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
 			$.ajax({
 				dataType: 'json',
-				url: Forum._uri + 'reply/accept/' + element.data('id')
+				url: Forum._uri + 'reply/accept/' + element.data('id'),
+				data: csrf
 			}).done(function(response){
 				if (response.status == "error") {
 					$('#errorModal .modal-body').html(response.message);

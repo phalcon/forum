@@ -40,6 +40,7 @@
                     {% endif %}
 
                     <form method="post" autocomplete="off" role="form">
+                        {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
 
                         <div class="form-group">
                             <label>Title</label>
