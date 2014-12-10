@@ -50,7 +50,7 @@
 						}
 					?>
                     {%- else -%}
-                     {{ image_input(["src": "/icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded"]) }}
+                     {{ image("icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded") }}
                     {%- endif -%}
 				</td>
 				<td align="left">
