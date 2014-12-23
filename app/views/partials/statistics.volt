@@ -1,6 +1,6 @@
 {% if actionName == 'index' %}
 <div class="clearfix">
-	<div class="col-lg-9  center-block">
+	<div class="col-lg-10  center-block">
 		<div class="panel panel-default">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Statistics</div>
