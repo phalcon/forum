@@ -1,6 +1,6 @@
 {% if actionName == 'index' %}
-<div class="clearfix">
-	<div class="col-lg-10  center-block">
+<div class="container">
+	<div class="span8">
 		<div class="panel panel-default">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">{{ t('Statistics') }}</div>
@@ -17,9 +17,8 @@
 				  {{- link_to('discussion/' ~ last_thread.id_post ~ '/' ~ last_thread.slug_post, last_thread.title_post|e) -}}&nbsp; posted by {{ last_thread.name_user }} ({{ last_thread.name_category }})<br>
 			   {%- endfor -%}
 			  </div>
-			 
 		</div>
-	
 	</div>
+	<div class="span4"></div>
 </div>
 {% endif %}
