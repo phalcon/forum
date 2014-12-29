@@ -8,7 +8,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  {{ link_to('', config.site.name, 'class': 'navbar-brand') }}
+		  {{ link_to('', t(config.site.name), 'class': 'navbar-brand') }}
 		</div>
 
 		<div class="collapse navbar-collapse">

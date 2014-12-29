@@ -3,7 +3,7 @@
 	<head>
 		{% set url = url(), version = '2.1.1', theme = session.get('identity-theme') %}
 
-		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
+		<title>{{ t(get_title(false)) }} - {{ t(config.site.name) }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 

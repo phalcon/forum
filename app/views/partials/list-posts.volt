@@ -29,7 +29,6 @@
 	<div align="center">
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
-				<th> &nbsp; </th>
 				<th width="50%">{{t('Topic')}}</th>
 				<th width="10%"class="hidden-xs">{{t('Users')}}</th>
 				<th width="10%"class="hidden-xs">{{t('Category')}}</th>
@@ -40,19 +39,6 @@
 			</tr>
 		{%- for post in posts -%}
 			<tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% endif %}">
-			    <td>
-                	{%- if logged != '' -%}
-					<?php
-						if (in_array($post->id, $readposts)) {
-							echo Phalcon\Tag::imageInput(array("src" => "/icon/new_none.png", "width" => "24", "height" => "24", "class" => "img-rounded"));
-						} else {
-							echo Phalcon\Tag::imageInput(array("src" => "/icon/new_some.png", "width" => "24", "height" => "24", "class" => "img-rounded"));
-						}
-					?>
-                    {%- else -%}
-                     {{ image("icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded") }}
-                    {%- endif -%}
-				</td>
 				<td align="left">
 
 					{%- if post.sticked == "Y" -%}

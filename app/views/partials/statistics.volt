@@ -3,14 +3,14 @@
 	<div class="col-lg-10  center-block">
 		<div class="panel panel-default">
 		  <!-- Default panel contents -->
-		  <div class="panel-heading">Statistics</div>
+		  <div class="panel-heading">{{ t('Statistics') }}</div>
 			  <div class="panel-body">
 				  Our users have posted a total of <b>{{ threads }}</b> Posts<br>
 				  We <b> {{users}} </b> registered users<br>
 				  The newest member is <b>{{ users_latest }}</b>
 			  </div>
 			  <div class="panel-footer">
-				  <small>Last Thread</small>
+				  <small>{{ t('Last Thread') }}</small>
 			  </div>
 			   <div class="panel-body">
 			   {%- for last_thread in last_threads -%}
