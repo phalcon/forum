@@ -59,8 +59,7 @@
 							{%- for category in categories -%}
 								<li>
 									{{- link_to('category/' ~ category.id ~ '/' ~ category.slug,
-										t(category.name) ~ '<span class="label label-default" style="float: right">' ~ category.number_posts ~ '</span>')
-									-}}
+										'<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ t(category.name)) -}}
 								</li>
 							{%- endfor -%}
 						{%- endif -%}
