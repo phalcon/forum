@@ -37,7 +37,7 @@ class SearchTasks extends Injectable
 try {
     $task = new SearchTasks($config);
     $task->run();
-} catch(Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;
     echo $e->getTraceAsString();
 }
