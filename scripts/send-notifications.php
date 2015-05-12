@@ -35,7 +35,7 @@ class SendSpoolTask extends Phalcon\DI\Injectable
 try {
     $task = new SendSpoolTask($config);
     $task->run();
-} catch(Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;
     echo $e->getTraceAsString();
 }

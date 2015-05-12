@@ -33,16 +33,17 @@ $database = $di->getShared('db');
 $database->begin();
 
 for ($i = 0; $i <= 20; $i++) {
-
     $title = $faker->company;
 
     $category               = new Phosphorum\Models\Categories();
     $category->name         = $title;
     $category->slug         = Phalcon\Tag::friendlyTitle($title);
     $category->number_posts = 0;
+    $category->no_bounty    = 'N';
+    $category->no_digest    = 'N';
+    $category->description  = $faker->text;
 
     if (!$category->save()) {
-
         var_dump($category->getMessages());
         $database->rollback();
         die;
@@ -52,7 +53,6 @@ for ($i = 0; $i <= 20; $i++) {
 }
 
 for ($i = 0; $i <= 50; $i++) {
-
     $user           = new Phosphorum\Models\Users();
     $user->name     = $faker->name;
     $user->login    = $faker->userName;
@@ -60,7 +60,6 @@ for ($i = 0; $i <= 50; $i++) {
     $user->timezone = $faker->timezone;
 
     if (!$user->save()) {
-
         var_dump($user->getMessages());
         $database->rollback();
         die;
@@ -75,7 +74,6 @@ $userIds     = Phosphorum\Models\Users::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 500; $i++) {
-
     $title   = $faker->company;
     $content = $faker->text();
 
@@ -92,7 +90,6 @@ for ($i = 0; $i <= 500; $i++) {
     $post->categories_id = $categoryIds[$categoryRandId]['id'];
 
     if (!$post->save()) {
-
         var_dump($post->getMessages());
         $database->rollback();
         die;
@@ -106,7 +103,6 @@ $postIds = Phosphorum\Models\Posts::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 1000; $i++) {
-
     $reply = new \Phosphorum\Models\PostsReplies();
 
     $reply->content = $faker->paragraph();
@@ -118,7 +114,6 @@ for ($i = 0; $i <= 1000; $i++) {
     $reply->users_id = $userIds[$userRandId]['id'];
 
     if (!$reply->save()) {
-
         var_dump($reply->getMessages());
         $database->rollback();
         die;
