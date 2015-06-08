@@ -11,6 +11,6 @@ modules:
     enabled: [Filesystem, Phalcon1, TestHelper]
     config:
         Phalcon1:
-            bootstrap: app/config/application.php
+            bootstrap: tests/config/bootstrap.php
             cleanup: true
             savepoints: true
