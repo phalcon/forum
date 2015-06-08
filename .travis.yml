@@ -6,10 +6,11 @@ php:
   - 5.6
 
 install:
- - composer --prefer-source install
+  - composer self-update
+  - composer --prefer-source install
 
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
 
 notifications:
   email:
