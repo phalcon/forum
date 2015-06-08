@@ -11,14 +11,17 @@ php:
   - 5.5
   - 5.6
 
+services:
+  - mysql
+
 before_script:
   - ./tests/install-phalcon.sh ${PHALCON_VERSION}
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
   - composer self-update
   - composer update
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
-  - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";'
-  - mysql -e 'FLUSH PRIVILEGES;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot
+  - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
+  - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
 
 script:
@@ -31,3 +34,4 @@ notifications:
     - andres@phalconphp.com
     - eduar@phalconphp.com
     - nikos@phalconphp.com
+    - sadhooklay@gmail.com
