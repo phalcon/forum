@@ -16,6 +16,10 @@ before_script:
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
   - composer self-update
   - composer update
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
+  - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";'
+  - mysql -e 'FLUSH PRIVILEGES;'
+  - mysql -uforumuser -psecret forum < schemas/forum.sql
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
