@@ -12,3 +12,5 @@ modules:
     config:
         Phalcon1:
             bootstrap: app/config/application.php
+            cleanup: true
+            savepoints: true
