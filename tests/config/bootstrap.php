@@ -6,7 +6,6 @@ defined('APP_PATH') || define('APP_PATH', realpath('.'));
 
 $config = include __DIR__ . "/config.php";
 require APP_PATH . "/app/config/loader.php";
-include APP_PATH . "/tests/config/loader.php";
 
 $di = new \Phalcon\DI\FactoryDefault();
 
