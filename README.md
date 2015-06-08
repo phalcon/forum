@@ -74,13 +74,11 @@ Tests
 Phosphorum use [Codeception](http://codeception.com) functional tests. Execute:
 
 ```bash
-php codecept.phar run
-```
+vendor/bin/codecept build
 
-Detailed output:
-
-```bash
-php codecept.phar run --debug
+vendor/bin/codecept run
+# OR
+vendor/bin/codecept run --debug # Detailed output
 ```
 
 License

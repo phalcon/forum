@@ -10,7 +10,7 @@
     },
     "require": {
         "php": ">= 5.4",
-        "ext-phalcon": ">= 2.0.2",
+        "ext-phalcon": "~2.0",
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
         "swiftmailer/swiftmailer": "@stable",
@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "1.4.*@dev",
+        "codeception/codeception": "2.0.14",
         "squizlabs/php_codesniffer": "1.*"
     }
 }
