@@ -8,7 +8,7 @@
 
 class_name: TestGuy
 modules:
-    enabled: [Filesystem, Phalcon1, TestHelper]
+    enabled: [Filesystem, Phalcon1, PhpBrowser, TestHelper]
     config:
         Phalcon1:
             bootstrap: tests/config/bootstrap.php
