@@ -23,8 +23,8 @@ before_script:
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
-  - sudo ./tests/_bin/install-fpm.sh
-  - sudo ./tests/_bin/install-nginx.sh
+  - ./tests/_bin/install-fpm.sh
+  - ./tests/_bin/install-nginx.sh
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
