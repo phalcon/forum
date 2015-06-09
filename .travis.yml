@@ -54,7 +54,7 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run --debug
 
 notifications:
   email:
