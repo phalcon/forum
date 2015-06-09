@@ -23,6 +23,7 @@ before_script:
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
+  - sudo apt-get update
   - sudo ./tests/_bin/install-fpm.sh
   - sudo ./tests/_bin/install-nginx.sh
 
