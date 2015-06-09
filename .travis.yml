@@ -39,10 +39,13 @@ before_script:
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sudo apt-get install -y php5-curl
+  - sudo sed -e "s/^listen = .\+$/listen = 9000/g" --in-place /etc/php5/fpm/pool.d/www.conf
+  - sudo /etc/init.d/php5-fpm restart
   # enable nginx
   - sudo apt-get install -y nginx
   - sudo cp -f ./tests/build/nginx.conf /etc/nginx/nginx.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/nginx/nginx.conf
+  - echo '127.0.0.1 pforum.loc' | sudo tee -a /etc/hosts
   - sudo /etc/init.d/nginx restart
   # debug. will be removed
   - nginx -v
