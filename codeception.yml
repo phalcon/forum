@@ -16,4 +16,8 @@ modules:
             user: ''
             password: ''
             dump: tests/_data/dump.sql
+        PhpBrowser:
+            url: 'http://pforum.loc/'
+            curl:
+              CURLOPT_RETURNTRANSFER: true
 error_level: "E_ALL | E_STRICT"
