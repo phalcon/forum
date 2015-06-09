@@ -15,19 +15,37 @@ services:
   - mysql
 
 before_script:
-  - ./tests/_bin/install-phalcon.sh ${PHALCON_VERSION}
+  # setup phalcon
+  - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - cp ./tests/build/config.php ./tests/config/config.php
+  # update composer
   - composer self-update
   - composer update
+  # enable mysql
   - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
   - sudo apt-get update -qq
-  - sudo ./tests/_bin/install-curl.sh
-  - sudo ./tests/_bin/install-fpm.sh
-  - sudo ./tests/_bin/install-nginx.sh
-  - cp ./tests/config/config-travis.php ./tests/config/config.php
+  # enable curl
+  - sudo apt-get install -y curl
+  - sudo apt-get install -y libcurl3
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo apt-get install -y php5-curl
+  # enable nginx
+  - sudo apt-get install -y nginx
+  - sudo cp -f ./tests/build/nginx.conf /etc/nginx/nginx.conf
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/nginx/nginx.conf
+  - sudo echo '127.0.0.1 pforum.loc' >> /etc/hosts
+  - sudo /etc/init.d/nginx restart
+  # debug. will be removed
+  - nginx -v
+  - sudo nginx -t
+  - curl -I pforum.loc
+  - cat /etc/nginx/nginx.conf
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
