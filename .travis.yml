@@ -14,6 +14,10 @@ php:
 services:
   - mysql
 
+addons:
+  hosts:
+    - pforum.loc
+
 before_script:
   # setup phalcon
   - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
@@ -39,13 +43,13 @@ before_script:
   - sudo apt-get install -y nginx
   - sudo cp -f ./tests/build/nginx.conf /etc/nginx/nginx.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/nginx/nginx.conf
-  - sudo echo '127.0.0.1 pforum.loc' >> /etc/hosts
   - sudo /etc/init.d/nginx restart
   # debug. will be removed
   - nginx -v
   - sudo nginx -t
   - curl -I pforum.loc
   - cat /etc/nginx/nginx.conf
+  - cat /etc/hosts
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
