@@ -1,18 +1,65 @@
 language: php
 
+env:
+  - PHALCON_VERSION="2.0.x"
+  - PHALCON_VERSION="phalcon-v2.0.2"
+  - PHALCON_VERSION="phalcon-v2.0.1"
+  - PHALCON_VERSION="phalcon-v2.0.0"
+
 php:
   - 5.4
   - 5.5
   - 5.6
 
-install:
- - composer --prefer-source install
+services:
+  - mysql
+
+addons:
+  hosts:
+    - pforum.loc
+
+before_script:
+  # setup phalcon
+  - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
+  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - cp ./tests/build/config.php ./tests/config/config.php
+  # update composer
+  - composer self-update
+  - composer update
+  # enable mysql
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot
+  - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
+  - mysql -e 'FLUSH PRIVILEGES;' -uroot
+  - mysql -uforumuser -psecret forum < schemas/forum.sql
+  - mysql -uforumuser -psecret forum < tests/build/dump.sql
+  - sudo apt-get update -qq
+  # enable curl
+  - sudo apt-get install -y curl
+  - sudo apt-get install -y libcurl3
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo apt-get install -y php5-curl
+  - sudo sed -e "s/^listen = .\+$/listen = 9000/g" --in-place /etc/php5/fpm/pool.d/www.conf
+  - sudo service php5-fpm restart
+  # enable nginx
+  - sudo apt-get install -y nginx && nginx -v
+  - sudo cp -f ./tests/build/nginx.conf /etc/nginx/nginx.conf
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/nginx/nginx.conf
+  - echo '127.0.0.1 pforum.loc' | sudo tee -a /etc/hosts
+  - sudo service nginx restart
+
+after_script:
+  - mysql -e 'DROP DATABASE forum;' -uroot
 
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/codecept build
+  - vendor/bin/codecept run --debug
 
 notifications:
   email:
     - andres@phalconphp.com
     - eduar@phalconphp.com
     - nikos@phalconphp.com
+    - sadhooklay@gmail.com

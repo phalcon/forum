@@ -7,7 +7,6 @@ app/cache/views/cache-*
 app/cache/views/forum-cache-*
 app/cache/metaData/*.php
 /nbproject/
-tests/_log/*
 vendor/
 .idea/
 composer.lock
