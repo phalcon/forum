@@ -26,6 +26,7 @@ before_script:
   - sudo apt-get update
   - sudo ./tests/_bin/install-fpm.sh
   - sudo ./tests/_bin/install-nginx.sh
+  - cp ./tests/config/config-travis.php ./tests/config/config.php
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
