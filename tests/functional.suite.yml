@@ -12,5 +12,5 @@ modules:
     config:
         Phalcon1:
             bootstrap: tests/config/bootstrap.php
-            cleanup: false
-            savepoints: false
+            cleanup: true
+            savepoints: true
