@@ -1,5 +1,16 @@
 {
+    "name":        "phalcon/forum",
+    "description": "Phalcon official Forum http://forum.phalconphp.com",
+    "type":        "project",
+    "license":     "BSD-3-Clause",
+    "support": {
+        "source": "https://github.com/phalcon/forum",
+        "issues": "https://github.com/phalcon/forum/issues",
+        "wiki":   "https://github.com/phalcon/forum/wiki"
+    },
     "require": {
+        "php": ">= 5.4",
+        "ext-phalcon": ">= 2.0.2",
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
         "swiftmailer/swiftmailer": "@stable",
