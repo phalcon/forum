@@ -31,12 +31,9 @@ use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
 use Phosphorum\Models\TopicTracking;
-
 use Phosphorum\Utils\Slug;
 use Phosphorum\Search\Indexer;
-
 use Phalcon\Http\Response;
-use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\View;
 
 /**
@@ -46,7 +43,6 @@ use Phalcon\Mvc\View;
  */
 class DiscussionsController extends ControllerBase
 {
-
     const POSTS_IN_PAGE = 40;
 
     /**
@@ -67,7 +63,6 @@ class DiscussionsController extends ControllerBase
      */
     protected function prepareQueries($joinReply = false)
     {
-
         /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
         $itemBuilder = $this
             ->modelsManager
@@ -95,6 +90,9 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Shows latest posts using an order clause
+     *
+     * @param string $order
+     * @param int  $offset
      */
     public function indexAction($order = null, $offset = 0)
     {
@@ -445,6 +443,7 @@ class DiscussionsController extends ControllerBase
      * Subscribe to a post to receive e-mail notifications
      *
      * @param string $id
+     * @return Response
      */
     public function subscribeAction($id)
     {
@@ -485,6 +484,7 @@ class DiscussionsController extends ControllerBase
      * Unsubscribe from a post of receiving e-mail notifications
      *
      * @param string $id
+     * @return Response
      */
     public function unsubscribeAction($id)
     {
@@ -530,7 +530,7 @@ class DiscussionsController extends ControllerBase
 
         $usersId = $this->session->get('identity');
 
-        #Check read / unread topic
+        // Check read / unread topic
 
         if ($usersId !='') {
             $check_topic = new TopicTracking();

@@ -17,8 +17,6 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
-
 /**
  * Class IndexController
  *
@@ -32,6 +30,7 @@ class IndexController extends ControllerBase
      */
     public function indexAction()
     {
+        var_dump(get_class($this->flashSession));
         $this->flashSession->error('Page not found: ' . $this->escaper->escapeHtml($this->router->getRewriteUri()));
         return $this->response->redirect('categories');
     }

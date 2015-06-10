@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Posts;
 use Phalcon\Http\Response;
 

@@ -2,15 +2,37 @@
 
 namespace Phosphorum\Controllers;
 
+use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 
-class ControllerBase extends \Phalcon\Mvc\Controller
+/**
+ * Class ControllerBase
+ *
+ * @package Phosphorum\Controllers
+ *
+ * @property \Phalcon\Flash\Session flashSession
+ * @property \Phalcon\Escaper escaper
+ * @property \Phalcon\Session\Adapter\Files session
+ * @property \Phalcon\Tag tag
+ * @property \Phalcon\Mvc\Model\Manager modelsManager
+ * @property \Phalcon\Db\Adapter\Pdo\Mysql db
+ * @property \Phalcon\Mvc\View view
+ * @property \Phalcon\Http\Response response
+ * @property \Phalcon\Http\Request request
+ * @property \Phalcon\Flash\Direct flash
+ * @property \Phalcon\Cache\Backend\Memory viewCache
+ * @property \Phalcon\Security security
+ * @property \Phalcon\Config config
+ * @property \Phalcon\Mvc\Router router
+ * @property \Phalcon\Mvc\Dispatcher dispatcher
+ */
+class ControllerBase extends Controller
 {
 
     public function onConstruct()
     {
-            $last_threads = $this
+        $last_threads = $this
             ->modelsManager
             ->createBuilder()
             ->from(array('p' => 'Phosphorum\Models\Posts'))
@@ -23,11 +45,14 @@ class ControllerBase extends \Phalcon\Mvc\Controller
             ->getQuery()
             ->execute();
 
-            $users = Users::find()->getLast();
-            $this->view->setVar("threads", Posts::count());
-            $this->view->setVar("last_threads", $last_threads);
-            $this->view->setVar("users", Users::count());
-            $this->view->setVar("users_latest", $users->login);
-            $this->view->actionName = $this->dispatcher->getActionName();
+        $users = Users::find()->getLast();
+
+        $this->view->setVars([
+            'threads'      => Posts::count(),
+            'last_threads' => $last_threads,
+            'users'        => Users::count(),
+            'users_latest' => $users->login,
+            'actionName'   => $this->dispatcher->getActionName(),
+        ]);
     }
 }
