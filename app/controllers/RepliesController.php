@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsBounties;
@@ -130,6 +129,8 @@ class RepliesController extends ControllerBase
      * Deletes a reply
      *
      * @param int $id
+     *
+     * @return Response
      */
     public function deleteAction($id)
     {

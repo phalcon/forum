@@ -17,10 +17,8 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Posts;
-use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\TopicTracking;
 
 /**
@@ -40,7 +38,7 @@ class CategoriesController extends ControllerBase
         $userId = $this->session->get('identity');
 
         foreach (Categories::find() as $category) {
-            if (count(\Phosphorum\Models\Posts::find("categories_id=".$category->id)) > 0) {
+            if (count(Posts::find("categories_id=".$category->id)) > 0) {
                 $last_author[$category->id] = $this
                 ->modelsManager
                 ->createBuilder()

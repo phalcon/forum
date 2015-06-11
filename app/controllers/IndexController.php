@@ -17,8 +17,6 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Mvc\Controller;
-
 /**
  * Class IndexController
  *

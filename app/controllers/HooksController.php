@@ -21,9 +21,9 @@ use Phosphorum\Models\Users;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\Karma;
+use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\NotificationsBounces;
 use Phalcon\Http\Response;
-use Phalcon\Mvc\Controller;
 use Aws\Sns\MessageValidator\Message;
 use Aws\Sns\MessageValidator\MessageValidator;
 

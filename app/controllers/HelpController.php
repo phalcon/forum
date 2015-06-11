@@ -18,7 +18,6 @@
 namespace Phosphorum\Controllers;
 
 use Phalcon\Http\Response;
-use Phalcon\Mvc\Controller;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Notifications;
