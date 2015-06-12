@@ -1,6 +1,8 @@
 Phosphorum 2
 ============
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/duythien/forum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://secure.travis-ci.org/phalcon/forum.svg?branch=master)](http://travis-ci.org/phalcon/forum)
 
 This is the official Phalcon Forum you can adapt it to your own needs or improve it if you want.
@@ -80,6 +82,15 @@ vendor/bin/codecept run
 # OR
 vendor/bin/codecept run --debug # Detailed output
 ```
+#### Running with Docker
+
+To play Phalcon forum with Docker you just edit password to "root" in file config.example.php and do follow command below:
+
+```
+docker build -t phalcon-forum .
+docker run -it -p 80:80 phalcon-forum
+```
+Finally if everything went accordingly, we'll be welcomed with Phalcon forum when pointing the browser to http://127.0.0.1
 
 License
 -------

@@ -8,7 +8,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  {{ link_to('', config.site.name, 'class': 'navbar-brand') }}
+		  {{ link_to('', t(config.site.name), 'class': 'navbar-brand') }}
 		</div>
 
 		<div class="collapse navbar-collapse">
@@ -57,8 +57,7 @@
 							{%- for category in categories -%}
 								<li>
 									{{- link_to('category/' ~ category.id ~ '/' ~ category.slug,
-										'<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ category.name)
-									-}}
+										'<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ t(category.name)) -}}
 								</li>
 							{%- endfor -%}
 						{%- endif -%}
@@ -69,15 +68,15 @@
 			<li>{{ link_to('help', '<span class="glyphicon glyphicon-question-sign"></span>', 'title': 'Help') }}</li>
 
 			{%- if session.get('identity') -%}
-			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': 'Settings') }}</li>
-			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': 'Logout') }}</li>
+			<li>{{ link_to('settings', '<span class="glyphicon glyphicon-cog"></span>', 'title': t('Settings')) }}</li>
+			<li>{{ link_to('logout', '<span class="glyphicon glyphicon-off"></span>', 'title': t('Logout')) }}</li>
 			{%- endif -%}
 		  </ul>
 
 			{%- if session.get('identity') -%}
-				{{ link_to('post/discussion', '<span class="glyphicon glyphicon-plus"></span> Start a Discussion', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('post/discussion', t('Start a Discussion'), 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- else -%}
-				{{ link_to('login/oauth/authorize', '<span class="glyphicon glyphicon-user"></span> Log In with Github', 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
+				{{ link_to('login/oauth/authorize', t('Log In with Github'), 'class': 'btn btn-default btn-primary navbar-btn navbar-right', 'rel': 'nofollow') }}
 			{%- endif -%}
 		</div>
 	  </div>

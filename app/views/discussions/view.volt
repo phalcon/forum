@@ -32,10 +32,10 @@
 {%- if post.canHaveBounty() -%}
 {%- set bounty = post.getBounty() -%}
 <div class="bs-callout bs-callout-info">
-	<h4>Bounty available!</h4>
+	<h4>{{t('Bounty available!')}}</h4>
 	{%- if bounty['type'] == "old" -%}
-	<p>It has been a while and this question still does not have any answers.
-		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
+	<p>{{t('It has been a while and this question still does not have any answers.
+						Answer this question and get additional')}} <span class="label label-info">+{{ bounty['value'] }}</span> {{t('points of karma/reputation if the original poster accepts your reply as correct answer')}}</p>
 	{%- elseif bounty['type'] == "fast-reply" -%}
 	<p>This post has recently posted.
 		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
@@ -46,8 +46,8 @@
 <div class="container">
 
 	<ol class="breadcrumb">
-		<li>{{ link_to('', 'Home') }}</li>
-		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</li>
+		<li>{{ link_to('', t('Home')) }}</li>
+		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, t(post.category.name)) }}</li>
 	</ol>
 
 	<p>
@@ -274,7 +274,7 @@
 					<div class="col-md-1 small" align="center"></div>
 					<div class="col-md-11 login-comment">
 						<div class="pull-right">
-							{{- link_to('login/oauth/authorize', 'Log In to Comment', 'class': 'btn btn-primary') -}}
+							{{- link_to('login/oauth/authorize', t('Log In to Comment'), 'class': 'btn btn-primary') -}}
 						</div>
 					</div>
 				{%- endif -%}
@@ -296,13 +296,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="historyModalLabel">History</h4>
+				<h4 class="modal-title" id="historyModalLabel">{{t('History')}}</h4>
 			</div>
 			<div class="modal-body" id="historyBody">
 				Loading...
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{t('Close')}}</button>
 			</div>
 		</div>
 	</div>
@@ -313,12 +313,12 @@
 		<div class="modal-content">
 			<div class="modal-header alert-danger">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="errorModalLabel">Error</h4>
+				<h4 class="modal-title" id="errorModalLabel">{{t('Error')}}</h4>
 			</div>
 			<div class="modal-body" id="errorBody">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{t('Close')}}</button>
 			</div>
 		</div>
 	</div>
@@ -334,14 +334,14 @@
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="replyModalLabel">Add Reply</h4>
+					<h4 class="modal-title" id="replyModalLabel">{{t('Add Reply')}}</h4>
 				</div>
 
 				<div class="modal-body" id="errorBody">
 					<ul class="nav nav-tabs preview-nav">
-						<li class="active"><a href="#" onclick="return false">Comment</a></li>
-						<li><a href="#" onclick="return false">Preview</a></li>
-						<li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
+						<li class="active"><a href="#" onclick="return false">{{t('Comment')}}</a></li>
+						<li><a href="#" onclick="return false">{{t('Preview')}}</a></li>
+						<li class="pull-right">{{ link_to('help/markdown', t('Help'), 'parent': '_new') }}</li>
 					</ul>
 					<p>
 						<div id="reply-comment-box">
@@ -354,7 +354,7 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{t('Close')}}</button>
 					<input type="submit" class="btn btn-success" value="Add Reply"/>
 				</div>
 			</div>

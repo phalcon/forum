@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+$setup = <<SCRIPT
+# Stop and remove any existing containers
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+
+# Build containers from Dockerfiles
+
+
+# Run and link the containers
+
+
+SCRIPT
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+#Check if you have the good Vagrant version to use docker provider...
+Vagrant.require_version ">= 1.6.0"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Setup resource requirements
+  # config.vm.provider "virtualbox" do |v|
+  #   v.memory = 1024
+  #   v.cpus = 2
+  # end
+
+  # need a private network for NFS shares to work
+  #config.vbguest.auto_update = false
+  # config.vm.hostname = 'phalcon-docker'
+  # config.vm.provision "shell", inline: $setup
+  # config.vm.network "private_network", ip: "192.168.33.55"
+  # config.ssh.forward_agent = true
+
+  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
+
+  config.vm.provider "docker" do |d|
+    d.build_dir = "."
+    d.has_ssh = true
+  end
+  config.ssh.port = 22
+end

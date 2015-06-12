@@ -2,7 +2,7 @@
 
 <div class="container start-discussion">
 
-    <h1>Start a Discussion</h1>
+    <h1>{{t('Start a Discussion')}}</h1>
 
     <div class="row">
         <div class="col-md-1 remove-image hidden-xs" align="right">
@@ -16,7 +16,7 @@
                 <div class="col-md-9">
 
                     <div class="bs-callout bs-callout-info">
-                        <h4>Creating a new Post</h4>
+                        <h4>{{t('Creating a new Post')}}</h4>
 
                         <p> {{ config.site.project }} is an open source project and a volunteer effort.
                             Help us make this a great place for discussion and collaboration. Please spend some time browsing the
@@ -28,7 +28,7 @@
 
                     {% if firstTime %}
                         <div class="bs-callout bs-callout-warning">
-                            <h4>Your first post</h4>
+                            <h4>{{t('Your first post')}}</h4>
 
                             <p>
                                 You're about to create your first post in the forum.
@@ -43,20 +43,20 @@
                         {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
 
                         <div class="form-group">
-                            <label>Title</label>
+                            <label>{{t('Title')}}</label>
                             {{ text_field("title", "placeholder": "Title", "class": "form-control") }}
                         </div>
 
                         <div class="form-group">
-                            <label>Category</label>
+                            <label>{{t('Category')}}</label>
                             {{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...', "class": "form-control") }}
                         </div>
 
                         <div class="form-group">
 
                             <ul class="nav nav-tabs preview-nav">
-                                <li class="active"><a href="#" onclick="return false">Write</a></li>
-                                <li><a href="#" onclick="return false">Preview</a></li>
+                                <li class="active"><a href="#" onclick="return false">{{t('Write')}}</a></li>
+                                <li><a href="#" onclick="return false">{{t('Preview')}}</a></li>
                                 <li class="pull-right">{{ link_to('help/markdown', 'Help', 'target': '_blank') }}</li>
                             </ul>
 
@@ -70,10 +70,10 @@
                         </div>
 
                         <div class="pull-left">
-                            {{ link_to('', 'Back to discussions') }}
+                            {{ link_to('', t('Back to discussions')) }}
                         </div>
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-sm btn-success">Submit Discussion</button>
+                            <button type="submit" class="btn btn-sm btn-success">{{t('Submit Discussion')}}</button>
                         </div>
 
                     </form>
@@ -82,8 +82,8 @@
 
                 <div class="col-md-3">
                     <div id="recommended-posts-create">
-                        <strong>Suggested Posts</strong>
-                        <div id="recommended-posts-create-content">There are no suggested posts</div>
+                        <strong>{{t('Suggested Posts')}}</strong>
+                        <div id="recommended-posts-create-content">{{('There are no suggested posts')}}</div>
                     </div>
                 </div>
 
