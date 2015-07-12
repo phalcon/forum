@@ -1,7 +1,6 @@
 language: php
 
 env:
-  - PHALCON_VERSION="2.0.x"
   - PHALCON_VERSION="phalcon-v2.0.3"
   - PHALCON_VERSION="phalcon-v2.0.2"
   - PHALCON_VERSION="phalcon-v2.0.1"
@@ -23,7 +22,10 @@ before_script:
   # setup phalcon
   - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - cp ./tests/build/bootstrap.php ./tests/config/bootstrap.php
+  - cp ./tests/build/services.php ./tests/config/services.php
   - cp ./tests/build/config.php ./tests/config/config.php
+  - cp ./tests/build/loader.php ./tests/config/loader.php
   # update composer
   - composer self-update
   - composer update

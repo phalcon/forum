@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2015 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file docs/LICENSE.txt.                        |
@@ -17,74 +17,74 @@
 
 return new \Phalcon\Config(array(
 
-    'site' => array(
+    'site' => [
         'name'      => 'Phalcon Framework',
         'url'       => 'http://pforum.loc',
         'project'   => 'Phalcon',
         'software'  => 'Phosphorum',
         'repo'      => 'https://github.com/phalcon/cphalcon/issues',
-        'docs'      => 'https://github.com/phalcon/docs',
-    ),
+        'docs'      => 'https://github.com/phalcon/docs'
+    ],
 
-    'database'    => array(
+    'database'    => [
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
         'username' => 'forumuser',
         'password' => 'secret',
         'dbname'   => 'forum',
         'charset'  => 'utf8'
-    ),
+    ],
 
-    'application' => array(
+    'application' => [
         'controllersDir' => APP_PATH . '/app/controllers/',
         'modelsDir'      => APP_PATH . '/app/models/',
         'viewsDir'       => APP_PATH . '/app/views/',
         'pluginsDir'     => APP_PATH . '/app/plugins/',
         'libraryDir'     => APP_PATH . '/app/library/',
-        'development'    => array(
+        'development'    => [
             'staticBaseUri' => '/',
             'baseUri'       => '/'
-        ),
-        'production'     => array(
+        ],
+        'production'     => [
             'staticBaseUri' => 'http://static.phosphorum.com/',
             'baseUri'       => '/'
-        ),
+        ],
         'debug'          => true
-    ),
+    ],
 
-    'mandrillapp' => array(
+    'mandrillapp' => [
         'secret' => ''
-    ),
+    ],
 
-    'github'      => array(
+    'github'      => [
         'clientId'     => '',
         'clientSecret' => '',
         'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
-    ),
+    ],
 
-    'amazonSns'   => array(
+    'amazonSns'   => [
         'secret' => ''
-    ),
+    ],
 
-    'smtp'        => array(
+    'smtp'        => [
         'host'     => "",
         'port'     => 25,
         'security' => "tls",
         'username' => "",
         'password' => ""
-    ),
+    ],
 
-    'beanstalk'   => array(
+    'beanstalk'   => [
         'disabled' => true,
         'host'     => '127.0.0.1'
-    ),
+    ],
 
-    'elasticsearch' => array(
+    'elasticsearch' => [
         'index'    => 'phosphorum'
-    ),
+    ],
 
-    'mail'     => array(
+    'mail'     => [
         'fromName'     => 'Phalcon',
         'fromEmail'    => 'phosphorum@phalconphp.com',
-    )
+    ]
 ));

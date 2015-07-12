@@ -15,21 +15,19 @@
  +------------------------------------------------------------------------+
 */
 
-use Phalcon\Mvc\Application;
-use Phalcon\DI\FactoryDefault;
+$modelsDir      = $config->application->modelsDir;
+$controllersDir = $config->application->controllersDir;
+$libraryDir     = $config->application->libraryDir;
 
-defined('APP_PATH') || define('APP_PATH', realpath('.'));
+$loader = new \Phalcon\Loader();
 
-require APP_PATH . "/vendor/autoload.php";
+// We're a registering a set of directories taken from the configuration file
+$loader->registerNamespaces(
+    [
+        'Phosphorum\Models'      => $modelsDir,
+        'Phosphorum\Controllers' => $controllersDir,
+        'Phosphorum'             => $libraryDir
+    ]
+);
 
-$config = include APP_PATH . "/tests/config/config.php";
-require APP_PATH . "/app/config/loader.php";
-
-$di = new FactoryDefault;
-
-require APP_PATH . "/app/config/services.php";
-
-$application = new Application;
-$application->setDI($di);
-
-return $application;
+$loader->register();
