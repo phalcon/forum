@@ -11,21 +11,8 @@ use Phosphorum\Models\Users;
  *
  * @package Phosphorum\Controllers
  *
- * @property \Phalcon\Flash\Session flashSession
- * @property \Phalcon\Escaper escaper
- * @property \Phalcon\Session\Adapter\Files session
- * @property \Phalcon\Tag tag
- * @property \Phalcon\Mvc\Model\Manager modelsManager
- * @property \Phalcon\Db\Adapter\Pdo\Mysql db
- * @property \Phalcon\Mvc\View view
- * @property \Phalcon\Http\Response response
- * @property \Phalcon\Http\Request request
- * @property \Phalcon\Flash\Direct flash
  * @property \Phalcon\Cache\Backend\Memory viewCache
- * @property \Phalcon\Security security
  * @property \Phalcon\Config config
- * @property \Phalcon\Mvc\Router router
- * @property \Phalcon\Mvc\Dispatcher dispatcher
  */
 class ControllerBase extends Controller
 {
