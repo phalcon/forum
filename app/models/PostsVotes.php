@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2015 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file docs/LICENSE.txt.                        |
@@ -30,12 +30,13 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
  */
 class PostsVotes extends Model
 {
-
     public $id;
 
     public $posts_id;
 
     public $users_id;
+
+    public $vote;
 
     public $created_at;
 
@@ -49,25 +50,19 @@ class PostsVotes extends Model
             'posts_id',
             'Phosphorum\Models\Posts',
             'id',
-            array(
-                'alias' => 'post'
-            )
+            ['alias' => 'post']
         );
 
         $this->belongsTo(
             'users_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
-                'alias' => 'user'
-            )
+            ['alias' => 'user']
         );
 
         $this->addBehavior(
             new Timestampable(array(
-                'beforeValidationOnCreate' => array(
-                    'field' => 'created_at'
-                )
+                'beforeValidationOnCreate' => ['field' => 'created_at']
             ))
         );
     }
