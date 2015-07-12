@@ -18,7 +18,7 @@
                 {%- for category in categories -%}
                     <tr>
                         <td>
-                            {%- if logged != '' -%}
+                            {%- if logged -%}
                                 {%- if not_read[category.id].numRows() > 0 -%}
                                     {{ image("icon/new_some.png", "class": "img-rounded") }}
                                 {%- else -%}
