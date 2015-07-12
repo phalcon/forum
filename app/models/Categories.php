@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2015 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file docs/LICENSE.txt.                        |
@@ -29,7 +29,6 @@ use Phalcon\Db\RawValue;
  */
 class Categories extends CacheableModel
 {
-
     public $id;
 
     public $name;
@@ -44,12 +43,17 @@ class Categories extends CacheableModel
 
     public function beforeValidation()
     {
-        if (! $this->no_bounty) {
+        if (!$this->no_bounty) {
             $this->no_bounty = new RawValue('default');
         }
 
-        if (! $this->no_digest) {
+        if (!$this->no_digest) {
             $this->no_digest = new RawValue('default');
         }
+    }
+
+    public function getUrl()
+    {
+        return "category/{$this->id}/{$this->slug}";
     }
 }
