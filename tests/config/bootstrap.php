@@ -22,7 +22,7 @@ defined('APP_PATH') || define('APP_PATH', realpath('.'));
 
 require APP_PATH . "/vendor/autoload.php";
 
-$config = include APP_PATH . "/tests/config/config.php";
+$config = include APP_PATH . "/app/config/config.php";
 require APP_PATH . "/app/config/loader.php";
 
 $di = new FactoryDefault;
