@@ -22,7 +22,7 @@
 error_reporting(E_ALL);
 set_time_limit(0);
 
-define('APP_PATH', realpath('..'));
+define('APP_PATH', realpath(__DIR__ . '/..'));
 
 /**
  * Read the configuration
