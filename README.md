@@ -65,8 +65,11 @@ Initial Test Data
 -----------------
 You can create fake entries on an empty Phosphorum installation by running:
 
+> Note: The script random-entries.php must be executed inside the scripts directory
+
 ```bash
-php scripts/random-entries.php
+cd scripts
+php random-entries.php
 ```
 
 Tests
