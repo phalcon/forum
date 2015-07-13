@@ -31,7 +31,7 @@ before_script:
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
-  - cd ./scripts/ && php random-entries.php && cd %TRAVIS_BUILD_DIR%
+  - cd ./scripts/ && php random-entries.php && cd $TRAVIS_BUILD_DIR
   # enable curl
   - sudo apt-get update -qq
   - sudo apt-get install -y curl
