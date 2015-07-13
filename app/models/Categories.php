@@ -33,6 +33,8 @@ class Categories extends CacheableModel
 
     public $name;
 
+    public $description;
+
     public $slug;
 
     public $number_posts;
