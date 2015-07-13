@@ -23,7 +23,6 @@ before_script:
   - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
   - cp ./tests/build/config.php ./app/config/config.php
-  - cd ./scripts/ && php random-entries.php && cd %TRAVIS_BUILD_DIR%
   # update composer
   - composer self-update
   - composer update
@@ -32,8 +31,9 @@ before_script:
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
-  - sudo apt-get update -qq
+  - cd ./scripts/ && php random-entries.php && cd %TRAVIS_BUILD_DIR%
   # enable curl
+  - sudo apt-get update -qq
   - sudo apt-get install -y curl
   - sudo apt-get install -y libcurl3
   # enable php-fpm
