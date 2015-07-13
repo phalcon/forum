@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-2015 Phalcon Team and contributors                  |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -63,11 +63,11 @@ $di->set(
         $volt = new Volt($view, $di);
 
         $volt->setOptions(
-            array(
+            [
                 "compiledPath"      => APP_PATH . "/app/cache/volt/",
                 "compiledSeparator" => "_",
                 "compileAlways"     => $config->application->debug
-            )
+            ]
         );
 
         $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
@@ -89,12 +89,7 @@ $di->set(
         $view = new View();
 
         $view->setViewsDir($config->application->viewsDir);
-
-        $view->registerEngines(
-            array(
-                ".volt" => 'volt'
-            )
-        );
+        $view->registerEngines([".volt" => 'volt']);
 
         return $view;
     },
@@ -157,9 +152,7 @@ $di->set(
             throw new \Exception('Beanstalk is not configured');
         }
 
-        return new Beanstalk(array(
-            'host' => $config->beanstalk->host
-        ));
+        return new Beanstalk(['host' => $config->beanstalk->host]);
     },
     true
 );
@@ -175,9 +168,7 @@ $di->set(
             return new MemoryMetaDataAdapter();
         }
 
-        return new MetaDataAdapter(array(
-            'metaDataDir' => APP_PATH . '/app/cache/metaData/'
-        ));
+        return new MetaDataAdapter(['metaDataDir' => APP_PATH . '/app/cache/metaData/']);
 
     },
     true
@@ -218,11 +209,11 @@ $di->set('config', $config);
 $di->set(
     'flash',
     function () {
-        return new Phalcon\Flash\Direct(array(
-           'error'   => 'alert alert-danger',
-           'success' => 'alert alert-success',
-           'notice'  => 'alert alert-info',
-        ));
+        return new Phalcon\Flash\Direct([
+            'error'   => 'alert alert-danger',
+            'success' => 'alert alert-success',
+            'notice'  => 'alert alert-info'
+        ]);
     }
 );
 
@@ -232,11 +223,11 @@ $di->set(
 $di->set(
     'flashSession',
     function () {
-        return new Phalcon\Flash\Session(array(
+        return new Phalcon\Flash\Session([
             'error'   => 'alert alert-danger',
             'success' => 'alert alert-success',
             'notice'  => 'alert alert-info',
-        ));
+        ]);
     }
 );
 
@@ -264,14 +255,12 @@ $di->set(
 
         } else {
             //Cache data for one day by default
-            $frontCache = new FrontendOutput(array(
-                "lifetime" => 86400 * 30
-            ));
+            $frontCache = new FrontendOutput(["lifetime" => 86400 * 30]);
 
-            return new FileCache($frontCache, array(
+            return new FileCache($frontCache, [
                 "cacheDir" => APP_PATH . "/app/cache/views/",
                 "prefix"   => "forum-cache-"
-            ));
+            ]);
         }
     }
 );
@@ -291,14 +280,12 @@ $di->set(
         } else {
 
             //Cache data for one day by default
-            $frontCache = new \Phalcon\Cache\Frontend\Data(array(
-                "lifetime" => 86400 * 30
-            ));
+            $frontCache = new \Phalcon\Cache\Frontend\Data(["lifetime" => 86400 * 30]);
 
-            return new \Phalcon\Cache\Backend\File($frontCache, array(
+            return new \Phalcon\Cache\Backend\File($frontCache, [
                 "cacheDir" => APP_PATH . "/app/cache/data/",
                 "prefix"   => "forum-cache-data-"
-            ));
+            ]);
         }
     }
 );
