@@ -15,8 +15,7 @@
  +------------------------------------------------------------------------+
 */
 
-return new \Phalcon\Config(array(
-
+return new \Phalcon\Config([
     'site' => [
         'name'      => 'Phalcon Framework',
         'url'       => 'http://pforum.loc',
@@ -87,4 +86,4 @@ return new \Phalcon\Config(array(
         'fromName'     => 'Phalcon',
         'fromEmail'    => 'phosphorum@phalconphp.com',
     ]
-));
+]);
