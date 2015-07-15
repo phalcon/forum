@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "1.4.*@dev",
-        "codeception/codeception": "2.0.14",
+        "codeception/codeception": "2.0.16",
         "squizlabs/php_codesniffer": "1.*"
     }
 }
