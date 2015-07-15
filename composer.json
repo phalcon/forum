@@ -20,8 +20,8 @@
         "dropbox/dropbox-sdk": "1.1.*"
     },
     "require-dev": {
-        "fzaninotto/faker": "1.4.*@dev",
-        "codeception/codeception": "2.0.16",
+        "fzaninotto/faker": "*",
+        "codeception/codeception": "*",
         "squizlabs/php_codesniffer": "1.*"
     }
 }
