@@ -18,7 +18,7 @@
 use Phalcon\Mvc\Application;
 use Phalcon\DI\FactoryDefault;
 
-defined('APP_PATH') || define('APP_PATH', realpath('.'));
+defined('APP_PATH') || define('APP_PATH', dirname(dirname(dirname(__FILE__))));
 
 require APP_PATH . "/vendor/autoload.php";
 
