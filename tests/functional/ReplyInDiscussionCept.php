@@ -3,23 +3,24 @@
  * @var \Codeception\Scenario $scenario
  */
 
-$I = new TestGuy($scenario);
+$I = new Step\Functional\UserSteps($scenario);
 
-$I = new TestGuy\UserSteps($scenario);
 $I->wantTo('reply in a discussion');
 $user_id = $I->amAdmin();
-$cat_id = $I->haveCategory(array(
+$cat_id = $I->haveCategory([
     'name' => 'Testing',
     'slug' => 'test',
     'description' => 'codeception functional test'
-));
-$post_id = $I->havePost(array(
+]);
+
+$post_id = $I->havePost([
     'title' => 'Please help with testing',
     'content' => 'How can I install Codeception',
     'users_id' => $user_id,
     'slug' => 'please-help-with-testing',
     'categories_id' => $cat_id
-));
+]);
+
 $I->amOnPage("/discussions");
 $I->seeLink('Please help with testing');
 $I->click('Please help with testing');

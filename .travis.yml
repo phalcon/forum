@@ -35,7 +35,7 @@ before_script:
   - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
   - mysql -e 'FLUSH PRIVILEGES;' -uroot
   - mysql -uforumuser -psecret forum < schemas/forum.sql
-  - (cd ./scripts/ && php random-entries.php)
+  - (cd ./scripts/ && php random-entries.php > /dev/null)
   # enable php-fpm
   - cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -53,7 +53,7 @@ after_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run --debug
+  - vendor/bin/codecept run
 
 notifications:
   email:

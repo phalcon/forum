@@ -3,7 +3,8 @@
  * @var \Codeception\Scenario $scenario
  */
 
-$I = new TestGuy\UserSteps($scenario);
+$I = new Step\Functional\UserSteps($scenario);
+
 $I->wantTo('start a discussion');
 $I->amAdmin();
 $I->haveCategory(['name' => 'Testing', 'slug' => 'test', 'description' => 'codeception functional test']);

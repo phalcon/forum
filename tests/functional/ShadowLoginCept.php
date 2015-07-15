@@ -3,7 +3,7 @@
  * @var \Codeception\Scenario $scenario
  */
 
-$I = new TestGuy($scenario);
+$I = new FunctionalTester($scenario);
 
 $I->wantTo('perform shadow login as first user');
 $I->haveInSession('identity', 1);
