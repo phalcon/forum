@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var \Codeception\Scenario $scenario
+ */
+
 $I = new TestGuy\UserSteps($scenario);
 $I->wantTo('start a discussion');
 $I->amAdmin();
