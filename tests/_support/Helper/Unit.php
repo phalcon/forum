@@ -17,6 +17,21 @@ use Mockery;
 class Unit extends Module
 {
     /**
+     * @var \Codeception\Module\Phalcon2
+     */
+    protected $phalcon = null;
+
+    /**
+     * HOOK: used after configuration is loaded
+     *
+     * @throws \Codeception\Exception\ModuleException
+     */
+    public function _initialize()
+    {
+        $this->phalcon = $this->getModule('Phalcon1');
+    }
+
+    /**
      * Executed after each test
      * HOOK: after suite
      *
@@ -25,5 +40,25 @@ class Unit extends Module
     public function _after(TestCase $test)
     {
         Mockery::close();
+    }
+
+    /**
+     * Get Di from Phalcon module
+     *
+     * @return \Phalcon\DiInterface
+     */
+    public function getDi()
+    {
+        return $this->phalcon->di;
+    }
+
+    /**
+     * Get Phalcon module
+     *
+     * @return \Codeception\Module\Phalcon2
+     */
+    public function getPhalcon()
+    {
+        return $this->phalcon;
     }
 }
