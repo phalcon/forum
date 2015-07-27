@@ -17,7 +17,7 @@ use Mockery;
 class Unit extends Module
 {
     /**
-     * @var \Codeception\Module\Phalcon2
+     * @var \Codeception\Module\Phalcon1
      */
     protected $phalcon = null;
 
@@ -55,7 +55,7 @@ class Unit extends Module
     /**
      * Get Phalcon module
      *
-     * @return \Codeception\Module\Phalcon2
+     * @return \Codeception\Module\Phalcon1
      */
     public function getPhalcon()
     {

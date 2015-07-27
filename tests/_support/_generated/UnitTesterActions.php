@@ -35,7 +35,7 @@ trait UnitTesterActions
      *
      * Get Phalcon module
      *
-     * @return \Codeception\Module\Phalcon2
+     * @return \Codeception\Module\Phalcon1
      * @see \Helper\Unit::getPhalcon()
      */
     public function getPhalcon() {
