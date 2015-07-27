@@ -212,7 +212,8 @@ $di->set(
         return new Phalcon\Flash\Direct([
             'error'   => 'alert alert-danger',
             'success' => 'alert alert-success',
-            'notice'  => 'alert alert-info'
+            'notice'  => 'alert alert-info',
+            'warning' => 'alert alert-warning'
         ]);
     }
 );
@@ -227,8 +228,17 @@ $di->set(
             'error'   => 'alert alert-danger',
             'success' => 'alert alert-success',
             'notice'  => 'alert alert-info',
+            'warning' => 'alert alert-warning'
         ]);
     }
+);
+
+/**
+ * Register the Slug component
+ */
+$di->set(
+    'slug',
+    ['className' => '\Phosphorum\Utils\Slug']
 );
 
 $di->set(

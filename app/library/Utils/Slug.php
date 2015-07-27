@@ -27,20 +27,22 @@ class Slug
     /**
      * Creates a slug to be used for pretty URLs
      *
-     * @param         $string
-     * @param  string $delimiter
+     * @param  string $string String for transliterate
+     * @param  string $delimiter Delimiter [Optional]
      * @return string
      */
-    public static function generate($string, $delimiter = '-')
+    public function generate($string, $delimiter = '-')
     {
         if (function_exists('transliterator_transliterate')) {
             $string = transliterator_transliterate('Any-Latin; Latin-ASCII; [:Punctuation:] Remove; Lower()', $string);
         } else {
             $string = mb_strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $string));
         }
+
         $string = preg_replace('/[-\s]+/', $delimiter, $string);
         $string = preg_replace('/^[-\s]+/', '', $string);
         $string = preg_replace('/[-\s]+$/', '', $string);
+
         return trim($string, $delimiter);
     }
 }
