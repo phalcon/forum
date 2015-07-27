@@ -28,9 +28,9 @@ return new \Phalcon\Config([
     'database'    => [
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
-        'username' => 'forumuser',
-        'password' => 'secret',
-        'dbname'   => 'forum',
+        'username' => 'travis',
+        'password' => '',
+        'dbname'   => 'phosphorum',
         'charset'  => 'utf8'
     ],
 

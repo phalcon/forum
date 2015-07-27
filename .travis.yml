@@ -1,13 +1,5 @@
 language: php
 
-env:
-  - PHALCON_VERSION="phalcon-v2.0.5"
-  - PHALCON_VERSION="phalcon-v2.0.4"
-  - PHALCON_VERSION="phalcon-v2.0.3"
-  - PHALCON_VERSION="phalcon-v2.0.2"
-  - PHALCON_VERSION="phalcon-v2.0.1"
-  - PHALCON_VERSION="phalcon-v2.0.0"
-
 php:
   - 5.4
   - 5.5
@@ -15,37 +7,36 @@ php:
 
 services:
   - mysql
+  - memcached
 
-sudo: required
+sudo: false
 
-addons:
-  hosts:
-    - pforum.loc
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+env:
+  - PHALCON_VERSION="2.0.6"
+  - PHALCON_VERSION="2.0.5"
+  - PHALCON_VERSION="2.0.4"
+  - PHALCON_VERSION="2.0.3"
+  - PHALCON_VERSION="2.0.2"
+  - PHALCON_VERSION="2.0.1"
+  - PHALCON_VERSION="2.0.0"
+
+install:
+  - composer self-update
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b phalcon-v${PHALCON_VERSION}
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 > /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
+  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - composer install
 
 before_script:
-  # setup phalcon
-  - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
-  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
-  - cp ./tests/build/config.php ./app/config/config.php
-  # update composer
-  - composer self-update
-  - composer update
-  # enable mysql
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS forum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot
-  - mysql -e 'GRANT ALL PRIVILEGES ON forum.* TO "forumuser"@"localhost" IDENTIFIED BY "secret";' -uroot
-  - mysql -e 'FLUSH PRIVILEGES;' -uroot
-  - mysql -uforumuser -psecret forum < schemas/forum.sql
+  - cp ./tests/config/config.php.dist ./app/config/config.php
+  - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
+  - cat schemas/forum.sql | mysql phosphorum
   - (cd ./scripts/ && php random-entries.php > /dev/null)
-  # enable php-fpm
-  - cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sudo sed -e "s/^listen = .\+$/listen = 9000/g" --in-place /etc/php5/fpm/pool.d/www.conf
-  - sudo service php5-fpm restart
-  # enable nginx
-  - sudo cp -f ./tests/build/nginx.conf /etc/nginx/nginx.conf
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/nginx/nginx.conf
-  - echo '127.0.0.1 pforum.loc' | sudo tee -a /etc/hosts
-  - sudo service nginx restart
 
 after_script:
   - mysql -e 'DROP DATABASE forum;' -uroot
@@ -60,11 +51,4 @@ notifications:
     - andres@phalconphp.com
     - eduar@phalconphp.com
     - nikos@phalconphp.com
-
-addons:
-  apt:
-    packages:
-    - curl
-    - libcurl3
-    - php5-curl
-    - nginx
+    - sadhooklay@gmail.com
