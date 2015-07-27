@@ -22,6 +22,7 @@
     "require-dev": {
         "fzaninotto/faker": "*",
         "codeception/codeception": "*",
+        "mockery/mockery": "dev-master",
         "squizlabs/php_codesniffer": "1.*"
     }
 }
