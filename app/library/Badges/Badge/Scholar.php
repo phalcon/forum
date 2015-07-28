@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Scholar extends BadgeBase
 {
-
     protected $name = 'Scholar';
 
     protected $description = 'Asked a question and accepted an answer';

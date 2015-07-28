@@ -19,10 +19,6 @@ namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
 use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\Categories;
-
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -32,7 +28,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class GoodReply extends BadgeBase
 {
-
     protected $name = 'Good Reply';
 
     protected $description = 'Awarded one time per every answer with more than 5 positive votes';
@@ -48,12 +43,12 @@ class GoodReply extends BadgeBase
         $has = false;
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = '(IF(votes_up IS NULL, 0, votes_up) - IF(votes_down IS NULL, 0, votes_down)) >= 5';
-        $replies = $user->getReplies(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        $replies = $user->getReplies([$conditions, 'columns' => 'id', 'order' => 'created_at DESC']);
         foreach ($replies as $reply) {
-            $has |= (UsersBadges::count(array(
+            $has |= (UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "C" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $reply->id)
-            )) == 0);
+                'bind' => [$user->id, $this->getName(), $reply->id]
+            ]) == 0);
         }
         return !$has;
     }
@@ -66,24 +61,24 @@ class GoodReply extends BadgeBase
      */
     public function canHave(Users $user)
     {
-        $ids = array();
+        $ids = [];
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = '(IF(votes_up IS NULL, 0, votes_up) - IF(votes_down IS NULL, 0, votes_down)) >= 5';
-        $replies = $user->getReplies(array($conditions, 'columns' => 'id, posts_id', 'order' => 'created_at DESC'));
+        $replies = $user->getReplies([$conditions, 'columns' => 'id, posts_id', 'order' => 'created_at DESC']);
         foreach ($replies as $reply) {
-            $have = UsersBadges::count(array(
+            $have = UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "C" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $reply->id)
-            ));
+                'bind' => [$user->id, $this->getName(), $reply->id]
+            ]);
             if (!$have) {
-                $ids[] = array($reply->posts_id, $reply->id);
+                $ids[] = [$reply->posts_id, $reply->id];
             }
         }
         return $ids;
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
@@ -98,7 +93,8 @@ class GoodReply extends BadgeBase
             $userBadge->type     = 'C';
             $userBadge->code1    = $reply[1];
             $userBadge->code2    = $reply[0];
-            var_dump($userBadge->save());
+
+            $userBadge->save();
         }
     }
 }

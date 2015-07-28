@@ -19,10 +19,6 @@ namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
 use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\Categories;
-
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -32,7 +28,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class GoodQuestion extends BadgeBase
 {
-
     protected $name = 'Good Question';
 
     protected $description = 'Awarded one time per every question with more than 5 positive votes';
@@ -49,12 +44,12 @@ class GoodQuestion extends BadgeBase
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND
         (IF(votes_up IS NULL, 0, votes_up) - IF(votes_down IS NULL, 0, votes_down)) >= 5';
-        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        $posts = $user->getPosts([$conditions, 'columns' => 'id', 'order' => 'created_at DESC']);
         foreach ($posts as $post) {
-            $has |= (UsersBadges::count(array(
+            $has |= (UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $post->id)
-            )) == 0);
+                'bind' => [$user->id, $this->getName(), $post->id]
+            ]) == 0);
         }
         return !$has;
     }
@@ -67,16 +62,17 @@ class GoodQuestion extends BadgeBase
      */
     public function canHave(Users $user)
     {
-        $ids = array();
+        $ids = [];
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND
         (IF(votes_up IS NULL, 0, votes_up) - IF(votes_down IS NULL, 0, votes_down)) >= 5';
-        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        $posts = $user->getPosts([$conditions, 'columns' => 'id', 'order' => 'created_at DESC']);
         foreach ($posts as $post) {
-            $have = UsersBadges::count(array(
+            $have = UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $post->id)
-            ));
+                'bind' => [$user->id, $this->getName(), $post->id]
+            ]);
+
             if (!$have) {
                 $ids[] = $post->id;
             }
@@ -85,7 +81,7 @@ class GoodQuestion extends BadgeBase
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
@@ -99,7 +95,7 @@ class GoodQuestion extends BadgeBase
             $userBadge->badge    = $name;
             $userBadge->type     = 'P';
             $userBadge->code1    = $id;
-            var_dump($userBadge->save());
+            $userBadge->save();
         }
     }
 }

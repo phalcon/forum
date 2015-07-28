@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Maven extends BadgeBase
 {
-
     protected $name = 'Maven';
 
     protected $description = 'More than 15 accepted answers';

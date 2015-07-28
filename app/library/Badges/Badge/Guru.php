@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Guru extends BadgeBase
 {
-
     protected $name = 'Guru';
 
     protected $description = 'Reached 15000 or more of Karma';
