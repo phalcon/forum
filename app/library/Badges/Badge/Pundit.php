@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Pundit extends BadgeBase
 {
-
     protected $name = 'Pundit';
 
     protected $description = 'More than 50 replies in the forum';

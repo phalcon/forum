@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Illuminator extends BadgeBase
 {
-
     protected $name = 'Illuminator';
 
     protected $description = 'More than 50 accepted answers';

@@ -27,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Moderator extends BadgeBase
 {
-
     protected $name = 'Moderator';
 
     protected $description = 'User is a moderator';

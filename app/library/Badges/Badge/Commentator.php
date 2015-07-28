@@ -18,9 +18,6 @@
 namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -30,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Commentator extends BadgeBase
 {
-
     protected $name = 'Commentator';
 
     protected $description = 'More than 10 replies on different threads';

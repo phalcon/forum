@@ -20,9 +20,6 @@ namespace Phosphorum\Badges\Badge;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\UsersBadges;
 use Phosphorum\Models\Categories;
-
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -32,7 +29,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Expert extends BadgeBase
 {
-
     protected $name = 'Expert';
 
     protected $description = 'More than 10 accepted answers in specific categories';
@@ -43,8 +39,8 @@ class Expert extends BadgeBase
     {
         if (!$this->query) {
             $this->query = $user->getModelsManager()->createBuilder()
-                ->columns(array('p.categories_id', 'COUNT(*)'))
-                ->from(array('r' => 'Phosphorum\Models\PostsReplies'))
+                ->columns(['p.categories_id', 'COUNT(*)'])
+                ->from(['r' => 'Phosphorum\Models\PostsReplies'])
                 ->join('Phosphorum\Models\Posts', null, 'p')
                 ->where('r.users_id = ?0 AND r.accepted = "Y"')
                 ->notInWhere('p.categories_id', $this->getNoBountyCategories())
@@ -64,15 +60,15 @@ class Expert extends BadgeBase
     public function has(Users $user)
     {
         $has = false;
-        $categories = $this->getExpertQuery($user)->execute(array($user->id));
+        $categories = $this->getExpertQuery($user)->execute([$user->id]);
         foreach ($categories as $categoryRow) {
             $category = Categories::findFirstById($categoryRow->categories_id);
             if ($category) {
                 $badgeName = $category->name . ' / ' . $this->getName();
-                $has |= (UsersBadges::count(array(
+                $has |= (UsersBadges::count([
                     'users_id = ?0 AND badge = ?1',
-                    'bind' => array($user->id, $badgeName)
-                )) == 0);
+                    'bind' => [$user->id, $badgeName]
+                ]) == 0);
             }
         }
         return (boolean) !$has;
@@ -86,8 +82,8 @@ class Expert extends BadgeBase
      */
     public function canHave(Users $user)
     {
-        $ids = array();
-        $categories = $this->getExpertQuery($user)->execute(array($user->id));
+        $ids = [];
+        $categories = $this->getExpertQuery($user)->execute([$user->id]);
         foreach ($categories as $categoryRow) {
             $category = Categories::findFirstById($categoryRow->categories_id);
             if ($category) {
@@ -98,7 +94,7 @@ class Expert extends BadgeBase
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
@@ -110,7 +106,7 @@ class Expert extends BadgeBase
             $userBadge = new UsersBadges();
             $userBadge->users_id = $user->id;
             $userBadge->badge    = $category->name . ' / ' . $this->getName();
-            var_dump($userBadge->save());
+            $userBadge->save();
         }
     }
 }

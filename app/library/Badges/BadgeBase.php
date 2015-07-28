@@ -23,10 +23,12 @@ use Phosphorum\Models\Categories;
 
 /**
  * Phosphorum\Badges\Manager
+ *
+ * @property  string name
+ * @property  string description
  */
 class BadgeBase
 {
-
     protected $noBountyCategories;
 
     protected $fullNoBountyCategories;
@@ -39,10 +41,10 @@ class BadgeBase
      */
     public function has(Users $user)
     {
-        return UsersBadges::count(array(
+        return UsersBadges::count([
             'users_id = ?0 AND badge = ?1',
-            'bind' => array($user->id, $this->getName())
-        )) > 0;
+            'bind' => [$user->id, $this->getName()]
+        ]) > 0;
     }
 
     /**
@@ -66,7 +68,7 @@ class BadgeBase
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
@@ -76,7 +78,7 @@ class BadgeBase
         $userBadge = new UsersBadges();
         $userBadge->users_id = $user->id;
         $userBadge->badge = $this->getName();
-        var_dump($userBadge->save());
+        $userBadge->save();
     }
 
     /**
@@ -87,7 +89,7 @@ class BadgeBase
     public function getNoBountyCategories()
     {
         if (!$this->noBountyCategories) {
-            $categories = array();
+            $categories = [];
             foreach (Categories::find('no_bounty = "Y"') as $category) {
                 $categories[] = $category->id;
             }

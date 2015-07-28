@@ -18,7 +18,6 @@
 namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
 use Phosphorum\Models\PostsVotes;
 use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
@@ -30,7 +29,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class Supporter extends BadgeBase
 {
-
     protected $name = 'Supporter';
 
     protected $description = 'First positive vote to another user';
@@ -43,15 +41,15 @@ class Supporter extends BadgeBase
      */
     public function canHave(Users $user)
     {
-        $canHave = PostsRepliesVotes::count(array(
+        $canHave = PostsRepliesVotes::count([
             'users_id = ?0 AND vote = 1',
-            'bind' => array($user->id)
-        )) > 0;
+            'bind' => [$user->id]
+        ]) > 0;
 
-        $canHave = $canHave || PostsVotes::count(array(
+        $canHave = $canHave || PostsVotes::count([
             'users_id = ?0 AND vote = 1',
-            'bind' => array($user->id)
-        )) > 0;
+            'bind' => [$user->id]
+        ]) > 0;
 
         return $canHave;
     }

@@ -19,10 +19,6 @@ namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
 use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\Categories;
-
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -32,7 +28,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class PopularQuestion extends BadgeBase
 {
-
     protected $name = 'Popular Question';
 
     protected $description = 'Asked a question with more than 1000 views';
@@ -48,12 +43,12 @@ class PopularQuestion extends BadgeBase
         $has = false;
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 1000';
-        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        $posts = $user->getPosts([$conditions, 'columns' => 'id', 'order' => 'created_at DESC']);
         foreach ($posts as $post) {
-            $has |= (UsersBadges::count(array(
+            $has |= (UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $post->id)
-            )) == 0);
+                'bind' => [$user->id, $this->getName(), $post->id]
+            ]) == 0);
         }
         return !$has;
     }
@@ -66,15 +61,15 @@ class PopularQuestion extends BadgeBase
      */
     public function canHave(Users $user)
     {
-        $ids = array();
+        $ids = [];
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND number_views >= 1000';
-        $posts = $user->getPosts(array($conditions, 'columns' => 'id', 'order' => 'created_at DESC'));
+        $posts = $user->getPosts([$conditions, 'columns' => 'id', 'order' => 'created_at DESC']);
         foreach ($posts as $post) {
-            $have = UsersBadges::count(array(
+            $have = UsersBadges::count([
                 'users_id = ?0 AND badge = ?1 AND type = "P" AND code1 = ?2',
-                'bind' => array($user->id, $this->getName(), $post->id)
-            ));
+                'bind' => [$user->id, $this->getName(), $post->id]
+            ]);
             if (!$have) {
                 $ids[] = $post->id;
             }
@@ -83,7 +78,7 @@ class PopularQuestion extends BadgeBase
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
@@ -97,7 +92,7 @@ class PopularQuestion extends BadgeBase
             $userBadge->badge    = $name;
             $userBadge->type     = 'P';
             $userBadge->code1    = $id;
-            var_dump($userBadge->save());
+            $userBadge->save();
         }
     }
 }

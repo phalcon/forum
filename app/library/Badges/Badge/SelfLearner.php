@@ -18,11 +18,6 @@
 namespace Phosphorum\Badges\Badge;
 
 use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\Categories;
-
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -32,7 +27,6 @@ use Phosphorum\Badges\BadgeBase;
  */
 class SelfLearner extends BadgeBase
 {
-
     protected $name = 'Self-Learner';
 
     protected $description = 'Asked a question and accepted his/her own answer';
@@ -47,12 +41,12 @@ class SelfLearner extends BadgeBase
     {
         $noBountyCategories = $this->getNoBountyCategories();
         $conditions = 'categories_id NOT IN (' . join(', ', $noBountyCategories) . ') AND accepted_answer = "Y"';
-        $posts = $user->getPosts(array($conditions, 'order' => 'created_at DESC'));
+        $posts = $user->getPosts([$conditions, 'order' => 'created_at DESC']);
         foreach ($posts as $post) {
-            $ownReply = $post->countReplies(array(
+            $ownReply = $post->countReplies([
                 "accepted = 'Y' AND users_id = ?0",
-                'bind' => array($user->id)
-            ));
+                'bind' => [$user->id]
+            ]);
             if ($ownReply) {
                 return true;
             }

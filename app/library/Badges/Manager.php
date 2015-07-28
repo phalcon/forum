@@ -18,7 +18,6 @@
 namespace Phosphorum\Badges;
 
 use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
 
 /**
  * Phosphorum\Badges\Manager
@@ -32,11 +31,10 @@ class Manager
      */
     public function getBadges()
     {
-        $badges = array();
+        $badges = [];
         $directory = new \RecursiveDirectoryIterator(__DIR__ . '/Badge');
         foreach ($directory as $item) {
             if (!$item->isDir()) {
-
                 $path = $item->getPathname();
                 $baseClassName = str_replace('.php', '', basename($path));
                 $className = 'Phosphorum\Badges\Badge\\' . $baseClassName;
