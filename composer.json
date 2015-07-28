@@ -10,6 +10,8 @@
     },
     "require": {
         "php": ">= 5.4",
+        "ext-mbstring": "*",
+        "ext-iconv": "*",
         "ext-phalcon": "~2.0",
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
@@ -22,6 +24,7 @@
     "require-dev": {
         "fzaninotto/faker": "*",
         "codeception/codeception": "*",
+        "mockery/mockery": "dev-master",
         "squizlabs/php_codesniffer": "1.*"
     }
 }

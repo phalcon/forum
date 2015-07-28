@@ -13,6 +13,7 @@ use Phosphorum\Models\Users;
  *
  * @property \Phalcon\Cache\Backend\Memory viewCache
  * @property \Phalcon\Config config
+ * @property \Phosphorum\Utils\Slug slug
  */
 class ControllerBase extends Controller
 {

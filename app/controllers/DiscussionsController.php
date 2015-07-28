@@ -266,7 +266,7 @@ class DiscussionsController extends ControllerBase
             $post->users_id      = $usersId;
             $post->categories_id = $this->request->getPost('categoryId');
             $post->title         = $title;
-            $post->slug          = Slug::generate($title);
+            $post->slug          = $this->slug->generate($title);
             $post->content       = $this->request->getPost('content');
 
             if ($post->save()) {
@@ -327,7 +327,7 @@ class DiscussionsController extends ControllerBase
 
             $post->categories_id = $this->request->getPost('categoryId');
             $post->title         = $title;
-            $post->slug          = Slug::generate($title);
+            $post->slug          = $this->slug->generate($title);
             $post->content       = $content;
             $post->edited_at     = time();
 

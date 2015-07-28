@@ -27,6 +27,7 @@ to be set up in the configuration (`app/config/config.php`):
 * [Curl][1] extension
 * [Openssl][2] extension
 * Internationalization ([intl][3]) extension
+* Mbstring ([mbstring][4]) extension
 
 NOTE
 ----
@@ -46,7 +47,7 @@ To run this application on your machine, you need at least:
 * PHP >= 5.4.0
 * Apache Web Server with mod rewrite enabled or Nginx Web Server
 * Latest Phalcon Framework extension installed and enabled
-* [Beanstalkd][4] server
+* [Beanstalkd][5] server
 
 Then you'll need to create the database and initialize schema:
 
@@ -76,7 +77,7 @@ $ php random-entries.php
 
 Tests
 -----
-Phosphorum use [Codeception][5] functional tests. Execute:
+Phosphorum use [Codeception][6] functional tests. Execute:
 
 ```bash
 $ vendor/bin/codecept build
@@ -88,12 +89,13 @@ $ vendor/bin/codecept run --debug # Detailed output
 
 License
 -------
-Phosphorum is open-sourced software licensed under the [New BSD License][6]. © Phalcon Framework Team and contributors
+Phosphorum is open-sourced software licensed under the [New BSD License][7]. © Phalcon Framework Team and contributors
 
 
 [1]: http://php.net/manual/en/book.curl.php
 [2]: http://php.net/manual/en/book.openssl.php
 [3]: http://php.net/manual/en/book.intl.php
-[4]: http://kr.github.io/beanstalkd/
-[5]: http://codeception.com
-[6]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
+[4]: http://php.net/manual/en/book.mbstring.php
+[5]: http://kr.github.io/beanstalkd/
+[6]: http://codeception.com
+[7]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
