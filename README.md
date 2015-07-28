@@ -77,7 +77,7 @@ $ php random-entries.php
 
 Tests
 -----
-Phosphorum use [Codeception][6] functional tests. Execute:
+Phosphorum use [Codeception][5] functional and unit tests. Execute:
 
 ```bash
 $ vendor/bin/codecept build
