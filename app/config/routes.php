@@ -404,7 +404,7 @@ $router->add(
 $router->add(
     '/',
     [
-       'controller' => 'categories',
+       'controller' => 'discussions',
        'action'     => 'index'
     ]
 );
