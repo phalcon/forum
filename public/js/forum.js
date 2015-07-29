@@ -70,7 +70,7 @@ var Forum = {
 			form.appendChild(cancel);
 
 			var submit = document.createElement('INPUT');
-			submit.type = 'buttom';
+			submit.type = 'button';
 			submit.className = 'btn btn-success btn-sm pull-right';
 			submit.value = 'Update Comment';
 			$(submit).bind('click', { form: form }, function(event) {

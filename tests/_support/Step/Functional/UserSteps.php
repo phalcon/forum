@@ -4,7 +4,16 @@ namespace Step\Functional;
 
 class UserSteps extends \FunctionalTester
 {
-    function amAdmin()
+    public function amRegularUser()
+    {
+        $I = $this;
+        $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Regular User']);
+        $I->haveInSession('identity', $id);
+        $I->haveInSession('identity-name', 'Regular User');
+        return $id;
+    }
+
+    public function amAdmin()
     {
         $I = $this;
         $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Phalcon']);
@@ -13,13 +22,18 @@ class UserSteps extends \FunctionalTester
         return $id;
     }
 
-    function haveCategory($attrs)
+    public function haveCategory($attrs)
     {
         return $this->haveRecord('Phosphorum\Models\Categories', $attrs);
     }
 
-    function havePost($attrs)
+    public function havePost($attrs)
     {
         return $this->haveRecord('Phosphorum\Models\Posts', $attrs);
+    }
+
+    public function haveReply($attrs)
+    {
+        return $this->haveRecord('Phosphorum\Models\PostsReplies', $attrs);
     }
 }
