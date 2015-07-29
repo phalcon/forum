@@ -19,22 +19,28 @@ namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Class Users
  *
- * @method static Users findFirstById
- * @method static Users findFirstByLogin
- * @method static Users findFirstByName
- * @method static Users findFirstByEmail
- * @method static Users findFirstByAccessToken
+ * @property Simple badges
+ * @property Simple posts
+ * @property Simple replies
+ * @method Simple getBadges
+ * @method Simple getPosts
+ * @method Simple getReplies
+ * @method static Users findFirstById(int $id)
+ * @method static Users findFirstByLogin(string $login)
+ * @method static Users findFirstByName(string $name)
+ * @method static Users findFirstByEmail(string $email)
+ * @method static Users findFirstByAccessToken(string $token)
  * @method static Users[] find($parameters=null)
  *
  * @package Phosphorum\Models
  */
 class Users extends Model
 {
-
     public $id;
 
     public $name;
@@ -69,6 +75,8 @@ class Users extends Model
 
     public $banned;
 
+    public $theme;
+
     const SYSTEM_USER = 1;
 
     public function initialize()
@@ -77,41 +85,37 @@ class Users extends Model
             'id',
             'Phosphorum\Models\UsersBadges',
             'users_id',
-            array(
+            [
                 'alias' => 'badges',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->hasMany(
             'id',
             'Phosphorum\Models\Posts',
             'users_id',
-            array(
+            [
                 'alias' => 'posts',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->hasMany(
             'id',
             'Phosphorum\Models\PostsReplies',
             'users_id',
-            array(
+            [
                 'alias' => 'replies',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
-                    'field' => 'created_at'
-                ),
-                'beforeUpdate' => array(
-                    'field' => 'modified_at'
-                )
-            ))
+            new Timestampable([
+                'beforeCreate' => ['field' => 'created_at'],
+                'beforeUpdate' => ['field' => 'modified_at']
+            ])
         );
     }
 
