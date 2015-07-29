@@ -14,7 +14,6 @@ use Phalcon\DI\Injectable;
  */
 class MentionExtension extends Injectable implements ExtensionInterface
 {
-
     /**
      * {@inheritdoc}
      */
@@ -29,7 +28,7 @@ class MentionExtension extends Injectable implements ExtensionInterface
     public function processMentions(Text $text)
     {
         // Turn @username into [@username](http://example.com/user/username)
-        $text->replace('/(?:^|[^a-zA-Z0-9.])@([A-Za-z]+[A-Za-z0-9]+)/', function (Text $w, Text $username) {
+        $text->replace('/(?:^|[^a-zA-Z0-9.])@([A-Za-z0-9]+)/', function (Text $w, Text $username) {
             return ' [@' . $username . '](' . $this->config->site->url . '/user/0/' . $username . ')';
         });
     }
