@@ -6,19 +6,19 @@
 $I = new Step\Functional\UserSteps($scenario);
 
 $I->wantTo('reply in a discussion');
-$user_id = $I->amAdmin();
-$cat_id = $I->haveCategory([
+$userId = $I->amRegularUser();
+$catId = $I->haveCategory([
     'name' => 'Testing',
     'slug' => 'test',
     'description' => 'codeception functional test'
 ]);
 
-$post_id = $I->havePost([
+$postId = $I->havePost([
     'title' => 'Please help with testing',
     'content' => 'How can I install Codeception',
-    'users_id' => $user_id,
+    'users_id' => $userId,
     'slug' => 'please-help-with-testing',
-    'categories_id' => $cat_id
+    'categories_id' => $catId
 ]);
 
 $I->amOnPage("/discussions");
