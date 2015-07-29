@@ -7,7 +7,7 @@ class UserSteps extends \FunctionalTester
     public function amRegularUser()
     {
         $I = $this;
-        $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Regular User']);
+        $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Regular User', 'login' => 'iregular']);
         $I->haveInSession('identity', $id);
         $I->haveInSession('identity-name', 'Regular User');
         return $id;
@@ -16,7 +16,7 @@ class UserSteps extends \FunctionalTester
     public function amAdmin()
     {
         $I = $this;
-        $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Phalcon']);
+        $id = $I->haveRecord('Phosphorum\Models\Users', ['name' => 'Phalcon', 'login' => 'phalcon']);
         $I->haveInSession('identity', $id);
         $I->haveInSession('identity-name', 'Phalcon');
         return $id;
