@@ -30,7 +30,7 @@ install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b phalcon-v${PHALCON_VERSION}
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 > /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
-  - composer install
+  - composer install --no-interaction
 
 before_script:
   - cp ./tests/config/config.php.dist ./app/config/config.php
