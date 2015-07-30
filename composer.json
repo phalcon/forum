@@ -1,8 +1,16 @@
 {
     "name":        "phalcon/forum",
-    "description": "Phalcon official Forum http://forum.phalconphp.com",
+    "description": "Phalcon Official Forum",
+    "keywords":    ["forum", "phalcon"],
     "type":        "project",
     "license":     "BSD-3-Clause",
+    "homepage":    "http://forum.phalconphp.com",
+    "authors": [
+        {
+            "name": "Phalcon Team",
+            "email": "team@phalconphp.com"
+        }
+    ],
     "support": {
         "source": "https://github.com/phalcon/forum",
         "issues": "https://github.com/phalcon/forum/issues",
@@ -15,9 +23,9 @@
         "ext-phalcon": "~2.0",
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
-        "swiftmailer/swiftmailer": "@stable",
+        "swiftmailer/swiftmailer": "~5.4",
         "kzykhys/ciconia": "~1.0.0",
-        "phpspec/php-diff": "dev-master",
+        "phpspec/php-diff": "~1.0",
         "elasticsearch/elasticsearch": "~1.0",
         "dropbox/dropbox-sdk": "1.1.*"
     },
