@@ -40,18 +40,16 @@
 			</tr>
 		{%- for post in posts -%}
 			<tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% else %}post-positive{% endif %}">
-			    <td>
-                	{%- if logged != '' -%}
-					<?php
-						if (in_array($post->id, $readposts)) {
-							echo Phalcon\Tag::imageInput(array("src" => "/icon/new_none.png", "width" => "24", "height" => "24", "class" => "img-rounded"));
-						} else {
-							echo Phalcon\Tag::imageInput(array("src" => "/icon/new_some.png", "width" => "24", "height" => "24", "class" => "img-rounded"));
-						}
-					?>
-                    {%- else -%}
-                     {{ image("icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded") }}
-                    {%- endif -%}
+				<td>
+					{%- if logged != '' -%}
+						{%- if readposts[post.id] is defined -%}
+							{{ image('/icon/new_none.png', 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+						{%- else -%}
+							{{ image('/icon/new_some.png', 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+						{%- endif -%}
+					{%- else -%}
+					 {{ image("icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded") }}
+					{%- endif -%}
 				</td>
 				<td align="left">
 

@@ -24,12 +24,13 @@ use Phalcon\Mvc\Model;
  * Class PostsHistory
  *
  * @property \Phosphorum\Models\Posts post
+ * @method static TopicTracking[] find($parameters=null)
+ * @method static TopicTracking findFirst($parameters=null)
  *
  * @package Phosphorum\Models
  */
 class TopicTracking extends Model
 {
-
     public $id;
 
     public $topic_id;

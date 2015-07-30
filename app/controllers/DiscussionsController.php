@@ -31,7 +31,6 @@ use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Karma;
 use Phosphorum\Models\TopicTracking;
-use Phosphorum\Utils\Slug;
 use Phosphorum\Search\Indexer;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\View;
@@ -96,10 +95,10 @@ class DiscussionsController extends ControllerBase
      */
     public function indexAction($order = null, $offset = 0)
     {
-
-        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
-        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder */
-
+        /**
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder
+         */
         if ($order == "answers") {
             list($itemBuilder, $totalBuilder) = $this->prepareQueries(true);
         } else {
@@ -110,13 +109,12 @@ class DiscussionsController extends ControllerBase
          * Create the conditions according to the parameter order
          */
         $userId = $this->session->get('identity');
-        $this->view->logged = $userId;
+        $readposts = [];
+
         if ($userId != '') {
             $ur = TopicTracking::findFirst("user_id='".$userId."'");
-            if ($ur === false) {
-                $this->view->readposts = array();
-            } else {
-                $this->view->readposts = explode(",", $ur->topic_id);
+            if ($ur !== false) {
+                $readposts = explode(",", $ur->topic_id);
             }
         }
 
@@ -167,17 +165,16 @@ class DiscussionsController extends ControllerBase
             $itemBuilder->offset((int)$offset);
         }
 
-        $this->view->posts      = $itemBuilder->getQuery()->execute($params);
-        $this->view->totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
-
-        if (!$order) {
-            $order = 'new';
-        }
-
-        $this->view->currentOrder = $order;
-        $this->view->offset       = $offset;
-        $this->view->paginatorUri = 'discussions/' . $order;
-        $this->view->canonical    = '';
+        $this->view->setVars([
+            'logged'       => $userId,
+            'readposts'    => $readposts,
+            'posts'        => $itemBuilder->getQuery()->execute($params),
+            'totalPosts'   => $totalBuilder->getQuery()->setUniqueRow(true)->execute($params),
+            'currentOrder' => $order ?: 'new',
+            'offset'       => $offset,
+            'paginatorUri' => 'discussions/' . $order,
+            'canonical'    => ''
+        ]);
     }
 
     /**
