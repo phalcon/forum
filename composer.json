@@ -23,9 +23,9 @@
         "ext-phalcon": "~2.0",
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": "~3.7",
-        "swiftmailer/swiftmailer": "@stable",
+        "swiftmailer/swiftmailer": "~5.4",
         "kzykhys/ciconia": "~1.0.0",
-        "phpspec/php-diff": "dev-master",
+        "phpspec/php-diff": "~1.0",
         "elasticsearch/elasticsearch": "~1.0",
         "dropbox/dropbox-sdk": "1.1.*"
     },
