@@ -251,9 +251,7 @@ class DiscussionsController extends ControllerBase
      */
     public function createAction()
     {
-
-        $usersId = $this->session->get('identity');
-        if (!$usersId) {
+        if (!$usersId = $this->session->get('identity')) {
             $this->flashSession->error('You must be logged first');
             return $this->response->redirect();
         }
@@ -287,18 +285,15 @@ class DiscussionsController extends ControllerBase
                 $this->flash->error($message);
             }
 
-            $this->view->firstTime = false;
+            $this->view->setVar('firstTime', false);
 
         } else {
-
-            $this->view->firstTime = Posts::countByUsersId($usersId) == 0;
+            $this->view->setVar('firstTime', Posts::countByUsersId($usersId) == 0);
         }
 
-        $parameters = array(
-            'order' => 'name'
-        );
+        $parameters = ['order' => 'name'];
 
-        $this->view->categories = Categories::find($parameters);
+        $this->view->setVar('categories', Categories::find($parameters));
     }
 
     /**
