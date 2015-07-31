@@ -22,7 +22,7 @@ use Phalcon\Db\RawValue;
 /**
  * Class Categories
  *
- * @method static Categories findFirstById
+ * @method static Categories findFirstById(int $categoryId)
  * @method static Categories[] find($parameters = null)
  *
  * @package Phosphorum\Models
