@@ -179,25 +179,32 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Shows latest posts by category
+     *
+     * @param int $categoryId Category Id
+     * @param string $slug Category Slug
+     * @param int $offset Posts offset
+     * @return \Phalcon\Http\ResponseInterface
      */
     public function categoryAction($categoryId, $slug, $offset = 0)
     {
-        $this->tag->setTitle('Discussions');
-
-        $userId = $this->session->get('identity');
-        if ($userId != '') {
-            $ur = TopicTracking::findFirst("user_id='".$userId."'");
-            $this->view->readposts = explode(",", $ur->topic_id);
-        }
-
-        $category = Categories::findFirstById($categoryId);
-        if (!$category) {
-            $this->flashSession->notice('The category doesn\'t exist');
+        if (!$category = Categories::findFirstById($categoryId)) {
+            $this->flashSession->notice("The category doesn't exist");
+            error_log("The category doesn't exist");
             return $this->response->redirect();
         }
 
-        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
-        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder */
+        $this->tag->setTitle('Discussions');
+        $readposts = [];
+
+        if ($userId = $this->session->get('identity')) {
+            $ur = TopicTracking::findFirst("user_id='".$userId."'");
+            $readposts = explode(',', $ur->topic_id);
+        }
+
+        /**
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder
+         */
         list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
         $totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
@@ -207,21 +214,27 @@ class DiscussionsController extends ControllerBase
             ->orderBy('p.created_at DESC')
             ->offset((int)$offset)
             ->getQuery()
-            ->execute(array($categoryId));
+            ->execute([$categoryId]);
 
         if (!count($posts)) {
             $this->flashSession->notice('There are no posts in category: ' . $category->name);
             return $this->response->redirect();
         }
 
-        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute(array($categoryId));
+        $totalPosts = $totalBuilder
+            ->getQuery()
+            ->setUniqueRow(true)
+            ->execute([$categoryId]);
 
-        $this->view->posts        = $posts;
-        $this->view->totalPosts   = $totalPosts;
-        $this->view->currentOrder = null;
-        $this->view->offset       = (int)$offset;
-        $this->view->paginatorUri = 'category/' . $category->id . '/' . $category->slug;
-        $this->view->logged = $this->session->get('identity');
+        $this->view->setVars([
+            'readposts'    => $readposts,
+            'posts'        => $posts,
+            'totalPosts'   => $totalPosts,
+            'currentOrder' => null,
+            'offset'       => (int)$offset,
+            'paginatorUri' => 'category/' . $category->id . '/' . $category->slug,
+            'logged'       => $userId
+        ]);
     }
 
     protected function checkTokenPost()
