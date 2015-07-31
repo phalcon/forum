@@ -136,6 +136,10 @@ class Posts extends Model
         $this->accepted_answer = 'N';
         $this->locked          = 'N';
         $this->status          = 'A';
+
+        if ($this->title && !$this->slug) {
+            $this->slug = $this->getDI()->getShared('slug')->generate($this->title);
+        }
     }
 
     /**
