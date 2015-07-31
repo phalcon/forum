@@ -17,17 +17,16 @@ use Phosphorum\Models\Users;
  */
 class ControllerBase extends Controller
 {
-
     public function onConstruct()
     {
         $last_threads = $this
             ->modelsManager
             ->createBuilder()
-            ->from(array('p' => 'Phosphorum\Models\Posts'))
+            ->from(['p' => 'Phosphorum\Models\Posts'])
             ->groupBy("p.id")
             ->join('Phosphorum\Models\Categories', "r.id = p.categories_id", 'r')
             ->join('Phosphorum\Models\Users', "u.id = p.users_id", 'u')
-            ->columns(array('p.title as title_post', 'p.id as id_post', 'p.slug as slug_post', 'r.name as name_category', 'u.name as name_user'))
+            ->columns(['p.title as title_post', 'p.id as id_post', 'p.slug as slug_post', 'r.name as name_category', 'u.name as name_user'])
             ->orderBy('p.created_at DESC')
             ->limit(3)
             ->getQuery()
@@ -39,7 +38,7 @@ class ControllerBase extends Controller
             'threads'      => Posts::count(),
             'last_threads' => $last_threads,
             'users'        => Users::count(),
-            'users_latest' => $users->login,
+            'users_latest' => ($users ? $users->login : null),
             'actionName'   => $this->dispatcher->getActionName(),
         ]);
     }
