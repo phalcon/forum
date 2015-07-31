@@ -22,7 +22,7 @@
         "ext-iconv": "*",
         "ext-phalcon": "~2.0",
         "aws/aws-sdk-php": "~2.5",
-        "guzzle/guzzle": "~3.7",
+        "guzzle/guzzle": ">=4.0|<7.0",
         "swiftmailer/swiftmailer": "~5.4",
         "kzykhys/ciconia": "~1.0.0",
         "phpspec/php-diff": "~1.0",
