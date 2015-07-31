@@ -28,6 +28,3 @@ $I->seeInTitle('Discussions - Phalcon Framework');
 $I->seeLink('model->save() return TRUE when no matching database column');
 $I->click('model->save() return TRUE when no matching database column');
 $I->seeInCurrentUrl(sprintf('/discussion/%s/model-save-return-true-when-no-matching-database-column', $postId));
-
-
-
