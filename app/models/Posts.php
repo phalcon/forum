@@ -31,12 +31,12 @@ use Phalcon\Mvc\Model;
  * @method static Posts findFirst($parameters = null)
  * @method static Posts[] find($parameters = null)
  * @method PostsReplies[] getReplies
+ * @method static int countByUsersId(int $userId)
  *
  * @package Phosphorum\Models
  */
 class Posts extends Model
 {
-
     public $id;
 
     public $users_id;
@@ -79,50 +79,50 @@ class Posts extends Model
             'users_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
+            [
                 'alias'    => 'user',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->belongsTo(
             'categories_id',
             'Phosphorum\Models\Categories',
             'id',
-            array(
+            [
                 'alias'      => 'category',
                 'reusable'   => true,
-                'foreignKey' => array(
+                'foreignKey' => [
                     'message' => 'The category is not valid'
-                )
-            )
+                ]
+            ]
         );
 
         $this->hasMany(
             'id',
             'Phosphorum\Models\PostsReplies',
             'posts_id',
-            array(
+            [
                 'alias' => 'replies'
-            )
+            ]
         );
 
         $this->hasMany(
             'id',
             'Phosphorum\Models\PostsViews',
             'posts_id',
-            array(
+            [
                 'alias' => 'views'
-            )
+            ]
         );
 
         $this->hasMany(
             'id',
             'Phosphorum\Models\PostsSubscribers',
             'posts_id',
-            array(
+            [
                 'alias' => 'subscribers'
-            )
+            ]
         );
 
     }
@@ -183,8 +183,8 @@ class Posts extends Model
             /**
              * Notify users that always want notifications
              */
-            $toNotify = array();
-            foreach (Users::find(array('notifications = "Y"', 'columns' => 'id')) as $user) {
+            $toNotify = [];
+            foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
                 if ($this->users_id != $user->id) {
                     $notification           = new Notifications();
                     $notification->users_id = $user->id;
@@ -244,10 +244,10 @@ class Posts extends Model
     public function getRecentUsers()
     {
 
-        $users  = array($this->user->id => array($this->user->login, $this->user->gravatar_id));
+        $users  = [$this->user->id => [$this->user->login, $this->user->gravatar_id]];
         foreach ($this->getReplies(['order' => 'created_at DESC', 'limit' => 3]) as $reply) {
             if (!isset($users[$reply->user->id])) {
-                $users[$reply->user->id] = array($reply->user->login, $reply->user->gravatar_id);
+                $users[$reply->user->id] = [$reply->user->login, $reply->user->gravatar_id];
             }
         }
         return $users;
@@ -392,7 +392,7 @@ class Posts extends Model
      */
     public function isSubscribed($userId)
     {
-        return $this->countSubscribers(array('users_id = :userId:', 'bind' => array('userId' => $userId))) > 0;
+        return $this->countSubscribers(['users_id = :userId:', 'bind' => ['userId' => $userId]]) > 0;
     }
 
     /**
