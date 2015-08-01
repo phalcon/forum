@@ -41,4 +41,16 @@ class TopicTracking extends Model
     {
         $this->setSource('topic_tracking');
     }
+
+    public function updateTracking($postId, $userId)
+    {
+        $sql = "
+            UPDATE topic_tracking
+            SET topic_id=IF(topic_id='',{$postId}, CONCAT(topic_id,',{$postId}'))
+            WHERE user_id=:user_id
+            AND NOT (FIND_IN_SET('{$postId}', topic_id) OR FIND_IN_SET(' {$postId}', topic_id))
+        ";
+
+        return $this->getReadConnection()->query($sql, ['user_id' => $userId]);
+    }
 }

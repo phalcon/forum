@@ -24,7 +24,7 @@
         "aws/aws-sdk-php": "~2.5",
         "guzzle/guzzle": ">=4.0|<7.0",
         "swiftmailer/swiftmailer": "~5.4",
-        "kzykhys/ciconia": "~1.0.0",
+        "kzykhys/ciconia": "~1.0",
         "phpspec/php-diff": "~1.0",
         "elasticsearch/elasticsearch": "~1.0",
         "dropbox/dropbox-sdk": "1.1.*"

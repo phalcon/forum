@@ -307,6 +307,7 @@ $di->set(
     'markdown',
     function () {
         $ciconia = new Ciconia();
+        $ciconia->addExtension(new \Phosphorum\Markdown\UnderscoredUrlsExtension());
         $ciconia->addExtension(new \Phosphorum\Markdown\TableExtension());
         $ciconia->addExtension(new \Phosphorum\Markdown\MentionExtension());
         $ciconia->addExtension(new \Phosphorum\Markdown\BlockQuoteExtension());

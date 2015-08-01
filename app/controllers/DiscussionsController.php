@@ -524,8 +524,8 @@ class DiscussionsController extends ControllerBase
     /**
      * Displays a post and its comments
      *
-     * @param $id
-     * @param $slug
+     * @param int $id Post ID
+     * @param string $slug Post slug
      *
      * @return \Phalcon\Http\ResponseInterface
      */
@@ -533,27 +533,19 @@ class DiscussionsController extends ControllerBase
     {
         $id = (int)$id;
 
-        $usersId = $this->session->get('identity');
-
         // Check read / unread topic
-
-        if ($usersId !='') {
+        if ($usersId = $this->session->get('identity')) {
             $check_topic = new TopicTracking();
             $check_topic->user_id = $usersId;
             $check_topic->topic_id = $id;
+
             if ($check_topic->create() == false) {
-                $sql     = "UPDATE topic_tracking SET topic_id=IF(topic_id='',{$id}, CONCAT(topic_id,',{$id}')) WHERE user_id=:user_id AND NOT (FIND_IN_SET('{$id}', topic_id) OR FIND_IN_SET(' {$id}', topic_id));";
-                $this->db->query($sql, array("user_id" => $usersId));
-            } else {
+                $check_topic->updateTracking($id, $usersId);
             }
         }
 
-
         if (!$this->request->isPost()) {
-
-            /**
-             * Find the post using get
-             */
+            // Find the post using get
             $post = Posts::findFirstById($id);
             if (!$post) {
                 $this->flashSession->error('The discussion does not exist');
@@ -567,28 +559,22 @@ class DiscussionsController extends ControllerBase
 
             $ipAddress = $this->request->getClientAddress();
 
-            $parameters = array(
+            $parameters = [
                 'posts_id = ?0 AND ipaddress = ?1',
-                'bind' => array($id, $ipAddress)
-            );
+                'bind' => [$id, $ipAddress]
+            ];
+
             $viewed = PostsViews::count($parameters);
 
-            /**
-             * A view is stored by ipaddress
-             */
+            // A view is stored by ip address
             if (!$viewed) {
-
-                /**
-                 * Increase the number of views in the post
-                 */
+                // Increase the number of views in the post
                 $post->number_views++;
                 if ($post->users_id != $usersId) {
 
                     $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
                     if ($usersId > 0) {
-
-                        /** @var Users $user */
                         $user = Users::findFirstById($usersId);
                         if ($user) {
                             if ($user->moderator == 'Y') {
@@ -596,6 +582,7 @@ class DiscussionsController extends ControllerBase
                             } else {
                                 $user->increaseKarma(Karma::VISIT_POST);
                             }
+
                             $user->save();
                         }
                     }
@@ -612,28 +599,21 @@ class DiscussionsController extends ControllerBase
             }
 
             if (!$usersId) {
+                // Enable cache
+                $this->view->cache(['key' => 'post-' . $id]);
 
-                /**
-                 * Enable cache
-                 */
-                $this->view->cache(array('key' => 'post-' . $id));
-
-                /**
-                 * Check for a cache
-                 */
+                // Check for a cache
                 if ($this->viewCache->exists('post-' . $id)) {
                     return;
                 }
             }
 
-            /**
-             * Generate cannonical meta
-             */
-            $this->view->canonical = 'discussion/' . $post->id . '/' . $post->slug;
-            $this->view->author    = $post->user;
-
+            // Generate canonical meta
+            $this->view->setVars([
+                'canonical' => 'discussion/' . $post->id . '/' . $post->slug,
+                'author'    => $post->user
+            ]);
         } else {
-
             if (!$this->checkTokenPost()) {
                 return $this->response->redirect();
             }
@@ -643,9 +623,7 @@ class DiscussionsController extends ControllerBase
                 return $this->response->redirect();
             }
 
-            /**
-             * Find the post using POST
-             */
+            // Find the post using POST
             $post = Posts::findFirstById($this->request->getPost('id'));
             if (!$post) {
                 $this->flashSession->error('The discussion does not exist');
@@ -660,9 +638,7 @@ class DiscussionsController extends ControllerBase
             $content = $this->request->getPost('content', 'trim');
             if ($content) {
 
-                /**
-                 * Check if the question can have a bounty before add the reply
-                 */
+                // Check if the question can have a bounty before add the reply
                 $canHaveBounty = $post->canHaveBounty();
 
                 $user = Users::findFirstById($usersId);
@@ -671,9 +647,7 @@ class DiscussionsController extends ControllerBase
                     return $this->response->redirect();
                 }
 
-                /**
-                 * Only update the number of replies if the user that commented isn't the same that posted
-                 */
+                // Only update the number of replies if the user that commented isn't the same that posted
                 if ($post->users_id != $usersId) {
 
                     $post->number_replies++;
@@ -721,7 +695,7 @@ class DiscussionsController extends ControllerBase
          */
         $this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
-        $this->view->post = $post;
+        $this->view->setVar('post', $post);
     }
 
     /**
