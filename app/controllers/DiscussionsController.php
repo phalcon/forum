@@ -545,7 +545,6 @@ class DiscussionsController extends ControllerBase
         }
 
         if (!$this->request->isPost()) {
-
             // Find the post using get
             $post = Posts::findFirstById($id);
             if (!$post) {
@@ -569,7 +568,6 @@ class DiscussionsController extends ControllerBase
 
             // A view is stored by ip address
             if (!$viewed) {
-
                 // Increase the number of views in the post
                 $post->number_views++;
                 if ($post->users_id != $usersId) {
@@ -577,8 +575,6 @@ class DiscussionsController extends ControllerBase
                     $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
                     if ($usersId > 0) {
-
-                        /** @var Users $user */
                         $user = Users::findFirstById($usersId);
                         if ($user) {
                             if ($user->moderator == 'Y') {
@@ -586,6 +582,7 @@ class DiscussionsController extends ControllerBase
                             } else {
                                 $user->increaseKarma(Karma::VISIT_POST);
                             }
+
                             $user->save();
                         }
                     }
