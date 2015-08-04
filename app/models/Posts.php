@@ -30,7 +30,7 @@ use Phalcon\Mvc\Model;
  * @method static Posts findFirstById(int $id)
  * @method static Posts findFirst($parameters = null)
  * @method static Posts[] find($parameters = null)
- * @method PostsReplies[] getReplies
+ * @method PostsReplies[] getReplies($parameters = null)
  * @method static int countByUsersId(int $userId)
  *
  * @package Phosphorum\Models
@@ -243,7 +243,6 @@ class Posts extends Model
      */
     public function getRecentUsers()
     {
-
         $users  = [$this->user->id => [$this->user->login, $this->user->gravatar_id]];
         foreach ($this->getReplies(['order' => 'created_at DESC', 'limit' => 3]) as $reply) {
             if (!isset($users[$reply->user->id])) {
