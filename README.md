@@ -96,6 +96,15 @@ $ vendor/bin/codecept run
 # OR
 $ vendor/bin/codecept run --debug # Detailed output
 ```
+#### Running with Docker
+
+To play Phalcon forum with Docker you just edit password to "root" in file config.example.php and do follow command below:
+
+```
+docker build -t phalcon-forum .
+docker run -it -p 80:80 phalcon-forum
+```
+Finally if everything went accordingly, we'll be welcomed with Phalcon forum when pointing the browser to http://127.0.0.1
 
 ## License
 
