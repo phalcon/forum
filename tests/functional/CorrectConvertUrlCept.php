@@ -20,7 +20,7 @@ $catId = $I->haveCategory([
 $postId = $I->havePost([
     'title' => 'Is there a precompiled binary for 64 bit Centos out there',
     'content' => '[this reddit topic](http://www.reddit.com/r/PHP/comments/2s7bbr/phalconphp_vs_php_disappointing_results/)',
-    'users_id' => 1,
+    'users_id' => $userId,
     'slug' => 'is-there-a-precompiled-binary-for-64-bit-centos-out-there',
     'categories_id' => $catId
 ]);
