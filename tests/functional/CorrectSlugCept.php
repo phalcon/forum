@@ -20,11 +20,11 @@ $catId = $I->haveCategory([
 $postId = $I->havePost([
     'title' => 'model->save() return TRUE when no matching database column',
     'content' => 'some content',
-    'users_id' => 1,
+    'users_id' => $userId,
     'categories_id' => $catId
 ]);
 
-$I->amOnPage('/discussions');
+$I->amOnPage('/');
 $I->seeInTitle('Discussions - Phalcon Framework');
 $I->seeLink('model->save() return TRUE when no matching database column');
 $I->click('model->save() return TRUE when no matching database column');
