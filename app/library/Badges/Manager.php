@@ -27,7 +27,7 @@ class Manager
     /**
      * Returns instances of all available badges
      *
-     * @return array
+     * @return BadgeInterface[]
      */
     public function getBadges()
     {
@@ -37,9 +37,13 @@ class Manager
             if (!$item->isDir()) {
                 $path = $item->getPathname();
                 $baseClassName = str_replace('.php', '', basename($path));
-                $className = 'Phosphorum\Badges\Badge\\' . $baseClassName;
 
-                $badges[] = new $className();
+                $className = 'Phosphorum\Badges\Badge\\' . $baseClassName;
+                $badge = new $className();
+
+                if ($badge instanceof BadgeInterface) {
+                    $badges[] = new $className();
+                }
             }
         }
 
@@ -47,7 +51,7 @@ class Manager
     }
 
     /**
-     *
+     * Process users badges
      */
     public function process()
     {
@@ -59,7 +63,7 @@ class Manager
 
     /**
      * @param Users $user
-     * @param array $badges
+     * @param BadgeInterface[] $badges
      */
     public function processUserBadges(Users $user, $badges)
     {

@@ -27,7 +27,6 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
  */
 class UsersBadges extends Model
 {
-
     public $id;
 
     public $users_id;
@@ -44,13 +43,7 @@ class UsersBadges extends Model
 
     public function initialize()
     {
-        $this->addBehavior(
-            new Timestampable(array(
-                'beforeValidationOnCreate' => array(
-                    'field' => 'created_at'
-                )
-            ))
-        );
+        $this->addBehavior(new Timestampable(['beforeValidationOnCreate' => ['field' => 'created_at']]));
     }
 
     public function afterCreate()
@@ -74,6 +67,6 @@ class UsersBadges extends Model
         }
         $activity->extra                = $this->badge;
         $activity->users_origin_id      = $this->users_id;
-        var_dump($activity->save());
+        $activity->save();
     }
 }

@@ -27,7 +27,7 @@ use Phosphorum\Models\Categories;
  * @property  string name
  * @property  string description
  */
-class BadgeBase
+abstract class BadgeBase implements BadgeInterface
 {
     protected $noBountyCategories;
 
@@ -72,6 +72,7 @@ class BadgeBase
      *
      * @param Users $user
      * @param array $extra
+     * @return $this
      */
     public function add(Users $user, $extra = null)
     {
@@ -79,6 +80,8 @@ class BadgeBase
         $userBadge->users_id = $user->id;
         $userBadge->badge = $this->getName();
         $userBadge->save();
+
+        return $this;
     }
 
     /**
