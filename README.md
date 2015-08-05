@@ -75,7 +75,7 @@ $ php random-entries.php
 Change the owner of `app/logs` and `app/cache` to whatever user your web server is running as.
 
 This application uses Github as authentication system, you need a client id and secret id
-to be set up in the configuration (`app/config/config.php`):
+to be set up in the configuration (`app/config/config.php`).
 
 #### Starting the Beanstalkd client
 
@@ -99,7 +99,7 @@ $ vendor/bin/codecept run --debug # Detailed output
 
 ## License
 
-Phosphorum is open-sourced software licensed under the [New BSD License][7]. © Phalcon Framework Team and contributors
+Phosphorum is open-sourced software licensed under the [New BSD License][12]. © Phalcon Framework Team and contributors
 
 [1]: http://php.net/manual/en/book.curl.php
 [2]: http://php.net/manual/en/book.openssl.php
