@@ -87,19 +87,44 @@ $ php scripts/send-notifications-consumer.php &
 
 ## Tests
 
-Phosphorum use [Codeception][11] functional and unit tests. Execute:
+Phosphorum use [Codeception][11] functional, acceptance and unit tests.
+
+First you need to re-generate base classes for all suites:
 
 ```bash
 $ vendor/bin/codecept build
+```
 
+Sure, for acceptance tests you also need [Selenium server][12] executable as well.
+You need Java installed in order to run the Selenium server. You can launch it by running this:
+
+```bash
+$ java -jar selenium-server-standalone-2.37.0.jar
+```
+
+> Note: replace 2.37.0 to your version.
+
+> Note: Selenium may not support the most recent versions of Firefox.
+
+Execute all test with `run` command:
+
+```bash
 $ vendor/bin/codecept run
 # OR
 $ vendor/bin/codecept run --debug # Detailed output
 ```
 
+Execute `unit` test with `run unit` command:
+
+```bash
+$ vendor/bin/codecept run unit
+```
+
+More details about Console Commands see [here][13].
+
 ## License
 
-Phosphorum is open-sourced software licensed under the [New BSD License][12]. © Phalcon Framework Team and contributors
+Phosphorum is open-sourced software licensed under the [New BSD License][14]. © Phalcon Framework Team and contributors
 
 [1]: http://php.net/manual/en/book.curl.php
 [2]: http://php.net/manual/en/book.openssl.php
@@ -112,4 +137,6 @@ Phosphorum is open-sourced software licensed under the [New BSD License][12]. ©
 [9]: https://github.com/phalcon/cphalcon/releases
 [10]: http://kr.github.io/beanstalkd/
 [11]: http://codeception.com
-[12]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
+[12]: http://goo.gl/yLJLZg
+[13]: http://codeception.com/docs/reference/Commands
+[14]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
