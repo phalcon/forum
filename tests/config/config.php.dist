@@ -18,7 +18,7 @@
 return new \Phalcon\Config([
     'site' => [
         'name'      => 'Phalcon Framework',
-        'url'       => 'http://pforum.loc',
+        'url'       => 'http://localhost',
         'project'   => 'Phalcon',
         'software'  => 'Phosphorum',
         'repo'      => 'https://github.com/phalcon/cphalcon/issues',
@@ -58,7 +58,7 @@ return new \Phalcon\Config([
     'github'      => [
         'clientId'     => '',
         'clientSecret' => '',
-        'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
+        'redirectUri'  => 'http://localhost/login/oauth/access_token/'
     ],
 
     'amazonSns'   => [
