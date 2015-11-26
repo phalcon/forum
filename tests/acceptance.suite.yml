@@ -12,4 +12,6 @@ modules:
             url: http://localhost:8000
             browser: 'firefox'
             window_size: 1200x768
-        - Phalcon1
+            wait: 10
+            capabilities:
+                unexpectedAlertBehaviour: 'accept'

@@ -11,4 +11,5 @@ modules:
     enabled:
         - \Helper\Functional
         - Filesystem
-        - Phalcon1
+        - Phalcon2:
+            bootstrap: 'tests/config/bootstrap.php'

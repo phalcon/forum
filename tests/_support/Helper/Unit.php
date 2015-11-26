@@ -28,7 +28,7 @@ class Unit extends Module
      */
     public function _initialize()
     {
-        $this->phalcon = $this->getModule('Phalcon1');
+        $this->phalcon = $this->getModule('Phalcon2');
     }
 
     /**
