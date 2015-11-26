@@ -8,4 +8,5 @@ modules:
     enabled:
         - \Helper\Unit
         - Asserts
-        - Phalcon1
+        - Phalcon2:
+            bootstrap: 'tests/config/bootstrap.php'
