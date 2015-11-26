@@ -11,11 +11,6 @@ services:
 
 sudo: false
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-
 env:
   - PHALCON_VERSION="2.0.9"
   - PHALCON_VERSION="2.0.8"
