@@ -15,21 +15,23 @@
  +------------------------------------------------------------------------+
 */
 
+use Phalcon\Loader;
+
 $modelsDir      = $config->application->modelsDir;
 $controllersDir = $config->application->controllersDir;
 $libraryDir     = $config->application->libraryDir;
 
-$loader = new \Phalcon\Loader();
+$loader = new Loader();
 
 /**
  * We're a registering a set of directories taken from the configuration file
  */
 $loader->registerNamespaces(
-    array(
-       'Phosphorum\Models'        => $modelsDir,
-       'Phosphorum\Controllers'   => $controllersDir,
-       'Phosphorum'               => $libraryDir
-    )
+    [
+        'Phosphorum\Models'        => $modelsDir,
+        'Phosphorum\Controllers'   => $controllersDir,
+        'Phosphorum'               => $libraryDir
+    ]
 );
 
 $loader->register();

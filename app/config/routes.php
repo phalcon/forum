@@ -15,7 +15,9 @@
  +------------------------------------------------------------------------+
 */
 
-$router = new Phalcon\Mvc\Router(false);
+use Phalcon\Mvc\Router;
+
+$router = new Router(false);
 
 $router->add(
     '/sitemap',

@@ -15,7 +15,7 @@
   +------------------------------------------------------------------------+
 */
 
-return array(
+return [
     'Pacific/Wake'                   => '(GMT-12:00) International Date Line West',
     'Pacific/Apia'                   => '(GMT-11:00) Midway Island/Samoa',
     'Pacific/Honolulu'               => '(GMT-10:00) Hawaii',
@@ -91,4 +91,4 @@ return array(
     'Pacific/Auckland'               => '(GMT+12:00) Auckland/Wellington',
     'Pacific/Fiji'                   => '(GMT+12:00) Fiji/Kamchatka/Marshall Is.',
     'Pacific/Tongatapu'              => '(GMT+13:00) Nuku\'alofa',
-);
+];

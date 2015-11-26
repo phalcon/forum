@@ -15,76 +15,77 @@
  +------------------------------------------------------------------------+
 */
 
-return new \Phalcon\Config(array(
+use Phalcon\Config;
 
-    'site' => array(
-        'name'      => 'Phalcon Framework',
-        'url'       => 'http://forum.phalconphp.com',
-        'project'   => 'Phalcon',
-        'software'  => 'Phosphorum',
-        'repo'      => 'https://github.com/phalcon/cphalcon/issues',
-        'docs'      => 'https://github.com/phalcon/docs',
-    ),
+return new Config([
+    'site' => [
+        'name'     => 'Phalcon Framework',
+        'url'      => 'http://forum.phalconphp.com',
+        'project'  => 'Phalcon',
+        'software' => 'Phosphorum',
+        'repo'     => 'https://github.com/phalcon/cphalcon/issues',
+        'docs'     => 'https://github.com/phalcon/docs',
+    ],
 
-    'database'    => array(
+    'database' => [
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
         'username' => 'root',
         'password' => '',
-        'dbname'   => 'forum',
+        'dbname'   => 'phosphorum',
         'charset'  => 'utf8'
-    ),
+    ],
 
-    'application' => array(
+    'application' => [
         'controllersDir' => APP_PATH . '/app/controllers/',
         'modelsDir'      => APP_PATH . '/app/models/',
         'viewsDir'       => APP_PATH . '/app/views/',
         'pluginsDir'     => APP_PATH . '/app/plugins/',
         'libraryDir'     => APP_PATH . '/app/library/',
-        'development'    => array(
+        'development'    => [
             'staticBaseUri' => '/',
             'baseUri'       => '/'
-        ),
-        'production'     => array(
+        ],
+        'production' => [
             'staticBaseUri' => 'http://static.phosphorum.com/',
             'baseUri'       => '/'
-        ),
-        'debug'          => true
-    ),
+        ],
+        'debug' => true
+    ],
 
-    'mandrillapp' => array(
+    'mandrillapp' => [
         'secret' => ''
-    ),
+    ],
 
-    'github'      => array(
+    'github' => [
         'clientId'     => '',
         'clientSecret' => '',
         'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
-    ),
+    ],
 
-    'amazonSns'   => array(
+    'amazonSns' => [
         'secret' => ''
-    ),
+    ],
 
-    'smtp'        => array(
+    'smtp' => [
         'host'     => "",
         'port'     => 25,
         'security' => "tls",
         'username' => "",
         'password' => ""
-    ),
+    ],
 
-    'beanstalk'   => array(
+    'beanstalk' => [
         'disabled' => true,
         'host'     => '127.0.0.1'
-    ),
+    ],
 
-    'elasticsearch' => array(
-        'index'    => 'phosphorum'
-    ),
-    
-    'mail'     => array(
-        'fromName'     => 'Phalcon',
-        'fromEmail'    => 'phosphorum@phalconphp.com',
-    )
-));
+    'elasticsearch' => [
+        'index' => 'phosphorum'
+    ],
+
+    'mail' => [
+        'fromName'  => 'Phalcon',
+        'fromEmail' => 'phosphorum@phalconphp.com',
+    ]
+]);
