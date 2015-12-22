@@ -9,6 +9,11 @@ services:
   - mysql
   - memcached
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 sudo: false
 
 env:
@@ -22,11 +27,12 @@ env:
 
 install:
   - wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar
-  - composer self-update
+  - phpenv config-rm xdebug.ini
+  - travis_retry composer self-update
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b phalcon-v${PHALCON_VERSION}
-  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 > /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
-  - composer install --prefer-source --no-interaction
+  - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
   - export DISPLAY=:99.0
@@ -43,7 +49,7 @@ after_script:
   - mysql -e 'DROP DATABASE forum;' -uroot
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --warning-severity=0 --ignore=app/cache app/
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 
