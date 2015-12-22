@@ -385,6 +385,26 @@ class Posts extends Model
     }
 
     /**
+     * Checks if the Post has replies
+     *
+     * @return bool
+     */
+    public function hasReplies()
+    {
+        return $this->number_replies > 0;
+    }
+
+    /**
+     * Checks if the Post has accepted answer
+     *
+     * @return bool
+     */
+    public function hasAcceptedAnswer()
+    {
+        return 'Y' == $this->accepted_answer;
+    }
+
+    /**
      * Checks whether a specific user is subscribed to the post
      *
      * @param int $userId

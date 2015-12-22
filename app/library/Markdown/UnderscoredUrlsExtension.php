@@ -30,7 +30,8 @@ class UnderscoredUrlsExtension implements ExtensionInterface
             return "{gfm-extraction-$md5}";
         });
 
-        $text->replace('#(?:(?<=[href|src]=\"|\')(?:[a-z0-9]+:\/\/)?|(?:[a-z0-9]+:\/\/))([^\'">\s]+_+[^\'">\s]*)+#i', function (Text $w) {
+        $pattern = '#(?:(?<=[href|src]=\"|\')(?:[a-z0-9]+:\/\/)?|(?:[a-z0-9]+:\/\/))([^\'">\s]+_+[^\'">\s]*)+#i';
+        $text->replace($pattern, function (Text $w) {
 
             $w->replaceString('_', '%5');
 

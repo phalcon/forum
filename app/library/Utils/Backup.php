@@ -37,7 +37,12 @@ class Backup extends Injectable
         }
 
         $config = $this->config->database;
-        system('/usr/bin/mysqldump -u ' . $config->username . ' -p' . $config->password . ' -r /tmp/phosphorum.sql ' . $config->dbname);
+        system(sprintf(
+            '/usr/bin/mysqldump -u %s -p%s -r /tmp/phosphorum.sql %s',
+            $config->dbname,
+            $config->username,
+            $config->password
+        ));
         system('bzip2 /tmp/phosphorum.sql');
 
         $sourcePath = '/tmp/phosphorum.sql.bz2';

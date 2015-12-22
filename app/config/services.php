@@ -15,6 +15,7 @@
   +------------------------------------------------------------------------+
 */
 
+use Phalcon\Logger;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View;
@@ -121,9 +122,12 @@ $di->set(
                         /** @var DatabaseConnection $connection */
                         $variables = $connection->getSQLVariables();
                         if ($variables) {
-                            $logger->log($connection->getSQLStatement() . ' [' . join(',', $variables) . ']', \Phalcon\Logger::INFO);
+                            $logger->log(
+                                $connection->getSQLStatement() . ' [' . join(',', $variables) . ']',
+                                Logger::INFO
+                            );
                         } else {
-                            $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+                            $logger->log($connection->getSQLStatement(), Logger::INFO);
                         }
                     }
                 }
