@@ -344,5 +344,7 @@ $di->setShared('gravatar', function () {
         'rating'        => Gravatar::RATING_PG
     ]);
 
+    $gravatar->enableSecureURL();
+
     return $gravatar;
 });
