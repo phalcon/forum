@@ -72,8 +72,8 @@
 							<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
 								{{ image(gravatar.getAvatar(user[1]), 'width': 24, 'height': 24, 'class': 'img-rounded') }}
 							</a>
-						{%- endcache -%}
-					{%- endfor -%}
+						{%- endfor -%}
+					{%- endcache -%}
 				</td>
 				<td class="hidden-xs">
 					<span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
