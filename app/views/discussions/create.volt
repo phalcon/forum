@@ -6,8 +6,7 @@
 
     <div class="row">
         <div class="col-md-1 remove-image hidden-xs" align="right">
-            <img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon"
-                 class="img-rounded">
+            {{ image(gravatar.getAvatar(session.get('identity-email')), 'class': 'img-rounded') }}
         </div>
         <div class="col-md-11">
 

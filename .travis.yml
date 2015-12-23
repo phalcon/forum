@@ -43,6 +43,7 @@ before_script:
   - cat schemas/forum.sql | mysql phosphorum
   - (cd ./scripts/ && php random-entries.php > /dev/null)
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - stty cols 160
 
 after_script:
   - mysql -e 'DROP DATABASE forum;' -uroot

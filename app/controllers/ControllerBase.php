@@ -15,6 +15,7 @@ use Phosphorum\Models\Users;
  * @property \Phalcon\Cache\Backend\Memory viewCache
  * @property \Phalcon\Config config
  * @property \Phosphorum\Utils\Slug slug
+ * @property \Phalcon\Avatar\Gravatar gravatar
  */
 class ControllerBase extends Controller
 {
