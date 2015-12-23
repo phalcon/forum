@@ -33,6 +33,7 @@ use Phalcon\Cache\Backend\Memory as MemoryBackend;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Cache\Frontend\Output as FrontendOutput;
+use Phalcon\Avatar\Gravatar;
 use Ciconia\Ciconia;
 
 /**
@@ -332,3 +333,16 @@ $di->set(
     },
     true
 );
+
+/**
+ * Gravatar instance
+ */
+$di->setShared('gravatar', function () {
+    $gravatar = new Gravatar([
+        'default_image' => 'identicon',
+        'size'          => 24,
+        'rating'        => Gravatar::RATING_PG
+    ]);
+
+    return $gravatar;
+});
