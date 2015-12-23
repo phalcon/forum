@@ -1,6 +1,6 @@
 {{- content() -}}
 
-{% include 'partials/flash-banner.volt'
+{% include 'partials/flash-banner.volt' %}
 
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
 
