@@ -21,18 +21,18 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-phalcon": ">=2.0.3",
-        "aws/aws-sdk-php": "~2.5",
+        "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
-        "swiftmailer/swiftmailer": "~5.4",
+        "swiftmailer/swiftmailer": "^5.4",
         "kzykhys/ciconia": "~1.0",
         "phpspec/php-diff": "~1.0",
         "elasticsearch/elasticsearch": "~1.0",
-        "dropbox/dropbox-sdk": "1.1.*"
+        "dropbox/dropbox-sdk": "^1.1"
     },
     "require-dev": {
-        "fzaninotto/faker": "*",
-        "codeception/codeception": "*",
-        "mockery/mockery": "dev-master",
-        "squizlabs/php_codesniffer": "1.*"
+        "fzaninotto/faker": "^1.5",
+        "codeception/codeception": "^2.1",
+        "codeception/mockery-module": "^0.2",
+        "squizlabs/php_codesniffer": "^2.3"
     }
 }

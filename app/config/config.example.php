@@ -20,7 +20,7 @@ use Phalcon\Config;
 return new Config([
     'site' => [
         'name'     => 'Phalcon Framework',
-        'url'      => 'http://forum.phalconphp.com',
+        'url'      => 'http://pforum.loc.com',
         'project'  => 'Phalcon',
         'software' => 'Phosphorum',
         'repo'     => 'https://github.com/phalcon/cphalcon/issues',

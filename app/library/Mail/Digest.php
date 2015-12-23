@@ -48,7 +48,10 @@ class Digest extends Injectable
 
         $users = array();
         foreach (Users::find($parameters) as $user) {
-            if ($user->email && strpos($user->email, '@') !== false && strpos($user->email, '@users.noreply.github.com') === false) {
+            if ($user->email &&
+                strpos($user->email, '@') !== false &&
+                strpos($user->email, '@users.noreply.github.com') === false
+            ) {
                 $users[trim($user->email)] = $user->name;
             }
         }
@@ -62,10 +65,14 @@ class Digest extends Injectable
         $lastWeek = new \DateTime();
         $lastWeek->modify('-1 week');
 
+        $order = 'number_views + ' .
+            '((IF(votes_up IS NOT NULL, votes_up, 0) - ' .
+            'IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + ' .
+            'number_replies + IF(accepted_answer = "Y", 10, 0) DESC';
         $parameters = array(
             'created_at >= ?0 AND deleted != 1 AND categories_id <> 4',
             'bind'  => array($lastWeek->getTimestamp()),
-            'order' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies + IF(accepted_answer = "Y", 10, 0) DESC',
+            'order' => $order,
             'limit' => 10
         );
 

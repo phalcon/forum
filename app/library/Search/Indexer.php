@@ -33,7 +33,8 @@ class Indexer
      *
      * @param array $fields
      * @param int $limit
-     * @param boolean $returnPosts
+     * @param bool $returnPosts
+     * @return array
      */
     public function search(array $fields, $limit = 10, $returnPosts = false)
     {
@@ -66,7 +67,7 @@ class Indexer
                 foreach ($queryResponse['hits']['hits'] as $hit) {
                     $post = Posts::findFirstById($hit['fields']['id'][0]);
                     if ($post) {
-                        if ($hit['fields']['karma'][0] > 0 && ($post->number_replies > 0 || $post->accepted_answer == 'Y')) {
+                        if ($hit['fields']['karma'][0] > 0 && ($post->hasReplies() || $post->hasAcceptedAnswer())) {
                             $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
                             if (!$returnPosts) {
                                 $results[$score] = array(
@@ -98,7 +99,7 @@ class Indexer
      * @param Client $client
      * @param Posts $post
      */
-    protected function _doIndex($client, $post)
+    protected function doIndex($client, $post)
     {
         $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
         if ($karma > 0) {
@@ -140,7 +141,7 @@ class Indexer
     public function index($post)
     {
         $client = new Client();
-        $this->_doIndex($client, $post);
+        $this->doIndex($client, $post);
     }
 
     /**
@@ -158,7 +159,7 @@ class Indexer
         }
 
         foreach (Posts::find('deleted != 1') as $post) {
-            $this->_doIndex($client, $post);
+            $this->doIndex($client, $post);
         }
     }
 }
