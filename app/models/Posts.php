@@ -243,10 +243,10 @@ class Posts extends Model
      */
     public function getRecentUsers()
     {
-        $users  = [$this->user->id => [$this->user->login, $this->user->gravatar_id]];
+        $users  = [$this->user->id => [$this->user->login, $this->user->email]];
         foreach ($this->getReplies(['order' => 'created_at DESC', 'limit' => 3]) as $reply) {
             if (!isset($users[$reply->user->id])) {
-                $users[$reply->user->id] = [$reply->user->login, $reply->user->gravatar_id];
+                $users[$reply->user->id] = [$reply->user->login, $reply->user->email];
             }
         }
         return $users;
