@@ -33,7 +33,7 @@
 					{%- cache "post-users-" ~ post.id -%}
 						{%- for id, user in post.getRecentUsers() -%}
 						 	<a href="{{ url("user/" ~ id ~ "/" ~ user[0]) }}" title="{{ user[0] }}">
-								<img src="https://secure.gravatar.com/avatar/{{ user[1] }}?s=24&amp;r=pg&amp;d=identicon" width="24" height="24" class="img-rounded">
+								{{ image(gravatar.getAvatar(user[1]), 'width': 24, 'height': 24, 'class': 'img-rounded') }}
 							</a>
 						{%- endfor -%}
 					{%- endcache -%}
