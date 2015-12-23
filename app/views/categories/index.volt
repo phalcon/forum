@@ -1,4 +1,4 @@
-{{ flashSession.output() }}
+{% include 'partials/flash-banner.volt' %}
 
 <div class="clearfix">
     <div class="col-lg-9 center-block">

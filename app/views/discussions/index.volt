@@ -1,6 +1,6 @@
 {{ content() }}
 
-{{ flashSession.output() }}
+{% include 'partials/flash-banner.volt' %}
 
 <div class="hot-discussions">
 
