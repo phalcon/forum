@@ -189,7 +189,7 @@ class DiscussionsController extends ControllerBase
     {
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
-            error_log("The category doesn't exist");
+            $this->logger->error("The category doesn't exist");
             return $this->response->redirect();
         }
 

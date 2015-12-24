@@ -240,6 +240,7 @@ class SessionController extends ControllerBase
         $this->session->remove('identity-name');
         $this->session->remove('identity-moderator');
         $this->session->remove('identity-gravatar');
+        $this->session->remove('identity-email');
         $this->session->remove('identity-theme');
 
         $this->flashSession->success('Goodbye!');

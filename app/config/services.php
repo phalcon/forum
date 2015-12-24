@@ -22,6 +22,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Db\Adapter\Pdo\Mysql as DatabaseConnection;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger\Adapter\File as FileLogger;
+use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
 use Phalcon\Mvc\Model\Metadata\Memory as MemoryMetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
@@ -103,40 +104,32 @@ $di->set(
  */
 $di->set(
     'db',
-    function () use ($config) {
+    function () use ($config, $di) {
+        $connection    = new DatabaseConnection($config->database->toArray());
+        $eventsManager = new EventsManager();
 
-        $connection = new DatabaseConnection($config->database->toArray());
+        // Listen all the database events
+        $eventsManager->attach(
+            'db',
+            function ($event, $connection) use ($di) {
+                /** @var Phalcon\Events\Event $event */
+                if ($event->getType() == 'beforeQuery') {
+                    /** @var DatabaseConnection $connection */
+                    $variables = $connection->getSQLVariables();
+                    $string    = $connection->getSQLStatement();
 
-        $debug = $config->application->debug;
-        if ($debug) {
-
-            $eventsManager = new EventsManager();
-
-            $logger = new FileLogger(APP_PATH . "/app/logs/db.log");
-
-            //Listen all the database events
-            $eventsManager->attach(
-                'db',
-                function ($event, $connection) use ($logger) {
-                    /** @var Phalcon\Events\Event $event */
-                    if ($event->getType() == 'beforeQuery') {
-                        /** @var DatabaseConnection $connection */
-                        $variables = $connection->getSQLVariables();
-                        if ($variables) {
-                            $logger->log(
-                                $connection->getSQLStatement() . ' [' . join(',', $variables) . ']',
-                                Logger::INFO
-                            );
-                        } else {
-                            $logger->log($connection->getSQLStatement(), Logger::INFO);
-                        }
+                    if ($variables) {
+                        $string .= ' [' . join(',', $variables) . ']';
                     }
-                }
-            );
 
-            //Assign the eventsManager to the db adapter instance
-            $connection->setEventsManager($eventsManager);
-        }
+                    // To disable logging change logLevel in config
+                    $di->get('logger', ['db.log'])->debug($string);
+                }
+            }
+        );
+
+        // Assign the eventsManager to the db adapter instance
+        $connection->setEventsManager($eventsManager);
 
         return $connection;
     }
@@ -347,4 +340,21 @@ $di->setShared('gravatar', function () {
     $gravatar->enableSecureURL();
 
     return $gravatar;
+});
+
+/**
+ * Logger service
+ */
+$di->set('logger', function ($filename = null, $format = null) use ($config) {
+    $format   = $format ?: $config->get('logger')->format;
+    $filename = trim($filename ?: $config->get('logger')->filename, '\\/');
+    $path     = rtrim($config->get('logger')->path, '\\/') . DIRECTORY_SEPARATOR;
+
+    $formatter = new FormatterLine($format, $config->get('logger')->date);
+    $logger    = new FileLogger($path . $filename);
+
+    $logger->setFormatter($formatter);
+    $logger->setLogLevel($config->get('logger')->logLevel);
+
+    return $logger;
 });

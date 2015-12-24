@@ -16,6 +16,9 @@
 */
 
 use Phalcon\Config;
+use Phalcon\Logger;
+
+defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[ 0 ]);
 
 return new Config([
     'site' => [
@@ -87,5 +90,12 @@ return new Config([
     'mail' => [
         'fromName'  => 'Phalcon',
         'fromEmail' => 'phosphorum@phalconphp.com',
+    ],
+    'logger' => [
+        'path'     => APP_PATH . '/app/logs/',
+        'format'   => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
+        'date'     => 'D j H:i:s',
+        'logLevel' => Logger::WARNING,
+        'filename' => 'application.log',
     ]
 ]);
