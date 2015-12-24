@@ -9,7 +9,7 @@
 			{%- if activity.post and activity.post.deleted != 1 -%}
 				<tr>
 					<td class="small hidden-xs" valign="top">
-						<img src="https://secure.gravatar.com/avatar/{{ activity.userOrigin.gravatar_id }}?s=24&amp;r=pg&amp;d=identicon" class="img-rounded">
+						{{ image(gravatar.getAvatar(activity.userOrigin.email), 'class': 'img-rounded') }}
 					</td>
 					<td>
 						<div class="activity{% if activity.was_read == 'N' %} unread{% endif %}">

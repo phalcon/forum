@@ -130,12 +130,8 @@ class SessionController extends ControllerBase
                 }
             }
 
-            $user->gravatar_id = $githubUser->getGravatarId();
-            if (!$user->gravatar_id) {
-                if ($user->email && strpos($user->email, '@') !== false) {
-                    $user->gravatar_id = md5(strtolower($user->email));
-                }
-            }
+            // In any case user has Gravatar ID even if he has no email
+            $user->gravatar_id = $this->gravatar->getEmailHash($user->email);
 
             $user->increaseKarma(Karma::LOGIN);
 
@@ -151,6 +147,7 @@ class SessionController extends ControllerBase
              */
             $this->session->set('identity', $user->id);
             $this->session->set('identity-name', $user->name);
+            $this->session->set('identity-email', $user->email);
             $this->session->set('identity-gravatar', $user->gravatar_id);
             $this->session->set('identity-timezone', $user->timezone);
             $this->session->set('identity-theme', $user->theme);

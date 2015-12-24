@@ -257,6 +257,7 @@ class DiscussionsController extends ControllerBase
         }
 
         $this->tag->setTitle('Start a Discussion');
+        $this->gravatar->setSize(48);
 
         if ($this->request->isPost()) {
             if (!$this->checkTokenPost()) {
@@ -371,6 +372,7 @@ class DiscussionsController extends ControllerBase
 
         $this->view->categories = Categories::find($parametersCategory);
 
+        $this->gravatar->setSize(48);
         $this->view->post = $post;
     }
 
@@ -543,6 +545,8 @@ class DiscussionsController extends ControllerBase
                 $check_topic->updateTracking($id, $usersId);
             }
         }
+
+        $this->gravatar->setSize(48);
 
         if (!$this->request->isPost()) {
             // Find the post using get
@@ -1081,6 +1085,7 @@ class DiscussionsController extends ControllerBase
         $this->view->ranking       = $ranking;
         $this->view->total_ranking = count($users);
 
+        $this->gravatar->setSize(64);
         $this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
     }
 
@@ -1141,6 +1146,8 @@ class DiscussionsController extends ControllerBase
             'users_id = ?0',
             'bind' => array($user->id)
         );
+
+        $this->gravatar->setSize(64);
         $this->view->numberReplies = PostsReplies::count($parametersNumberReplies);
     }
 
