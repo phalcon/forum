@@ -18,7 +18,6 @@
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Application;
 use Phalcon\DI\FactoryDefault;
-use Phalcon\Logger\Adapter\File as Logger;
 
 error_reporting(E_ALL);
 
@@ -63,13 +62,11 @@ try {
     echo $application->handle()->getContent();
 
 } catch (Exception $e) {
-
     /**
      * Log the exception
      */
-    $logger = new Logger(APP_PATH . '/app/logs/error.log');
-    $logger->error($e->getMessage());
-    $logger->error($e->getTraceAsString());
+    $di->get('logger', ['error.log'])->error($e->getMessage());
+    $di->get('logger', ['error.log'])->error($e->getTraceAsString());
 
     /**
      * Show an static error page
@@ -77,5 +74,4 @@ try {
     $response = new Response();
     $response->redirect('505.html');
     $response->send();
-
 }

@@ -15,7 +15,12 @@
  +------------------------------------------------------------------------+
 */
 
-return new \Phalcon\Config([
+use Phalcon\Config;
+use Phalcon\Logger;
+
+defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[ 0 ]);
+
+return new Config([
     'site' => [
         'name'      => 'Phalcon Framework',
         'url'       => 'http://localhost',
@@ -25,7 +30,7 @@ return new \Phalcon\Config([
         'docs'      => 'https://github.com/phalcon/docs'
     ],
 
-    'database'    => [
+    'database' => [
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
         'username' => 'travis',
@@ -44,28 +49,28 @@ return new \Phalcon\Config([
             'staticBaseUri' => '/',
             'baseUri'       => '/'
         ],
-        'production'     => [
+        'production' => [
             'staticBaseUri' => 'http://static.phosphorum.com/',
             'baseUri'       => '/'
         ],
-        'debug'          => true
+        'debug' => false
     ],
 
     'mandrillapp' => [
         'secret' => ''
     ],
 
-    'github'      => [
+    'github' => [
         'clientId'     => '',
         'clientSecret' => '',
         'redirectUri'  => 'http://localhost/login/oauth/access_token/'
     ],
 
-    'amazonSns'   => [
+    'amazonSns'  => [
         'secret' => ''
     ],
 
-    'smtp'        => [
+    'smtp'         => [
         'host'     => "",
         'port'     => 25,
         'security' => "tls",
@@ -73,17 +78,24 @@ return new \Phalcon\Config([
         'password' => ""
     ],
 
-    'beanstalk'   => [
+    'beanstalk'    => [
         'disabled' => true,
         'host'     => '127.0.0.1'
     ],
 
     'elasticsearch' => [
-        'index'    => 'phosphorum'
+        'index'     => 'phosphorum'
     ],
 
-    'mail'     => [
-        'fromName'     => 'Phalcon',
-        'fromEmail'    => 'phosphorum@phalconphp.com',
-    ]
+    'mail' => [
+        'fromName'  => 'Phalcon',
+        'fromEmail' => 'phosphorum@phalconphp.com',
+    ],
+    'logger' => [
+        'path'     => APP_PATH . '/app/logs/',
+        'format'   => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
+        'date'     => 'D j H:i:s',
+        'logLevel' => Logger::WARNING,
+        'filename' => 'application.log',
+    ],
 ]);
