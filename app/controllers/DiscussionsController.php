@@ -34,6 +34,7 @@ use Phosphorum\Models\TopicTracking;
 use Phosphorum\Search\Indexer;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\View;
+use Phosphorum\Mvc\Controllers\TokenTrait;
 
 /**
  * Class DiscussionsController
@@ -42,6 +43,8 @@ use Phalcon\Mvc\View;
  */
 class DiscussionsController extends ControllerBase
 {
+    use TokenTrait;
+
     const POSTS_IN_PAGE = 40;
 
     /**
@@ -235,15 +238,6 @@ class DiscussionsController extends ControllerBase
             'paginatorUri' => 'category/' . $category->id . '/' . $category->slug,
             'logged'       => $userId
         ]);
-    }
-
-    protected function checkTokenPost()
-    {
-        if (!$this->security->checkToken()) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return false;
-        }
-        return true;
     }
 
     /**
