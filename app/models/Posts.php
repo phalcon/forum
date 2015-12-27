@@ -151,6 +151,9 @@ class Posts extends Model
         $postView            = new PostsViews();
         $postView->ipaddress = $this->getDI()->getShared('request')->getClientAddress();
         $this->views         = $postView;
+
+        $this->created_at    = time();
+        $this->modified_at   = time();
     }
 
     public function afterCreate()

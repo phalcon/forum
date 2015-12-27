@@ -102,11 +102,7 @@ class DiscussionsController extends ControllerBase
          * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
          * @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder
          */
-        if ($order == "answers") {
-            list($itemBuilder, $totalBuilder) = $this->prepareQueries(true);
-        } else {
-            list($itemBuilder, $totalBuilder) = $this->prepareQueries();
-        }
+        list($itemBuilder, $totalBuilder) = $this->prepareQueries($order == "answers");
 
         /**
          * Create the conditions according to the parameter order
@@ -757,16 +753,19 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Votes a post up
+     *
+     * @param int $id Post ID
+     * @return Response
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
 
         if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = array(
+            $csrfTokenError = [
                 'status'  => 'error',
                 'message' => 'Token error. This might be CSRF attack.'
-            );
+            ];
             return $response->setJsonContent($csrfTokenError);
         }
 
@@ -775,35 +774,35 @@ class DiscussionsController extends ControllerBase
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $contentNotExist = array(
+            $contentNotExist = [
                 'status'  => 'error',
                 'message' => 'Post does not exist'
-            );
+            ];
             return $response->setJsonContent($contentNotExist);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentlogIn = array(
+            $contentlogIn = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
-            );
+            ];
             return $response->setJsonContent($contentlogIn);
         }
 
         if ($user->votes <= 0) {
-            $contentDontHave = array(
+            $contentDontHave = [
                 'status'  => 'error',
-                'message' => 'You don\'t have enough votes available'
-            );
+                'message' => "You don't have enough votes available"
+            ];
             return $response->setJsonContent($contentDontHave);
         }
 
-        if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
-            $contentAlreadyVote = array(
+        if (PostsVotes::count(['posts_id = ?0 AND users_id = ?1', 'bind' => [$post->id, $user->id]])) {
+            $contentAlreadyVote = [
                 'status'  => 'error',
                 'message' => 'You have already voted this post'
-            );
+            ];
             return $response->setJsonContent($contentAlreadyVote);
         }
 
@@ -813,10 +812,10 @@ class DiscussionsController extends ControllerBase
         $postVote->vote     = PostsVotes::VOTE_UP;
         if (!$postVote->save()) {
             foreach ($postVote->getMessages() as $message) {
-                $contentError = array(
+                $contentError = [
                     'status'  => 'error',
                     'message' => $message->getMessage()
-                );
+                ];
                 return $response->setJsonContent($contentError);
             }
         }
@@ -831,10 +830,10 @@ class DiscussionsController extends ControllerBase
             $user->votes--;
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
-                    $contentErrorSave = array(
+                    $contentErrorSave = [
                         'status'  => 'error',
                         'message' => $message->getMessage()
-                    );
+                    ];
                     return $response->setJsonContent($contentErrorSave);
                 }
             }
@@ -850,9 +849,10 @@ class DiscussionsController extends ControllerBase
             $activity->save();
         }
 
-        $contentOk = array(
+        $contentOk = [
             'status' => 'OK'
-        );
+        ];
+
         return $response->setJsonContent($contentOk);
     }
 
