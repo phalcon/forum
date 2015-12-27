@@ -121,6 +121,7 @@ for ($i = 0; $i <= 1000; $i++) {
     }
 
     $reply->post->number_replies++;
+    $reply->post->modified_at = time();
     $reply->save();
 
     $log->info('Reply to post: ' . $reply->posts_id);
