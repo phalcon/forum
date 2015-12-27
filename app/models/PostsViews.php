@@ -41,16 +41,16 @@ class PostsViews extends Model
             'posts_id',
             'Phosphorum\Models\Posts',
             'id',
-            array(
+            [
                 'alias' => 'post'
-            )
+            ]
         );
     }
 
     public function clearCache()
     {
         if ($this->id) {
-            $viewCache = $this->getDI()->getViewCache();
+            $viewCache = $this->getDI()->getShared('viewCache');
             $viewCache->delete('post-' . $this->posts_id);
         }
     }

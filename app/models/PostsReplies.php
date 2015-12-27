@@ -64,54 +64,52 @@ class PostsReplies extends Model
             'posts_id',
             'Phosphorum\Models\Posts',
             'id',
-            array(
+            [
                 'alias'    => 'post',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->belongsTo(
             'in_reply_to_id',
             'Phosphorum\Models\PostsReplies',
             'id',
-            array(
+            [
                 'alias'    => 'postReplyTo',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->belongsTo(
             'users_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
+            [
                 'alias'    => 'user',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
+            new Timestampable([
+                'beforeCreate' => [
                     'field' => 'created_at'
-                ),
-                'beforeUpdate' => array(
+                ],
+                'beforeUpdate' => [
                     'field' => 'modified_at'
-                )
-            ))
+                ]
+            ])
         );
     }
 
     public function beforeCreate()
     {
         if ($this->in_reply_to_id > 0) {
-            $postReplyTo = self::findFirst(array('id = ?0', 'bind' => array($this->in_reply_to_id)));
+            $postReplyTo = self::findFirst(['id = ?0', 'bind' => [$this->in_reply_to_id]]);
             if (!$postReplyTo) {
                 $this->in_reply_to_id = 0;
-            } else {
-                if ($postReplyTo->posts_id != $this->posts_id) {
-                    $this->in_reply_to_id = 0;
-                }
+            } elseif ($postReplyTo->posts_id != $this->posts_id) {
+                $this->in_reply_to_id = 0;
             }
         }
         $this->accepted = 'N';
@@ -127,12 +125,12 @@ class PostsReplies extends Model
             $activity->type     = Activities::NEW_REPLY;
             $activity->save();
 
-            $toNotify = array();
+            $toNotify = [];
 
             /**
              * Notify users that always want notifications
              */
-            foreach (Users::find(array('notifications = "Y"', 'columns' => 'id')) as $user) {
+            foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
                 if ($this->users_id != $user->id) {
 
                     $notification                   = new Notifications();
@@ -183,11 +181,10 @@ class PostsReplies extends Model
              * Register the user in the post's notifications
              */
             if (!isset($toNotify[$this->users_id])) {
-
-                $parameters       = array(
+                $parameters       = [
                     'users_id = ?0 AND posts_id = ?1',
-                    'bind' => array($this->users_id, $this->posts_id)
-                );
+                    'bind' => [$this->users_id, $this->posts_id]
+                ];
                 $hasNotifications = PostsNotifications::count($parameters);
 
                 if (!$hasNotifications) {
@@ -232,7 +229,7 @@ class PostsReplies extends Model
             /**
              * Queue notifications to be sent
              */
-            $this->getDI()->getQueue()->put($toNotify);
+            $this->getDI()->getShared('queue')->put($toNotify);
         }
     }
 
@@ -243,12 +240,9 @@ class PostsReplies extends Model
         $history                   = new PostsRepliesHistory();
         $history->posts_replies_id = $this->id;
         $usersId                   = $this->getDI()->getSession()->get('identity');
-        if ($usersId) {
-            $history->users_id = $usersId;
-        } else {
-            $history->users_id = $this->users_id;
-        }
-        $history->content = $this->content;
+        $history->users_id         = $usersId ? $usersId : $this->users_id;
+        $history->content          = $this->content;
+
         $history->save();
     }
 
@@ -302,7 +296,7 @@ class PostsReplies extends Model
     public function clearCache()
     {
         if ($this->id) {
-            $viewCache = $this->getDI()->getViewCache();
+            $viewCache = $this->getDI()->getShared('viewCache');
             $viewCache->delete('post-' . $this->posts_id);
             $viewCache->delete('post-body-' . $this->posts_id);
             $viewCache->delete('post-users-' . $this->posts_id);
