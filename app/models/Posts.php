@@ -149,11 +149,8 @@ class Posts extends Model
     public function beforeCreate()
     {
         $postView            = new PostsViews();
-        $postView->ipaddress = $this->getDI()->getRequest()->getClientAddress();
+        $postView->ipaddress = $this->getDI()->getShared('request')->getClientAddress();
         $this->views         = $postView;
-
-        $this->created_at    = time();
-        $this->modified_at   = time();
     }
 
     public function afterCreate()
@@ -204,7 +201,7 @@ class Posts extends Model
             /**
              * Queue notifications to be sent
              */
-            $this->getDI()->getQueue()->put($toNotify);
+            $this->getDI()->getShared('queue')->put($toNotify);
         }
     }
 
@@ -215,7 +212,7 @@ class Posts extends Model
 
         $history           = new PostsHistory();
         $history->posts_id = $this->id;
-        $history->users_id = $this->getDI()->getSession()->get('identity');
+        $history->users_id = $this->getDI()->getShared('session')->get('identity');
         $history->content  = $this->content;
         $history->save();
     }
@@ -328,6 +325,8 @@ class Posts extends Model
                 }
             }
         }
+
+        return false;
     }
 
     /**
@@ -349,19 +348,17 @@ class Posts extends Model
             $this->categories_id != 24
             && //show community
             ($this->votes_up - $this->votes_down) >= 0;
+
         if ($canHave) {
             $diff = time() - $this->created_at;
-            if ($diff > 86400) {
-                if ($diff < (86400 * 30)) {
-                    return true;
-                }
-            } else {
-                if ($diff < 3600) {
-                    return true;
-                }
+            if ($diff > 86400 && $diff < (86400 * 30)) {
+                return true;
+            } elseif ($diff < 3600) {
+                return true;
             }
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -374,13 +371,12 @@ class Posts extends Model
         $diff = time() - $this->created_at;
         if ($diff > 86400) {
             if ($diff < (86400 * 30)) {
-                return array('type' => 'old', 'value' => 150 + intval($diff / 86400 * 3));
+                return ['type' => 'old', 'value' => 150 + intval($diff / 86400 * 3)];
             }
-        } else {
-            if ($diff < 3600) {
-                return array('type' => 'fast-reply', 'value' => 100);
-            }
+        } elseif ($diff < 3600) {
+            return ['type' => 'fast-reply', 'value' => 100];
         }
+
         return false;
     }
 
@@ -408,6 +404,7 @@ class Posts extends Model
      * Checks whether a specific user is subscribed to the post
      *
      * @param int $userId
+     * @return bool
      */
     public function isSubscribed($userId)
     {
@@ -416,12 +413,11 @@ class Posts extends Model
 
     /**
      * Clears the cache related to this post
-     *
      */
     public function clearCache()
     {
         if ($this->id) {
-            $viewCache = $this->getDI()->getViewCache();
+            $viewCache = $this->getDI()->getShared('viewCache');
             $viewCache->delete('post-' . $this->id);
             $viewCache->delete('post-body-' . $this->id);
             $viewCache->delete('post-users-' . $this->id);
