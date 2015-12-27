@@ -31,10 +31,11 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
  */
 class ActivityNotifications extends Model
 {
-
     public $id;
 
     public $users_id;
+
+    public $users_origin_id;
 
     public $type;
 
@@ -45,6 +46,8 @@ class ActivityNotifications extends Model
     public $created_at;
 
     public $was_read;
+
+    public $extra;
 
     public function beforeValidationOnCreate()
     {
@@ -57,44 +60,44 @@ class ActivityNotifications extends Model
             'users_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
+            [
                 'alias' => 'user'
-            )
+            ]
         );
 
         $this->belongsTo(
             'users_origin_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
+            [
                 'alias' => 'userOrigin'
-            )
+            ]
         );
 
         $this->belongsTo(
             'posts_id',
             'Phosphorum\Models\Posts',
             'id',
-            array(
+            [
                 'alias' => 'post'
-            )
+            ]
         );
 
         $this->belongsTo(
             'posts_replies_id',
             'Phosphorum\Models\PostsReplies',
             'id',
-            array(
+            [
                 'alias' => 'reply'
-            )
+            ]
         );
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
+            new Timestampable([
+                'beforeCreate' => [
                     'field' => 'created_at'
-                )
-            ))
+                ]
+            ])
         );
     }
 
