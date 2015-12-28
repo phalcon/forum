@@ -12,11 +12,11 @@ use Phosphorum\Models\Users;
  *
  * @package Phosphorum\Controllers
  *
- * @property \Phalcon\Cache\Backend\Memory viewCache
+ * @property \Phalcon\Cache\BackendInterface viewCache
  * @property \Phalcon\Config config
  * @property \Phosphorum\Utils\Slug slug
- * @property \Phalcon\Avatar\Gravatar gravatar
- * @property \Phalcon\Logger\Adapter\File logger
+ * @property \Phalcon\Avatar\Avatarable gravatar
+ * @property \Phalcon\Logger\AdapterInterface logger
  */
 class ControllerBase extends Controller
 {
