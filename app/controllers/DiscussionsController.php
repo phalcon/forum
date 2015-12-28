@@ -24,6 +24,8 @@ use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\PostsHistory;
 use Phosphorum\Models\PostsVotes;
 use Phosphorum\Models\PostsSubscribers;
+use Phosphorum\Models\PostsPollOptions;
+use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
 use Phosphorum\Models\ActivityNotifications;
@@ -52,11 +54,11 @@ class DiscussionsController extends ControllerBase
      */
     public function initialize()
     {
-        $timezone = $this->session->get('identity-timezone');
-        if ($timezone) {
+        if ($timezone = $this->session->get('identity-timezone')) {
             date_default_timezone_set($timezone);
         }
-        $this->view->limitPost  = self::POSTS_IN_PAGE;
+
+        $this->view->setVar('limitPost', self::POSTS_IN_PAGE);
     }
 
     /**
@@ -122,12 +124,10 @@ class DiscussionsController extends ControllerBase
 
         $params = null;
         switch ($order) {
-
             case 'hot':
                 $this->tag->setTitle('Hot Discussions');
                 $itemBuilder->orderBy('p.modified_at DESC');
                 break;
-
             case 'my':
                 $this->tag->setTitle('My Discussions');
                 if ($userId) {
@@ -137,14 +137,12 @@ class DiscussionsController extends ControllerBase
                     $totalBuilder->where($myConditions);
                 }
                 break;
-
             case 'unanswered':
                 $this->tag->setTitle('Unanswered Discussions');
                 $unansweredConditions = 'p.number_replies = 0 AND p.accepted_answer <> "Y"';
                 $itemBuilder->where($unansweredConditions);
                 $totalBuilder->where($unansweredConditions);
                 break;
-
             case 'answers':
                 $this->tag->setTitle('My Answers');
                 if ($userId) {
@@ -154,7 +152,6 @@ class DiscussionsController extends ControllerBase
                     $totalBuilder->where($answersConditions);
                 }
                 break;
-
             default:
                 $this->tag->setTitle('Discussions');
         }
@@ -186,14 +183,14 @@ class DiscussionsController extends ControllerBase
      * @param int $categoryId Category Id
      * @param string $slug Category Slug
      * @param int $offset Posts offset
-     * @return \Phalcon\Http\ResponseInterface
      */
     public function categoryAction($categoryId, $slug, $offset = 0)
     {
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
             $this->logger->error("The category doesn't exist");
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
         $this->tag->setTitle('Discussions');
@@ -221,7 +218,8 @@ class DiscussionsController extends ControllerBase
 
         if (!count($posts)) {
             $this->flashSession->notice('There are no posts in category: ' . $category->name);
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
         $totalPosts = $totalBuilder
@@ -247,7 +245,8 @@ class DiscussionsController extends ControllerBase
     {
         if (!$usersId = $this->session->get('identity')) {
             $this->flashSession->error('You must be logged first');
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
         $this->tag->setTitle('Start a Discussion');
@@ -255,15 +254,11 @@ class DiscussionsController extends ControllerBase
 
         if ($this->request->isPost()) {
             if (!$this->checkTokenPost()) {
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             $title = $this->request->getPost('title', 'trim');
-
-            /** @var Users $user */
-            $user = Users::findFirstById($usersId);
-            $user->increaseKarma(Karma::ADD_NEW_POST);
-            $user->save();
 
             $post                = new Posts();
             $post->users_id      = $usersId;
@@ -273,56 +268,69 @@ class DiscussionsController extends ControllerBase
             $post->content       = $this->request->getPost('content');
 
             if ($post->save()) {
-                return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
+                $user = Users::findFirstById($usersId);
+
+                if ($pollOptions = $this->request->getPost('pollOptions', ['trim'], [])) {
+                    foreach ($pollOptions as $opt) {
+                        $option = new PostsPollOptions();
+                        $option->posts_id = $post->id;
+                        $option->title = htmlspecialchars($opt, ENT_QUOTES);
+                        $option->save();
+                    }
+                }
+
+                $user->increaseKarma(Karma::ADD_NEW_POST);
+                $user->save();
+
+                $this->response->redirect("discussion/{$post->id}/{$post->slug}");
+                return;
             }
 
-            foreach ($post->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
+            $this->flashSession->error(join('<br>', $post->getMessages()));
             $this->view->setVar('firstTime', false);
-
         } else {
             $this->view->setVar('firstTime', Posts::countByUsersId($usersId) == 0);
         }
 
-        $parameters = ['order' => 'name'];
-
-        $this->view->setVar('categories', Categories::find($parameters));
+        $this->view->setVar('categories', Categories::find(['order' => 'name']));
     }
 
     /**
      * This shows the create post form and also store the related post
+     *
+     * @param int $id Post ID
      */
     public function editAction($id)
     {
-        $usersId = $this->session->get('identity');
-        if (!$usersId) {
+        if (!$usersId = $this->session->get('identity')) {
             $this->flashSession->error('You must be logged first');
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
-        /**
-         * Find the post using get
-         */
         $parameters = [
             "id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
             'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
         ];
-        $post = Posts::findFirst($parameters);
 
-        if (!$post) {
+        if (!$post = Posts::findFirst($parameters)) {
             $this->flashSession->error('The discussion does not exist');
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
         if ($this->request->isPost()) {
             if (!$this->checkTokenPost()) {
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             $title   = $this->request->getPost('title', 'trim');
             $content = $this->request->getPost('content');
+
+            /** @var \Phalcon\Db\Adapter\Pdo\Mysql $connection */
+            $connection = $this->getDI()->getShared('db');
+            $connection->begin();
 
             $post->categories_id = $this->request->getPost('categoryId');
             $post->title         = $title;
@@ -330,24 +338,37 @@ class DiscussionsController extends ControllerBase
             $post->content       = $content;
             $post->edited_at     = time();
 
-            $usersId = $this->session->get('identity');
-            if ($post->users_id != $usersId) {
-                /** @var Users $user */
-                $user = Users::findFirstById($usersId);
-                if ($user) {
-                    $user->increaseKarma(Karma::MODERATE_POST);
-                    $user->save();
+            if ($post->hasPoll() && !$post->isStartVoting()) {
+                foreach ($post->getPollOptions() as $option) {
+                    $option->delete();
+                }
+
+                if ($pollOptions = $this->request->getPost('pollOptions', ['trim'], [])) {
+                    foreach ($pollOptions as $opt) {
+                        $option           = new PostsPollOptions();
+                        $option->posts_id = $post->id;
+                        $option->title    = htmlspecialchars($opt, ENT_QUOTES);
+                        $option->save();
+                    }
                 }
             }
 
-            if ($post->save()) {
-                return $this->response->redirect("discussion/{$post->id}/{$post->slug}");
-            }
+            if ($post->isStartVoting()) {
+                $connection->rollback();
+                $this->flashSession->error("The voting for the poll was started. You can't change the Poll.");
+            } else if ($post->save()) {
+                if ($post->users_id != $usersId && $user = Users::findFirstById($usersId)) {
+                    $user->increaseKarma(Karma::MODERATE_POST);
+                    $user->save();
+                }
 
-            foreach ($post->getMessages() as $message) {
-                $this->flash->error($message);
+                $connection->commit();
+                $this->response->redirect("discussion/{$post->id}/{$post->slug}");
+                return;
+            } else {
+                $connection->rollback();
+                $this->flashSession->error(join('<br>', $post->getMessages()));
             }
-
         } else {
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
@@ -360,8 +381,9 @@ class DiscussionsController extends ControllerBase
         $this->gravatar->setSize(48);
 
         $this->view->setVars([
-            'categories' => Categories::find(['order' => 'name']),
-            'post'       => $post
+            'categories'   => Categories::find(['order' => 'name']),
+            'post'         => $post,
+            'optionsCount' => $post->pollOptions->count()
         ]);
     }
 
@@ -383,9 +405,6 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        /**
-         * Find the post using get
-         */
         $parameters = [
             "id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
             'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
@@ -512,11 +531,9 @@ class DiscussionsController extends ControllerBase
      * Displays a post and its comments
      *
      * @param int $id Post ID
-     * @param string $slug Post slug
-     *
-     * @return \Phalcon\Http\ResponseInterface
+     * @param string $slug Post slug [Optional]
      */
-    public function viewAction($id, $slug)
+    public function viewAction($id, $slug = '')
     {
         $id = (int)$id;
 
@@ -535,15 +552,16 @@ class DiscussionsController extends ControllerBase
 
         if (!$this->request->isPost()) {
             // Find the post using get
-            $post = Posts::findFirstById($id);
-            if (!$post) {
+            if (!$post = Posts::findFirstById($id)) {
                 $this->flashSession->error('The discussion does not exist');
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             if ($post->deleted) {
                 $this->flashSession->error('The discussion is deleted');
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             $ipAddress = $this->request->getClientAddress();
@@ -553,27 +571,16 @@ class DiscussionsController extends ControllerBase
                 'bind' => [$id, $ipAddress]
             ];
 
-            $viewed = PostsViews::count($parameters);
-
             // A view is stored by ip address
-            if (!$viewed) {
+            if (!$viewed = PostsViews::count($parameters)) {
                 // Increase the number of views in the post
                 $post->number_views++;
                 if ($post->users_id != $usersId) {
-
                     $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
-                    if ($usersId > 0) {
-                        $user = Users::findFirstById($usersId);
-                        if ($user) {
-                            if ($user->moderator == 'Y') {
-                                $user->increaseKarma(Karma::MODERATE_VISIT_POST);
-                            } else {
-                                $user->increaseKarma(Karma::VISIT_POST);
-                            }
-
-                            $user->save();
-                        }
+                    if ($user = Users::findFirstById($usersId)) {
+                        $user->increaseKarma($user->moderator == 'Y' ? Karma::MODERATE_VISIT_POST : Karma::VISIT_POST);
+                        $user->save();
                     }
                 }
 
@@ -581,9 +588,7 @@ class DiscussionsController extends ControllerBase
                 $postView->post      = $post;
                 $postView->ipaddress = $ipAddress;
                 if (!$postView->save()) {
-                    foreach ($postView->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+                    $this->flash->error(join('<br>', $postView->getMessages()));
                 }
             }
 
@@ -599,46 +604,46 @@ class DiscussionsController extends ControllerBase
 
             // Generate canonical meta
             $this->view->setVars([
-                'canonical' => 'discussion/' . $post->id . '/' . $post->slug,
+                'canonical' => "discussion/{$post->id}/{$post->slug}",
                 'author'    => $post->user
             ]);
         } else {
             if (!$this->checkTokenPost()) {
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             if (!$usersId) {
                 $this->flashSession->error('You must be logged in first to add a comment');
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             // Find the post using POST
-            $post = Posts::findFirstById($this->request->getPost('id'));
-            if (!$post) {
+            if (!$post = Posts::findFirstById($this->request->getPost('id'))) {
                 $this->flashSession->error('The discussion does not exist');
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
             if ($post->deleted) {
                 $this->flashSession->error('The discussion is deleted');
-                return $this->response->redirect();
+                $this->response->redirect();
+                return;
             }
 
-            $content = $this->request->getPost('content', 'trim');
-            if ($content) {
-
+            if ($content = $this->request->getPost('content', 'trim')) {
                 // Check if the question can have a bounty before add the reply
                 $canHaveBounty = $post->canHaveBounty();
 
-                $user = Users::findFirstById($usersId);
-                if (!$user) {
+                if (!$user = Users::findFirstById($usersId)) {
                     $this->flashSession->error('You must be logged in first to add a comment');
-                    return $this->response->redirect();
+                    $this->response->redirect();
+                    return;
                 }
 
                 // Only update the number of replies if the user that commented isn't the same that posted
                 if ($post->users_id != $usersId) {
-
                     $post->number_replies++;
                     $post->modified_at = time();
                     $post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
@@ -654,7 +659,6 @@ class DiscussionsController extends ControllerBase
                 $postReply->content        = $content;
 
                 if ($postReply->save()) {
-
                     if ($post->users_id != $usersId && $canHaveBounty) {
                         $bounty                       = $post->getBounty();
                         $postBounty                   = new PostsBounties();
@@ -663,28 +667,38 @@ class DiscussionsController extends ControllerBase
                         $postBounty->posts_replies_id = $postReply->id;
                         $postBounty->points           = $bounty['value'];
                         if (!$postBounty->save()) {
-                            foreach ($postBounty->getMessages() as $message) {
-                                $this->flash->error($message);
-                            }
+                            $this->flash->error(join('<br>', $postBounty->getMessages()));
                         }
                     }
 
-                    $href = 'discussion/' . $post->id . '/' . $post->slug . '#C' . $postReply->id;
-                    return $this->response->redirect($href);
+                    $this->response->redirect("discussion/{$post->id}/{$post->slug}#C{$postReply->id}");
+                    return;
                 }
 
-                foreach ($postReply->getMessages() as $message) {
-                    $this->flash->error($message);
-                }
+                $this->flash->error(join('<br>', $postReply->getMessages()));
             }
         }
 
-        /**
-         * Set the post name as title - escaping it first
-         */
+        $voting = [];
+
+        if ($post->hasPoll()) {
+            $totalVotes = $post->getPollVotes()->count();
+            $votesCount = PostsPollVotes::count(['posts_id = ?0', 'group' => 'options_id', 'bind' => [$post->id]]);
+
+            foreach ($votesCount as $row) {
+                /** @var \Phalcon\Mvc\Model\Row $row */
+                $voting[$row->offsetGet('options_id')] = round($row->offsetGet('rowcount') * 100 / $totalVotes, 1);
+            }
+        }
+
+        // Set the post name as title - escaping it first
         $this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
 
-        $this->view->setVar('post', $post);
+        $this->view->setVars([
+            'post'   => $post,
+            'voted'  => $post->isParticipatedInPoll($usersId),
+            'voting' => $voting
+        ]);
     }
 
     /**
@@ -692,7 +706,6 @@ class DiscussionsController extends ControllerBase
      */
     public function historyAction($id = 0)
     {
-
         $this->view->disable();
 
         /**

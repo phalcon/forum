@@ -54,7 +54,11 @@ abstract class Karma
 
     const SOMEONE_DID_VOTE_MY_POST = 5;
 
+    const SOMEONE_DID_VOTE_MY_POLL = 1;
+
     const VOTE_ON_SOMEONE_ELSE_POST = 10;
+
+    const VOTE_ON_SOMEONE_ELSE_POLL = 1;
 
     const VOTE_UP_ON_MY_REPLY_ON_MY_POST = 15;
 

@@ -17,62 +17,53 @@
 
 namespace Phosphorum\Models;
 
-use Phalcon\Db\RawValue;
-use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model;
 
 /**
- * Categories Model
+ * Post's Poll Options Model
  *
- * @property Simple posts
+ * @property Posts post
  *
- * @method static Categories findFirstById(int $categoryId)
- * @method static Categories[] find($parameters = null)
- * @method Simple getPosts($parameters = null)
+ * @method static PostsPollOptions findFirstById(int $id)
+ * @method Posts getPost($parameters = null)
  *
  * @package Phosphorum\Models
  */
-class Categories extends CacheableModel
+class PostsPollOptions extends Model
 {
     public $id;
-
-    public $name;
-
-    public $description;
-
-    public $slug;
-
-    public $number_posts;
-
-    public $no_bounty;
-
-    public $no_digest;
-
-    public function beforeValidation()
-    {
-        if (!$this->no_bounty) {
-            $this->no_bounty = new RawValue('default');
-        }
-
-        if (!$this->no_digest) {
-            $this->no_digest = new RawValue('default');
-        }
-    }
-
-    public function getUrl()
-    {
-        return "category/{$this->id}/{$this->slug}";
-    }
+    public $posts_id;
+    public $title;
 
     public function initialize()
     {
-        $this->hasMany(
-            'id',
+        $this->belongsTo(
+            'posts_id',
             'Phosphorum\Models\Posts',
-            'categories_id',
+            'id',
             [
-                'alias'    => 'posts',
+                'alias' => 'post',
                 'reusable' => true
             ]
         );
+    }
+
+    public function afterSave()
+    {
+        $this->clearCache();
+    }
+
+    public function afterDelete()
+    {
+        $this->clearCache();
+    }
+
+    public function clearCache()
+    {
+        if ($this->id) {
+            $viewCache = $this->getDI()->getShared('viewCache');
+            $viewCache->delete('poll-options-' . $this->posts_id);
+            $viewCache->delete('poll-options-started-' . $this->posts_id);
+        }
     }
 }

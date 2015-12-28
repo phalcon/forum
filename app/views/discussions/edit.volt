@@ -40,6 +40,8 @@
                 </div>
                 <div id="preview-box" style="display:none"></div>
 
+                {% include 'partials/poll-form' with ['post': post]  %}
+
                 <div class="pull-left">
                     {{ link_to('discussion/' ~ post.id ~ '/' ~ post.slug , 'Cancel') }}
                 </div>

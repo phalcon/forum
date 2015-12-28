@@ -73,8 +73,14 @@ $di->set(
             ]
         );
 
-        $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
+        $compiler = $volt->getCompiler();
+
+        $compiler->addFunction('number_format', function ($resolvedArgs) {
             return 'number_format(' . $resolvedArgs . ')';
+        });
+
+        $compiler->addFunction('chr', function ($resolvedArgs) {
+            return 'chr(' . $resolvedArgs . ')';
         });
 
         return $volt;

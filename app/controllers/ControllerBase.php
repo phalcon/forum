@@ -36,6 +36,7 @@ class ControllerBase extends Controller
                 'r.name as name_category',
                 'u.name as name_user'
             ])
+            ->where('p.deleted = 0')
             ->orderBy('p.created_at DESC')
             ->limit(3)
             ->getQuery()

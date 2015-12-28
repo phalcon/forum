@@ -18,25 +18,38 @@
 namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\Behavior\SoftDelete;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
  * Class Posts
  *
- * @property \Phosphorum\Models\Users          user
- * @property \Phosphorum\Models\Categories     category
- * @property \Phosphorum\Models\PostsReplies[] replies
- * @property \Phosphorum\Models\PostsViews[]   views
+ * @property Users user
+ * @property Categories category
+ * @property Simple replies
+ * @property Simple views
+ * @property Simple pollOptions
+ * @property Simple pollVotes
  *
  * @method static Posts findFirstById(int $id)
+ * @method static Posts findFirstByCategoriesId(int $id)
+ * @method static Simple findByCategoriesId(int $id)
  * @method static Posts findFirst($parameters = null)
  * @method static Posts[] find($parameters = null)
- * @method PostsReplies[] getReplies($parameters = null)
  * @method static int countByUsersId(int $userId)
+ * @method int countSubscribers($parameters = null)
+ * @method Simple getReplies($parameters = null)
+ * @method Simple getViews($parameters = null)
+ * @method Simple getPollOptions($parameters = null)
+ * @method Simple getPollVotes($parameters = null)
  *
  * @package Phosphorum\Models
  */
 class Posts extends Model
 {
+    const IS_DELETED = 1;
+
     public $id;
 
     public $users_id;
@@ -100,6 +113,24 @@ class Posts extends Model
 
         $this->hasMany(
             'id',
+            'Phosphorum\Models\PostsPollOptions',
+            'posts_id',
+            [
+                'alias' => 'pollOptions'
+            ]
+        );
+
+        $this->hasMany(
+            'id',
+            'Phosphorum\Models\PostsPollVotes',
+            'posts_id',
+            [
+                'alias' => 'pollVotes'
+            ]
+        );
+
+        $this->hasMany(
+            'id',
             'Phosphorum\Models\PostsReplies',
             'posts_id',
             [
@@ -125,6 +156,24 @@ class Posts extends Model
             ]
         );
 
+        $this->addBehavior(
+            new SoftDelete(
+                [
+                    'field' => 'deleted',
+                    'value' => self::IS_DELETED
+                ]
+            )
+        );
+
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    'beforeCreate' => [
+                        'field' => ['created_at', 'modified_at'],
+                    ]
+                ]
+            )
+        );
     }
 
     public function beforeValidationOnCreate()
@@ -151,9 +200,6 @@ class Posts extends Model
         $postView            = new PostsViews();
         $postView->ipaddress = $this->getDI()->getShared('request')->getClientAddress();
         $this->views         = $postView;
-
-        $this->created_at    = time();
-        $this->modified_at   = time();
     }
 
     public function afterCreate()
@@ -162,7 +208,6 @@ class Posts extends Model
          * Register a new activity
          */
         if ($this->id > 0) {
-
             /**
              * Register the activity
              */
@@ -210,7 +255,6 @@ class Posts extends Model
 
     public function afterSave()
     {
-
         $this->clearCache();
 
         $history           = new PostsHistory();
@@ -401,6 +445,41 @@ class Posts extends Model
     public function hasAcceptedAnswer()
     {
         return 'Y' == $this->accepted_answer;
+    }
+
+    /**
+     * Checks if the Post has a Poll
+     *
+     * @return bool
+     */
+    public function hasPoll()
+    {
+        return $this->getPollOptions()->valid();
+    }
+
+    /**
+     * Checks if User is participated in a Poll
+     *
+     * @param int $userId User ID
+     * @return bool
+     */
+    public function isParticipatedInPoll($userId)
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return $this->getPollVotes(['users_id = :id:', 'bind' => ['id' => $userId]])->valid();
+    }
+
+    /**
+     * Checks if the voting for the poll was started
+     *
+     * @return bool
+     */
+    public function isStartVoting()
+    {
+        return $this->getPollVotes()->count() > 0;
     }
 
     /**

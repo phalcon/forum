@@ -18,6 +18,7 @@
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\Categories;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Tag;
@@ -91,6 +92,28 @@ for ($i = 0; $i <= 500; $i++) {
 
     $categoryRandId      = array_rand($categoryIds);
     $post->categories_id = $categoryIds[$categoryRandId]['id'];
+
+    if (!mt_rand(0, 10)) {
+        $size = mt_rand(2, 10);
+        $options = [];
+        for ($j = 0; $j < $size; $j++) {
+            $options[$j] = $faker->company;
+        }
+
+        foreach ($options as $opt) {
+            $option          = new PostsPollOptions();
+            $option->posts_id = $post->id;
+            $option->title   = htmlspecialchars($opt, ENT_QUOTES);
+
+            if (!$option->save()) {
+                echo join(PHP_EOL, $option->getMessages()), PHP_EOL;
+                $database->rollback();
+                die;
+            }
+
+            $log->info('Option: ' . $option->title);
+        }
+    }
 
     if (!$post->save()) {
         $database->rollback();

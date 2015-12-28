@@ -5,10 +5,12 @@
 
 		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework." name="keyword">
+		<meta content="php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum" name="description">
 
 		{%- if canonical is defined -%}
-		<link rel="canonical" href="{{ config.site.url }}/{{ canonical }}"/>
+		<link rel="canonical" href="{{ config.site.url }}/{{ canonical }}">
 		{%- endif -%}
 
 		{%- if post is defined -%}

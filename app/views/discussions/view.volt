@@ -3,20 +3,18 @@
 {% include 'partials/flash-banner.volt' %}
 
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
-
-{% set tokenKey = security.getTokenKey() %}
-{% set token = security.getToken() %}
+{%- set tokenKey = security.getTokenKey() -%}
+{%- set token = security.getToken() -%}
 
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">
 		<h4>Too many negative votes</h4>
-		<p>This post has too many negative votes. The cause of this could be:
-			<ul>
-				<li>Irrelevant or controversial information</li>
-				<li>confusing question or not a real question</li>
-				<li>Aggressive vocabulary, excessive rudeness, etc.</li>
-			</ul>
-		</p>
+		<p>This post has too many negative votes. The cause of this could be:</p>
+		<ul>
+			<li>Irrelevant or controversial information</li>
+			<li>confusing question or not a real question</li>
+			<li>Aggressive vocabulary, excessive rudeness, etc.</li>
+		</ul>
 	</div>
 {% else %}
 	{%- if post.accepted_answer == 'Y' -%}
@@ -30,17 +28,21 @@
 {%- endif -%}
 
 {%- if post.canHaveBounty() -%}
-{%- set bounty = post.getBounty() -%}
-<div class="bs-callout bs-callout-info">
-	<h4>Bounty available!</h4>
-	{%- if bounty['type'] == "old" -%}
-	<p>It has been a while and this question still does not have any answers.
-		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
-	{%- elseif bounty['type'] == "fast-reply" -%}
-	<p>This post has recently posted.
-		Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer</p>
-	{%- endif -%}
-</div>
+	{%- set bounty = post.getBounty() -%}
+	<div class="bs-callout bs-callout-info">
+		<h4>Bounty available!</h4>
+		{%- if bounty['type'] == "old" -%}
+			<p>
+				It has been a while and this question still does not have any answers.
+				Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer
+			</p>
+		{%- elseif bounty['type'] == "fast-reply" -%}
+			<p>
+				This post has recently posted.
+				Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer
+			</p>
+		{%- endif -%}
+	</div>
 {%- endif -%}
 
 <div class="container">
@@ -50,41 +52,39 @@
 		<li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</li>
 	</ol>
 
-	<p>
-		<div class="row table-title">
-			<div class="col-md-8">
-				<h1 class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative-h1{% endif %}">
-					{{- post.title|e -}}
-				</h1>
-			</div>
-			<div class="col-md-4">
-				<table class="table-stats">
-					<tr>
-						<td>
-							<label>Created</label><br>
-							{{- post.getHumanCreatedAt() -}}
-						</td>
-						<td>
-							<label>Last Reply</label><br>
-							{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
-						</td>
-						<td>
-							<label>Replies</label><br>
-							{{- post.number_replies -}}
-						</td>
-						<td>
-							<label>Views</label><br>
-							{{- post.number_views -}}
-						</td>
-						<td>
-							<label>Votes</label><br>
-							{{- post.votes_up - post.votes_down -}}
-						</td>
-					</tr>
-				</table>
-			</div>
+	<div class="row table-title">
+		<div class="col-md-8">
+			<h1 class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative-h1{% endif %}">
+				{{- post.title|e -}}
+			</h1>
 		</div>
-	</p>
+		<div class="col-md-4">
+			<table class="table-stats">
+				<tr>
+					<td>
+						<label>Created</label><br>
+						{{- post.getHumanCreatedAt() -}}
+					</td>
+					<td>
+						<label>Last Reply</label><br>
+						{{- post.getHumanModifiedAt() ? post.getHumanModifiedAt() : "None" -}}
+					</td>
+					<td>
+						<label>Replies</label><br>
+						{{- post.number_replies -}}
+					</td>
+					<td>
+						<label>Views</label><br>
+						{{- post.number_views -}}
+					</td>
+					<td>
+						<label>Votes</label><br>
+						{{- post.votes_up - post.votes_down -}}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 
 	{%- if moderator == 'Y' -%}
 		<ul class="nav navbar-nav navbar-right">
@@ -114,8 +114,15 @@
 				</div>
 				<div class="post-content">
 					{%- cache "post-body-" ~ post.id -%}
-					{{- markdown.render(post.content|e) -}}
+						{{- markdown.render(post.content|e) -}}
 					{%- endcache -%}
+					{% if post.hasPoll() %}
+						{% if voted %}
+							{% include 'partials/poll-votes' with ['post': post, 'result': voting] %}
+						{% else %}
+							{% include 'partials/poll-options' with ['post': post] %}
+						{% endif %}
+					{% endif %}
 				</div>
 				<div class="posts-buttons" align="right">
 					{%- if post.users_id == currentUser or moderator == 'Y' -%}

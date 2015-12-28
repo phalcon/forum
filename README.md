@@ -43,7 +43,7 @@ Create the composer.json file as follows:
 ```json
 {
     "require": {
-        "phalcon/forum": "dev-master"
+        "phalcon/forum": "^2.0"
     }
 }
 ```

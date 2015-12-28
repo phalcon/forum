@@ -1,4 +1,3 @@
-
 {% include 'partials/top-menu.volt' %}
 
 {{ content() }}

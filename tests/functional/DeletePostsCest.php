@@ -1,7 +1,6 @@
 <?php
 
 use Step\Functional\UserSteps;
-use Phalcon\Tag;
 
 class DeletePostsCest
 {

@@ -177,6 +177,40 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+--
+-- Table structure for table `posts_poll_options`
+--
+
+CREATE TABLE `posts_poll_options` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `posts_id` INT(10) UNSIGNED NOT NULL,
+  `title` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_poll_options_post_id` (`posts_id`),
+  FOREIGN KEY (`posts_id`) REFERENCES `posts` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts_poll_votes`
+--
+
+CREATE TABLE `posts_poll_votes` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `users_id` INT(10) UNSIGNED NOT NULL,
+  `options_id` BIGINT UNSIGNED NOT NULL,
+  `posts_id` INT(10) UNSIGNED NOT NULL,
+  `created_at` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_poll_votes_user_id` (`users_id`),
+  UNIQUE `posts_poll_votes_post_id_user_id` (`posts_id`, `users_id`),
+  FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`options_id`) REFERENCES `posts_poll_options` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`posts_id`) REFERENCES `posts` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 --
 -- Table structure for table `posts_bounties`
 --
@@ -378,19 +412,18 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Struktura tabeli dla tabeli `topic_tracking`
+-- Table structure for table `topic_tracking`
 --
 
-CREATE TABLE IF NOT EXISTS `topic_tracking` (
+DROP TABLE IF EXISTS `topic_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topic_tracking` (
   `user_id` int(11) NOT NULL,
-  `topic_id` text NOT NULL
-) ENGINE=InnoDB;
-
---
--- Indexes for table `topic_tracking`
---
-ALTER TABLE `topic_tracking`
- ADD PRIMARY KEY (`user_id`);
+  `topic_id` text NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users_badges`
