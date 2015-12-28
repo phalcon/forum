@@ -741,16 +741,6 @@ class DiscussionsController extends ControllerBase
         }
     }
 
-    protected function checkTokenGetJson()
-    {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Votes a post up
      *

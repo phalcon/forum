@@ -23,7 +23,9 @@ namespace Phosphorum\Mvc\Controllers;
  * @package Phosphorum\Mvc\Controllers
  *
  * @property \Phalcon\Security $security
- * @property \Phalcon\Flash\Session $flashSession
+ * @property \Phalcon\FlashInterface $flashSession
+ * @property \Phalcon\Session\AdapterInterface $session
+ * @property \Phalcon\Http\RequestInterface $request
  */
 trait TokenTrait
 {
@@ -35,5 +37,15 @@ trait TokenTrait
         }
 
         return true;
+    }
+
+    protected function checkTokenGetJson()
+    {
+        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+
+        return $this->security->checkToken(
+            $csrfKey,
+            $this->request->getQuery($csrfKey, null, 'dummy')
+        );
     }
 }
