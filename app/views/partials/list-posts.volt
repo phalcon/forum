@@ -30,7 +30,7 @@
 		<table class="table table-striped list-discussions" width="90%">
 			<tr>
 				<th> &nbsp; </th>
-				<th width="40%">Topic</th>
+				<th width="38%">Topic</th>
 				<th class="hidden-xs">Users</th>
 				<th class="hidden-xs">Category</th>
 				<th class="hidden-xs">Replies</th>
