@@ -164,14 +164,15 @@ class DiscussionsController extends ControllerBase
             $itemBuilder->offset((int)$offset);
         }
 
+        $order = $order ?: 'new';
         $this->view->setVars([
             'logged'       => $userId,
             'readposts'    => $readposts,
             'posts'        => $itemBuilder->getQuery()->execute($params),
             'totalPosts'   => $totalBuilder->getQuery()->setUniqueRow(true)->execute($params),
-            'currentOrder' => $order ?: 'new',
+            'currentOrder' => $order,
             'offset'       => $offset,
-            'paginatorUri' => 'discussions/' . $order,
+            'paginatorUri' => "discussions/{$order}",
             'canonical'    => ''
         ]);
     }
