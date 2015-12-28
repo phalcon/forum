@@ -61,16 +61,16 @@ class PostsVotes extends Model
         );
 
         $this->addBehavior(
-            new Timestampable(array(
+            new Timestampable([
                 'beforeValidationOnCreate' => ['field' => 'created_at']
-            ))
+            ])
         );
     }
 
     public function afterSave()
     {
         if ($this->id) {
-            $viewCache = $this->getDI()->getViewCache();
+            $viewCache = $this->getDI()->getShared('viewCache');
             $viewCache->delete('post-' . $this->posts_id);
         }
     }

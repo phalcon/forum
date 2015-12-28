@@ -47,7 +47,7 @@ before_script:
   - stty cols 160
 
 after_script:
-  - mysql -e 'DROP DATABASE forum;' -uroot
+  - mysql -e 'DROP DATABASE phosphorum;' -uroot
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --warning-severity=0 --ignore=app/cache app/
