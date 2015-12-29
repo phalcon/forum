@@ -119,8 +119,8 @@
 				</div>
 				<div class="posts-buttons" align="right">
 					{%- if post.users_id == currentUser or moderator == 'Y' -%}
-						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', "class": "btn btn-default btn-xs") }}
-						{{ link_to('delete/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', "class": "btn btn-default btn-xs") }}&nbsp;
+						{{ link_to('edit/discussion/' ~ post.id, '<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit', 'class': 'btn btn-default btn-xs btn-edit-post') }}
+						{{ link_to('delete/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', 'class': 'btn btn-default btn-xs btn-delete-post') }}&nbsp;
 					{%- endif %}
 					{%- if currentUser -%}
 						{% if post.isSubscribed(currentUser) %}

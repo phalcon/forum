@@ -366,7 +366,7 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
-     * This shows the create post form and also store the related post
+     * Deletes the Post
      *
      * @param int $id
      * @return Response|\Phalcon\Http\ResponseInterface
@@ -391,26 +391,27 @@ class DiscussionsController extends ControllerBase
             'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
         ];
 
-        $post = Posts::findFirst($parameters);
-        if (!$post) {
+        if (!$post = Posts::findFirst($parameters)) {
             $this->flashSession->error('The discussion does not exist');
             return $this->response->redirect();
         }
 
+        if ($post->deleted == 'Y') {
+            $this->flashSession->error("The post is already deleted");
+            return $this->response->redirect();
+        }
+
         if ($post->sticked == 'Y') {
-            $this->flashSession->error('The discussion cannot be deleted because it\'s sticked');
+            $this->flashSession->error("The discussion cannot be deleted because it's sticked");
             return $this->response->redirect();
         }
 
         $post->deleted = 1;
         if ($post->save()) {
-
             $usersId = $this->session->get('identity');
             if ($post->users_id != $usersId) {
-
                 /** @var Users $user */
-                $user = Users::findFirstById($usersId);
-                if ($user) {
+                if ($user = Users::findFirstById($usersId)) {
                     if ($user->moderator == 'Y') {
                         $user->increaseKarma(Karma::MODERATE_DELETE_POST);
                         $user->save();
@@ -425,6 +426,9 @@ class DiscussionsController extends ControllerBase
             $this->flashSession->success('Discussion was successfully deleted');
             return $this->response->redirect();
         }
+
+        $this->flashSession->error(join('<br>', $post->getMessages()));
+        return $this->response->redirect();
     }
 
     /**
@@ -996,7 +1000,8 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
-     *
+     * Reload categories
+     * @todo Move to the CategoriesController
      */
     public function reloadCategoriesAction()
     {
@@ -1008,36 +1013,37 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Shows the user profile
+     *
+     * @todo Move to the UsersController
+     * @param $id
+     * @param $username
      */
     public function userAction($id, $username)
     {
-        if ($id) {
-            $user = Users::findFirstById($id);
-        } else {
-            $user = Users::findFirstByLogin($username);
-            if (!$user) {
-                $user = Users::findFirstByName($username);
-            }
+        $user = $id ? Users::findFirstById($id) : Users::findFirstByLogin($username);
+        if (!$user) {
+            $user = Users::findFirstByName($username);
         }
 
         if (!$user) {
             $this->flashSession->error('The user does not exist');
-            return $this->response->redirect();
+            $this->response->redirect();
+            return;
         }
 
-        $this->view->user = $user;
+        $this->view->setVar('user', $user);
 
         $parametersNumberPosts = [
             'users_id = ?0 AND deleted = 0',
             'bind' => [$user->id]
         ];
-        $this->view->numberPosts = Posts::count($parametersNumberPosts);
+        $this->view->setVar('numberPosts', Posts::count($parametersNumberPosts));
 
         $parametersNumberReplies = [
             'users_id = ?0',
             'bind' => [$user->id]
         ];
-        $this->view->numberReplies = PostsReplies::count($parametersNumberReplies);
+        $this->view->setVar('numberReplies', PostsReplies::count($parametersNumberReplies));
 
         $parametersActivities = [
             'users_id = ?0',
@@ -1045,7 +1051,7 @@ class DiscussionsController extends ControllerBase
             'order' => 'created_at DESC',
             'limit' => 15
         ];
-        $this->view->activities = Activities::find($parametersActivities);
+        $this->view->setVar('activities', Activities::find($parametersActivities));
 
         $users   = Users::find(['columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC']);
         $ranking = count($users);
@@ -1056,8 +1062,10 @@ class DiscussionsController extends ControllerBase
             }
         }
 
-        $this->view->ranking       = $ranking;
-        $this->view->total_ranking = count($users);
+        $this->view->setVars([
+            'ranking'       => $ranking,
+            'total_ranking' => count($users),
+        ]);
 
         $this->gravatar->setSize(64);
         $this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
