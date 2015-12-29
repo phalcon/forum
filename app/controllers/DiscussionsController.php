@@ -197,8 +197,8 @@ class DiscussionsController extends ControllerBase
         $readposts = [];
 
         if ($userId = $this->session->get('identity')) {
-            $ur = TopicTracking::findFirst("user_id='".$userId."'");
-            $readposts = explode(',', $ur->topic_id);
+            $ur = TopicTracking::findFirst(['user_id= ?0', 'bind' => [$userId]]);
+            $readposts = $ur ? explode(',', $ur->topic_id) : [];
         }
 
         /**
