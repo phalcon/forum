@@ -62,6 +62,9 @@ class DiscussionsController extends ControllerBase
     /**
      * This method prepares the queries to be executed in each list of posts
      * The returned builders are used as base in the search, tagged list and index lists
+     *
+     * @param bool $joinReply
+     * @return array
      */
     protected function prepareQueries($joinReply = false)
     {
@@ -69,25 +72,25 @@ class DiscussionsController extends ControllerBase
         $itemBuilder = $this
             ->modelsManager
             ->createBuilder()
-            ->from(array('p' => 'Phosphorum\Models\Posts'))
+            ->from(['p' => 'Phosphorum\Models\Posts'])
             ->orderBy('p.sticked DESC, p.created_at DESC');
 
         if ($joinReply) {
             $itemBuilder
-                ->groupBy("p.id")
-                ->join('Phosphorum\Models\PostsReplies', "r.posts_id = p.id", 'r');
+                ->groupBy('p.id')
+                ->join('Phosphorum\Models\PostsReplies', 'r.posts_id = p.id', 'r');
         }
 
         $totalBuilder = clone $itemBuilder;
 
         $itemBuilder
-            ->columns(array('p.*'))
+            ->columns(['p.*'])
             ->limit(self::POSTS_IN_PAGE);
 
         $totalBuilder
             ->columns('COUNT(*) AS count');
 
-        return array($itemBuilder, $totalBuilder);
+        return [$itemBuilder, $totalBuilder];
     }
 
     /**
@@ -128,7 +131,7 @@ class DiscussionsController extends ControllerBase
             case 'my':
                 $this->tag->setTitle('My Discussions');
                 if ($userId) {
-                    $params       = array($userId);
+                    $params       = [$userId];
                     $myConditions = 'p.users_id = ?0';
                     $itemBuilder->where($myConditions);
                     $totalBuilder->where($myConditions);
@@ -145,7 +148,7 @@ class DiscussionsController extends ControllerBase
             case 'answers':
                 $this->tag->setTitle('My Answers');
                 if ($userId) {
-                    $params            = array($userId);
+                    $params            = [$userId];
                     $answersConditions = 'r.users_id = ?0';
                     $itemBuilder->where($answersConditions);
                     $totalBuilder->where($answersConditions);
@@ -197,8 +200,8 @@ class DiscussionsController extends ControllerBase
         $readposts = [];
 
         if ($userId = $this->session->get('identity')) {
-            $ur = TopicTracking::findFirst("user_id='".$userId."'");
-            $readposts = explode(',', $ur->topic_id);
+            $ur = TopicTracking::findFirst(['user_id= ?0', 'bind' => [$userId]]);
+            $readposts = $ur ? explode(',', $ur->topic_id) : [];
         }
 
         /**
@@ -293,7 +296,6 @@ class DiscussionsController extends ControllerBase
      */
     public function editAction($id)
     {
-
         $usersId = $this->session->get('identity');
         if (!$usersId) {
             $this->flashSession->error('You must be logged first');
@@ -303,10 +305,10 @@ class DiscussionsController extends ControllerBase
         /**
          * Find the post using get
          */
-        $parameters = array(
+        $parameters = [
             "id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
-            "bind" => array($id, $usersId, $this->session->get('identity-moderator'))
-        );
+            'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
+        ];
         $post = Posts::findFirst($parameters);
 
         if (!$post) {
@@ -330,7 +332,6 @@ class DiscussionsController extends ControllerBase
 
             $usersId = $this->session->get('identity');
             if ($post->users_id != $usersId) {
-
                 /** @var Users $user */
                 $user = Users::findFirstById($usersId);
                 if ($user) {
@@ -340,7 +341,7 @@ class DiscussionsController extends ControllerBase
             }
 
             if ($post->save()) {
-                return $this->response->redirect('discussion/' . $post->id . '/' . $post->slug);
+                return $this->response->redirect("discussion/{$post->id}/{$post->slug}");
             }
 
             foreach ($post->getMessages() as $message) {
@@ -348,7 +349,6 @@ class DiscussionsController extends ControllerBase
             }
 
         } else {
-
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
             $this->tag->displayTo('content', $post->content);
@@ -357,29 +357,19 @@ class DiscussionsController extends ControllerBase
 
         $this->tag->setTitle('Edit Discussion: ' . $this->escaper->escapeHtml($post->title));
 
-        $parametersCategory = array(
-            'order' => 'name'
-        );
-
-        $this->view->categories = Categories::find($parametersCategory);
-
         $this->gravatar->setSize(48);
-        $this->view->post = $post;
-    }
 
-    protected function checkTokenGet()
-    {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return false;
-        }
-        return true;
+        $this->view->setVars([
+            'categories' => Categories::find(['order' => 'name']),
+            'post'       => $post
+        ]);
     }
 
     /**
      * This shows the create post form and also store the related post
+     *
+     * @param int $id
+     * @return Response|\Phalcon\Http\ResponseInterface
      */
     public function deleteAction($id)
     {
@@ -396,10 +386,10 @@ class DiscussionsController extends ControllerBase
         /**
          * Find the post using get
          */
-        $parameters = array(
+        $parameters = [
             "id = ?0 AND (users_id = ?1 OR 'Y' = ?2)",
-            "bind" => array($id, $usersId, $this->session->get('identity-moderator'))
-        );
+            'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
+        ];
 
         $post = Posts::findFirst($parameters);
         if (!$post) {
@@ -461,10 +451,10 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $subscription = PostsSubscribers::findFirst(array(
+        $subscription = PostsSubscribers::findFirst([
             'posts_id = ?0 AND users_id = ?1',
-            'bind' => array($post->id, $usersId)
-        ));
+            'bind' => [$post->id, $usersId]
+        ]);
         if (!$subscription) {
             $subscription             = new PostsSubscribers();
             $subscription->posts_id   = $post->id;
@@ -502,10 +492,10 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $subscription = PostsSubscribers::findFirst(array(
+        $subscription = PostsSubscribers::findFirst([
             'posts_id = ?0 AND users_id = ?1',
-            'bind' => array($post->id, $usersId)
-        ));
+            'bind' => [$post->id, $usersId]
+        ]);
         if ($subscription) {
             $this->flashSession->notice('You were successfully unsubscribed from this post');
             $subscription->delete();
@@ -713,7 +703,7 @@ class DiscussionsController extends ControllerBase
         $a = explode("\n", $post->content);
 
         $first         = true;
-        $parameters    = array('posts_id = ?0', 'bind' => array($post->id), 'order' => 'created_at DESC');
+        $parameters    = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
 
         /** @var PostsHistory[] $postHistories */
         $postHistories = PostsHistory::find($parameters);
@@ -733,7 +723,7 @@ class DiscussionsController extends ControllerBase
         if (is_object($postHistory)) {
             $b = explode("\n", $postHistory->content);
 
-            $diff     = new \Diff($b, $a, array());
+            $diff     = new \Diff($b, $a, []);
             $renderer = new \Diff_Renderer_Html_SideBySide();
 
             echo $diff->Render($renderer);
@@ -855,10 +845,10 @@ class DiscussionsController extends ControllerBase
         $response = new Response();
 
         if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = array(
+            $csrfTokenError = [
                 'status'  => 'error',
                 'message' => 'Token error. This might be CSRF attack.'
-            );
+            ];
             return $response->setJsonContent($csrfTokenError);
         }
 
@@ -867,35 +857,35 @@ class DiscussionsController extends ControllerBase
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $contentNotExist = array(
+            $contentNotExist = [
                 'status'  => 'error',
                 'message' => 'Post does not exist'
-            );
+            ];
             return $response->setJsonContent($contentNotExist);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentlogIn = array(
+            $contentlogIn = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
-            );
+            ];
             return $response->setJsonContent($contentlogIn);
         }
 
         if ($user->votes <= 0) {
-            $contentDontHave = array(
+            $contentDontHave = [
                 'status'  => 'error',
-                'message' => 'You don\'t have enough votes available'
-            );
+                'message' => "You don't have enough votes available"
+            ];
             return $response->setJsonContent($contentDontHave);
         }
 
-        if (PostsVotes::count(array('posts_id = ?0 AND users_id = ?1', 'bind' => array($post->id, $user->id)))) {
-            $contentAlreadyVote = array(
+        if (PostsVotes::count(['posts_id = ?0 AND users_id = ?1', 'bind' => [$post->id, $user->id]])) {
+            $contentAlreadyVote = [
                 'status'  => 'error',
                 'message' => 'You have already voted this post'
-            );
+            ];
             return $response->setJsonContent($contentAlreadyVote);
         }
 
@@ -915,18 +905,18 @@ class DiscussionsController extends ControllerBase
             $user->votes--;
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
-                    $contentErrorSave = array(
+                    $contentErrorSave = [
                         'status'  => 'error',
                         'message' => $message->getMessage()
-                    );
+                    ];
                     return $response->setJsonContent($contentErrorSave);
                 }
             }
         }
 
-        $contentOk = array(
+        $contentOk = [
             'status' => 'OK'
-        );
+        ];
         return $response->setJsonContent($contentOk);
     }
 
@@ -935,22 +925,21 @@ class DiscussionsController extends ControllerBase
      */
     public function ircAction()
     {
-
-        $parameters = array(
+        $parameters = [
             'order' => 'datelog DESC',
             'limit' => 250
-        );
-        $irclog = IrcLog::find($parameters);
+        ];
+        $ircLog = IrcLog::find($parameters);
 
-        $activities = array();
-        foreach ($irclog as $log) {
+        $activities = [];
+        foreach ($ircLog as $log) {
             $who          = explode('@', $log->who);
             $parts        = explode('!', $who[0]);
             $log->who     = substr($parts[0], 1);
             $activities[] = $log;
         }
 
-        $this->view->activities = array_reverse($activities);
+        $this->view->setVar('activities', array_reverse($activities));
 
         $this->tag->setTitle('Recent Activity on the IRC');
     }
@@ -960,14 +949,15 @@ class DiscussionsController extends ControllerBase
      */
     public function activityAction($offset = 0)
     {
-
-        $this->view->total = Activities::count();
-
-        $parameters             = array(
+        $parameters = [
             'order' => 'created_at DESC',
-            'limit' => array('number' => self::POSTS_IN_PAGE, 'offset' => 0)
-        );
-        $this->view->activities = Activities::find($parameters);
+            'limit' => ['number' => self::POSTS_IN_PAGE, 'offset' => 0]
+        ];
+
+        $this->view->setVars([
+            'total'      => Activities::count(),
+            'activities' => Activities::find($parameters),
+        ]);
 
         $this->tag->setTitle('Recent Activity on the Forum');
     }
@@ -984,9 +974,9 @@ class DiscussionsController extends ControllerBase
 
         $indexer = new Indexer();
 
-        $posts = $indexer->search(array('title' => $q, 'content' => $q), 50, true);
+        $posts = $indexer->search(['title' => $q, 'content' => $q], 50, true);
         if (!count($posts)) {
-            $posts = $indexer->search(array('title' => $q), 50, true);
+            $posts = $indexer->search(['title' => $q], 50, true);
             if (!count($posts)) {
                 $this->flashSession->notice('There are no search results');
                 return $this->response->redirect();
@@ -996,11 +986,13 @@ class DiscussionsController extends ControllerBase
         $paginator = new \stdClass;
         $paginator->count = 0;
 
-        $this->view->posts        = $posts;
-        $this->view->totalPosts   = $paginator;
-        $this->view->currentOrder = null;
-        $this->view->offset       = 0;
-        $this->view->paginatorUri = 'search';
+        $this->view->setVars([
+            'posts'        => $posts,
+            'totalPosts'   => $paginator,
+            'currentOrder' => null,
+            'offset'       => 0,
+            'paginatorUri' => 'search'
+        ]);
     }
 
     /**
@@ -1008,10 +1000,7 @@ class DiscussionsController extends ControllerBase
      */
     public function reloadCategoriesAction()
     {
-        $parameters             = array(
-            'order' => 'number_posts DESC, name'
-        );
-        $this->view->categories = Categories::find($parameters);
+        $this->view->setVar('categories', Categories::find(['order' => 'number_posts DESC, name']));
 
         $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
         $this->view->getCache()->delete('sidebar');
@@ -1038,27 +1027,27 @@ class DiscussionsController extends ControllerBase
 
         $this->view->user = $user;
 
-        $parametersNumberPosts              = array(
+        $parametersNumberPosts = [
             'users_id = ?0 AND deleted = 0',
-            'bind' => array($user->id)
-        );
+            'bind' => [$user->id]
+        ];
         $this->view->numberPosts = Posts::count($parametersNumberPosts);
 
-        $parametersNumberReplies   = array(
+        $parametersNumberReplies = [
             'users_id = ?0',
-            'bind' => array($user->id)
-        );
+            'bind' => [$user->id]
+        ];
         $this->view->numberReplies = PostsReplies::count($parametersNumberReplies);
 
-        $parametersActivities   = array(
+        $parametersActivities = [
             'users_id = ?0',
-            'bind'  => array($user->id),
+            'bind'  => [$user->id],
             'order' => 'created_at DESC',
             'limit' => 15
-        );
+        ];
         $this->view->activities = Activities::find($parametersActivities);
 
-        $users   = Users::find(array('columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC'));
+        $users   = Users::find(['columns' => 'id', 'conditions' => 'karma != 0', 'order' => 'karma DESC']);
         $ranking = count($users);
         foreach ($users as $position => $everyUser) {
             if ($everyUser->id == $user->id) {
@@ -1121,16 +1110,16 @@ class DiscussionsController extends ControllerBase
         $this->view->user      = $user;
         $this->view->timezones = require APP_PATH .'/app/config/timezones.php';
 
-        $parametersNumberPosts   = array(
+        $parametersNumberPosts = [
             'users_id = ?0 AND deleted = 0',
-            'bind' => array($user->id)
-        );
+            'bind' => [$user->id]
+        ];
         $this->view->numberPosts = Posts::count($parametersNumberPosts);
 
-        $parametersNumberReplies   = array(
+        $parametersNumberReplies = [
             'users_id = ?0',
-            'bind' => array($user->id)
-        );
+            'bind' => [$user->id]
+        ];
 
         $this->gravatar->setSize(64);
         $this->view->numberReplies = PostsReplies::count($parametersNumberReplies);
@@ -1155,12 +1144,12 @@ class DiscussionsController extends ControllerBase
 
         $this->view->user = $user;
 
-        $this->view->notifications = ActivityNotifications::find(array(
+        $this->view->notifications = ActivityNotifications::find([
             'users_id = ?0',
-            'bind'  => array($usersId),
+            'bind'  => [$usersId],
             'limit' => 128,
             'order' => 'created_at DESC'
-        ));
+        ]);
 
         $this->tag->setTitle('Notifications');
     }
@@ -1173,14 +1162,12 @@ class DiscussionsController extends ControllerBase
         $response = new Response();
 
         $indexer = new Indexer();
-        $results = $indexer->search(array(
-            'title' => $this->request->getPost('title')
-        ), 5);
+        $results = $indexer->search(['title' => $this->request->getPost('title')], 5);
 
-        $contentOk = array(
+        $contentOk = [
             'status'  => 'OK',
             'results' => $results
-        );
+        ];
         return $response->setJsonContent($contentOk);
     }
 
@@ -1194,18 +1181,21 @@ class DiscussionsController extends ControllerBase
         $post = Posts::findFirstById($this->request->getPost('id'));
         if ($post) {
             $indexer = new Indexer();
-            $posts = $indexer->search(array(
-                'title'    => $post->title,
-                'category' => $post->categories_id
-            ), 5, true);
+            $posts = $indexer->search(
+                [
+                    'title'    => $post->title,
+                    'category' => $post->categories_id
+                ],
+                5,
+                true
+            );
+
             if (count($posts) == 0) {
-                $posts = $indexer->search(array(
-                    'title'    => $post->title
-                ), 5, true);
+                $posts = $indexer->search(['title' => $post->title], 5, true);
             }
-            $this->view->posts = $posts;
+            $this->view->setVar('posts', $posts);
         } else {
-            $this->view->posts = array();
+            $this->view->setVar('posts', []);
         }
     }
 }
