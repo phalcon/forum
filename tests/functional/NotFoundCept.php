@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Codeception\Scenario $scenario
+ * @var Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);

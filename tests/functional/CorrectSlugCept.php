@@ -1,8 +1,7 @@
 <?php
 /**
- * Test for https://github.com/phalcon/forum/issues/87 issue
- *
- * @var \Codeception\Scenario $scenario
+ * @issue 87
+ * @var   Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
@@ -10,18 +9,12 @@ $I = new Step\Functional\UserSteps($scenario);
 $I->wantTo('use illegal characters in title and get correct slug');
 
 $userId = $I->amRegularUser();
-
-$catId = $I->haveCategory([
-    'name' => 'ORM',
-    'slug' => 'orm',
-    'description' => 'ORM related posts'
-]);
-
+$catId  = $I->haveCategory();
 $postId = $I->havePost([
-    'title' => 'model->save() return TRUE when no matching database column',
-    'content' => 'some content',
-    'users_id' => $userId,
-    'categories_id' => $catId
+    'title'         => 'model->save() return TRUE when no matching database column',
+    'users_id'      => $userId,
+    'categories_id' => $catId,
+    'slug'          => false // do not generate slug manually
 ]);
 
 $I->amOnPage('/');

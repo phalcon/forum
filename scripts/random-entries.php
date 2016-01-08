@@ -15,6 +15,13 @@
  +------------------------------------------------------------------------+
 */
 
+use Phosphorum\Models\Users;
+use Phosphorum\Models\Posts;
+use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\Categories;
+use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Tag;
+use Faker\Factory as Faker;
 
 /**
  * This script generates random posts
@@ -22,8 +29,8 @@
 
 require 'cli-bootstrap.php';
 
-$faker = Faker\Factory::create();
-$log   = new Phalcon\Logger\Adapter\Stream('php://stdout');
+$faker = Faker::create();
+$log   = new Stream('php://stdout');
 
 $log->info('Start');
 
@@ -35,54 +42,49 @@ $database->begin();
 for ($i = 0; $i <= 20; $i++) {
     $title = $faker->company;
 
-    $category               = new Phosphorum\Models\Categories();
+    $category               = new Categories();
     $category->name         = $title;
     $category->description  = $faker->sentence;
-    $category->slug         = Phalcon\Tag::friendlyTitle($title);
+    $category->slug         = Tag::friendlyTitle($title);
     $category->number_posts = 0;
     $category->no_bounty    = 'N';
     $category->no_digest    = 'N';
-    $category->description  = $faker->text;
 
     if (!$category->save()) {
-        var_dump($category->getMessages());
         $database->rollback();
-        die;
+        die(join(PHP_EOL, $category->getMessages()));
     }
 
     $log->info('Category: ' . $category->name);
 }
 
 for ($i = 0; $i <= 50; $i++) {
-    $user           = new Phosphorum\Models\Users();
+    $user           = new Users();
     $user->name     = $faker->name;
     $user->login    = $faker->userName;
     $user->email    = $faker->email;
     $user->timezone = $faker->timezone;
 
     if (!$user->save()) {
-        var_dump($user->getMessages());
         $database->rollback();
-        die;
+        die(join(PHP_EOL, $user->getMessages()));
     }
 
     $log->info('User: ' . $user->name);
 }
 $database->commit();
 
-$categoryIds = Phosphorum\Models\Categories::find(['columns' => 'id'])->toArray();
-$userIds     = Phosphorum\Models\Users::find(['columns' => 'id'])->toArray();
+$categoryIds = Categories::find(['columns' => 'id'])->toArray();
+$userIds     = Users::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 500; $i++) {
     $title   = $faker->company;
-    $content = $faker->text();
 
-    $post          = new Phosphorum\Models\Posts();
+    $post          = new Posts();
     $post->title   = $title;
-    $post->slug    = Phalcon\Tag::friendlyTitle($title);
-    $post->content = $content;
-
+    $post->slug    = Tag::friendlyTitle($title);
+    $post->content = $faker->text();
 
     $userRandId     = array_rand($userIds);
     $post->users_id = $userIds[$userRandId]['id'];
@@ -91,20 +93,19 @@ for ($i = 0; $i <= 500; $i++) {
     $post->categories_id = $categoryIds[$categoryRandId]['id'];
 
     if (!$post->save()) {
-        var_dump($post->getMessages());
         $database->rollback();
-        die;
+        die(join(PHP_EOL, $post->getMessages()));
     }
 
     $log->info('Post: ' . $post->title);
 }
 $database->commit();
 
-$postIds = Phosphorum\Models\Posts::find(['columns' => 'id'])->toArray();
+$postIds = Posts::find(['columns' => 'id'])->toArray();
 
 $database->begin();
 for ($i = 0; $i <= 1000; $i++) {
-    $reply = new \Phosphorum\Models\PostsReplies();
+    $reply = new PostsReplies();
 
     $reply->content = $faker->paragraph();
 
@@ -115,9 +116,8 @@ for ($i = 0; $i <= 1000; $i++) {
     $reply->users_id = $userIds[$userRandId]['id'];
 
     if (!$reply->save()) {
-        var_dump($reply->getMessages());
         $database->rollback();
-        die;
+        die(join(PHP_EOL, $reply->getMessages()));
     }
 
     $reply->post->number_replies++;

@@ -1,23 +1,17 @@
 <?php
 /**
- * @var \Codeception\Scenario $scenario
+ * @var Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
 
 $I->wantTo('reply in a discussion');
-$userId = $I->amRegularUser();
-$catId = $I->haveCategory([
-    'name' => 'Testing',
-    'slug' => 'test',
-    'description' => 'codeception functional test'
-]);
 
+$userId = $I->amRegularUser();
+$catId  = $I->haveCategory();
 $postId = $I->havePost([
-    'title' => 'Please help with testing',
-    'content' => 'How can I install Codeception',
-    'users_id' => $userId,
-    'slug' => 'please-help-with-testing',
+    'title'         => 'Please help with testing',
+    'users_id'      => $userId,
     'categories_id' => $catId
 ]);
 

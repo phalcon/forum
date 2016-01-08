@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Codeception\Scenario $scenario
+ * @var Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
@@ -8,18 +8,12 @@ $I = new Step\Functional\UserSteps($scenario);
 $I->wantTo('use the mention name as a link');
 
 $userId = $I->amRegularUser();
-
-$catId = $I->haveCategory([
-    'name' => 'Routing',
-    'slug' => 'routing',
-    'description' => 'Routing questions'
-]);
-
+$catId  = $I->haveCategory();
 $postId = $I->havePost([
-    'title' => 'Router Phalcon',
-    'content' => 'I have a question I could not find anywhere, and I ask @123456789, @12er45t and @iregular help. Let me test: @%, @&abcd and xxx@xxx',
-    'users_id' => $userId,
-    'slug' => 'router-phalcon',
+    'title'         => 'Router Phalcon',
+    'content'       => 'I have a question I could not find anywhere, and I ask @123456789, ' .
+                       '@12er45t and @iregular help. Let me test: @%, @&abcd and xxx@xxx',
+    'users_id'      => $userId,
     'categories_id' => $catId
 ]);
 
