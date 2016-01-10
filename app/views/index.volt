@@ -13,7 +13,7 @@
 
 		{%- if post is defined -%}
 		<link rel="author" href="https://github.com/{{ post.user.login }}">
-		<link rel="publisher" href="http://{{ config.site.url }}/">
+		<link rel="publisher" href="{{ config.site.url }}/">
 		{%- endif -%}
 
 		{%- if canonical is defined -%}
