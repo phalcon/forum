@@ -93,6 +93,11 @@ for ($i = 0; $i <= 500; $i++) {
     $categoryRandId      = array_rand($categoryIds);
     $post->categories_id = $categoryIds[$categoryRandId]['id'];
 
+    if (!$post->save()) {
+        $database->rollback();
+        die(join(PHP_EOL, $post->getMessages()));
+    }
+
     if (!mt_rand(0, 10)) {
         $size = mt_rand(2, 10);
         $options = [];
@@ -113,11 +118,6 @@ for ($i = 0; $i <= 500; $i++) {
 
             $log->info('Option: ' . $option->title);
         }
-    }
-
-    if (!$post->save()) {
-        $database->rollback();
-        die(join(PHP_EOL, $post->getMessages()));
     }
 
     $log->info('Post: ' . $post->title);
