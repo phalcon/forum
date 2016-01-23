@@ -338,7 +338,7 @@ class DiscussionsController extends ControllerBase
             $post->content       = $content;
             $post->edited_at     = time();
 
-            if ($post->hasPoll() && !$post->isStartVoting()) {
+            if (!$post->hasPoll() || !$post->isStartVoting()) {
                 foreach ($post->getPollOptions() as $option) {
                     $option->delete();
                 }

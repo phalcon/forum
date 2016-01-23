@@ -22,7 +22,7 @@ class ControllerBase extends Controller
 {
     public function onConstruct()
     {
-        $last_threads = $this
+        $lastThreads = $this
             ->modelsManager
             ->createBuilder()
             ->from(['p' => 'Phosphorum\Models\Posts'])
@@ -52,7 +52,7 @@ class ControllerBase extends Controller
 
         $this->view->setVars([
             'threads'      => Posts::count(),
-            'last_threads' => $last_threads,
+            'last_threads' => $lastThreads,
             'users'        => Users::count(),
             'users_latest' => $login,
             'actionName'   => $this->dispatcher->getActionName(),

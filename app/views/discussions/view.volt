@@ -120,7 +120,7 @@
 						{% if voted %}
 							{% include 'partials/poll-votes' with ['post': post, 'result': voting] %}
 						{% else %}
-							{% include 'partials/poll-options' with ['post': post] %}
+							{% include 'partials/poll-options' with ['post': post, 'currentUser': currentUser] %}
 						{% endif %}
 					{% endif %}
 				</div>
