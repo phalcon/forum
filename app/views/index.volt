@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		{% set url = url(), version = '2.1.1', theme = session.get('identity-theme') %}
-
-		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
+		{%- set url = url(), version = '2.1.2', theme = session.get('identity-theme') -%}
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
+
 		<meta content="php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum" name="keyword">
 		<meta content="Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework." name="description">
 
