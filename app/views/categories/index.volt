@@ -21,7 +21,7 @@
                             {%- if logged -%}
                                 {% set not_read_category = not_read[category.id] %}
 
-                                {%- if not_read_category.numRows() > 0 -%}
+                                {%- if not_read_category > 0 -%}
                                     {{ image("icon/new_some.png", "class": "img-rounded") }}
                                 {%- else -%}
                                     {{ image("icon/new_none.png", "class": "img-rounded") }}

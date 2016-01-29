@@ -43,12 +43,12 @@
 
                         <div class="form-group">
                             <label>Title</label>
-                            {{ text_field("title", "placeholder": "Title", "class": "form-control") }}
+                            {{ text_field("title", "placeholder": "Title", "class": "form-control", "required": "required") }}
                         </div>
 
                         <div class="form-group">
                             <label>Category</label>
-                            {{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...', "class": "form-control") }}
+                            {{ select("categoryId", categories, 'using': ['id', 'name'], 'useEmpty': true, 'emptyText': 'Choose a category...', "class": "form-control", "required": "required") }}
                         </div>
 
                         <div class="form-group">
@@ -67,6 +67,8 @@
 
                             <div id="preview-box" style="display:none"></div>
                         </div>
+
+                        {% include 'partials/poll-form.volt' %}
 
                         <div class="pull-left">
                             {{ link_to('', 'Back to discussions') }}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Codeception\Scenario $scenario
+ * @var Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
@@ -8,7 +8,7 @@ $I = new Step\Functional\UserSteps($scenario);
 $I->wantTo('start a discussion');
 
 $I->amRegularUser();
-$I->haveCategory(['name' => 'Testing', 'slug' => 'test', 'description' => 'codeception functional test']);
+$I->haveCategory(['name' => 'Testing']);
 $I->amOnPage('/');
 $I->see('Start a Discussion');
 $I->click('Start a Discussion');

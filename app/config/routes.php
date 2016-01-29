@@ -212,6 +212,14 @@ $router->add(
 );
 
 $router->add(
+    '/poll/vote/{id:[0-9]+}/{option:[0-9]+}',
+    [
+        'controller' => 'polls',
+        'action'     => 'vote'
+    ]
+);
+
+$router->add(
     '/discussion/vote-down/{id:[0-9]+}',
     [
        'controller' => 'discussions',

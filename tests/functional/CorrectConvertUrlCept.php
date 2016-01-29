@@ -1,8 +1,7 @@
 <?php
 /**
- * Test for https://github.com/phalcon/forum/issues/85 issue
- *
- * @var \Codeception\Scenario $scenario
+ * @issue 85
+ * @var   Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
@@ -10,18 +9,12 @@ $I = new Step\Functional\UserSteps($scenario);
 $I->wantTo('use underscored character in content and see correct url');
 
 $userId = $I->amRegularUser();
-
-$catId = $I->haveCategory([
-    'name' => 'Installation',
-    'slug' => 'installation',
-    'description' => 'Installation related posts'
-]);
-
+$catId  = $I->haveCategory();
 $postId = $I->havePost([
-    'title' => 'Is there a precompiled binary for 64 bit Centos out there',
-    'content' => '[this reddit topic](http://www.reddit.com/r/PHP/comments/2s7bbr/phalconphp_vs_php_disappointing_results/)',
-    'users_id' => $userId,
-    'slug' => 'is-there-a-precompiled-binary-for-64-bit-centos-out-there',
+    'title'         => 'Is there a precompiled binary for 64 bit Centos out there',
+    'content'       => '[this reddit topic](http://www.reddit.com/r/PHP/comments/2s7bbr/phalconphp_vs_php_disappointing_results/)',
+    'users_id'      => $userId,
+    'slug'          => 'is-there-a-precompiled-binary-for-64-bit-centos-out-there',
     'categories_id' => $catId
 ]);
 

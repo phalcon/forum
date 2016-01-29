@@ -494,3 +494,32 @@ div#sticky-progress {
     margin-right: auto;
     float:none;
 }
+
+.user-poll-section {
+    height: 5px;
+}
+
+.poll-idx {
+    width: 1em;
+    display: inline-block;
+}
+
+.post-option-header {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    box-shadow: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 15px;
+    position: relative;
+}
+
+.post-option-body {
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    margin: -1px 0 0;
+    background-color: #f7f7f9;
+    padding: 34px 14px 9px;
+    color: #333;
+}

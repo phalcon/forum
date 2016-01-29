@@ -200,14 +200,228 @@ var Forum = {
 	},
 
 	/**
+	 * Delete Option from the Poll
+	 * @param event
+     */
+	delOption: function(event)
+	{
+		event.preventDefault();
+
+		var optionsCount = $('#options-box input[type=text]').length;
+
+		$(this).closest('div.form-group').remove();
+		optionsCount--;
+
+		if (optionsCount < 10) {
+			$('a.add-poll-option').removeClass('disabled');
+		}
+	},
+
+	removePoll: function()
+	{
+		var button     = $(this),
+			optionsBox = $('#options-box');
+
+		optionsBox.html('');
+		optionsBox.removeClass('post-option-body');
+
+		button.removeClass('btn-danger');
+		button.addClass('btn-primary');
+		button.text('Attach a poll');
+		button.attr('id', 'create-poll');
+		button.on('click', Forum.addPoll)
+	},
+
+	addPoll: function()
+	{
+		var button       = $(this),
+			optionsCount = $('#options-box input[type=text]').length,
+			form         = button.parents('form');
+
+		optionsCount++;
+
+		var optionsBox = $('#options-box');
+		var nextId     = 'option' + optionsCount;
+		var formGroup  = Forum.createFormGroup();
+
+		var label = document.createElement('LABEL');
+		label.className   = 'col-sm-2 control-label';
+		label.textContent = 'Name';
+		label.htmlFor     = nextId;
+
+		formGroup.appendChild(label);
+
+		var inputGroup = document.createElement('DIV');
+		inputGroup.className = 'col-sm-10';
+
+		var input = Forum.createInput(nextId);
+
+		inputGroup.appendChild(input);
+		formGroup.appendChild(inputGroup);
+
+		optionsBox.append(formGroup);
+
+		var formGroup2 = formGroup.cloneNode(true);
+		optionsBox.append(formGroup2);
+
+		var formGroup3 = Forum.createFormGroup();
+
+		var addOption  = document.createElement('A');
+		addOption.textContent = '+ Add option';
+		addOption.href        = '#';
+		addOption.className   = 'btn btn-sm btn-primary add-poll-option';
+		addOption.onclick     = Forum.addOption;
+
+		formGroup3.appendChild(addOption);
+		optionsBox.append(formGroup3);
+
+		optionsBox.addClass('post-option-body');
+
+		button.removeClass('btn-primary');
+		button.addClass('btn-danger');
+		button.text('Remove poll');
+		button.attr('id', 'remove-poll');
+		button.on('click', Forum.removePoll)
+	},
+
+	createFormGroup: function()
+	{
+		var formGroup  = document.createElement('DIV');
+		formGroup.className = 'form-group';
+		formGroup.style = "min-height: 34px";
+
+		return formGroup;
+	},
+
+	createInput: function(id)
+	{
+		var input = document.createElement('input');
+		input.className = 'form-control';
+
+		if (input.placeholder != 'undefined') {
+			input.placeholder = 'Enter an option here';
+		}
+
+		input.name = "pollOptions[]";
+		input.id   = id;
+		input.type = 'text';
+		input.setAttribute('maxLength', '64');
+		input.setAttribute('required', 'required');
+
+		return input;
+	},
+
+	/**
+	 * Add Option to the Poll
+	 * @param event
+     */
+	addOption: function(event)
+	{
+		event.preventDefault();
+
+		var optionsCount = $('#options-box input[type=text]').length,
+			addOptionBtn = $('a.add-poll-option'),
+			element      = $(this);
+
+		if (element.length && optionsCount < 10) {
+			optionsCount++;
+
+			var nextId    = 'option' + optionsCount;
+			var formGroup = Forum.createFormGroup()
+
+			var label = document.createElement('LABEL');
+			label.className = 'col-sm-2 control-label';
+			label.textContent = 'Name';
+			label.htmlFor = nextId;
+
+			formGroup.appendChild(label);
+
+			var inputGroup = document.createElement('DIV');
+			inputGroup.className = 'col-sm-9';
+
+			var input = Forum.createInput(nextId);
+
+			inputGroup.appendChild(input);
+			formGroup.appendChild(inputGroup);
+
+			var removeGroup = document.createElement('DIV');
+			removeGroup.className = 'col-sm-1';
+
+			var removeBtn = document.createElement('A');
+			removeBtn.title = 'Delete option';
+			removeBtn.href = '#';
+			removeBtn.className = 'del-poll-option';
+			removeBtn.onclick = Forum.delOption;
+
+			var removeSpn = document.createElement('SPAN');
+			removeSpn.className = 'glyphicon glyphicon-remove-circle';
+
+			removeBtn.appendChild(removeSpn);
+			removeGroup.appendChild(removeBtn);
+			formGroup.appendChild(removeGroup);
+
+			addOptionBtn.before($(formGroup));
+
+			if (optionsCount >= 10) {
+				addOptionBtn.addClass('disabled');
+			}
+		}
+	},
+
+	/**
+	 * Vote for the Poll
+     */
+	votePoll: function()
+	{
+		var pollOption = $("input:radio[name ='pollOption']:checked"),
+			element    = $(this);
+
+		if (element.length && pollOption.length) {
+			var csrf = {},
+				tokenInput = $('#csrf-token');
+
+			csrf[tokenInput.attr('name')] = tokenInput.attr('value');
+
+			$.ajax({
+				dataType: 'json',
+				url: Forum._uri + 'poll/vote/' + element.data('id') + '/' + pollOption.data('id'),
+				data: csrf
+			}).done(function(response){
+				if (response.status == "error") {
+					$('#errorModal .modal-body').html(response.message);
+					$('#errorModal').modal('show');
+				} else {
+					window.location.reload(true);
+				}
+			});
+		} else {
+			console.error('Cannot trigger event');
+		}
+	},
+
+	/**
+	 * Reflect the Vote button
+	 * @param event
+     */
+	reflectVoteButton: function(event)
+	{
+		var element = $(event.data.element);
+		if (element.length) {
+			$('a.vote-poll').removeClass('disabled');
+		}
+	},
+
+	/**
 	 * Vote a post up
 	 */
 	votePostDown: function(event)
 	{
 		var element = $(event.data.element);
 		if (element.length) {
-			var csrf = {}
-			csrf[$('#csrf-token').attr('name')] = $('#csrf-token').attr('value')
+			var csrf = {},
+				tokenInput = $('#csrf-token');
+
+			csrf[tokenInput.attr('name')] = tokenInput.attr('value');
 			$.ajax({
 				dataType: 'json',
 				url: Forum._uri + 'discussion/vote-down/' + element.data('id'),
@@ -464,8 +678,19 @@ var Forum = {
 			$(element).bind('click', {element: element}, Forum.votePostUp);
 		});
 
+		$('#create-poll').on('click', Forum.addPoll);
+		$('#remove-poll').on('click', Forum.removePoll);
+		$('a.add-poll-option').on('click', Forum.addOption);
+		$('a.del-poll-option').on('click', Forum.delOption);
+
 		$('a.vote-post-down').each(function(position, element) {
 			$(element).bind('click', {element: element}, Forum.votePostDown);
+		});
+
+		$('a.vote-poll').on('click', Forum.votePoll);
+
+		$('input.pollOption').each(function(position, element) {
+			$(element).bind('change', {element: element}, Forum.reflectVoteButton);
 		});
 
 		$('a.vote-reply-up').each(function(position, element) {

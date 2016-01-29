@@ -17,8 +17,8 @@
 
 namespace Phosphorum\Controllers;
 
+use Phalcon\Db\Column;
 use Phosphorum\Models\Categories;
-use Phosphorum\Models\Posts;
 use Phosphorum\Models\TopicTracking;
 
 /**
@@ -41,18 +41,37 @@ class CategoriesController extends ControllerBase
         $notRead          = [];
         $postsPerCategory = [];
 
+        $statement = $this->db->prepare(
+            "
+                SELECT * FROM posts p
+                JOIN topic_tracking tt ON tt.topic_id
+                WHERE CONCAT(p.id) AND NOT(FIND_IN_SET(p.id, tt.topic_id))
+                  AND p.categories_id = :cid AND tt.user_id = :uid
+            "
+        );
+
         foreach ($categories as $category) {
-            /** @var \Phalcon\Mvc\Model\Resultset\Simple $posts */
-            $posts = Posts::find("categories_id=".$category->id);
+            $posts = $category->getPosts();
             $postsPerCategory[$category->id] = $posts->count();
             if ($posts->count()) {
                 $lastAuthor[$category->id] = $this
                     ->modelsManager
                     ->createBuilder()
                     ->from(['p' => 'Phosphorum\Models\Posts'])
-                    ->where('p.categories_id = "'.$category->id.'"')
-                    ->join('Phosphorum\Models\Users', "u.id = p.users_id", 'u')
-                    ->columns(['p.users_id as users_id','u.name as name_user','p.title as post1_title','p.slug as post1_slug','p.id as post1_id'])
+                    ->where(
+                        'p.categories_id = :cat_id: AND p.deleted = 0',
+                        ['cat_id' => $category->id],
+                        ['cat_id' => Column::BIND_PARAM_INT]
+                    )
+                    ->join('Phosphorum\Models\Users', 'u.id = p.users_id', 'u')
+                    ->columns([
+                        'p.users_id as users_id',
+                        'u.name as name_user',
+                        'p.title as post1_title',
+                        'p.slug as post1_slug',
+                        'p.id as post1_id'
+                    ])
+
                     ->orderBy('p.id DESC')
                     ->limit(1)
                     ->getQuery()
@@ -62,16 +81,11 @@ class CategoriesController extends ControllerBase
                 $lastAuthor[$category->id] = 0;
             }
 
-            // SQL
-            $sql[$category->id] = "
-                SELECT *
-                FROM `posts` `p`
-                JOIN `topic_tracking` `tt` ON `tt`.`topic_id`
-                WHERE CONCAT(`p`.`id`)
-                  AND NOT(FIND_IN_SET(`p`.`id`, `tt`.`topic_id`))
-                  AND `p`.`categories_id` = '{$category->id}' AND `tt`.`user_id` = '{$userId}';
-            ";
-            $notRead[$category->id] = $this->db->query($sql[$category->id]);
+            $notRead[$category->id] = $this->db->executePrepared(
+                $statement,
+                ['cid' => $category->id, 'uid' => $userId],
+                ['cid' => Column::BIND_PARAM_INT, 'uid'=> Column::BIND_PARAM_INT]
+            )->rowCount();
         }
 
         if ($userId) {

@@ -22,7 +22,7 @@ class ControllerBase extends Controller
 {
     public function onConstruct()
     {
-        $last_threads = $this
+        $lastThreads = $this
             ->modelsManager
             ->createBuilder()
             ->from(['p' => 'Phosphorum\Models\Posts'])
@@ -36,6 +36,7 @@ class ControllerBase extends Controller
                 'r.name as name_category',
                 'u.name as name_user'
             ])
+            ->where('p.deleted = 0')
             ->orderBy('p.created_at DESC')
             ->limit(3)
             ->getQuery()
@@ -51,7 +52,7 @@ class ControllerBase extends Controller
 
         $this->view->setVars([
             'threads'      => Posts::count(),
-            'last_threads' => $last_threads,
+            'last_threads' => $lastThreads,
             'users'        => Users::count(),
             'users_latest' => $login,
             'actionName'   => $this->dispatcher->getActionName(),

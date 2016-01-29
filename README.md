@@ -43,7 +43,7 @@ Create the composer.json file as follows:
 ```json
 {
     "require": {
-        "phalcon/forum": "dev-master"
+        "phalcon/forum": "^2.0"
     }
 }
 ```
@@ -58,7 +58,7 @@ Then you'll need to create the database and initialize schema:
 
 ```sh
 $ echo 'CREATE DATABASE forum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-$ cat schemas/forum.sql | mysql -u root forum
+$ cat schemas/forum.sql | mysql -u root phosphorum
 ```
 
 #### Initial Test Data

@@ -13,3 +13,4 @@ modules:
         - Filesystem
         - Phalcon2:
             bootstrap: 'tests/config/bootstrap.php'
+            cleanup: true

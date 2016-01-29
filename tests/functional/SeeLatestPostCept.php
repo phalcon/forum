@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Codeception\Scenario $scenario
+ * @var Codeception\Scenario $scenario
  */
 
 $I = new Step\Functional\UserSteps($scenario);
@@ -8,18 +8,11 @@ $I = new Step\Functional\UserSteps($scenario);
 $I->wantTo('see latest post on front page at top of table');
 
 $userId = $I->amRegularUser();
-
-$catId = $I->haveCategory([
-    'name' => 'Database',
-    'slug' => 'database',
-    'description' => 'Database questions'
-]);
-
+$catId  = $I->haveCategory();
 $postId = $I->havePost([
-    'title' => 'Binding Parameters',
-    'content' => 'This may be a little bit of a noob question but here goes.',
-    'users_id' => $userId,
-    'slug' => 'binding-parameters',
+    'title'         => 'Binding Parameters',
+    'content'       => 'This may be a little bit of a noob question but here goes.',
+    'users_id'      => $userId,
     'categories_id' => $catId
 ]);
 

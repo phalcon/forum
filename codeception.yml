@@ -35,9 +35,5 @@ modules:
             user: ''
             password: ''
             dump: tests/_data/dump.sql
-        Phalcon1:
-            bootstrap: tests/config/bootstrap.php
-            cleanup: true
-            savepoints: true
 
 error_level: "E_ALL | E_STRICT"
