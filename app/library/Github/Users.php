@@ -18,13 +18,14 @@
 namespace Phosphorum\Github;
 
 use Guzzle\Http\Client as HttpClient;
+use Phalcon\Di\Injectable;
 
 /**
  * Class Users
  *
  * @package Phosphorum\Github
  */
-class Users
+class Users extends Injectable
 {
 
     protected $endPoint = 'https://api.github.com';
@@ -32,6 +33,8 @@ class Users
     protected $accessToken;
 
     protected $response;
+
+    protected $logger;
 
     /**
      * Users constructor
@@ -41,7 +44,8 @@ class Users
     public function __construct($accessToken)
     {
         $this->accessToken = $accessToken;
-        $this->response   = $this->request('/user');
+        $this->logger      = $this->getDI()->get('logger', ['auth']);
+        $this->response    = $this->request('/user');
     }
 
     /**
@@ -58,6 +62,7 @@ class Users
                 true
             );
         } catch (\Exception $e) {
+            $this->logger->error("Invalid GitHub response for token: {$this->accessToken}. " . $e->getMessage());
             return null;
         }
     }
