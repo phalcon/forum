@@ -22,14 +22,20 @@ defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[ 0 ]);
 
 return new Config([
     'site' => [
-        'name'     => 'Phalcon Framework',
-        'url'      => 'http://pforum.loc.com',
+        'name'        => 'Phalcon Framework',
+        'url'         => 'http://pforum.loc.com',
         'description' => 'Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework.',
-        'keywords' => 'php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum',
-        'project'  => 'Phalcon',
-        'software' => 'Phosphorum',
-        'repo'     => 'https://github.com/phalcon/cphalcon/issues',
-        'docs'     => 'https://github.com/phalcon/docs',
+        'keywords'    => 'php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum',
+        'project'     => 'Phalcon',
+        'software'    => 'Phosphorum',
+        'repo'        => 'https://github.com/phalcon/cphalcon/issues',
+        'docs'        => 'https://github.com/phalcon/docs',
+    ],
+
+    'theme' => [
+        'use_topics_icon'     => true,
+        'inactive_topic_icon' => '/icon/new_none.png',
+        'active_topic_icon'   => '/icon/new_some.png',
     ],
 
     'database' => [

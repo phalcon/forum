@@ -41,14 +41,16 @@
 		{%- for post in posts -%}
 			<tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% else %}post-positive{% endif %}">
 				<td>
-					{%- if logged != '' -%}
-						{%- if readposts[post.id] is defined -%}
-							{{ image('/icon/new_none.png', 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+					{%  if config.theme.use_topics_icon %}
+						{%- if logged != '' -%}
+							{%- if readposts[post.id] is defined -%}
+								{{ image(config.theme.inactive_topic_icon, 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+							{%- else -%}
+								{{ image(config.theme.active_topic_icon, 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+							{%- endif -%}
 						{%- else -%}
-							{{ image('/icon/new_some.png', 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+						 {{ image(config.theme.inactive_topic_icon, "width": "24", "height": "24", "class": "img-rounded") }}
 						{%- endif -%}
-					{%- else -%}
-					 {{ image("icon/new_none.png", "width": "24", "height": "24", "class": "img-rounded") }}
 					{%- endif -%}
 				</td>
 				<td align="left">
