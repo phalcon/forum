@@ -261,12 +261,9 @@ $di->set(
 $di->set(
     'viewCache',
     function () use ($config) {
-
         if ($config->application->debug) {
-
             $frontCache = new FrontendNone();
             return new MemoryBackend($frontCache);
-
         } else {
             //Cache data for one day by default
             $frontCache = new FrontendOutput(["lifetime" => 86400 * 30]);
