@@ -7,8 +7,8 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
 
-		<meta content="php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum" name="keyword">
-		<meta content="Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework." name="description">
+		<meta content="{{ config.site.keywords }}" name="keyword">
+		<meta content="{{ config.site.description }}" name="description">
 
 		{%- if canonical is defined -%}
 		<link rel="canonical" href="{{ config.site.url }}/{{ canonical }}">

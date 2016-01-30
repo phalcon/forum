@@ -24,6 +24,8 @@ return new Config([
     'site' => [
         'name'     => 'Phalcon Framework',
         'url'      => 'http://pforum.loc.com',
+        'description' => 'Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework.',
+        'keywords' => 'php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum',
         'project'  => 'Phalcon',
         'software' => 'Phosphorum',
         'repo'     => 'https://github.com/phalcon/cphalcon/issues',
