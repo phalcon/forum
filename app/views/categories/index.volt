@@ -18,16 +18,18 @@
                 {%- for category in categories -%}
                     <tr>
                         <td>
-                            {%- if logged -%}
-                                {% set not_read_category = not_read[category.id] %}
+                            {%  if config.theme.use_topics_icon %}
+                                {%- if logged -%}
+                                    {% set not_read_category = not_read[category.id] %}
 
-                                {%- if not_read_category > 0 -%}
-                                    {{ image("icon/new_some.png", "class": "img-rounded") }}
+                                    {%- if not_read_category > 0 -%}
+                                        {{ image(config.theme.active_topic_icon, "class": "img-rounded") }}
+                                    {%- else -%}
+                                        {{ image(config.theme.inactive_topic_icon, "class": "img-rounded") }}
+                                    {%- endif -%}
                                 {%- else -%}
-                                    {{ image("icon/new_none.png", "class": "img-rounded") }}
+                                    {{ image(config.theme.inactive_topic_icon, "class": "img-rounded") }}
                                 {%- endif -%}
-                            {%- else -%}
-                                {{ image("icon/new_none.png", "class": "img-rounded") }}
                             {%- endif -%}
                         </td>
                         <td>
