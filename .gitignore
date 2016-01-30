@@ -12,8 +12,8 @@ vendor/
 composer.lock
 composer.phar
 app/config/config.php
+app/config/nginx.conf
 app/config/backup.app
 app/config/backup.auth
-tests/_support/_generated/*.php
 selenium-server-standalone-*.jar
 chromedriver
