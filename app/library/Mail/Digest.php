@@ -46,7 +46,7 @@ class Digest extends Injectable
 
         $parameters = array(
             'modified_at >= ?0 AND digest = "Y" AND notifications <> "N"',
-            'bind'  => array($lastMonths->getTimestamp())
+            'bind'  => [$lastMonths->getTimestamp()]
         );
 
         $users = [];
@@ -122,7 +122,7 @@ class Digest extends Injectable
 
         $content = $view->render('mail/digest.phtml');
 
-        $textContent = preg_replace('#<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>#', '$2:' . "\n" . '$1', $content);;
+        $textContent = preg_replace('#<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>#', '$2:' . "\n" . '$1', $content);
         $textContent = str_replace('<span class="foot-line"></span>', "--\n", $textContent);
         $textContent = trim(strip_tags($textContent));
         $textContent = str_replace('&nbsp;', ' ', $textContent);
@@ -166,6 +166,7 @@ class Digest extends Injectable
                 $logger->info("Sent an email to {$email}");
             } catch (\Exception $e) {
                 $logger->error($e->getMessage());
+                throw new \Exception($e->getMessage(), $e->getCode(), $e);
             }
         }
     }
