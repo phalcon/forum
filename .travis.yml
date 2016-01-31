@@ -16,19 +16,20 @@ cache:
 sudo: false
 
 env:
-  - PHALCON_VERSION="2.0.9"
-  - PHALCON_VERSION="2.0.8"
-  - PHALCON_VERSION="2.0.7"
-  - PHALCON_VERSION="2.0.6"
-  - PHALCON_VERSION="2.0.5"
-  - PHALCON_VERSION="2.0.4"
+  - PHALCON_VERSION="2.1.x"
+  - PHALCON_VERSION="phalcon-v2.0.9"
+  - PHALCON_VERSION="phalcon-v2.0.8"
+  - PHALCON_VERSION="phalcon-v2.0.7"
+  - PHALCON_VERSION="phalcon-v2.0.6"
+  - PHALCON_VERSION="phalcon-v2.0.5"
+  - PHALCON_VERSION="phalcon-v2.0.4"
 
 install:
   - wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar
   - phpenv config-rm xdebug.ini
   - travis_retry composer self-update -q
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b phalcon-v${PHALCON_VERSION}
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
   - travis_retry composer install --prefer-dist --no-interaction

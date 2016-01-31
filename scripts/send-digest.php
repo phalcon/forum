@@ -21,21 +21,10 @@
 require 'cli-bootstrap.php';
 
 use Phosphorum\Mail\Digest;
-use Phalcon\DI\Injectable;
-
-class SendDigest extends Injectable
-{
-
-    public function run()
-    {
-        $digest = new Digest();
-        $digest->send();
-    }
-}
 
 try {
-    $task = new SendDigest($config);
-    $task->run();
+    $digest = new Digest();
+    $digest->send();
 } catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;
     echo $e->getTraceAsString();

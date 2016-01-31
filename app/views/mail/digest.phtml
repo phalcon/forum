@@ -1,0 +1,84 @@
+<?php
+/**
+ * @var $this \Phalcon\Mvc\View\Engine\Php
+ * @var $title string
+ * @var $stories array
+ * @var $notice string
+ */
+
+echo $this->tag->getDocType();
+?>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+        <title><?php echo $title ?></title>
+    </head>
+    <body>
+        <h1 style="font-size:22px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;padding:16px 0;border-bottom:1px solid #e2e2e2">
+            <?php echo $title ?>
+        </h1>
+        <?php foreach($stories as $story): ?>
+            <p>
+                <a style="text-decoration:none;display:block;font-size:20px;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="<?php echo $story['post_url']?>">
+                    <?php echo $story['post_title'] ?>
+                </a>
+            </p>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="<?php echo $story['user_avatar']?>" width="32" height="32" alt="<?php echo $story['user_name'] . 'icon'?>">
+                                </td>
+                                <td>
+                                    <a style="text-decoration:none;color:#155fad" href="<?php echo $story['user_url']?>">
+                                        <?php echo $story['user_name'] ?><br>
+                                        <span style="text-decoration:none;color:#999">
+                                            <?php echo $story['user_karma']?>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td align="right">
+                        <table style="border: 1px solid #dadada;" cellspacing=5>
+                            <tr>
+                                <td align="center">
+                                    <label style="color:#999;margin:0;font-weight:normal;">Created</label>
+                                    <br><?php echo $story['post_created']?>
+                                </td>
+                                <td align="center">
+                                    <label style="color:#999;margin:0;font-weight:normal;">Replies</label>
+                                    <br><?php echo $story['post_replies']?>
+                                </td>
+                                <td align="center">
+                                    <label style="color:#999;margin:0;font-weight:normal;">Views</label>
+                                    <br><?php echo $story['post_views']?>
+                                </td>
+                                <td align="center">
+                                    <label style="color:#999;margin:0;font-weight:normal;">Votes</label>
+                                    <br><?php echo $story['post_votes']?>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <?php echo $story['post_content']?>
+            </div>
+            <div>
+                <p><a style="color:#155fad" href="<?php echo $story['post_url'] ?>">Read more</a></p>
+            </div>
+            <hr style="border: 1px solid #dadada">
+        <?php endforeach; ?>
+        <div style="width:100%;margin:2.5em 0 0.5em;text-align:center">
+            <span class="foot-line"></span>
+            <p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">
+                <?php echo $notice ?>
+            </p>
+        </div>
+    </body>
+</html>

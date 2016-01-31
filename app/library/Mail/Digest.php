@@ -20,18 +20,20 @@ namespace Phosphorum\Mail;
 use Phalcon\Di\Injectable;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
+use Phalcon\Mvc\View\Simple as View;
 
 /**
- * Digest
+ * Weekly Digest
  *
  * Sends a weekly digest to subscribed users
+ *
  * @property \Phalcon\Avatar\Gravatar gravatar
+ * @property \Phalcon\Config config
+ * @property \Ciconia\Ciconia markdown
  */
 class Digest extends Injectable
 {
-
     protected $transport;
-
     protected $mailer;
 
     /**
@@ -44,10 +46,10 @@ class Digest extends Injectable
 
         $parameters = array(
             'modified_at >= ?0 AND digest = "Y" AND notifications <> "N"',
-            'bind'  => array($lastMonths->getTimestamp())
+            'bind'  => [$lastMonths->getTimestamp()]
         );
 
-        $users = array();
+        $users = [];
         foreach (Users::find($parameters) as $user) {
             if ($user->email &&
                 strpos($user->email, '@') !== false &&
@@ -57,11 +59,15 @@ class Digest extends Injectable
             }
         }
 
+        $view = new View();
+        $view->setViewsDir($this->config->application->viewsDir);
+
         $fromName  = $this->config->mail->fromName;
         $fromEmail = $this->config->mail->fromEmail;
         $url       = $this->config->site->url;
 
-        $subject = 'Top Stories from Phosphorum ' . date('d/m/y');
+        $subject = sprintf('Top Stories from Phosphorum %s', date('d/m/y'));
+        $view->setVar('title', $subject);
 
         $lastWeek = new \DateTime();
         $lastWeek->modify('-1 week');
@@ -70,59 +76,71 @@ class Digest extends Injectable
             '((IF(votes_up IS NOT NULL, votes_up, 0) - ' .
             'IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + ' .
             'number_replies + IF(accepted_answer = "Y", 10, 0) DESC';
-        $parameters = array(
+        $parameters = [
             'created_at >= ?0 AND deleted != 1 AND categories_id <> 4',
-            'bind'  => array($lastWeek->getTimestamp()),
+            'bind'  => [$lastWeek->getTimestamp()],
             'order' => $order,
             'limit' => 10
-        );
+        ];
 
         $e = $this->escaper;
+        /** @var \Phalcon\Logger\AdapterInterface $logger */
+        $logger = $this->getDI()->get('logger', ['mail.log']);
 
-        $content = '<html><head></head><body><p><h1 style="font-size:22px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;padding:16px 0;border-bottom:1px solid #e2e2e2">Top Stories from Phosphorum</h1></p>';
-
-        foreach (Posts::find($parameters) as $post) {
-
+        $stories = [];
+        foreach (Posts::find($parameters) as $i => $post) {
             $user = $post->user;
             if ($user == false) {
                 continue;
             }
 
-            $content .= '<p><a style="text-decoration:none;display:block;font-size:20px;color:#333;letter-spacing:-0.5px;line-height:1.25;font-weight:normal;color:#155fad" href="'. $url .'/discussion/' . $post->id . '/' . $post->slug . '">' . $e->escapeHtml($post->title) . '</a></p>';
-
             $this->gravatar->setSize(32);
 
-            $content .= '<p><table width="100%"><td><table><tr><td>' .
-                        '<img src="'.$this->gravatar->getAvatar($user->email).'" width="32" height="32" alt="' . $user->name . ' icon">' .
-                        '</td><td><a style="text-decoration:none;color:#155fad" href="' . $url . '/user/' . $user->id . '/' . $user->login . '">' . $user->name . '<br><span style="text-decoration:none;color:#999;text-decoration:none">' . $user->getHumanKarma() . '</span></a></td></tr></table></td><td align="right"><table style="border: 1px solid #dadada;" cellspacing=5>' .
-                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Created</label><br>' . $post->getHumanCreatedAt() . '</td>' .
-                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Replies</label><br>' . $post->number_replies . '</td>' .
-                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Views</label><br>' . $post->number_views . '</td>' .
-                        '<td align="center"><label style="color:#999;margin:0px;font-weight:normal;">Votes</label><br>' . ($post->votes_up - $post->votes_down) . '</td>' .
-                        '</tr></table></td></tr></table></p>';
-
-            $content .= $this->markdown->render($e->escapeHtml($post->content));
-
-            $content .= '<p><a style="color:#155fad" href="' . $url . '/discussion/' . $post->id . '/' . $post->slug . '">Read more</a></p>';
-
-            $content .= '<hr style="border: 1px solid #dadada">';
-
+            $stories[$i]['user_name']    = $user->name;
+            $stories[$i]['user_avatar']  = $this->gravatar->getAvatar($user->email);
+            $stories[$i]['user_url']     = $url . '/user/' . $user->id . '/' . $user->login;
+            $stories[$i]['user_karma']   = $user->getHumanKarma();
+            $stories[$i]['post_title']   = $e->escapeHtml($post->title);
+            $stories[$i]['post_created'] = $post->getHumanCreatedAt();
+            $stories[$i]['post_replies'] = (int) $post->number_replies;
+            $stories[$i]['post_views']   = (int) $post->number_views;
+            $stories[$i]['post_votes']   = ($post->votes_up - $post->votes_down);
+            $stories[$i]['post_content'] = $this->markdown->render($e->escapeHtml($post->content));
+            $stories[$i]['post_url']     = $url . '/discussion/' . $post->id . '/' . $post->slug;
         }
 
-        $textContent = strip_tags($content);
+        if (empty($stories)) {
+            return;
+        }
 
-        $htmlContent = $content . '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
-        $htmlContent .= PHP_EOL . 'This email was sent by Phalcon Framework. Change your e-mail preferences <a href="' . $url . '/settings">here</a></p>';
+        $view->setVar('stories', $stories);
+        $view->setVar('notice', sprintf(
+            'This email was sent by %s mail sender. Change your e-mail preferences <a href="%s/settings">here</a>',
+            $this->config->site->name,
+            $url
+        ));
+
+        $content = $view->render('mail/digest.phtml');
+
+        $textContent = preg_replace('#<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>#', '$2:' . "\n" . '$1', $content);
+        $textContent = str_replace('<span class="foot-line"></span>', "--\n", $textContent);
+        $textContent = trim(strip_tags($textContent));
+        $textContent = str_replace('&nbsp;', ' ', $textContent);
+        $textContent = preg_replace('#\t+#', '', $textContent);
+        $textContent = preg_replace('# {2,}#', ' ', $textContent);
+        $textContent = preg_split('#(\r|\n)#', $textContent);
+        $textContent = join("\n\n", array_filter($textContent, function ($line) {
+            return '' !== trim($line);
+        }));
+        $textContent = preg_replace('#^[ \t]+#m', '', $textContent);
 
         foreach ($users as $email => $name) {
-
             try {
+                $message = new \Swift_Message("[{$this->config->site->name} Forum] " . $subject);
+                $message->setTo([$email => $name]);
+                $message->setFrom([$fromEmail => $fromName]);
 
-                $message = new \Swift_Message('[Phalcon Forum] ' . $subject);
-                $message->setTo(array($email => $name));
-                $message->setFrom(array($fromEmail => $fromName));
-
-                $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
+                $bodyMessage = new \Swift_MimePart($content, 'text/html');
                 $bodyMessage->setCharset('UTF-8');
                 $message->attach($bodyMessage);
 
@@ -131,7 +149,6 @@ class Digest extends Injectable
                 $message->attach($bodyMessage);
 
                 if (!$this->transport) {
-
                     $this->transport = \Swift_SmtpTransport::newInstance(
                         $this->config->smtp->host,
                         $this->config->smtp->port,
@@ -146,11 +163,11 @@ class Digest extends Injectable
                 }
 
                 $this->mailer->send($message);
-
+                $logger->info("Sent an email to {$email}");
             } catch (\Exception $e) {
-                echo $e->getMessage(), PHP_EOL;
+                $logger->error($e->getMessage());
+                throw new \Exception($e->getMessage(), $e->getCode(), $e);
             }
         }
-
     }
 }
