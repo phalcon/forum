@@ -27,7 +27,6 @@ use Phalcon\Http\Response;
  */
 class SitemapController extends ControllerBase
 {
-
     public function initialize()
     {
         $this->view->disable();
@@ -35,11 +34,9 @@ class SitemapController extends ControllerBase
 
     /**
      * Generate the website sitemap
-     *
      */
     public function indexAction()
     {
-
         $response = new Response();
 
         $expireDate = new \DateTime();
@@ -61,17 +58,21 @@ class SitemapController extends ControllerBase
         $url->appendChild($sitemap->createElement('priority', '1.0'));
         $urlset->appendChild($url);
 
-        $parametersPosts = array(
+        $karmaSql = 'number_views + ' .
+            '((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + ' .
+            'number_replies';
+
+        $parametersPosts = [
             'conditions' => 'deleted != 1',
-            'columns'    => 'id, slug, modified_at, number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies AS karma',
+            'columns'    => "id, slug, modified_at, {$karmaSql} AS karma",
             'order'      => 'karma DESC'
-        );
+        ];
         $posts = Posts::find($parametersPosts);
 
-        $parametersKarma = array(
-            'column' => 'number_views + ((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + number_replies',
+        $parametersKarma = [
+            'column' => $karmaSql,
             'conditions' => 'deleted != 1'
-        );
+        ];
         $karma = Posts::maximum($parametersKarma);
 
         $modifiedAt = new \DateTime();

@@ -27,20 +27,9 @@ use Phalcon\Di\Injectable;
  */
 class SendSpool extends Injectable
 {
-
     protected $transport;
 
     protected $mailer;
-
-    private function _prerify($text)
-    {
-        if (preg_match_all('#```([a-z]+)(.+)```([\n\r]+)?#m', $text, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $text = str_replace($match[0], '<pre>' . $match[2] . '</pre>', $text);
-            }
-        }
-        return $text;
-    }
 
     public function send(Notifications $notification)
     {
@@ -60,12 +49,10 @@ class SendSpool extends Injectable
         $url  = $this->config->site->url;
 
         if ($post && $user && $reply) {
-
-            if ($user->email && $user->notifications != 'N' && strpos($user->email, '@users.noreply.github.com') === false) {
-
+            $isGitHubEmail = strpos($user->email, '@users.noreply.github.com');
+            if ($user->email && $user->notifications != 'N' && false === $isGitHubEmail) {
                 try {
-
-                    $message = new \Swift_Message('[Phalcon Forum] ' . $post->title);
+                    $message = new \Swift_Message("[{$this->config->site->name} Forum] " . $post->title);
                     $message->setTo(array($user->email => $user->name));
                     $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
 
@@ -83,18 +70,22 @@ class SendSpool extends Injectable
                     }
 
                     if (trim($originalContent)) {
-
                         $textContent = strip_tags($originalContent);
 
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
+                        $href = "{$url}/discussion/{$post->id}/{$post->slug}";
+
                         if ($notification->type == 'P') {
                             $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="'. $url . '/discussion/' . $post->id . '/' . $post->slug . '">Phosphorum</a>. ';
+                                PHP_EOL . '<a href="'. $href . '">Phosphorum</a>. ';
                         } else {
                             $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="' . $url . '/discussion/' . $post->id . '/' . $post->slug . '#C' . $reply->id . '">Phosphorum</a>. ';
+                                PHP_EOL . '<a href="' . $href . '#C' . $reply->id . '">Phosphorum</a>. ';
                         }
-                        $htmlContent .= PHP_EOL . 'Change your e-mail preferences <a href="'. $url . '/settings">here</a></p>';
+
+                        $htmlContent .= PHP_EOL .
+                            'Change your e-mail preferences <a href="'. $url . '/settings">here</a></p>';
+
                         $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
                         $bodyMessage->setCharset('UTF-8');
                         $message->attach($bodyMessage);
@@ -104,7 +95,6 @@ class SendSpool extends Injectable
                         $message->attach($bodyMessage);
 
                         if (!$this->transport) {
-
                             $this->transport = \Swift_SmtpTransport::newInstance(
                                 $this->config->smtp->host,
                                 $this->config->smtp->port,
@@ -150,11 +140,8 @@ class SendSpool extends Injectable
      */
     public function consumeQueue()
     {
-
         while (true) {
-
             while ($this->queue->peekReady() !== false) {
-
                 $job = $this->queue->reserve();
 
                 $message = $job->getBody();

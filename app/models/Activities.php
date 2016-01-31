@@ -42,7 +42,6 @@ class Activities extends Model
     public $created_at;
 
     const NEW_POST = 'P';
-
     const NEW_REPLY = 'C';
 
     public function initialize()
@@ -51,28 +50,28 @@ class Activities extends Model
             'users_id',
             'Phosphorum\Models\Users',
             'id',
-            array(
+            [
                 'alias'    => 'user',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->belongsTo(
             'posts_id',
             'Phosphorum\Models\Posts',
             'id',
-            array(
+            [
                 'alias'    => 'post',
                 'reusable' => true
-            )
+            ]
         );
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
+            new Timestampable([
+                'beforeCreate' => [
                     'field' => 'created_at'
-                )
-            ))
+                ]
+            ])
         );
     }
 

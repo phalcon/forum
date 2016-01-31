@@ -220,7 +220,10 @@ class SessionController extends ControllerBase
                  * Show a notification to users that haven't spend their votes
                  */
                 if ($user->votes >= 10 && mt_rand(1, 5) == 3) {
-                    $this->flashSession->notice('You have ' . $user->votes . ' votes remaining to spend. If you find something useful in this forum do not hesitate to give others some votes.');
+                    $this->flashSession->notice(
+                        "You have {$user->votes} votes remaining to spend. " .
+                        'If you find something useful in this forum do not hesitate to give others some votes.'
+                    );
                 }
             }
 

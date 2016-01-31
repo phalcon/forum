@@ -29,13 +29,14 @@ use Aws\Sns\MessageValidator\MessageValidator;
 
 class HooksController extends ControllerBase
 {
+    const RE_DATE_TIME_1 = '/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? ([^:]*):$/u';
+    const RE_DATE_TIME_2 = '/^On [A-Za-z]{3} [0-9]{1,2}, [0-9]{4} [0-9]{1,2}:[0-9]{2} [AP]M, ([^:]*):$/u';
+
     /**
      * This implements an inbound webhook from MandrillApp to reply to posts using emails
-     *
      */
     public function mailReplyAction()
     {
-
         $response = new Response();
         if ($this->request->isPost()) {
 
@@ -111,7 +112,7 @@ class HooksController extends ControllerBase
                 /**
                  * Process replies to remove the base message
                  */
-                $str = array();
+                $str = [];
                 $firstNoBaseReplyLine = false;
                 foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
 
@@ -123,11 +124,11 @@ class HooksController extends ControllerBase
                         }
                     }
 
-                    if (preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2} GMT([\-\+][0-9]{2}:[0-9]{2})? ([^:]*):$/u', $line)) {
+                    if (preg_match(self::RE_DATE_TIME_1, $line)) {
                         continue;
                     }
 
-                    if (preg_match('/^On [A-Za-z]{3} [0-9]{1,2}, [0-9]{4} [0-9]{1,2}:[0-9]{2} [AP]M, ([^:]*):$/u', $line)) {
+                    if (preg_match(self::RE_DATE_TIME_2, $line)) {
                         continue;
                     }
 
@@ -203,9 +204,7 @@ class HooksController extends ControllerBase
         if ($validator->isValid($message)) {
             $notification = json_decode($message->get('Message'), true);
             if (is_array($notification)) {
-
                 do {
-
                     if (!isset($notification['notificationType'])) {
                         break;
                     }
@@ -232,7 +231,6 @@ class HooksController extends ControllerBase
                     }
 
                 } while (0);
-
             }
         }
 
