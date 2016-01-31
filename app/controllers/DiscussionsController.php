@@ -356,7 +356,7 @@ class DiscussionsController extends ControllerBase
             if ($post->isStartVoting()) {
                 $connection->rollback();
                 $this->flashSession->error("The voting for the poll was started. You can't change the Poll.");
-            } else if ($post->save()) {
+            } elseif ($post->save()) {
                 if ($post->users_id != $usersId && $user = Users::findFirstById($usersId)) {
                     $user->increaseKarma(Karma::MODERATE_POST);
                     $user->save();

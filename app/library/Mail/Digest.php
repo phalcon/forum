@@ -98,7 +98,7 @@ class Digest extends Injectable
 
             $stories[$i]['user_name']    = $user->name;
             $stories[$i]['user_avatar']  = $this->gravatar->getAvatar($user->email);
-            $stories[$i]['user_url']     = $url . '/user/' . $user->id . '/' . $user->login;
+            $stories[$i]['user_url']     = "{$url}/user/{$user->id}/{$user->login}";
             $stories[$i]['user_karma']   = $user->getHumanKarma();
             $stories[$i]['post_title']   = $e->escapeHtml($post->title);
             $stories[$i]['post_created'] = $post->getHumanCreatedAt();
@@ -106,7 +106,7 @@ class Digest extends Injectable
             $stories[$i]['post_views']   = (int) $post->number_views;
             $stories[$i]['post_votes']   = ($post->votes_up - $post->votes_down);
             $stories[$i]['post_content'] = $this->markdown->render($e->escapeHtml($post->content));
-            $stories[$i]['post_url']     = $url . '/discussion/' . $post->id . '/' . $post->slug;
+            $stories[$i]['post_url']     = "{$url}/discussion/{$post->id}/{$post->slug}";
         }
 
         if (empty($stories)) {

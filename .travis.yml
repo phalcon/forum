@@ -50,7 +50,7 @@ after_script:
   - mysql -e 'DROP DATABASE phosphorum;' -uroot
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 
