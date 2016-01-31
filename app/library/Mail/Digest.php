@@ -70,7 +70,7 @@ class Digest extends Injectable
         $view->setVar('title', $subject);
 
         $lastWeek = new \DateTime();
-        $lastWeek->modify('-5 years');
+        $lastWeek->modify('-1 week');
 
         $order = 'number_views + ' .
             '((IF(votes_up IS NOT NULL, votes_up, 0) - ' .
