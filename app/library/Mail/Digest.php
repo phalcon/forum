@@ -66,7 +66,7 @@ class Digest extends Injectable
         $fromEmail = $this->config->mail->fromEmail;
         $url       = $this->config->site->url;
 
-        $subject = sprintf('Top Stories from %s %s', $this->config->site->name, date('d/m/y'));
+        $subject = sprintf('Top Stories from Phosphorum %s', date('d/m/y'));
         $view->setVar('title', $subject);
 
         $lastWeek = new \DateTime();
