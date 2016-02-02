@@ -162,8 +162,14 @@ class Digest extends Injectable
                     $this->mailer = \Swift_Mailer::newInstance($this->transport);
                 }
 
-                $this->mailer->send($message);
-                $logger->info("Sent an email to {$email}");
+                $failedRecipients = [];
+                $this->mailer->send($message, $failedRecipients);
+
+                if (empty($failedRecipients)) {
+                    $logger->info("Sent an email to {$email}");
+                } else {
+                    $logger->error("Unable to sent an email to " . join(', ', $failedRecipients));
+                }
             } catch (\Exception $e) {
                 $logger->error($e->getMessage());
                 throw new \Exception($e->getMessage(), $e->getCode(), $e);
