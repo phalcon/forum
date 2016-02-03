@@ -64,7 +64,7 @@ class Digest extends Injectable
 
         $fromName  = $this->config->mail->fromName;
         $fromEmail = $this->config->mail->fromEmail;
-        $url       = $this->config->site->url;
+        $url       = trim($this->config->site->url, '/');
 
         $subject = sprintf('Top Stories from Phosphorum %s', date('d/m/y'));
         $view->setVar('title', $subject);
