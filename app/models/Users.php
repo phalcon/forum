@@ -27,9 +27,9 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  * @property Simple badges
  * @property Simple posts
  * @property Simple replies
- * @method Simple getBadges
- * @method Simple getPosts
- * @method Simple getReplies
+ * @method Simple getBadges($parameters=null)
+ * @method Simple getPosts($parameters=null)
+ * @method Simple getReplies($parameters=null)
  * @method static Users findFirstById(int $id)
  * @method static Users findFirstByLogin(string $login)
  * @method static Users findFirstByName(string $name)
