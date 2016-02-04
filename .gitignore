@@ -17,3 +17,4 @@ app/config/backup.app
 app/config/backup.auth
 selenium-server-standalone-*.jar
 chromedriver
+/public/google*.html
