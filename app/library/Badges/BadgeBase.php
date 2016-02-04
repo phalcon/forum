@@ -98,7 +98,8 @@ abstract class BadgeBase implements BadgeInterface
             }
             $this->noBountyCategories = $categories;
         }
-        return $this->noBountyCategories;
+
+        return empty($this->noBountyCategories) ? [0] : $this->noBountyCategories;
     }
 
     /**
