@@ -82,7 +82,9 @@ to be set up in the configuration (`app/config/config.php`).
 A PHP client to deliver e-mails must be enabled in background:
 
 ```bash
-$ php scripts/send-notifications-consumer.php &
+$ cd scripts
+# run send-notifications-consumer.php from scripts directory
+$ php send-notifications-consumer.php &
 ```
 
 ## Tests
