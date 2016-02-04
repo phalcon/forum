@@ -8,6 +8,9 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - \Helper\Acceptance
+        - REST:
+           depends: PhpBrowser
+           url: http://localhost:8000
         - WebDriver:
             url: http://localhost:8000
             browser: 'firefox'
