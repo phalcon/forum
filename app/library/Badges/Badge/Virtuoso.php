@@ -98,6 +98,7 @@ class Virtuoso extends BadgeBase
      *
      * @param Users $user
      * @param array $extra
+     * @return $this
      */
     public function add(Users $user, $extra = null)
     {
@@ -105,8 +106,10 @@ class Virtuoso extends BadgeBase
         foreach ($extra as $category) {
             $userBadge = new UsersBadges();
             $userBadge->users_id = $user->id;
-            $userBadge->badge    = $category->name . ' / ' . $this->getName();
+            $userBadge->badge    = $category->name . ' / ' . $name;
             $userBadge->save();
         }
+
+        return $this;
     }
 }

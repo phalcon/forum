@@ -85,6 +85,7 @@ class GoodQuestion extends BadgeBase
      *
      * @param Users $user
      * @param array $extra
+     * @return $this
      */
     public function add(Users $user, $extra = null)
     {
@@ -97,5 +98,7 @@ class GoodQuestion extends BadgeBase
             $userBadge->code1    = $id;
             $userBadge->save();
         }
+
+        return $this;
     }
 }

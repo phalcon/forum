@@ -82,6 +82,7 @@ class GoodReply extends BadgeBase
      *
      * @param Users $user
      * @param array $extra
+     * @return $this
      */
     public function add(Users $user, $extra = null)
     {
@@ -96,5 +97,7 @@ class GoodReply extends BadgeBase
 
             $userBadge->save();
         }
+
+        return $this;
     }
 }

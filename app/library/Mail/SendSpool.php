@@ -46,7 +46,7 @@ class SendSpool extends Injectable
         }
 
         $from = $this->config->mail->fromEmail;
-        $url  = $this->config->site->url;
+        $url  = trim($this->config->site->url. '/');
 
         if ($post && $user && $reply) {
             $isGitHubEmail = strpos($user->email, '@users.noreply.github.com');
