@@ -523,3 +523,42 @@ div#sticky-progress {
     padding: 34px 14px 9px;
     color: #333;
 }
+
+.badge {
+    padding: .4em .8em .4em .4em;
+    margin: 0 3px 3px 0;
+    text-decoration: none;
+    background-color: #333;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-weight: 400;
+    -webkit-transition: background, .3s, ease;
+       -moz-transition: background, .3s, ease;
+        -ms-transition: background, .3s, ease;
+         -o-transition: background, .3s, ease;
+              transition: background .3s ease;
+}
+
+.badge:hover {
+    background: #555;
+    color: white;
+    border-color: #555;
+}
+
+.badge1, .badge2, .badge3 {
+    display: inline-block;
+    overflow: hidden;
+    line-height: inherit;
+    vertical-align: text-bottom;
+    height: 14px;
+    margin-right: 3px;
+    margin-left: 2px;
+    width: 6px;
+}
+
+
+.badge3 {
+    background-image: url("/icon/badges.gif?v=1");
+    background-size: initial;
+    background-position: -7px -3px;
+}

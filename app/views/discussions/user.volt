@@ -20,7 +20,7 @@
 					</p>
 					<p>
 						{% for badge in user.badges %}
-							<button type="button" class="btn btn-default btn-sm">{{ badge.badge }}</button>
+							<button type="button" class="btn btn-default btn-sm badge"><span class="badge3"></span> {{ badge.badge }}</button>
 						{% endfor %}
 					</p>
 					<p>

@@ -8,10 +8,10 @@ php:
 services:
   - memcached
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
+#cache:
+#  directories:
+#    - vendor
+#    - $HOME/.composer/cache
 
 sudo: false
 
@@ -31,7 +31,7 @@ install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
-  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - php --ri phalcon
   - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
