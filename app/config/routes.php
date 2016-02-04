@@ -27,6 +27,16 @@ $router->add(
     ]
 );
 
+// We have rewrite rule for Nginx
+// robots.txt => robots
+$router->add(
+    '/robots',
+    [
+        'controller' => 'robots',
+        'action'     => 'index'
+    ]
+);
+
 $router->add(
     '/help/stats',
     [
