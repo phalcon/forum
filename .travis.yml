@@ -17,6 +17,7 @@ sudo: false
 
 env:
   - PHALCON_VERSION="2.1.x"
+  - PHALCON_VERSION="phalcon-v2.0.10"
   - PHALCON_VERSION="phalcon-v2.0.9"
   - PHALCON_VERSION="phalcon-v2.0.8"
   - PHALCON_VERSION="phalcon-v2.0.7"
