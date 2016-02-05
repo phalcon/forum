@@ -30,4 +30,9 @@ class Acceptance extends Module
 
         return $urls;
     }
+
+    public function seeResponseRegexp($regexp, $content)
+    {
+        $this->assertRegExp($regexp, $content);
+    }
 }
