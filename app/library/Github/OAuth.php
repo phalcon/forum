@@ -17,7 +17,9 @@
 
 namespace Phosphorum\Github;
 
-use Phalcon\DI\Injectable;
+use Phalcon\Text;
+use Phalcon\Config;
+use Phalcon\Di\Injectable;
 use Guzzle\Http\Client as HttpClient;
 
 /**
@@ -27,45 +29,41 @@ use Guzzle\Http\Client as HttpClient;
  */
 class OAuth extends Injectable
 {
-
     protected $endPointAuthorize = 'https://github.com/login/oauth/authorize';
 
     protected $endPointAccessToken = 'https://github.com/login/oauth/access_token';
 
     protected $redirectUriAuthorize;
 
-    protected $baseUri;
-
     protected $clientId;
 
     protected $clientSecret;
 
-    protected $transport;
+    protected $logger;
 
     /**
-     * @param $config
+     * @param Config $config
      */
-    public function __construct($config)
+    public function __construct(Config $config)
     {
-        $this->redirectUriAuthorize = $config->redirectUri;
-        $this->clientId             = $config->clientId;
-        $this->clientSecret         = $config->clientSecret;
+        $this->redirectUriAuthorize = $config->get('redirectUri');
+        $this->clientId             = $config->get('clientId');
+        $this->clientSecret         = $config->get('clientSecret');
+        $this->logger               = $this->getDI()->get('logger', ['auth.log']);
     }
 
-    /**
-     *
-     */
     public function authorize()
     {
         $this->view->disable();
 
-        $key   = $this->security->getTokenKey();
-        $token = $this->security->getToken();
+        $params = [
+            'client_id'    => $this->clientId,
+            'redirect_uri' => $this->redirectUriAuthorize . urlencode('&statekey=' . $this->security->getTokenKey()),
+            'state'        => $this->security->getToken(),
+            'scope'        => 'user:email'
+        ];
+        $url = $this->endPointAuthorize . '?' . http_build_query($params);
 
-        $url = $this->endPointAuthorize . '?client_id=' . $this->clientId . '&redirect_uri='
-            . $this->redirectUriAuthorize . urlencode('&statekey=' . $key)
-            . // add the tokenkey as a query param. Then we will be able to use it to check token authenticity
-            '&state=' . $token . '&scope=user:email';
         $this->response->redirect($url, true);
     }
 
@@ -74,22 +72,31 @@ class OAuth extends Injectable
      */
     public function accessToken()
     {
-
-        // check the securtity - anti csrf token
+        // check the security - anti csrf token
         $key   = $this->request->getQuery('statekey');
         $value = $this->request->getQuery('state');
 
-        if (!$this->di["security"]->checkToken($key, $value)) {
+        if (!$this->security->checkToken($key, $value)) {
             return false;
         }
 
         $this->view->disable();
-        $params   = array(
+
+        if ($error = $this->request->getQuery('error')) {
+            $error = Text::humanize($error);
+            $uri   = $this->request->getQuery('error_uri');
+            $this->logger->error("{$error}: " . $this->request->getQuery('error_description') . " (see: {$uri})");
+
+            return false;
+        }
+
+        $params = [
             'client_id'     => $this->clientId,
             'client_secret' => $this->clientSecret,
             'code'          => $this->request->getQuery('code'),
             'state'         => $this->request->getQuery('state')
-        );
+        ];
+
         $response = $this->send($this->endPointAccessToken, $params);
 
         return $response;
@@ -105,12 +112,8 @@ class OAuth extends Injectable
     public function send($url, $parameters, $method = 'post')
     {
         try {
-
             $client = new HttpClient();
-
-            $headers = array(
-                'Accept' => 'application/json'
-            );
+            $headers = ['Accept' => 'application/json'];
 
             switch ($method) {
                 case 'post':
@@ -124,9 +127,8 @@ class OAuth extends Injectable
             }
 
             return json_decode((string)$request->send()->getBody(), true);
-
         } catch (\Exception $e) {
-            //file_put_contents('error.txt', $e->getMessage());
+            $this->logger->error($e->getMessage());
             return false;
         }
     }

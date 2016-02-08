@@ -80,11 +80,10 @@ class Users extends Injectable
      */
     public function getName()
     {
-        if (isset($this->response['name'])) {
-            if ($this->response['name']) {
-                return $this->response['name'];
-            }
+        if (isset($this->response['name']) && $this->response['name']) {
+            return $this->response['name'];
         }
+
         return $this->response['login'];
     }
 
@@ -93,11 +92,8 @@ class Users extends Injectable
      */
     public function getEmail()
     {
-
-        if (isset($this->response['email'])) {
-            if ($this->response['email'] && strpos($this->response['email'], '@') !== false) {
-                return $this->response['email'];
-            }
+        if (isset($this->response['email']) && false !== strpos($this->response['email'], '@')) {
+            return $this->response['email'];
         }
 
         $emails = $this->request('/user/emails');
