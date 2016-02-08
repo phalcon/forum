@@ -63,7 +63,7 @@ class SessionController extends ControllerBase
     public function authorizeAction()
     {
         if (!$this->session->has('identity')) {
-            $oauth = new OAuth($this->config->get('github'), new Config);
+            $oauth = new OAuth($this->config->get('github', new Config));
             return $oauth->authorize();
         }
 
@@ -75,7 +75,7 @@ class SessionController extends ControllerBase
      */
     public function accessTokenAction()
     {
-        $oauth = new OAuth($this->config->get('github'), new Config);
+        $oauth = new OAuth($this->config->get('github', new Config));
 
         $response = $oauth->accessToken();
         if (is_array($response)) {
