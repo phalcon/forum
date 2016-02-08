@@ -45,7 +45,7 @@
 	</div>
 {%- endif -%}
 
-<div class="container">
+<div class="container" itemscope itemtype="http://schema.org/Question">
 
 	<ol class="breadcrumb">
 		<li>{{ link_to('', 'Home') }}</li>
@@ -54,7 +54,7 @@
 
 	<div class="row table-title">
 		<div class="col-md-8">
-			<h1 class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative-h1{% endif %}">
+			<h1 class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative-h1{% endif %}" itemprop="name">
 				{{- post.title|e -}}
 			</h1>
 		</div>
@@ -63,7 +63,9 @@
 				<tr>
 					<td>
 						<label>Created</label><br>
-						{{- post.getHumanCreatedAt() -}}
+						<time itemprop="dateCreated" datetime="{{ date('c', post.created_at) }}">
+							{{- post.getHumanCreatedAt() -}}
+						</time>
 					</td>
 					<td>
 						<label>Last Reply</label><br>
@@ -71,7 +73,9 @@
 					</td>
 					<td>
 						<label>Replies</label><br>
-						{{- post.number_replies -}}
+						<span itemprop="answerCount">
+							{{- post.number_replies -}}
+						</span>
 					</td>
 					<td>
 						<label>Views</label><br>
@@ -79,7 +83,7 @@
 					</td>
 					<td>
 						<label>Votes</label><br>
-						{{- post.votes_up - post.votes_down -}}
+						<span itemprop="upvoteCount">{{- post.votes_up - post.votes_down -}}</span>
 					</td>
 				</tr>
 			</table>
@@ -96,7 +100,13 @@
 		<div class="row reply-block">
 			<div class="col-md-1 small" align="center">
 				{{ image(gravatar.getAvatar(post.user.email), 'width': 48, 'height': 48, 'class': 'img-rounded') }}<br>
-				<span>{{ link_to('user/' ~ post.user.id ~ '/' ~ post.user.login, post.user.name|e, 'class': 'user-moderator-' ~ post.user.moderator) }}</span><br>
+				<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+					{{ link_to(
+					'user/' ~ post.user.id ~ '/' ~ post.user.login,
+					'<span itemprop="name">' ~ post.user.name|e ~ '</span>',
+					'class': 'user-moderator-' ~ post.user.moderator
+					) }}
+				</span><br>
 				<span class="karma">{{ post.user.getHumanKarma() }}</span>
 			</div>
 			<div class="col-md-11 post-body{% if (post.votes_up - post.votes_down) <= -3 %} post-negative-body{% endif %}">
@@ -107,14 +117,14 @@
 						</span><br/>
 					{% endif %}
 					<a name="C{{ post.id }}" href="#C{{ post.id }}">
-						<span class="action-date">
-							<span>{{ post.getHumanCreatedAt() }}</span>
-						</span>
+						<time class="action-date">{{ post.getHumanCreatedAt() }}</time>
 					</a>
 				</div>
 				<div class="post-content">
 					{%- cache "post-body-" ~ post.id -%}
-						{{- markdown.render(post.content|e) -}}
+						<div itemprop="text">
+							{{- markdown.render(post.content|e) -}}
+						</div>
 					{%- endcache -%}
 					{% if post.hasPoll() %}
 						{% if voted %}
@@ -137,7 +147,7 @@
 						{% endif %}
 						<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-post-down" data-id="{{ post.id }}">
 							<span class="glyphicon glyphicon-thumbs-down"></span>
-							{{ post.votes_down }}
+							{{- post.votes_down -}}
 						</a>
 						<a href="#" onclick="return false" class="btn btn-success btn-xs vote-post-up" data-id="{{ post.id }}">
 							<span class="glyphicon glyphicon-thumbs-up"></span>
@@ -146,11 +156,19 @@
 					{%- else -%}
 						<a href="#" onclick="return false" class="btn btn-danger btn-xs">
 							<span class="glyphicon glyphicon-thumbs-down"></span>
-							{{- post.votes_down -}}
+							{%- if post.votes_down -%}
+								<span itemprop="downvoteCount">{{ post.votes_down }}</span>
+							{%- else -%}
+								{{ post.votes_down }}
+							{%- endif -%}
 						</a>
 						<a href="#" onclick="return false" class="btn btn-success btn-xs">
 							<span class="glyphicon glyphicon-thumbs-up"></span>
-							{{- post.votes_up -}}
+							{%- if post.votes_up -%}
+								<span itemprop="upvoteCount">{{ post.votes_up }}</span>
+							{%- else -%}
+								{{- post.votes_up -}}
+							{%- endif -%}
 						</a>
 					{%- endif -%}
 				</div>
@@ -158,10 +176,16 @@
 		</div>
 
 		{%- for reply in post.replies -%}
-			<div class="reply-block row{% if (reply.votes_up - reply.votes_down) <= -3 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 4 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
+			<div itemprop="suggestedAnswer{%- if reply.accepted == 'Y' -%} acceptedAnswer{%- endif -%}" itemscope itemtype="http://schema.org/Answer" class="reply-block row{% if (reply.votes_up - reply.votes_down) <= -3 %} reply-negative{% endif %}{% if (reply.votes_up - reply.votes_down) >= 4 %} reply-positive{% endif %}{% if reply.accepted == 'Y' %} reply-accepted{% endif %}">
 				<div class="col-md-1 small" align="center">
 					{{ image(gravatar.getAvatar(reply.user.email), 'width': 48, 'height': 48, 'class': 'img-rounded') }}<br>
-					<span>{{ link_to('user/' ~ reply.user.id ~ '/' ~ reply.user.login, reply.user.name|e, 'class': 'user-moderator-' ~ reply.user.moderator) }}</span><br>
+					<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+						{{ link_to(
+						'user/' ~ reply.user.id ~ '/' ~ reply.user.login,
+						'<span itemprop="name">' ~ reply.user.name|e ~ '</span>',
+						'class': 'user-moderator-' ~ reply.user.moderator
+						) }}
+					</span><br>
 					<span class="karma">{{ reply.user.getHumanKarma() }}</span>
 					{%- if reply.accepted == 'Y' -%}
 						<div class="accepted-reply">
@@ -189,14 +213,14 @@
 							</span><br/>
 						{%- endif -%}
 						<a name="C{{ reply.id }}" href="#C{{ reply.id }}">
-							<span class="action-date">
-								<span>{{ reply.getHumanCreatedAt() }}</span>
-							</span>
+							<time itemprop="dateCreated" datetime="{{ date('c', reply.created_at) }}" class="action-date">{{ reply.getHumanCreatedAt() }}</time>
 						</a>
 					</div>
 					<div class="post-content">
 						{%- cache "reply-body-" ~ reply.id -%}
-						{{- markdown.render(reply.content|e) -}}
+						<div itemprop="text">
+							{{- markdown.render(reply.content|e) -}}
+						</div>
 						{%- endcache -%}
 					</div>
 					<div class="posts-buttons" align="right">
@@ -233,11 +257,19 @@
 						{%- else -%}
 							<a href="#" onclick="return false" class="btn btn-danger btn-xs vote-login" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-down"></span>
-								{{ reply.votes_down }}
+								{%- if reply.votes_down -%}
+									<span itemprop="downvoteCount">{{ reply.votes_down }}</span>
+								{%- else -%}
+									{{ reply.votes_down }}
+								{%- endif -%}
 							</a>
 							<a href="#" onclick="return false" class="btn btn-success btn-xs vote-login" data-id="{{ reply.id }}">
 								<span class="glyphicon glyphicon-thumbs-up"></span>
-								{{ reply.votes_up }}
+								{%- if reply.votes_up -%}
+									<span itemprop="upvoteCount">{{ reply.votes_up }}</span>
+								{%- else -%}
+									{{ reply.votes_up }}
+								{%- endif -%}
 							</a>
 						{%- endif -%}
 					</div>
