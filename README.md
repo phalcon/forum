@@ -72,7 +72,11 @@ $ cd scripts
 $ php random-entries.php
 ```
 
-Change the owner of `app/logs` and `app/cache` to whatever user your web server is running as.
+#### Directory Permissions
+
+After installing Phosphorum, you may need to configure some permissions. Directories within the `app/cache` and the `app/logs` directory should be writable by your web server or Phosphorum will not run.
+
+#### OAuth
 
 This application uses Github as authentication system, you need a client id and secret id
 to be set up in the configuration (`app/config/config.php`).
