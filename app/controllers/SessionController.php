@@ -23,6 +23,7 @@ use Phosphorum\Models\Users as ForumUsers;
 use Phosphorum\Models\Karma;
 use Phosphorum\Models\NotificationsBounces;
 use Phalcon\Mvc\Model;
+use Phalcon\Config;
 
 /**
  * Class SessionController
@@ -31,7 +32,6 @@ use Phalcon\Mvc\Model;
  */
 class SessionController extends ControllerBase
 {
-
     /**
      * @return \Phalcon\Http\ResponseInterface
      */
@@ -62,9 +62,8 @@ class SessionController extends ControllerBase
      */
     public function authorizeAction()
     {
-
-        if (!$this->session->get('identity')) {
-            $oauth = new OAuth($this->config->github);
+        if (!$this->session->has('identity')) {
+            $oauth = new OAuth($this->config->get('github'), new Config);
             return $oauth->authorize();
         }
 
@@ -76,11 +75,10 @@ class SessionController extends ControllerBase
      */
     public function accessTokenAction()
     {
-        $oauth = new OAuth($this->config->github);
+        $oauth = new OAuth($this->config->get('github'), new Config);
 
         $response = $oauth->accessToken();
         if (is_array($response)) {
-
             if (isset($response['error'])) {
                 $this->flashSession->error('Github: ' . $response['error']);
                 return $this->indexRedirect();
@@ -108,8 +106,6 @@ class SessionController extends ControllerBase
                 return $this->indexRedirect();
             }
 
-            //$user = ForumUsers::findFirst();
-
             // Update session id
             session_regenerate_id(true);
 
@@ -122,12 +118,8 @@ class SessionController extends ControllerBase
 
             if (is_string($email)) {
                 $user->email = $email;
-            } else {
-                if (is_array($email)) {
-                    if (isset($email['email'])) {
-                        $user->email = $email['email'];
-                    }
-                }
+            } elseif (is_array($email) && isset($email['email'])) {
+                $user->email = $email['email'];
             }
 
             // In any case user has Gravatar ID even if he has no email
@@ -159,50 +151,47 @@ class SessionController extends ControllerBase
                 $this->flashSession->success('Welcome back ' . $user->name);
             }
 
-            if ($user->email && strpos($user->email, '@') !== false) {
-
-                if (strpos($user->email, '@users.noreply.github.com') !== false) {
-                    $messageNotAlllow = 'Your current e-mail: ' . $this->escaper->escapeHtml($user->email)
-                        . ' does not allow us to send you e-mail notifications';
-                    $this->flashSession->notice($messageNotAlllow);
+            if ($user->email) {
+                if (false !== strpos($user->email, '@users.noreply.github.com')) {
+                    $messageNotAllow = sprintf(
+                        'Your current e-mail %s does not allow us to send you e-mail notifications',
+                        $this->escaper->escapeHtml($user->email)
+                    );
+                    $this->flashSession->notice($messageNotAllow);
                 }
             } else {
-
-                $messageCantSend
-                    = 'We weren\'t able to obtain your e-mail address'
-                    . ' from Github, we can\'t send you e-mail notifications';
+                $messageCantSend = "We weren't able to obtain your e-mail address"
+                    . " from Github, we can't send you e-mail notifications";
                 $this->flashSession->notice($messageCantSend);
             }
 
             if ($user->getOperationMade() != Model::OP_CREATE) {
-
                 /**
                  * Show a notification to users that have e-mail bounces
                  */
-                $parametersBounces = array(
+                $parametersBounces = [
                     'email = ?0 AND reported = "N"',
-                    'bind' => array($user->email)
-                );
-                $bounces           = NotificationsBounces::find($parametersBounces);
+                    'bind' => [$user->email]
+                ];
+                $bounces = NotificationsBounces::find($parametersBounces);
                 if (count($bounces)) {
-
                     foreach ($bounces as $bounce) {
                         $bounce->reported = 'Y';
                         $bounce->save();
                     }
 
-                    $messageFailid
+                    $messageFailed
                         = 'We have failed to deliver you some email notifications,'
                         . ' this might be caused by an invalid email associated to your Github account or '
                         . 'its mail server is rejecting our emails. Your current e-mail is: '
                         . $this->escaper->escapeHtml($user->email);
 
-                    $this->flashSession->notice($messageFailid);
+                    $this->flashSession->notice($messageFailed);
 
-                    $parametersBouncesMax = array(
+                    $parametersBouncesMax = [
                         'email = ?0 AND created_at >= ?1',
-                        'bind' => array($user->email, time() - 86400 * 7)
-                    );
+                        'bind' => [$user->email, time() - 86400 * 7]
+                    ];
 
                     $bounces = NotificationsBounces::find($parametersBouncesMax);
 
