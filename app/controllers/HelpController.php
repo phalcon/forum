@@ -32,64 +32,66 @@ use Phosphorum\Badges\Manager as BadgeManager;
  */
 class HelpController extends ControllerBase
 {
-
     public function initialize()
     {
-        $this->tag->setTitle('Help');
-        $this->view->setTemplateBefore(array('discussions'));
+        $this->view->setTemplateBefore(['discussions']);
     }
 
     public function indexAction()
     {
-
+        $this->tag->setTitle("Help");
     }
 
     public function karmaAction()
     {
-
+        $this->tag->setTitle("Karma & Reputation");
     }
 
     public function markdownAction()
     {
-
+        $this->tag->setTitle("Markdown");
     }
 
     public function votingAction()
     {
-
+        $this->tag->setTitle("Feedback system");
     }
 
     public function moderatorsAction()
     {
-
+        $this->tag->setTitle("Moderation");
     }
 
     public function aboutAction()
     {
-
+        $this->tag->setTitle("About {$this->config->site->name}");
     }
 
     public function createAction()
     {
-
+        $this->tag->setTitle("Creating Posts");
     }
 
     public function badgesAction()
     {
-        $manager = new BadgeManager;
-        $this->view->badges = $manager->getBadges();
+        $this->tag->setTitle("Badges");
+
+        $this->view->setVar('badges', (new BadgeManager)->getBadges());
     }
 
     public function statsAction()
     {
-        $this->view->threads         = Posts::count();
-        $this->view->replies         = Posts::sum(array('column' => 'number_replies'));
-        $this->view->votes           = Posts::sum(array('column' => 'votes_up + votes_down'));
-        $this->view->users           = Users::count();
-        $this->view->karma           = Users::sum(array('column' => 'karma'));
-        $this->view->notifications   = Notifications::count();
-        $this->view->unotifications  = ActivityNotifications::count();
-        $this->view->views           = Posts::sum(array('column' => 'number_views'));
-        $this->view->irc             = IrcLog::count();
+        $this->tag->setTitle("Statistics");
+
+        $this->view->setVars([
+            'threads'       => Posts::count(),
+            'replies'       => Posts::sum(['column' => 'number_replies']),
+            'votes'         => Posts::sum(['column' => 'votes_up + votes_down']),
+            'users'         => Users::count(),
+            'karma'         => Users::sum(['column' => 'karma']),
+            'notifications' => Notifications::count(),
+            'views'         => Posts::sum(['column' => 'number_views']),
+            'irc'           => IrcLog::count(),
+        ]);
     }
 }
