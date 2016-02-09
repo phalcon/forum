@@ -193,7 +193,7 @@ class DiscussionsController extends ControllerBase
             return;
         }
 
-        $this->tag->setTitle('Discussions');
+        $this->tag->setTitle("Discussions in category {$category->name}");
         $readposts = [];
 
         if ($userId = $this->session->get('identity')) {
