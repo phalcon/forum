@@ -29,7 +29,8 @@ class MentionExtension extends Injectable implements ExtensionInterface
     {
         // Turn @username into [@username](http://example.com/user/username)
         $text->replace('/(?:^|[^a-zA-Z0-9.])@([A-Za-z0-9]+)/', function (Text $w, Text $username) {
-            return ' [@' . $username . '](' . $this->config->site->url . '/user/0/' . $username . ')';
+            $url = $this->config->site->url;
+            return ' [@' . $username . '](' . rtrim($url, '/') . '/user/0/' . $username . ')';
         });
     }
 
