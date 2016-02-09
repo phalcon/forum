@@ -15,6 +15,11 @@
   +------------------------------------------------------------------------+
 */
 
+/**
+ * @var $config \Phalcon\Config
+ */
+
+use Phalcon\Config;
 use Phalcon\Logger;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt;
@@ -35,12 +40,14 @@ use Phosphorum\Notifications\Checker as NotificationsChecker;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Cache\Frontend\Output as FrontendOutput;
 use Phalcon\Avatar\Gravatar;
+use Phalcon\Flash\Session as FlashSession;
+use Phalcon\Flash\Direct as FlashDirect;
 use Ciconia\Ciconia;
 
 /**
  * The URL component is used to generate all kind of urls in the application
  */
-$di->set(
+$di->setShared(
     'url',
     function () use ($config) {
         $url = new UrlResolver();
@@ -52,14 +59,13 @@ $di->set(
             $url->setStaticBaseUri($config->application->development->staticBaseUri);
         }
         return $url;
-    },
-    true
+    }
 );
 
 /**
  * Setting up volt
  */
-$di->set(
+$di->setShared(
     'volt',
     function ($view, $di) use ($config) {
 
@@ -84,14 +90,13 @@ $di->set(
         });
 
         return $volt;
-    },
-    true
+    }
 );
 
 /**
  * Setting up the view component
  */
-$di->set(
+$di->setShared(
     'view',
     function () use ($config) {
 
@@ -101,8 +106,7 @@ $di->set(
         $view->registerEngines([".volt" => 'volt']);
 
         return $view;
-    },
-    true
+    }
 );
 
 /**
@@ -147,7 +151,6 @@ $di->set(
 $di->set(
     'queue',
     function () use ($config) {
-
         if (isset($config->beanstalk->disabled) && $config->beanstalk->disabled) {
             return new DummyServer();
         }
@@ -181,39 +184,37 @@ $di->set(
 /**
  * Start the session the first time some component request the session service
  */
-$di->set(
+$di->setShared(
     'session',
     function () {
         $session = new SessionAdapter();
         $session->start();
         return $session;
-    },
-    true
+    }
 );
 
 /**
  * Router
  */
-$di->set(
+$di->setShared(
     'router',
     function () {
         return include APP_PATH . "/app/config/routes.php";
-    },
-    true
+    }
 );
 
 /**
  * Register the configuration itself as a service
  */
-$di->set('config', $config);
+$di->setShared('config', $config);
 
 /**
  * Register the flash service with the Twitter Bootstrap classes
  */
-$di->set(
+$di->setShared(
     'flash',
     function () {
-        return new Phalcon\Flash\Direct([
+        return new FlashDirect([
             'error'   => 'alert alert-danger',
             'success' => 'alert alert-success',
             'notice'  => 'alert alert-info',
@@ -225,10 +226,10 @@ $di->set(
 /**
  * Register the session flash service with the Twitter Bootstrap classes
  */
-$di->set(
+$di->setShared(
     'flashSession',
     function () {
-        return new Phalcon\Flash\Session([
+        return new FlashSession([
             'error'   => 'alert alert-danger',
             'success' => 'alert alert-success',
             'notice'  => 'alert alert-info',
@@ -240,25 +241,24 @@ $di->set(
 /**
  * Register the Slug component
  */
-$di->set(
+$di->setShared(
     'slug',
     ['className' => '\Phosphorum\Utils\Slug']
 );
 
-$di->set(
+$di->setShared(
     'dispatcher',
     function () {
         $dispatcher = new MvcDispatcher();
         $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
         return $dispatcher;
-    },
-    true
+    }
 );
 
 /**
  * View cache
  */
-$di->set(
+$di->setShared(
     'viewCache',
     function () use ($config) {
         if ($config->application->debug) {
@@ -279,17 +279,13 @@ $di->set(
 /**
  * Cache
  */
-$di->set(
+$di->setShared(
     'modelsCache',
     function () use ($config) {
-
         if ($config->application->debug) {
-
             $frontCache = new FrontendNone();
             return new MemoryBackend($frontCache);
-
         } else {
-
             //Cache data for one day by default
             $frontCache = new \Phalcon\Cache\Frontend\Data(["lifetime" => 86400 * 30]);
 
@@ -304,7 +300,7 @@ $di->set(
 /**
  * Markdown renderer
  */
-$di->set(
+$di->setShared(
     'markdown',
     function () {
         $ciconia = new Ciconia();
@@ -315,34 +311,24 @@ $di->set(
         $ciconia->addExtension(new \Phosphorum\Markdown\UrlAutoLinkExtension());
         $ciconia->addExtension(new \Ciconia\Extension\Gfm\FencedCodeBlockExtension());
         return $ciconia;
-    },
-    true
+    }
 );
 
 /**
  * Real-Time notifications checker
  */
-$di->set(
+$di->setShared(
     'notifications',
     function () {
         return new NotificationsChecker();
-    },
-    true
+    }
 );
 
 /**
  * Gravatar instance
  */
-$di->setShared('gravatar', function () {
-    $gravatar = new Gravatar([
-        'default_image' => 'identicon',
-        'size'          => 24,
-        'rating'        => Gravatar::RATING_PG
-    ]);
-
-    $gravatar->enableSecureURL();
-
-    return $gravatar;
+$di->setShared('gravatar', function () use ($config) {
+    return new Gravatar($config->get('gravatar', new Config()));
 });
 
 /**
