@@ -23,7 +23,7 @@ defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[ 0 ]);
 return new Config([
     'site' => [
         'name'        => 'Phalcon Framework',
-        'url'         => 'http://pforum.loc.com',
+        'url'         => 'http://pforum.loc',
         'description' => 'Phosphorum - Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework.',
         'keywords'    => 'php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum',
         'project'     => 'Phalcon',
