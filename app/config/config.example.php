@@ -38,6 +38,13 @@ return new Config([
         'active_topic_icon'   => '/icon/new_some.png',
     ],
 
+    'gravatar' => [
+        'default_image' => 'identicon',
+        'size'          => 24,
+        'rating'        => 'pg',
+        'use_https'     => true,
+    ],
+
     'database' => [
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
