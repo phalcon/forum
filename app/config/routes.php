@@ -18,6 +18,7 @@
 use Phalcon\Mvc\Router;
 
 $router = new Router(false);
+$router->removeExtraSlashes(true);
 
 $router->add(
     '/sitemap',
