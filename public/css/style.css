@@ -60,6 +60,7 @@ p {
 .discussion .small {
     width: 90px;
     text-align: center;
+    overflow: hidden;
 }
 
 .discussion .small a {
