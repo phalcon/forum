@@ -35,7 +35,7 @@ class CategoriesController extends ControllerBase
      * @param string $slug Category Slug
      * @param int $offset Posts offset
      */
-    public function categoryAction($categoryId, $slug, $offset = 0)
+    public function viewAction($categoryId, $slug, $offset = 0)
     {
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
