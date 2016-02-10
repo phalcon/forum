@@ -111,14 +111,6 @@ $router->add(
 );
 
 $router->add(
-    '/index.html',
-    [
-       'controller' => 'categories',
-       'action'     => 'index'
-    ]
-);
-
-$router->add(
     '/discussions',
     [
        'controller' => 'discussions',
@@ -155,14 +147,6 @@ $router->add(
     [
        'controller' => 'discussions',
        'action'     => 'settings'
-    ]
-);
-
-$router->add(
-    '/reload-categories',
-    [
-       'controller' => 'discussions',
-       'action'     => 'reloadCategories'
     ]
 );
 

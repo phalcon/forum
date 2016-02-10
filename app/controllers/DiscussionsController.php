@@ -1013,18 +1013,6 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
-     * Reload categories
-     * @todo Move to the CategoriesController
-     */
-    public function reloadCategoriesAction()
-    {
-        $this->view->setVar('categories', Categories::find(['order' => 'number_posts DESC, name']));
-
-        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-        $this->view->getCache()->delete('sidebar');
-    }
-
-    /**
      * Shows the user profile
      *
      * @todo Move to the UsersController
