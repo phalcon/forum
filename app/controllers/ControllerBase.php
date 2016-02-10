@@ -53,12 +53,25 @@ class ControllerBase extends Controller
         }
 
         $this->view->setVars([
-            'threads'      => Posts::count(),
-            'last_threads' => $lastThreads,
-            'users'        => Users::count(),
-            'users_latest' => $login,
-            'actionName'   => $this->dispatcher->getActionName(),
+            'threads'        => Posts::count(),
+            'last_threads'   => $lastThreads,
+            'users'          => Users::count(),
+            'users_latest'   => $login,
+            'actionName'     => $this->dispatcher->getActionName(),
+            'controllerName' => $this->dispatcher->getControllerName(),
         ]);
+    }
+
+    /**
+     * This initializes the timezone in each request
+     */
+    public function initialize()
+    {
+        if ($timezone = $this->session->get('identity-timezone')) {
+            date_default_timezone_set($timezone);
+        }
+
+        $this->view->setVar('limitPost', self::POSTS_IN_PAGE);
     }
 
     /**

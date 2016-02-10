@@ -48,18 +48,6 @@ class DiscussionsController extends ControllerBase
     use TokenTrait;
 
     /**
-     * This initializes the timezone in each request
-     */
-    public function initialize()
-    {
-        if ($timezone = $this->session->get('identity-timezone')) {
-            date_default_timezone_set($timezone);
-        }
-
-        $this->view->setVar('limitPost', self::POSTS_IN_PAGE);
-    }
-
-    /**
      * Shows latest posts using an order clause
      *
      * @param string $order
