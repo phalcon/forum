@@ -9,6 +9,7 @@
 
 		<meta content="{{ config.site.keywords }}" name="keyword">
 		<meta content="{{ config.site.description }}" name="description">
+		<meta name=generator content="Phalcon Framework {{ version() }}">
 
 		{%- if canonical is defined -%}
 		<link rel="canonical" href="{{ config.site.url }}/{{ canonical }}">
