@@ -347,3 +347,7 @@ $di->set('logger', function ($filename = null, $format = null) use ($config) {
 
     return $logger;
 });
+
+$di->setShared('timezones', function () {
+    return require APP_PATH .'/app/config/timezones.php';
+});

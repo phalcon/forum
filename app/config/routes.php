@@ -142,14 +142,6 @@ $router->add(
     ]
 );
 
-$router->add(
-    '/settings',
-    [
-       'controller' => 'discussions',
-       'action'     => 'settings'
-    ]
-);
-
 $router->addPost(
     '/preview',
     [
@@ -353,8 +345,16 @@ $router->add(
 $router->add(
     '/user/{id:[0-9]+}/{login}',
     [
-       'controller' => 'discussions',
-       'action'     => 'user'
+       'controller' => 'users',
+       'action'     => 'view'
+    ]
+);
+
+$router->add(
+    '/settings',
+    [
+        'controller' => 'users',
+        'action'     => 'settings'
     ]
 );
 
