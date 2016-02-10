@@ -47,8 +47,6 @@ class DiscussionsController extends ControllerBase
 {
     use TokenTrait;
 
-    const POSTS_IN_PAGE = 40;
-
     /**
      * This initializes the timezone in each request
      */
@@ -59,40 +57,6 @@ class DiscussionsController extends ControllerBase
         }
 
         $this->view->setVar('limitPost', self::POSTS_IN_PAGE);
-    }
-
-    /**
-     * This method prepares the queries to be executed in each list of posts
-     * The returned builders are used as base in the search, tagged list and index lists
-     *
-     * @param bool $joinReply
-     * @return array
-     */
-    protected function prepareQueries($joinReply = false)
-    {
-        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
-        $itemBuilder = $this
-            ->modelsManager
-            ->createBuilder()
-            ->from(['p' => 'Phosphorum\Models\Posts'])
-            ->orderBy('p.sticked DESC, p.created_at DESC');
-
-        if ($joinReply) {
-            $itemBuilder
-                ->groupBy('p.id')
-                ->join('Phosphorum\Models\PostsReplies', 'r.posts_id = p.id', 'r');
-        }
-
-        $totalBuilder = clone $itemBuilder;
-
-        $itemBuilder
-            ->columns(['p.*'])
-            ->limit(self::POSTS_IN_PAGE);
-
-        $totalBuilder
-            ->columns('COUNT(*) AS count');
-
-        return [$itemBuilder, $totalBuilder];
     }
 
     /**
@@ -174,67 +138,6 @@ class DiscussionsController extends ControllerBase
             'offset'       => $offset,
             'paginatorUri' => "discussions/{$order}",
             'canonical'    => ''
-        ]);
-    }
-
-    /**
-     * Shows latest posts by category
-     *
-     * @param int $categoryId Category Id
-     * @param string $slug Category Slug
-     * @param int $offset Posts offset
-     */
-    public function categoryAction($categoryId, $slug, $offset = 0)
-    {
-        if (!$category = Categories::findFirstById($categoryId)) {
-            $this->flashSession->notice("The category doesn't exist");
-            $this->logger->error("The category doesn't exist");
-            $this->response->redirect();
-            return;
-        }
-
-        $this->tag->setTitle("Discussions in category {$category->name}");
-        $readposts = [];
-
-        if ($userId = $this->session->get('identity')) {
-            $ur = TopicTracking::findFirst(['user_id= ?0', 'bind' => [$userId]]);
-            $readposts = $ur ? explode(',', $ur->topic_id) : [];
-        }
-
-        /**
-         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
-         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder
-         */
-        list($itemBuilder, $totalBuilder) = $this->prepareQueries();
-
-        $totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
-
-        $posts = $itemBuilder
-            ->where('p.categories_id = ?0 AND p.deleted = 0')
-            ->orderBy('p.created_at DESC')
-            ->offset((int)$offset)
-            ->getQuery()
-            ->execute([$categoryId]);
-
-        if (!count($posts)) {
-            $this->flashSession->notice('There are no posts in category: ' . $category->name);
-            $this->response->redirect();
-            return;
-        }
-
-        $totalPosts = $totalBuilder
-            ->getQuery()
-            ->setUniqueRow(true)
-            ->execute([$categoryId]);
-
-        $this->view->setVars([
-            'readposts'    => $readposts,
-            'posts'        => $posts,
-            'totalPosts'   => $totalPosts,
-            'currentOrder' => null,
-            'offset'       => (int)$offset,
-            'paginatorUri' => 'category/' . $category->id . '/' . $category->slug,
-            'logged'       => $userId
         ]);
     }
 

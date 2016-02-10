@@ -20,6 +20,8 @@ use Phosphorum\Models\Users;
  */
 class ControllerBase extends Controller
 {
+    const POSTS_IN_PAGE = 40;
+
     public function onConstruct()
     {
         $lastThreads = $this
@@ -57,5 +59,39 @@ class ControllerBase extends Controller
             'users_latest' => $login,
             'actionName'   => $this->dispatcher->getActionName(),
         ]);
+    }
+
+    /**
+     * This method prepares the queries to be executed in each list of posts
+     * The returned builders are used as base in the search, tagged list and index lists
+     *
+     * @param bool $joinReply
+     * @return array
+     */
+    protected function prepareQueries($joinReply = false)
+    {
+        /** @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
+        $itemBuilder = $this
+            ->modelsManager
+            ->createBuilder()
+            ->from(['p' => 'Phosphorum\Models\Posts'])
+            ->orderBy('p.sticked DESC, p.created_at DESC');
+
+        if ($joinReply) {
+            $itemBuilder
+                ->groupBy('p.id')
+                ->join('Phosphorum\Models\PostsReplies', 'r.posts_id = p.id', 'r');
+        }
+
+        $totalBuilder = clone $itemBuilder;
+
+        $itemBuilder
+            ->columns(['p.*'])
+            ->limit(self::POSTS_IN_PAGE);
+
+        $totalBuilder
+            ->columns('COUNT(*) AS count');
+
+        return [$itemBuilder, $totalBuilder];
     }
 }

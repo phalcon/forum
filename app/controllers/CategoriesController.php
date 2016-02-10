@@ -29,80 +29,63 @@ use Phosphorum\Models\TopicTracking;
 class CategoriesController extends ControllerBase
 {
     /**
-     * @return \Phalcon\Http\ResponseInterface
+     * Shows latest posts by category
+     *
+     * @param int $categoryId Category Id
+     * @param string $slug Category Slug
+     * @param int $offset Posts offset
      */
-    public function indexAction()
+    public function categoryAction($categoryId, $slug, $offset = 0)
     {
-        $this->tag->setTitle('Forum');
-
-        $userId           = $this->session->get('identity');
-        $categories       = Categories::find();
-        $lastAuthor       = [];
-        $notRead          = [];
-        $postsPerCategory = [];
-
-        $statement = $this->db->prepare(
-            "
-                SELECT * FROM posts p
-                JOIN topic_tracking tt ON tt.topic_id
-                WHERE CONCAT(p.id) AND NOT(FIND_IN_SET(p.id, tt.topic_id))
-                  AND p.categories_id = :cid AND tt.user_id = :uid
-            "
-        );
-
-        foreach ($categories as $category) {
-            $posts = $category->getPosts();
-            $postsPerCategory[$category->id] = $posts->count();
-            if ($posts->count()) {
-                $lastAuthor[$category->id] = $this
-                    ->modelsManager
-                    ->createBuilder()
-                    ->from(['p' => 'Phosphorum\Models\Posts'])
-                    ->where(
-                        'p.categories_id = :cat_id: AND p.deleted = 0',
-                        ['cat_id' => $category->id],
-                        ['cat_id' => Column::BIND_PARAM_INT]
-                    )
-                    ->join('Phosphorum\Models\Users', 'u.id = p.users_id', 'u')
-                    ->columns([
-                        'p.users_id as users_id',
-                        'u.name as name_user',
-                        'p.title as post1_title',
-                        'p.slug as post1_slug',
-                        'p.id as post1_id'
-                    ])
-
-                    ->orderBy('p.id DESC')
-                    ->limit(1)
-                    ->getQuery()
-                    ->execute();
-            } else {
-                $postsPerCategory[$category->id] = 0;
-                $lastAuthor[$category->id] = 0;
-            }
-
-            $notRead[$category->id] = $this->db->executePrepared(
-                $statement,
-                ['cid' => $category->id, 'uid' => $userId],
-                ['cid' => Column::BIND_PARAM_INT, 'uid'=> Column::BIND_PARAM_INT]
-            )->rowCount();
+        if (!$category = Categories::findFirstById($categoryId)) {
+            $this->flashSession->notice("The category doesn't exist");
+            $this->logger->error("The category doesn't exist");
+            $this->response->redirect();
+            return;
         }
 
-        if ($userId) {
-            $check_topic = new TopicTracking();
-            $check_topic->user_id = ''.$userId.'';
-            $check_topic->topic_id = '9999999';
-            $check_topic->create();
+        $this->tag->setTitle("Discussions in category {$category->name}");
+        $readposts = [];
+
+        if ($userId = $this->session->get('identity')) {
+            $ur = TopicTracking::findFirst(['user_id= ?0', 'bind' => [$userId]]);
+            $readposts = $ur ? explode(',', $ur->topic_id) : [];
         }
 
-        $this->view->setVars(
-            [
-                'last_author'        => $lastAuthor,
-                'not_read'           => $notRead,
-                'logged'             => $userId,
-                'categories'         => $categories,
-                'posts_per_category' => $postsPerCategory
-            ]
-        );
+        /**
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder
+         */
+        list($itemBuilder, $totalBuilder) = $this->prepareQueries();
+
+        $totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
+
+        $posts = $itemBuilder
+            ->where('p.categories_id = ?0 AND p.deleted = 0')
+            ->orderBy('p.created_at DESC')
+            ->offset((int) $offset)
+            ->getQuery()
+            ->execute([$categoryId]);
+
+        if (!count($posts)) {
+            $this->flashSession->notice('There are no posts in category: ' . $category->name);
+            $this->response->redirect();
+            return;
+        }
+
+        $totalPosts = $totalBuilder
+            ->getQuery()
+            ->setUniqueRow(true)
+            ->execute([$categoryId]);
+
+        $this->view->setVars([
+            'readposts'    => $readposts,
+            'posts'        => $posts,
+            'totalPosts'   => $totalPosts,
+            'currentOrder' => null,
+            'offset'       => (int) $offset,
+            'paginatorUri' => "category/{$category->id}/{$category->slug}",
+            'logged'       => $userId
+        ]);
     }
 }

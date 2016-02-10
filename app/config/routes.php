@@ -305,8 +305,8 @@ $router->add(
 $router->add(
     '/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}',
     [
-       'controller' => 'discussions',
-       'action'     => 'category'
+       'controller' => 'categories',
+       'action'     => 'view'
     ]
 );
 
