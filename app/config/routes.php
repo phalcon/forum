@@ -311,6 +311,14 @@ $router->add(
 );
 
 $router->add(
+    '/category/{id:[0-9]+}/{slug}',
+    [
+        'controller' => 'categories',
+        'action'     => 'view'
+    ]
+);
+
+$router->add(
     '/post/discussion',
     [
        'controller' => 'discussions',
@@ -347,14 +355,6 @@ $router->add(
     [
        'controller' => 'discussions',
        'action'     => 'user'
-    ]
-);
-
-$router->add(
-    '/category/{id:[0-9]+}/{slug}',
-    [
-       'controller' => 'discussions',
-       'action'     => 'category'
     ]
 );
 
