@@ -48,6 +48,7 @@
 		{{- stylesheet_link("css/theme.css?v=" ~ version, true) -}}
 		{%- endif -%}
 		{{- stylesheet_link("css/editor.css?v=" ~ version, true) -}}
+		{{- stylesheet_link("css/octicons.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/diff.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/style.css?v=" ~ version, true) -}}
 	</head>
