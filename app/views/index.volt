@@ -40,7 +40,7 @@
 		</style>
 
 		{#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
-		{{- stylesheet_link("//cdn.jsdelivr.net/bootstrap/3.1.1/css/bootstrap.min.css", false) -}}
+		{{- stylesheet_link("//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css", false) -}}
 		{{- stylesheet_link("//cdn.jsdelivr.net/prettify/0.1/prettify.css", false) -}}
 		{%- if theme == 'L' -%}
 		{{- stylesheet_link("css/theme-white.css?v=" ~ version, true) -}}
@@ -54,7 +54,7 @@
 	</head>
 	<body>
 		{{ content() }}
-		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.1,prettify@0.1(prettify.js+lang-css.js+lang-sql.js)"></script>
+		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.3.6,prettify@0.1(prettify.js+lang-css.js+lang-sql.js)"></script>
 		{{ javascript_include("js/editor.js?v=" ~ version) }}
 		{{ javascript_include("js/forum.js?v=" ~ version) }}
 		{{ javascript_include("js/gs.js?v=" ~ version) }}
