@@ -1,10 +1,5 @@
 {{ content() }}
 
-<div class="hot-discussions">
-
-	<div class="row-fluid">
-		<div class="span12">
-			{% include 'partials/list-posts.volt' %}
-		</div>
-	</div>
+<div class="col-md-12">
+	{% include 'partials/list-posts.volt' %}
 </div>

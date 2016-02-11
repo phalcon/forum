@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div class="container start-discussion">
+<div class="start-discussion">
 
     <h1>Start a Discussion</h1>
 

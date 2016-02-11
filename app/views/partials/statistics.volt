@@ -1,5 +1,5 @@
 {% if actionName is 'index' or (actionName is 'view' and controllerName is 'categories') %}
-<div class="clearfix">
+<div class="clearfix footer-statistic">
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading">Statistics</div>

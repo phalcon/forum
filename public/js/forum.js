@@ -589,12 +589,12 @@ var Forum = {
 
 	reloadCategories: function(event)
 	{
-		if ($('#categories-dropdown').html().trim() == '') {
+		if ($('.categories-dropdown').html().trim() == '') {
 			$.ajax({
 				method: 'GET',
-				url: Forum._uri + 'reload-categories',
+				url: Forum._uri + 'reload-categories'
 			}).done(function(response){
-				$('#categories-dropdown').html(response);
+				$('.categories-dropdown').html(response);
 			});
 		}
 	},
