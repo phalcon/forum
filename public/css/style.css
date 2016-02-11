@@ -76,6 +76,17 @@ h1, h2, h3, h4, h5, h6 {
     color: rgba(0, 0, 0, 0.8);
 }
 
+.search-group .btn-primary {
+    background-color: #5b9f81;
+    border-color: #4c8c6f;
+    color: #fff;
+}
+
+.search-group #forum-search-input {
+    border: 1px solid #70b99a;
+    background-color: #e7edf3;
+}
+
 .page-wrapper {
     margin-top: 2rem;
     font-size: 0.85rem;

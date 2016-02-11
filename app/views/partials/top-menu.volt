@@ -21,7 +21,7 @@
                         <li>
                             <div style="">
                                 {{- form('search', 'method': 'get', 'autocomplete': 'off') -}}
-                                <div class="input-group">
+                                <div class="input-group search-group">
                                     <label class="sr-only" for="forum-search-input"></label>
                                     <input type="text" class="form-control input-sm" name="q" id="forum-search-input">
                                     <span class="input-group-btn">
