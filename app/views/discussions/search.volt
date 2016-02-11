@@ -1,11 +1,7 @@
 {{ content() }}
 
-<div class="container">
-	<h1>Search Results</h1>
-</div>
+<h1>Search Results</h1>
 
-<div class="row-fluid">
-	<div class="span8">
-		{% include 'partials/list-posts.volt' %}
-	</div>
+<div class="col-md-12">
+    {% include 'partials/list-posts.volt' %}
 </div>

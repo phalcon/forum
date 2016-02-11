@@ -45,7 +45,7 @@
 	</div>
 {%- endif -%}
 
-<div class="container" itemscope itemtype="http://schema.org/Question">
+<div itemscope itemtype="http://schema.org/Question">
 
 	<ol class="breadcrumb">
 		<li>{{ link_to('', 'Home') }}</li>

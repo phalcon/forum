@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div class="view-discussion container activity-container">
+<div class="view-discussion activity-container">
 
     <h1>Notifications</h1>
 

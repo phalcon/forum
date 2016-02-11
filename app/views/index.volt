@@ -48,11 +48,11 @@
 		{{- stylesheet_link("css/theme.css?v=" ~ version, true) -}}
 		{%- endif -%}
 		{{- stylesheet_link("css/editor.css?v=" ~ version, true) -}}
-		{{- stylesheet_link("css/octicons.css?v=" ~ version, true) -}}
+		{{- stylesheet_link("css/fonts.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/diff.css?v=" ~ version, true) -}}
 		{{- stylesheet_link("css/style.css?v=" ~ version, true) -}}
 	</head>
-	<body>
+	<body class="with-top-navbar">
 		{{ content() }}
 		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.3.6,prettify@0.1(prettify.js+lang-css.js+lang-sql.js)"></script>
 		{{ javascript_include("js/editor.js?v=" ~ version) }}

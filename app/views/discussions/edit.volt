@@ -1,6 +1,6 @@
 {{ content() }}
 
-<div class="start-discussion container">
+<div class="start-discussion">
 
     <ol class="breadcrumb">
         <li>{{ link_to('', 'Home') }}</a></li>

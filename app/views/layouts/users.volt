@@ -1,5 +1,9 @@
 {% include 'partials/top-menu.volt' %}
 
-{{ content() }}
+<div class="page-wrapper">
+    <div class="container">
+        {{ content() }}
+    </div>
+</div>
 
 {% include 'partials/footer.volt' %}

@@ -1,5 +1,5 @@
 
-<div class="container help">
+<div class="help">
 
 	<ol class="breadcrumb">
 		<li>{{ link_to('', 'Home') }}</a></li>
