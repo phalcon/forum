@@ -2,15 +2,15 @@
 
 <div class="row profile">
     <div class="col-md-3">
-        <div class="profile-sidebar">
+        <div class="profile-sidebar" itemscope itemtype="http://schema.org/Person">
             <div class="profile-avatar">
-                {{ image(avatar, 'class': 'img-responsive') }}
+                {{ image(avatar, 'class': 'img-responsive', 'itemprop': 'image') }}
             </div>
             <div class="profile-title">
                 <div class="profile-title-name">
                     <h1>
-                        <div class="user-name">{{ user.name|e }}</div>
-                        <div class="user-login">{{ user.login }}</div>
+                        <span class="user-name" itemprop="name">{{ user.name|e }}</span>
+                        <span class="user-login" itemprop="additionalName">{{ user.login }}</span>
                     </h1>
                 </div>
             </div>
@@ -50,7 +50,9 @@
                 <h3>User badges</h3>
                 <p>
                     {% for badge in user.badges %}
-                        <button type="button" class="btn btn-default btn-sm badge"><span class="badge3"></span> {{ badge.badge }}</button>
+                        <button type="button" class="btn btn-default btn-sm badge">
+                            <span class="badge3"></span> {{ badge.badge }}
+                        </button>
                     {% endfor %}
                 </p>
             </div>
@@ -61,7 +63,17 @@
                         {%- if activity.post and activity.post.deleted != 1 -%}
                             <div class="activity-list">
                                 <div class="activity-list-body">
-                                    <span class="octicon octicon-comment-discussion dashboard-event-icon"></span>
+                                    {%- if activity.type == 'U' -%}
+                                        {% set icon = 'octicon-organization' %}
+                                    {%- elseif activity.type == 'P' -%}
+                                        {% set icon = 'octicon-file-text' %}
+                                    {%- elseif activity.type == 'C' -%}
+                                        {% set icon = 'octicon-comment-discussion' %}
+                                    {%- else -%}
+                                        {% set icon = 'octicon-star' %}
+                                    {%- endif -%}
+
+                                    <span class="octicon {{ icon }} dashboard-event-icon"></span>
                                     <time>{{ activity.getHumanCreatedAt() }}</time><br>
                                     {%- if activity.type == 'U' -%}
                                         has joined the forum
