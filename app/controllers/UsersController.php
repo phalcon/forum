@@ -82,12 +82,13 @@ class UsersController extends ControllerBase
             }
         }
 
+        $this->gravatar->setSize(220);
         $this->view->setVars([
             'ranking'       => $ranking,
             'total_ranking' => count($users),
+            'avatar'        => $this->gravatar->getAvatar($user->email),
         ]);
 
-        $this->gravatar->setSize(64);
         $this->tag->setTitle('Profile - ' . $this->escaper->escapeHtml($user->name));
     }
 

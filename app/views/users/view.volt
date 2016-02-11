@@ -2,38 +2,72 @@
 
 <hr>
 
-<div align="center" class="container">
-    <div class="user-profile">
-        <table align="center">
-            <tr>
-                <td class="small hidden-xs" valign="top">
-                    {{ image(gravatar.getAvatar(user.email), 'width': 64, 'height': 64, 'class': 'img-rounded') }}
-                </td>
-                <td align="left" valign="top">
-                    <h1>{{ user.name|e }}</h1>
-                    <span class="login">{{ user.login }}</span><br>
-                    <p>
-                        <span>joined <b>{{ date('M d/Y', user.created_at) }}</b></span><br>
-                        <span>posts <b>{{ numberPosts }}</b></span> / <span>replies <b>{{ numberReplies }}</b></span><br>
-                        <span>reputation <b>{{ user.karma }}</b></span><br>
-                        <span>reputation ranking <b>#{{ ranking }}</b> of <b>{{ total_ranking }}</b></span><br>
-                        <a href="https://github.com/{{ user.login }}">Github Profile</a>
-                    </p>
+<div class="container">
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    {{ image(avatar, 'class': 'img-responsive') }}
+                </div>
+                <div class="profile-title">
+                    <div class="profile-title-name">
+                        <h1>
+                            <div class="user-name">{{ user.name|e }}</div>
+                            <div class="user-login">{{ user.login }}</div>
+                        </h1>
+                    </div>
+                </div>
+                <div class="profile-buttons">
+                    <!-- todo -->
+                    <div style="height: 2em"></div>
+                    <!-- todo -->
+                </div>
+                <div class="profile-info">
+                    <ul class="nav">
+                        <li>
+                            <span class="octicon octicon-clock"></span>&nbsp;<span>Joined {{ date('M d, y', user.created_at) }}</span>
+                        </li>
+                        <li>
+                            <span class="octicon octicon-gist"></span>&nbsp;<span>Posts {{ numberPosts }}</span>
+                        </li>
+                        <li>
+                            <span class="octicon octicon-comment-discussion"></span>&nbsp;<span>Replies {{ numberReplies }}</span>
+                        </li>
+
+                        <li>
+                            <span class="octicon octicon-star"></span>&nbsp;<span>Reputation {{ user.karma }}</span>
+                        </li>
+
+                        <li>
+                            <span class="octicon octicon-pulse"></span>&nbsp;<span>Reputation Ranking <b>#{{ ranking }}</b> of <b>{{ total_ranking }}</b></span>
+                        </li>
+
+                        <li>
+                            <span class="octicon octicon-octoface"></span>&nbsp;<span><a href="https://github.com/{{ user.login }}">Github Profile</a></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="profile-content">
+                <div class="row">
+                    <h3>User badges</h3>
                     <p>
                         {% for badge in user.badges %}
                             <button type="button" class="btn btn-default btn-sm badge"><span class="badge3"></span> {{ badge.badge }}</button>
                         {% endfor %}
                     </p>
-                    <p>
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">Recent Activity</a><li>
-                    </ul>
-                    </p>
-                    <p>
-                    <table class="table table-striped">
+                </div>
+                <div class="row">
+                    <h3>Recent Activity</h3>
+                    <div class="naw news public_news">
                         {%- for activity in activities -%}
                             {%- if activity.post and activity.post.deleted != 1 -%}
-                                <tr><td>
+                                <div class="activity-list">
+                                    <div class="activity-list-body">
+                                        <span class="octicon octicon-comment-discussion dashboard-event-icon"></span>
+                                        <time>{{ activity.getHumanCreatedAt() }}</time><br>
                                         {%- if activity.type == 'U' -%}
                                             has joined the forum
                                         {%- elseif activity.type == 'P' -%}
@@ -41,14 +75,13 @@
                                         {%- elseif activity.type == 'C' -%}
                                             has commented in {{ link_to('discussion/' ~ activity.post.id ~ '/' ~ activity.post.slug, activity.post.title|e) }}
                                         {%- endif -%}
-                                        &nbsp;<span class="date">{{ activity.getHumanCreatedAt() }}</span>
-                                    </td></tr>
+                                    </div>
+                                </div>
                             {%- endif -%}
                         {%- endfor -%}
-                    </table>
-                    </p>
-                </td>
-            </tr>
-        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
