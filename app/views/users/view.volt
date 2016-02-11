@@ -1,7 +1,5 @@
 {{ content() }}
 
-<hr>
-
 <div class="container">
     <div class="row profile">
         <div class="col-md-3">
@@ -18,8 +16,6 @@
                     </div>
                 </div>
                 <div class="profile-buttons">
-                    <!-- todo -->
-                    <div style="height: 2em"></div>
                     <!-- todo -->
                 </div>
                 <div class="profile-info">

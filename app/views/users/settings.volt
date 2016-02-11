@@ -1,8 +1,6 @@
 {{ content() }}
 
-<hr>
-
-<div align="center" class="container">
+<div align="center" class="container" style="margin-top: 2em">
     <div class="user-profile">
         <table align="center">
             <tr>
