@@ -111,14 +111,6 @@ $router->add(
 );
 
 $router->add(
-    '/index.html',
-    [
-       'controller' => 'categories',
-       'action'     => 'index'
-    ]
-);
-
-$router->add(
     '/discussions',
     [
        'controller' => 'discussions',
@@ -147,22 +139,6 @@ $router->add(
     [
        'controller' => 'discussions',
        'action'     => 'search'
-    ]
-);
-
-$router->add(
-    '/settings',
-    [
-       'controller' => 'discussions',
-       'action'     => 'settings'
-    ]
-);
-
-$router->add(
-    '/reload-categories',
-    [
-       'controller' => 'discussions',
-       'action'     => 'reloadCategories'
     ]
 );
 
@@ -321,8 +297,24 @@ $router->add(
 $router->add(
     '/category/{id:[0-9]+}/{slug}/{offset:[0-9]+}',
     [
-       'controller' => 'discussions',
-       'action'     => 'category'
+       'controller' => 'categories',
+       'action'     => 'view'
+    ]
+);
+
+$router->add(
+    '/category/{id:[0-9]+}/{slug}',
+    [
+        'controller' => 'categories',
+        'action'     => 'view'
+    ]
+);
+
+$router->add(
+    '/reload-categories',
+    [
+        'controller' => 'categories',
+        'action'     => 'reloadCategories'
     ]
 );
 
@@ -361,16 +353,16 @@ $router->add(
 $router->add(
     '/user/{id:[0-9]+}/{login}',
     [
-       'controller' => 'discussions',
-       'action'     => 'user'
+       'controller' => 'users',
+       'action'     => 'view'
     ]
 );
 
 $router->add(
-    '/category/{id:[0-9]+}/{slug}',
+    '/settings',
     [
-       'controller' => 'discussions',
-       'action'     => 'category'
+        'controller' => 'users',
+        'action'     => 'settings'
     ]
 );
 

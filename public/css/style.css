@@ -14,6 +14,15 @@
   +------------------------------------------------------------------------+
 */
 
+header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+header > nav {
+    margin-bottom: 0!important;
+}
+
 .navbar-reverse .navbar-nav>li>a {
     font-size: 18px;
 }
@@ -21,8 +30,7 @@
 .navbar-reverse .navbar-nav>li>a.btn-default {
     font-size: 12px;
     padding: 5px;
-    margin: 5px;
-    margin-top: 10px;
+    margin: 10px 5px 5px;
 }
 
 h1 {
@@ -33,6 +41,10 @@ h1 {
 .action-date {
     font-size: 11px;
     color: #717171;
+}
+
+.hot-discussions, .container.help {
+    margin-top: 2em;
 }
 
 .discussion div.row {
@@ -557,9 +569,141 @@ div#sticky-progress {
     width: 6px;
 }
 
-
 .badge3 {
     background-image: url("/icon/badges.gif?v=1");
     background-size: initial;
     background-position: -7px -3px;
+}
+
+.profile {
+    margin: 20px 0;
+}
+
+.profile-sidebar {
+    padding: 20px 0 10px 0;
+    background: #fff;
+}
+
+.profile-avatar {
+    width: 100%;
+}
+
+.profile-avatar img {
+    float: none;
+    margin: 0 auto;
+    width: 70%;
+    height: 70%;
+    -webkit-border-radius: 4px !important;
+       -moz-border-radius: 4px !important;
+            border-radius: 4px !important;
+}
+
+.profile-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.profile-title-name h1 {
+    color: #333;
+    font-weight: 600;
+    padding:0;
+    margin:12px auto 12px;
+}
+
+.profile-title-name h1 div {
+    max-width: 100%;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.profile-title-name h1 .user-name {
+    font-size: 26px;
+    line-height: 30px;
+}
+
+.profile-title-name h1 .user-login {
+    color: #666;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px;
+}
+
+.profile-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.profile-info .nav {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+    padding-top: 12px;
+}
+
+.profile-info .nav li {
+    max-width: 100%;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+    color: #333;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.profile-info .nav li .octicon {
+    margin-right: 8px!important;
+    color:#999;
+}
+
+.profile-info .nav li .octicon > span {
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+.profile-content {
+    padding:0 2em
+}
+
+.profile-content h3 {
+    font-size: 20px;
+}
+
+.profile-content .activity-list {
+    padding: 0 0 1em 45px;
+    overflow: hidden;
+    border-top: 1px solid #f1f1f1;
+    position: relative;
+}
+
+
+.profile-content .activity-list:first-child {
+    border-top: 0 none;
+}
+
+.profile-content .activity-list-body {
+    font-size: 14px;
+    overflow: hidden;
+    padding: 1em 0 0;
+}
+
+.profile-content .activity-list-body .dashboard-event-icon {
+    font-size: 2em;
+    color: #bbb;
+    transform: translateX(-50%);
+    top: 14px;
+    position: absolute;
+    left: 22px;
+}
+
+.profile-content .activity-list-body time {
+    color: #bbb;
+    font-size: 0.95em;
 }
