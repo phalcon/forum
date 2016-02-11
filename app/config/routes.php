@@ -311,6 +311,14 @@ $router->add(
 );
 
 $router->add(
+    '/reload-categories',
+    [
+        'controller' => 'categories',
+        'action'     => 'reloadCategories'
+    ]
+);
+
+$router->add(
     '/post/discussion',
     [
        'controller' => 'discussions',

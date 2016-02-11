@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Db\Column;
+use Phalcon\Mvc\View;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\TopicTracking;
 
@@ -87,5 +87,16 @@ class CategoriesController extends ControllerBase
             'paginatorUri' => "category/{$category->id}/{$category->slug}",
             'logged'       => $userId
         ]);
+    }
+
+    /**
+     * Reload categories
+     */
+    public function reloadCategoriesAction()
+    {
+        $this->view->setVar('categories', Categories::find(['order' => 'number_posts DESC, name']));
+
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+        $this->view->getCache()->delete('sidebar');
     }
 }
