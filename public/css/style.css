@@ -37,7 +37,6 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 4px solid #70b99a;
     font-size: 87.5%;
     border-bottom: 1px solid #e5e5e5;
-    /*overflow: hidden;*/
 }
 
 .bg-faded {
@@ -45,7 +44,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-light .navbar-brand {
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, .8);
 }
 
 .navbar-brand {
@@ -73,7 +72,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-light .navbar-nav > li > a:focus, .navbar-light .navbar-nav > li > a:hover {
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, .8);
 }
 
 .search-group .btn-primary {
@@ -87,9 +86,18 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #e7edf3;
 }
 
+ul.categories-dropdown {
+    font-size: 0.8rem;
+    min-width: 280px;
+}
+
+ul.categories-dropdown > li > a {
+    padding: 3px .6rem;
+}
+
 .page-wrapper {
     margin-top: 2rem;
-    font-size: 0.85rem;
+    font-size: .85rem;
 }
 
 h1 {
@@ -217,7 +225,7 @@ pre.prettyprint {
 }
 
 .user-profile h1 {
-    margin: 0px;
+    margin: 0;
 }
 
 .user-profile table {
@@ -235,21 +243,18 @@ pre.prettyprint {
 }
 
 .bs-callout {
-    margin: 20px 0;
+    margin: 20px 0 20px 10px;
     padding: 20px;
     border: 1px solid #eee;
     border-left: 3px solid #eee;
     background: #fefefe;
-    margin-left: 10px;
 }
 
 .bs-callout-info {
-    /*background-color: #f4f8fa;*/
     border-left-color: #5bc0de;
 }
 
 .bs-callout-success {
-    /*background-color: #dff0d8;*/
     border-left-color: #47a447;
 }
 
@@ -313,7 +318,7 @@ pre.prettyprint {
 div.reply-negative div,
 div.reply-negative p {
     color: #c0c0c0;
-    font-size: 0.9em;
+    font-size: .9em;
 }
 
 div.reply-positive div,
@@ -347,7 +352,7 @@ div.reply-accepted .post-content {
 }
 
 .footer-statistic {
-    font-size: 0.80rem;
+    font-size: .80rem;
 }
 
 div#footer .version {
@@ -365,11 +370,11 @@ div#footer a {
 }
 
 .table-title td {
-    padding: 0px;
+    padding: 0;
 }
 
 .table-title h1 {
-    margin: 0px;
+    margin: 0;
 }
 
 .table-stats {
@@ -384,7 +389,7 @@ div#footer a {
 }
 
 .table-stats label {
-    color: #999999;
+    color: #999;
     margin: 0;
     font-weight: normal;
 }
@@ -410,7 +415,7 @@ blockquote {
     margin-top: 14px;
     margin-left: 15px;
     font-size: 14px;
-    border-left: 5px solid #cccccc;
+    border-left: 5px solid #ccc;
     background: whitesmoke;
 }
 
@@ -452,7 +457,7 @@ blockquote p {
 }
 
 .modal-backdrop {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, .2);
 }
 
 .in-reply-to {
@@ -482,7 +487,7 @@ table.list-discussions a:visited {
     color: #fff;
     border-radius: 3px;
     padding: 1px 3px;
-    font: 8px Verdana;
+    font: 8px sans-serif;
 }
 
 .activity-container table {
@@ -539,7 +544,7 @@ div.login-comment {
 }
 
 div#suggested-posts h3 {
-    margin: 0px;
+    margin: 0;
     font-size: 16px;
 }
 
@@ -598,11 +603,11 @@ div#sticky-progress {
     border: 1px solid #333;
     border-radius: 4px;
     font-weight: 400;
-    -webkit-transition: background, .3s, ease;
-       -moz-transition: background, .3s, ease;
-        -ms-transition: background, .3s, ease;
-         -o-transition: background, .3s, ease;
-              transition: background .3s ease;
+    -webkit-transition: background-color .3s ease;
+       -moz-transition: background-color .3s ease;
+        -ms-transition: background-color .3s ease;
+         -o-transition: background-color .3s ease;
+            transition: background-color .3s ease;
 }
 
 .badge:hover {
@@ -623,9 +628,8 @@ div#sticky-progress {
 }
 
 .badge3 {
-    background-image: url("/icon/badges.gif?v=1");
     background-size: initial;
-    background-position: -7px -3px;
+    background: transparent url("/icon/badges.gif?v=1") -7px -3px;
 }
 
 .profile {
@@ -758,5 +762,5 @@ div#sticky-progress {
 
 .profile-content .activity-list-body time {
     color: #bbb;
-    font-size: 0.95em;
+    font-size: .95em;
 }
