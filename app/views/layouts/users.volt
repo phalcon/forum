@@ -4,6 +4,6 @@
     <div class="container">
         {{ content() }}
     </div>
-</div>
 
-{% include 'partials/footer.volt' %}
+    {% include 'partials/footer.volt' %}
+</div>
