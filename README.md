@@ -8,8 +8,8 @@ You can adapt it to your own needs or improve it if you want.
 Please write us if you have any feedback.
 
 It is used by:
-* [Phalcon Framework Forum][11]
-* [Zephir Language  Forum][12]
+* [Phalcon Framework Forum][15]
+* [Zephir Language Forum][16]
 
 ## NOTE
 
@@ -32,6 +32,11 @@ To run this application on your machine, you need at least:
 * [Apache][6] Web Server with [mod_rewrite][7] enabled or [Nginx][8] Web Server
 * Latest stable [Phalcon Framework release][9] extension enabled
 * [Beanstalkd][10] server
+
+> Note:
+We highly recommend to use at least PHP 5.5.
+Support for PHP 5.4 will be only as long as it does not impose restrictions on the forum.
+This support may be stopped suddenly.
 
 ### Installation
 
