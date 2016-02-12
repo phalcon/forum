@@ -2,17 +2,20 @@
 
 [![Build Status](https://secure.travis-ci.org/phalcon/forum.svg?branch=master)](http://travis-ci.org/phalcon/forum)
 
-This is the official Phalcon Forum you can adapt it to your own needs or improve it if you want.
+Phosphorum is an engine for building flexible, clear and fast forums.
+You can adapt it to your own needs or improve it if you want.
 
 Please write us if you have any feedback.
 
-Thanks.
+It is used by:
+* [Phalcon Framework Forum][11]
+* [Zephir Language  Forum][12]
 
 ## NOTE
 
 The master branch will always contain the latest stable version. If you wish
 to check older versions or newer ones currently under development, please
-switch to the relevant branch.
+switch to the relevant branch/tag.
 
 ## Get Started
 
@@ -91,6 +94,24 @@ $ cd scripts
 $ php send-notifications-consumer.php &
 ```
 
+You can serve it with [Supervisor][17] by using following config:
+
+```ini
+; /etc/supervisor/conf.d/send-notifications-consumer.conf
+;
+; This is axample.
+; Please update config according to your environment
+
+[program:notifications_consumer]
+command=/usr/bin/php send-notifications-consumer.php
+directory=/var/www/forum/scripts/
+autostart=true
+autorestart=true
+stderr_logfile=/var/www/forum/app/logs/notification_consumer.err.log
+stdout_logfile=/var/www/forum/app/logs/notification_consumer.out.log
+
+```
+
 ## Tests
 
 Phosphorum use [Codeception][11] functional, acceptance and unit tests.
@@ -146,3 +167,6 @@ Phosphorum is open-sourced software licensed under the [New BSD License][14]. ©
 [12]: http://goo.gl/yLJLZg
 [13]: http://codeception.com/docs/reference/Commands
 [14]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
+[15]: https://forum.zephir-lang.com/
+[16]: https://forum.phalconphp.com/
+[17]: http://supervisord.org/
