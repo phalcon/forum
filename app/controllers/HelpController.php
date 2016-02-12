@@ -39,7 +39,7 @@ class HelpController extends ControllerBase
 
     public function indexAction()
     {
-        $this->tag->setTitle("Help");
+        $this->tag->setTitle("Help Index");
     }
 
     public function karmaAction()
@@ -54,7 +54,7 @@ class HelpController extends ControllerBase
 
     public function votingAction()
     {
-        $this->tag->setTitle("Feedback system");
+        $this->tag->setTitle("Feedback System");
     }
 
     public function moderatorsAction()
@@ -90,6 +90,7 @@ class HelpController extends ControllerBase
             'users'         => Users::count(),
             'karma'         => Users::sum(['column' => 'karma']),
             'notifications' => Notifications::count(),
+            'unotifications'=> ActivityNotifications::count(),
             'views'         => Posts::sum(['column' => 'number_views']),
             'irc'           => IrcLog::count(),
         ]);
