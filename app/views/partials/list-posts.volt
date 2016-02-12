@@ -1,4 +1,4 @@
-<div class="container">
+<div class="col-md-12">
 
 	<ul class="nav nav-tabs">
 		{%- set orders = [
@@ -24,7 +24,7 @@
 </div>
 
 {%- if posts|length -%}
-<div class="container">
+<div class="col-md-12">
 	<br/>
 	<div align="center">
 		<table class="table table-striped list-discussions" width="90%">
@@ -98,7 +98,7 @@
 	</div>
 </div>
 
-<div class="container">
+<div class="col-md-12">
 	<ul class="pager">
 		{%- if offset > 0 -%}
 			<li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - limitPost), 'Prev', 'rel': 'prev') }}</li>
@@ -111,7 +111,7 @@
 </div>
 
 {%- else -%}
-<div class="container" align="center">
+<div class="col-md-12" align="center">
 	<div class="alert alert-info">There are no posts here</div>
 </div>
 {%- endif -%}
