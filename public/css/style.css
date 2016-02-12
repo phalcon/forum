@@ -18,6 +18,10 @@ html {
     font-size: 16px;
 }
 
+html, body {
+    height:100%;
+}
+
 body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1rem;
@@ -26,7 +30,36 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem;
+    margin-top: 0;
     line-height: 1.3
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+h1, .h1 {
+    font-size: 1.85rem;
+}
+h2, .h2 {
+    font-size: 1.6rem;
+}
+h3, .h3 {
+    font-size: 1.35rem;
+}
+h4, .h4 {
+    font-size: 1.3rem;
+}
+h5, .h5 {
+    font-size: 1.2rem;
+}
+h6, .h6 {
+    font-size: 1rem;
 }
 
 .with-top-navbar {
@@ -98,20 +131,16 @@ ul.categories-dropdown > li > a {
 .page-wrapper {
     margin-top: 2rem;
     font-size: .85rem;
+    height:100%;
 }
 
-h1 {
-    font-size: 30px;
-    margin-bottom: 15px;
+.page-wrapper > .container:first-child {
+    min-height:73%;
 }
 
 .action-date {
     font-size: 11px;
     color: #717171;
-}
-
-.container.help {
-    margin-top: 2em;
 }
 
 .discussion div.row {
@@ -291,12 +320,33 @@ pre.prettyprint {
     margin-bottom: 0;
 }
 
-.help {
-    width: 800px;
+.help-container {
+    min-height: 100%;
+    height: 100%;
+    width:100%;
 }
 
-.help table {
-    max-width: 80%;
+.help-head h1 {
+    margin-bottom: 2rem;
+}
+
+.help-category-box {
+    margin-bottom: 1rem;
+}
+
+.help-category-box h3 {
+    border-bottom: 1px solid #eaebec;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.help-category-box .nav > li > a {
+    padding: 0.3rem 0.6rem;
+}
+
+.help-category-box .nav > li > a:focus, .help-category-box .nav > li > a:hover {
+    background-color: inherit;
+    text-decoration: none;
 }
 
 .post-negative a,
