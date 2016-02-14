@@ -126,6 +126,7 @@ command=/usr/bin/php send-notifications-consumer.php
 directory=/var/www/forum/scripts/
 autostart=true
 autorestart=true
+user=www-data
 stderr_logfile=/var/www/forum/app/logs/notification_consumer.err.log
 stdout_logfile=/var/www/forum/app/logs/notification_consumer.out.log
 ```
@@ -185,7 +186,7 @@ Phosphorum is open-sourced software licensed under the [New BSD License][14]. ©
 [12]: http://goo.gl/yLJLZg
 [13]: http://codeception.com/docs/reference/Commands
 [14]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
-[15]: https://forum.zephir-lang.com/
-[16]: https://forum.phalconphp.com/
+[15]: https://forum.phalconphp.com/
+[16]: https://forum.zephir-lang.com/
 [17]: http://supervisord.org/
 [18]: https://developer.github.com/v3/oauth/
