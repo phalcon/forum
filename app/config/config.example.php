@@ -18,8 +18,6 @@
 use Phalcon\Config;
 use Phalcon\Logger;
 
-defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[ 0 ]);
-
 return new Config([
     'site' => [
         'name'        => 'Phalcon Framework',
@@ -54,12 +52,17 @@ return new Config([
         'charset'  => 'utf8'
     ],
 
+    'metadata' => [
+        'adapter'     => 'Files',
+        'metaDataDir' => BASE_DIR . 'app/cache/metaData/',
+    ],
+
     'application' => [
-        'controllersDir' => APP_PATH . '/app/controllers/',
-        'modelsDir'      => APP_PATH . '/app/models/',
-        'viewsDir'       => APP_PATH . '/app/views/',
-        'pluginsDir'     => APP_PATH . '/app/plugins/',
-        'libraryDir'     => APP_PATH . '/app/library/',
+        'controllersDir' => BASE_DIR . 'app/controllers/',
+        'modelsDir'      => BASE_DIR . 'app/models/',
+        'viewsDir'       => BASE_DIR . 'app/views/',
+        'pluginsDir'     => BASE_DIR . 'app/plugins/',
+        'libraryDir'     => BASE_DIR . 'app/library/',
         'development'    => [
             'staticBaseUri' => '/',
             'baseUri'       => '/'
@@ -69,6 +72,40 @@ return new Config([
             'baseUri'       => '/'
         ],
         'debug' => true
+    ],
+
+    'volt' => [
+        'compiledExt'  => '.php',
+        'separator'    => '_',
+        'cacheDir'     => BASE_DIR . 'app/cache/volt/',
+        'forceCompile' => true,
+    ],
+
+    'dataCache' => [
+        'backend'  => 'File',
+        'frontend' => 'Data',
+        'lifetime' => 30 * 24 * 60 * 60,
+        'prefix'   => 'forum-data-cache-',
+        'cacheDir' => BASE_DIR . 'app/cache/data/',
+    ],
+
+    'modelsCache' => [
+        'backend'  => 'File',
+        'frontend' => 'Data',
+        'lifetime' => 30 * 24 * 60 * 60,
+        'prefix'   => 'forum-models-cache-',
+        'cacheDir' => BASE_DIR . 'app/cache/models/',
+    ],
+
+    'viewCache' => [
+        'backend'  => 'File',
+        'lifetime' => 30 * 24 * 60 * 60,
+        'prefix'   => 'forum-views-cache-',
+        'cacheDir' => BASE_DIR . 'app/cache/views/',
+    ],
+
+    'session' => [
+        'adapter' => 'Files',
     ],
 
     'mandrillapp' => [
@@ -106,11 +143,22 @@ return new Config([
         'fromName'  => 'Phalcon',
         'fromEmail' => 'phosphorum@phalconphp.com',
     ],
+
     'logger' => [
-        'path'     => APP_PATH . '/app/logs/',
+        'path'     => BASE_DIR . 'app/logs/',
         'format'   => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
         'date'     => 'D j H:i:s',
         'logLevel' => Logger::WARNING,
         'filename' => 'application.log',
-    ]
+    ],
+
+    'error' => [
+        'logger'    => BASE_DIR . 'app/logs/error.log',
+        'formatter' => [
+            'format' => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
+            'date'   => 'D j H:i:s',
+        ],
+        'controller' => 'error',
+        'action'     => 'index',
+    ],
 ]);
