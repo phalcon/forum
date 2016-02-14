@@ -40,10 +40,10 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - java -jar selenium-server-standalone-2.48.2.jar -port 4444 >/dev/null 2>&1 &
   - sleep 5
-  - cp ./tests/config/config.php.dist ./app/config/config.php
+  - cp ./app/config/config.example.php ./app/config/config.php
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
-  - (cd ./scripts/ && php random-entries.php > /dev/null)
+  - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - stty cols 160
 
