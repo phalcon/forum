@@ -545,18 +545,17 @@ class Bootstrap
     protected function initMarkdown(DiInterface $di, Config $config, EventsManager $em)
     {
         $di->setShared('markdown', function () {
-                $ciconia = new Ciconia;
+            $ciconia = new Ciconia;
 
-                $ciconia->addExtension(new Markdown\UnderscoredUrlsExtension);
-                $ciconia->addExtension(new Markdown\TableExtension);
-                $ciconia->addExtension(new Markdown\MentionExtension);
-                $ciconia->addExtension(new Markdown\BlockQuoteExtension);
-                $ciconia->addExtension(new Markdown\UrlAutoLinkExtension);
-                $ciconia->addExtension(new FencedCodeBlockExtension);
+            $ciconia->addExtension(new Markdown\UnderscoredUrlsExtension);
+            $ciconia->addExtension(new Markdown\TableExtension);
+            $ciconia->addExtension(new Markdown\MentionExtension);
+            $ciconia->addExtension(new Markdown\BlockQuoteExtension);
+            $ciconia->addExtension(new Markdown\UrlAutoLinkExtension);
+            $ciconia->addExtension(new FencedCodeBlockExtension);
 
-                return $ciconia;
-            }
-        );
+            return $ciconia;
+        });
     }
 
     /**
