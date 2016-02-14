@@ -71,15 +71,9 @@ class Bootstrap
 
     /**
      * Bootstrap constructor.
-     *
-     * @param Application|Console $application Application object
      */
-    public function __construct($application)
+    public function __construct()
     {
-        if (!$application instanceof Application && !$application instanceof Console) {
-            throw new RuntimeException('Invalid Application object.');
-        }
-
         $di = new FactoryDefault;
 
         $em = new EventsManager;
@@ -90,8 +84,7 @@ class Bootstrap
         // Register the configuration itself as a service
         $di->setShared('config', $config);
 
-        $this->app = $application;
-        $this->app->setEventsManager($em);
+        $this->app = new Application;
 
         $this->initLogger($di, $config, $em);
         $this->initLoader($di, $config, $em);
@@ -103,6 +96,9 @@ class Bootstrap
 
         $di->setShared('eventsManager', $em);
         $di->setShared('app', $this->app);
+
+        $this->app->setEventsManager($em);
+        $this->app->setDI($di);
     }
 
     /**
@@ -276,9 +272,8 @@ class Bootstrap
      */
     protected function initView(DiInterface $di, Config $config, EventsManager $em)
     {
-        $di->set('view', function () use ($config, $em) {
+        $di->set('view', function () use ($di, $config, $em) {
             $view  = new View;
-            $di    = $this;
             $view->registerEngines([
                 // Setting up Volt Engine
                 '.volt'  => function ($view, $di) use ($config) {
@@ -454,7 +449,7 @@ class Bootstrap
     {
         $di->setShared('router', function () use ($config, $em) {
             /** @var \Phalcon\Mvc\Router $router */
-            $router = include_once BASE_DIR . 'app/config/routes.php';
+            $router = include BASE_DIR . 'app/config/routes.php';
 
             if (!isset($_GET['_url'])) {
                 $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
@@ -661,15 +656,25 @@ class Bootstrap
             );
         }
 
-        $config = include_once $path . 'config.php';
+        $config = include $path . 'config.php';
 
         if (is_array($config)) {
             $config = new Config($config);
         }
 
         if (!$config instanceof Config) {
+            $type = gettype($config);
+            if ($type == 'boolean') {
+                $type .= ($type ? ' (true)' : ' (false)');
+            } elseif (is_object($type)) {
+                $type = get_class($type);
+            }
+
             throw new RuntimeException(
-                'Unable to read config file. Config must be either an array or Phalcon\Config instance.'
+                sprintf(
+                    'Unable to read config file. Config must be either an array or Phalcon\Config instance. Got %s',
+                    $type
+                )
             );
         }
 
