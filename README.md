@@ -69,6 +69,12 @@ $ echo 'CREATE DATABASE forum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u r
 $ cat schemas/forum.sql | mysql -u root phosphorum
 ```
 
+And create environment config (copy from example):
+
+```sh
+$ cp .env.example .env
+```
+
 #### Initial Test Data
 
 You can create fake entries on an empty Phosphorum installation by running:

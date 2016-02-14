@@ -19,6 +19,8 @@ use Phalcon\Http\Response;
 use Phalcon\Mvc\Application;
 use Phalcon\DI\FactoryDefault;
 
+require realpath(dirname(dirname(__FILE__))) . '/app/config/env.php';
+
 error_reporting(E_ALL);
 
 if (!isset($_GET['_url'])) {
