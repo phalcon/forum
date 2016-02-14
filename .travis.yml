@@ -8,10 +8,10 @@ php:
 services:
   - memcached
 
-#cache:
-#  directories:
-#    - vendor
-#    - $HOME/.composer/cache
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 sudo: false
 
@@ -23,7 +23,6 @@ env:
   - PHALCON_VERSION="phalcon-v2.0.7"
   - PHALCON_VERSION="phalcon-v2.0.6"
   - PHALCON_VERSION="phalcon-v2.0.5"
-  - PHALCON_VERSION="phalcon-v2.0.4"
 
 install:
   - wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar
@@ -47,9 +46,6 @@ before_script:
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - stty cols 160
-
-after_script:
-  - mysql -e 'DROP DATABASE phosphorum;' -uroot
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
