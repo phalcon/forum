@@ -50,7 +50,7 @@ class Backup extends Injectable
             throw new \Exception("Backup could not be created");
         }
 
-        list($accessToken, $host) = AuthInfo::loadFromJsonFile(APP_PATH . '/app/config/backup.auth');
+        list($accessToken, $host) = AuthInfo::loadFromJsonFile(BASE_DIR . 'app/config/backup.auth');
 
         $client = new Client($accessToken, "phosphorum", null, $host);
 

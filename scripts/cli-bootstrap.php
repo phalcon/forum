@@ -15,36 +15,11 @@
  +------------------------------------------------------------------------+
 */
 
-/**
- * CLI Bootstrap
- */
+use Phosphorum\Bootstrap;
+// @todo Use Console app here
+use Phalcon\Mvc\Application;
 
-error_reporting(E_ALL);
-set_time_limit(0);
+include_once realpath(dirname(dirname(__FILE__))) . '/app/config/env.php';
+include_once BASE_DIR . 'app/library/Bootstrap.php';
 
-define('APP_PATH', realpath('..'));
-
-/**
- * Read the configuration
- */
-$config = include APP_PATH . "/app/config/config.php";
-
-/**
- * Include the loader
- */
-require APP_PATH . "/app/config/loader.php";
-
-/**
- * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
- */
-$di = new \Phalcon\DI\FactoryDefault();
-
-/**
- * Include the application services
- */
-require APP_PATH . "/app/config/services.php";
-
-/**
- * Include composer autoloader
- */
-require APP_PATH . "/vendor/autoload.php";
+$bootstrap = new Bootstrap(new Application);
