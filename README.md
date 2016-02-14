@@ -91,11 +91,8 @@ $ cp app/config/development.example.php app/config/development.php
 
 You can create fake entries on an empty Phosphorum installation by running:
 
-> Note: The script random-entries.php must be executed inside the scripts directory
-
 ```bash
-$ cd scripts
-$ php random-entries.php
+$ php scripts/random-entries.php
 ```
 
 #### Directory Permissions
