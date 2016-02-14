@@ -69,10 +69,22 @@ $ echo 'CREATE DATABASE forum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u r
 $ cat schemas/forum.sql | mysql -u root phosphorum
 ```
 
-And create environment config (copy from example):
+Copy environment config:
 
 ```sh
 $ cp .env.example .env
+```
+
+Copy application config:
+
+```sh
+$ cp app/config/config.example.php app/config/config.php
+```
+
+You can override application configuration by creating development configuration:
+
+```sh
+$ cp app/config/development.example.php app/config/development.php
 ```
 
 #### Initial Test Data
@@ -88,11 +100,12 @@ $ php random-entries.php
 
 #### Directory Permissions
 
-After installing Phosphorum, you may need to configure some permissions. Directories within the `app/cache` and the `app/logs` directory should be writable by your web server or Phosphorum will not run.
+After installing Phosphorum, you may need to configure some permissions.
+Directories within the `app/cache` and the `app/logs` directory should be writable by your web server or **Phosphorum will not run**.
 
 #### OAuth
 
-This application uses Github as authentication system, you need a client id and secret id
+This application uses [Github as authentication system][18], you need a client id and secret id
 to be set up in the configuration (`app/config/config.php`).
 
 #### Starting the Beanstalkd client
@@ -100,9 +113,7 @@ to be set up in the configuration (`app/config/config.php`).
 A PHP client to deliver e-mails must be enabled in background:
 
 ```bash
-$ cd scripts
-# run send-notifications-consumer.php from scripts directory
-$ php send-notifications-consumer.php &
+$ php scripts/send-notifications-consumer.php &
 ```
 
 You can serve it with [Supervisor][17] by using following config:
@@ -120,7 +131,6 @@ autostart=true
 autorestart=true
 stderr_logfile=/var/www/forum/app/logs/notification_consumer.err.log
 stdout_logfile=/var/www/forum/app/logs/notification_consumer.out.log
-
 ```
 
 ## Tests
@@ -181,3 +191,4 @@ Phosphorum is open-sourced software licensed under the [New BSD License][14]. ©
 [15]: https://forum.zephir-lang.com/
 [16]: https://forum.phalconphp.com/
 [17]: http://supervisord.org/
+[18]: https://developer.github.com/v3/oauth/
