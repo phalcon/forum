@@ -40,6 +40,7 @@ before_script:
   - java -jar selenium-server-standalone-2.48.2.jar -port 4444 >/dev/null 2>&1 &
   - sleep 5
   - cp ./app/config/config.example.php ./app/config/config.php
+  - cp ./app/config/development.example.php ./app/config/development.php
   - cp ./.env.example ./.env
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
