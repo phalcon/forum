@@ -32,11 +32,6 @@ use Phosphorum\Badges\Manager as BadgeManager;
  */
 class HelpController extends ControllerBase
 {
-    public function initialize()
-    {
-        $this->view->setTemplateBefore(['discussions']);
-    }
-
     public function indexAction()
     {
         $this->tag->setTitle("Help Index");

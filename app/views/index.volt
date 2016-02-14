@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>{{ get_title(false) }} - {{ config.site.name }}</title>
+		<title>{{ get_title(false) ~ ' - ' ~ config.site.name }}</title>
 
 		<meta content="{{ config.site.keywords }}" name="keyword">
 		<meta content="{{ config.site.description }}" name="description">

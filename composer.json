@@ -21,6 +21,7 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-phalcon": ">=2.0.3",
+        "vlucas/phpdotenv": "^2.1",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
         "swiftmailer/swiftmailer": "^5.4",
@@ -32,8 +33,8 @@
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
-        "codeception/codeception": "2.1.x-dev",
+        "codeception/codeception": "^2.1",
         "codeception/mockery-module": "^0.2",
-        "squizlabs/php_codesniffer": "^2.3"
+        "squizlabs/php_codesniffer": "^2.5"
     }
 }

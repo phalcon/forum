@@ -15,63 +15,15 @@
  +------------------------------------------------------------------------+
 */
 
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Application;
-use Phalcon\DI\FactoryDefault;
+use Phosphorum\Bootstrap;
 
-error_reporting(E_ALL);
+include_once realpath(dirname(dirname(__FILE__))) . '/app/config/env.php';
+include_once BASE_DIR . 'app/library/Bootstrap.php';
 
-if (!isset($_GET['_url'])) {
-    $_GET['_url'] = '/';
-}
+$bootstrap = new Bootstrap();
 
-define('APP_PATH', realpath('..'));
-
-/**
- * Read the configuration
- */
-$config = include APP_PATH . "/app/config/config.php";
-
-/**
- * Include the loader
- */
-require APP_PATH . "/app/config/loader.php";
-
-/**
- * Include composer autoloader
- */
-require APP_PATH . "/vendor/autoload.php";
-
-try {
-
-    /**
-     * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
-     */
-    $di = new FactoryDefault();
-
-    /**
-     * Include the application services
-     */
-    require APP_PATH . "/app/config/services.php";
-
-    /**
-     * Handle the request
-     */
-    $application = new Application($di);
-
-    echo $application->handle()->getContent();
-
-} catch (Exception $e) {
-    /**
-     * Log the exception
-     */
-    $di->get('logger', ['error.log'])->error($e->getMessage());
-    $di->get('logger', ['error.log'])->error($e->getTraceAsString());
-
-    /**
-     * Show an static error page
-     */
-    $response = new Response();
-    $response->redirect('505.html');
-    $response->send();
+if (APPLICATION_ENV == ENV_TESTING) {
+    return $bootstrap->run();
+} else {
+    echo $bootstrap->run();
 }
