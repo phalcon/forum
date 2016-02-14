@@ -52,7 +52,7 @@ class ErrorController extends ControllerBase
 
         $this->view->setVars([
             'error' => $this->error,
-            'debug' => ENV_DEVELOPMENT === APPLICATION_ENV,
+            'debug' => (ENV_PRODUCTION !== APPLICATION_ENV && ENV_STAGING !== APPLICATION_ENV),
         ]);
     }
 
