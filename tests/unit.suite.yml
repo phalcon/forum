@@ -9,4 +9,5 @@ modules:
         - \Helper\Unit
         - Asserts
         - Phalcon2:
-            bootstrap: 'tests/config/bootstrap.php'
+            bootstrap: 'public/index.php'
+            cleanup: true
