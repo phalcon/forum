@@ -52,7 +52,7 @@ class ErrorController extends ControllerBase
 
         $this->view->setVars([
             'error' => $this->error,
-            'debug' => (ENV_PRODUCTION !== APPLICATION_ENV && ENV_STAGING !== APPLICATION_ENV),
+            'debug' => (ENV_DEVELOPMENT === APPLICATION_ENV || ENV_TESTING === APPLICATION_ENV),
         ]);
     }
 
@@ -83,15 +83,21 @@ class ErrorController extends ControllerBase
         $this->response->resetHeaders()->setStatusCode($code, null);
 
         $this->view->setVars([
-            'code'  => $code,
-            'message' => $message
+            'code'    => $code,
+            'message' => $message,
         ]);
     }
 
     public function route404Action()
     {
         $this->tag->setTitle('Page not found');
-        $this->view->setVar('code', 404);
-        $this->response->resetHeaders()->setStatusCode(404, 'Not Found');
+        $code = 404;
+
+        $this->view->setVars([
+            'code'    => $code,
+            'message' => 'Unfortunately, the page you are requesting can not be found!',
+        ]);
+
+        $this->response->resetHeaders()->setStatusCode($code, 'Not Found');
     }
 }
