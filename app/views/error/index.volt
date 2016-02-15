@@ -1,7 +1,7 @@
 {{ content() }}
 
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-12">
         <div class="error-v4">
             <div class="col-md-12 text-center error-banner">
                 <h1>{{ code }}</h1>
@@ -10,7 +10,9 @@
             {% if debug %}
                 <div class="col-md-12 error-debug">
                     <p>
-                        Error <br>in file <code>{{ error.file() }}</code>, at line <code>{{ error.line() }}</code>
+                        Error [{{ error.type() }}]: {{ error.message() }} <br>
+                        File: <code>{{ error.file() }}</code><br>
+                        Line: <code>{{ error.line() }}</code>
                     </p>
                     {% if error.isException() %}
                         <pre>{{ error.exception().getTraceAsString() }}</pre>
