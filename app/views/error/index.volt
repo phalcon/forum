@@ -21,7 +21,7 @@
                 <p class="lead">
                     We hope to solve it shortly.
                     Please check back in a few minutes. If you continue seeing this error please contact us at
-                    <a href="mailto:team@phalconphp.com">{{ config.mail.fromEmail }}</a>
+                    <a href="{{ 'mailto:' ~ config.mail.fromEmail }}">{{ config.mail.fromEmail }}</a>
                 </p>
                 <p>
                     <a class="btn btn-primary" href="/" style="color: #fff;">Back to main page</a>
