@@ -27,7 +27,6 @@ use Phalcon\Di\Injectable;
  */
 class Checker extends Injectable
 {
-
     /**
      * Check whether there are unread notifications or not
      *
@@ -40,10 +39,10 @@ class Checker extends Injectable
             return false;
         }
 
-        $number = ActivityNotifications::count(array(
+        $number = ActivityNotifications::count([
             'users_id = ?0 AND was_read = "N"',
-            'bind' => array($usersId)
-        ));
+            'bind' => [$usersId]
+        ]);
 
         return $number > 0;
     }
@@ -60,10 +59,10 @@ class Checker extends Injectable
             return 0;
         }
 
-        $number = ActivityNotifications::count(array(
+        $number = ActivityNotifications::count([
             'users_id = ?0 AND was_read = "N"',
-            'bind' => array($usersId)
-        ));
+            'bind' => [$usersId]
+        ]);
 
         return $number;
     }
