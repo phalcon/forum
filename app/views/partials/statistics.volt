@@ -1,4 +1,4 @@
-{% if actionName is 'index' or (actionName is 'view' and controllerName is 'categories') %}
+{% if actionName is 'index' and controllerName is not 'error' or (actionName is 'view' and controllerName is 'categories') %}
 <div class="container footer-statistic">
     <div class="row">
         <div class="col-md-6">

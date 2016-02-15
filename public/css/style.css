@@ -138,6 +138,35 @@ ul.categories-dropdown > li > a {
     min-height:73%;
 }
 
+.error-v4 {
+    float: left;
+    position: relative;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 4rem 0;
+}
+
+.error-v4 span.sorry {
+    color: #111;
+    display: block;
+    font-size: 2rem;
+    padding-bottom: 3rem;
+}
+
+.error-banner {
+    margin-bottom: 3rem;
+}
+
+.error-debug {
+    border-left: 2rem solid #2c3e50;
+    background-color: rgba(44, 62, 80, 0.16);
+    padding: .5rem;
+}
+
+.error-v4 h1 {
+    font-size: 10rem;
+}
+
 .action-date {
     font-size: 11px;
     color: #717171;
