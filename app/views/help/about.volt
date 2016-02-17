@@ -1,18 +1,32 @@
-
-<div class="help">
-
-	<ol class="breadcrumb">
-		<li>{{ link_to('', 'Home') }}</a></li>
-		<li>{{ link_to('help', 'Help') }}</a></li>
-	</ol>
-
-	<h1>About Phosphorum</h1>
-
-	<p>
-		Phosphorum is an open source project and depends on volunteer efforts.
-		If you want to improve this forum please submit a
-		<a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>
-		to its <a href="https://github.com/phalcon/forum">repository</a>.
-	</p>
-
+<div class="help-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group btn-breadcrumb breadcrumb">
+                <span class="btn btn-default"><span class="octicon octicon-milestone"></span></span>
+                {{ link_to('', 'Home', 'class': 'btn btn-default') }}
+                {{ link_to('help', 'Help', 'class': 'btn btn-default') }}
+                {{ link_to('help/about', 'About', 'class': 'btn btn-default') }}
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2 help-head">
+            <h1>About Phosphorum</h1>
+            <section>
+                <p>
+                    Phosphorum is an engine for building flexible, clear and fast forums.
+                    It is used by:
+                </p>
+                <ul>
+                    <li>{{ link_to('https://forum.phalconphp.com/', 'Phalcon Framework Forum', false) }}</li>
+                    <li>{{ link_to('https://forum.zephir-lang.com/', 'Zephir Language Forum', false) }}</li>
+                </ul>
+                <p>
+                    You can adapt it to your own needs or improve it if you want.
+                    If you want to improve this forum please submit a
+                    {{ link_to('https://help.github.com/articles/creating-a-pull-request', 'pull request', false) }}
+                    {{ link_to('https://github.com/phalcon/forum', 'repository', false) }}.
+                </p>
+                <p>Please write us if you have any feedback.</p>
+            </section>
+        </div>
+    </div>
 </div>
