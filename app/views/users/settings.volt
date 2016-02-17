@@ -64,11 +64,18 @@
                                 ], 'class': 'form-control') }}
                             </div>
                             <div class="form-group">
-                                <label for="digest">Weekly Digest</label>
-                                {{ select_static('digest', [
-                                'Y': 'Yes',
-                                'N': 'No'
-                                ], 'class': 'form-control') }}
+                                <label>Weekly Digest</label>
+
+                                <div class="radio">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="digest" id="digest_y" value="Y" {% if subscribed %}checked{% endif %}> Yes
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="digest" id="digest_n" value="N" {% if not subscribed %}checked{% endif %}> No
+                                    </label>
+                                </div>
                             </div>
                         </fieldset>
                         <fieldset>

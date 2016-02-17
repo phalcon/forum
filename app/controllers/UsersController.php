@@ -147,6 +147,7 @@ class UsersController extends ControllerBase
         $this->view->setVars([
             'avatar'        => $this->gravatar->getAvatar($user->email),
             'user'          => $user,
+            'subscribed'    => ($user->digest == 'Y'),
             'timezones'     => $this->di->getShared('timezones'),
             'numberPosts'   => Posts::count(['users_id = ?0 AND deleted = 0', 'bind' => [$user->id]]),
             'numberReplies' => PostsReplies::count(['users_id = ?0', 'bind' => [$user->id]]),
