@@ -53,7 +53,7 @@
                         {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
                         <fieldset>
                             <legend>
-                                <p>Notification Settings</p>
+                                Notification Settings
                             </legend>
                             <div class="form-group">
                                 <label for="notifications">E-Mail Notifications</label>
@@ -65,7 +65,6 @@
                             </div>
                             <div class="form-group">
                                 <label>Weekly Digest</label>
-
                                 <div class="radio">
                                     <label class="radio-inline">
                                         <input type="radio" name="digest" id="digest_y" value="Y" {% if subscribed %}checked{% endif %}> Yes
@@ -80,7 +79,7 @@
                         </fieldset>
                         <fieldset>
                             <legend>
-                                <p>Timezone Settings</p>
+                                Timezone Settings
                             </legend>
                             <div class="form-group">
                                 <label for="timezone">Timezone</label>
@@ -89,7 +88,7 @@
                         </fieldset>
                         <fieldset>
                             <legend>
-                                <p>Appearance</p>
+                                Appearance
                             </legend>
                             <div class="form-group">
                                 <div class="form-group">

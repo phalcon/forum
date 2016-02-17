@@ -818,3 +818,9 @@ div#sticky-progress {
     color: #bbb;
     font-size: .95em;
 }
+
+.profile-content fieldset legend {
+    font-size: 1.2rem;
+    padding: .3rem 0;
+    color: rgba(51, 51, 51, 0.8);
+}
