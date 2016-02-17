@@ -32,6 +32,13 @@ class UsersController extends ControllerBase
 {
     use TokenTrait;
 
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->gravatar->setSize(220);
+    }
+
     /**
      * Shows the user profile
      *
@@ -82,7 +89,6 @@ class UsersController extends ControllerBase
             }
         }
 
-        $this->gravatar->setSize(220);
         $this->view->setVars([
             'ranking'       => $ranking,
             'total_ranking' => count($users),
@@ -137,10 +143,11 @@ class UsersController extends ControllerBase
 
         $this->tag->setTitle('My Settings');
         $this->tag->setAutoEscape(false);
-        $this->gravatar->setSize(64);
 
         $this->view->setVars([
+            'avatar'        => $this->gravatar->getAvatar($user->email),
             'user'          => $user,
+            'subscribed'    => ($user->digest == 'Y'),
             'timezones'     => $this->di->getShared('timezones'),
             'numberPosts'   => Posts::count(['users_id = ?0 AND deleted = 0', 'bind' => [$user->id]]),
             'numberReplies' => PostsReplies::count(['users_id = ?0', 'bind' => [$user->id]]),

@@ -383,13 +383,15 @@ class Posts extends Model
      */
     public function canHaveBounty()
     {
-        $canHave = $this->accepted_answer != "Y"
+        $canHave = $this->accepted_answer != 'Y'
             && $this->sticked != 'Y'
             && $this->number_replies == 0
             && $this->categories_id != 15
-            && //announcements
-            $this->categories_id != 4
-            && //offtopic
+            && // announcements
+            $this->categories_id != 1
+            && // no_bounty
+            $this->category->no_bounty != 'Y'
+            && // offtopic
             $this->categories_id != 7
             && //jobs
             $this->categories_id != 24
