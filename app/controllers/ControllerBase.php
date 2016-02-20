@@ -45,7 +45,7 @@ class ControllerBase extends Controller
             ->execute();
 
         /** @var Simple $lastMember */
-        $lastMember = Users::find(['order' => 'created_at', 'limit' => 1, 'columns' => 'login']);
+        $lastMember = Users::find(['order' => 'created_at DESC', 'limit' => 1, 'columns' => 'login']);
 
         $login = null;
         if ($lastMember->valid()) {
