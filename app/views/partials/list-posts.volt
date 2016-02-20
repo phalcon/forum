@@ -1,5 +1,4 @@
 <div class="col-md-12">
-
     <ul class="nav nav-tabs">
         {%- set orders = [
             'new': 'All discussions',
@@ -9,14 +8,10 @@
             'answers':'My answers'
         ] -%}
         {%- for order, label in orders -%}
-            {%- if (order == 'my' or order == 'answers') and !session.get('identity') -%}
+            {%- if (order == 'my' or order == 'answers') and not session.get('identity') -%}
                 {%- continue -%}
             {% endif -%}
-            {%- if order == currentOrder -%}
-                <li class="active">
-            {%- else -%}
-                <li>
-            {%- endif -%}
+            <li class="{%- if order == currentOrder -%}active{%- endif -%}">
                 {{ link_to('discussions/' ~ order, label) }}
             </li>
         {%- endfor -%}
@@ -41,7 +36,7 @@
                 <th class="hidden-xs">Last Reply</th>
             </tr>
         {%- for post in posts -%}
-            <tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% else %}post-positive{% endif %}">
+            <tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% else %}post-positive{% endif %}" itemscope itemtype="http://schema.org/Question">
                 {%  if config.theme.use_topics_icon %}
                 <td>
                     {%- if logged != '' -%}
@@ -60,7 +55,9 @@
                     {%- if post.sticked == "Y" -%}
                         <span class="octicon octicon-pin"></span>&nbsp;
                     {%- endif -%}
-                    {{- link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) -}}
+                    <span itemprop="name">
+                        {{- link_to('discussion/' ~ post.id ~ '/' ~ post.slug, post.title|e) -}}
+                    </span>
                     {%- if post.accepted_answer == "Y" -%}
                         &nbsp;<span class="label label-success">SOLVED</span>
                     {%- else -%}
@@ -83,16 +80,22 @@
                     <span class="category">{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</span>
                 </td>
                 <td class="hidden-xs" align="center">
-                    <span class="big-number">{% if post.number_replies > 0 %}{{ post.number_replies }}{%endif %}</span>
+                    <span class="big-number">
+                        <span itemprop="answerCount">
+                            {{- post.number_replies -}}
+                        </span>
+                    </span>
                 </td>
                 <td class="hidden-xs" align="center">
-                    <span class="big-number">{{ post.getHumanNumberViews() }}</span>
+                    <span class="big-number">{{- post.getHumanNumberViews() -}}</span>
                 </td>
                 <td class="hidden-xs">
-                    <span class="date">{{ post.getHumanCreatedAt() }}</span>
+                    <time itemprop="dateCreated" datetime="{{ date('c', post.created_at) }}" class="date">
+                        {{- post.getHumanCreatedAt() -}}
+                    </time>
                 </td>
                 <td class="hidden-xs">
-                    <span class="date">{{ post.getHumanModifiedAt() }}</span>
+                    <span class="date">{{- post.getHumanModifiedAt() -}}</span>
                 </td>
             </tr>
         {%- endfor -%}
