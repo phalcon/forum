@@ -1,10 +1,7 @@
 
 <div class="help">
 
-	<ol class="breadcrumb">
-		<li>{{ link_to('', 'Home') }}</a></li>
-		<li>{{ link_to('help', 'Help') }}</a></li>
-	</ol>
+	{% include 'partials/breadcrumbs.volt' %}
 
 	<h1>Badges</h1>
 
