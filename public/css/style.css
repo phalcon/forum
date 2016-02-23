@@ -348,66 +348,6 @@ pre.prettyprint {
     padding: 0.3rem 0.6rem;
 }
 
-.btn-breadcrumb .btn:not(:last-child):after {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 1rem solid transparent;
-    border-bottom: 1rem solid transparent;
-    border-left: .7rem solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -1rem;
-    left: 100%;
-    z-index: 3;
-}
-
-.btn-breadcrumb .btn:not(:last-child):before
-{
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 1rem solid transparent;
-    border-bottom: 1rem solid transparent;
-    border-left: .7rem solid rgb(173, 173, 173);
-    position: absolute;
-    top: 50%;
-    margin-top: -1rem;
-    margin-left: 1px;
-    left: 100%;
-    z-index: 3;
-}
-
-.btn-breadcrumb .btn {
-    padding: .35rem .7rem .35rem 1.4rem;
-}
-
-.btn-breadcrumb .btn:first-child {
-    padding: .35rem .35rem .35rem .7rem;
-}
-
-.btn-breadcrumb .btn:last-child {
-    padding: .35rem 1rem .35rem 1.4rem;
-}
-
-.btn-breadcrumb .btn.btn-default:not(:last-child):after {
-    border-left: .7rem solid #fff;
-}
-
-.btn-breadcrumb .btn.btn-default:not(:last-child):before {
-    border-left: .7rem solid #ccc;
-}
-
-.btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
-    border-left: .7rem solid #ebebeb;
-}
-
-.btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
-    border-left: .7rem solid #adadad;
-}
-
 .help-category-box .nav > li > a:focus, .help-category-box .nav > li > a:hover {
     background-color: inherit;
     text-decoration: none;
@@ -623,21 +563,11 @@ table.list-discussions a:visited {
 
 .breadcrumb {
     background: transparent;
-    margin-bottom: 1rem;
-    padding: 0.75rem 1rem;
+    padding-left: 0;
 }
 
-.breadcrumb::after {
-    clear: both;
-    content: "";
-    display: table;
-}
-
-.breadcrumb > .active {
-    color: #818a91;
-}
-.breadcrumb > li {
-    float: left;
+.breadcrumb > li + li:before {
+    content: "> "!important;
 }
 
 pre {

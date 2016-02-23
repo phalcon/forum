@@ -24,6 +24,7 @@ use Phalcon\Mvc\View;
 use RuntimeException;
 use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
+use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phalcon\Cli\Console;
 use Phalcon\Events\Event;
@@ -67,6 +68,7 @@ class Bootstrap
         'flash',
         'gravatar',
         'timezones',
+        'breadcrumbs',
     ];
 
     /**
@@ -566,6 +568,26 @@ class Bootstrap
     {
         $di->setShared('notifications', function () {
             return new NotificationsChecker();
+        });
+    }
+
+    /**
+     * Initialize the Breadcrumbs component.
+     *
+     * @param DiInterface   $di     Dependency Injector
+     * @param Config        $config App config
+     * @param EventsManager $em     Events Manager
+     *
+     * @return void
+     */
+    protected function initBreadcrumbs(DiInterface $di, Config $config, EventsManager $em)
+    {
+        $di->setShared('breadcrumbs', function () use ($em) {
+            $breadcrumbs = new Breadcrumbs;
+            $breadcrumbs->setEventsManager($em);
+            $breadcrumbs->setSeparator('');
+
+            return $breadcrumbs;
         });
     }
 

@@ -1,10 +1,7 @@
 <div class="help-container">
     <div class="row">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li>{{ link_to('', 'Home') }}</a></li>
-            </ol>
-        </div>
+        {% include 'partials/breadcrumbs.volt' %}
+
         <div class="col-md-12 help-head">
             <h1>Find out more about…</h1>
         </div>

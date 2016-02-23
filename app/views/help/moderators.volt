@@ -1,13 +1,6 @@
 <div class="help-container">
     <div class="row">
-        <div class="col-md-12">
-            <div class="btn-group btn-breadcrumb breadcrumb">
-                <span class="btn btn-default"><span class="octicon octicon-milestone"></span></span>
-                {{ link_to('', 'Home', 'class': 'btn btn-default') }}
-                {{ link_to('help', 'Help', 'class': 'btn btn-default') }}
-                {{ link_to('help/moderators', 'Moderation', 'class': 'btn btn-default') }}
-            </div>
-        </div>
+        {% include 'partials/breadcrumbs.volt' %}
         <div class="col-md-8 col-md-offset-2 help-head">
             <h1>Moderation</h1>
             <section>

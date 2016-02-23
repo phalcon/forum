@@ -1,20 +1,13 @@
 <div class="help-container">
 	<div class="row">
-		<div class="col-md-12">
-			<div class="btn-group btn-breadcrumb breadcrumb">
-				<span class="btn btn-default"><span class="octicon octicon-milestone"></span></span>
-				{{ link_to('', 'Home', 'class': 'btn btn-default') }}
-				{{ link_to('help', 'Help', 'class': 'btn btn-default') }}
-				{{ link_to('help/voting', 'Voting', 'class': 'btn btn-default') }}
-			</div>
-		</div>
+		{% include 'partials/breadcrumbs.volt' %}
 		<div class="col-md-8 col-md-offset-2 help-head">
 			<h1>Feedback system</h1>
 			<section>
 				<p>
 					Posts and comments can be voted up or down. Voting enable the community to
 					collectively identify the best (and worst) contributions. However, votes aren't unlimited.
-					Every time you win 50 points of karma the forum assing you a vote.
+					Every time you win 50 points of karma the forum assign you a vote.
 					You can only vote once every post or comment. You can spend
 					your votes by voting positively or negatively posts and comments in the forum.
 				</p>

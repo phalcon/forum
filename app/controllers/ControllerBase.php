@@ -17,6 +17,7 @@ use Phosphorum\Models\Users;
  * @property \Phosphorum\Utils\Slug slug
  * @property \Phalcon\Avatar\Avatarable gravatar
  * @property \Phalcon\Logger\AdapterInterface logger
+ * @property \Phalcon\Breadcrumbs breadcrumbs
  */
 class ControllerBase extends Controller
 {
@@ -71,6 +72,7 @@ class ControllerBase extends Controller
             date_default_timezone_set($timezone);
         }
 
+        $this->breadcrumbs->add('Home', '/');
         $this->view->setVar('limitPost', self::POSTS_IN_PAGE);
     }
 
