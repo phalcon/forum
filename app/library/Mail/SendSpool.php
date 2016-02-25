@@ -17,6 +17,7 @@
 
 namespace Phosphorum\Mail;
 
+use Phalcon\Tag;
 use Phosphorum\Models\Notifications;
 use Phalcon\Di\Injectable;
 
@@ -74,17 +75,20 @@ class SendSpool extends Injectable
 
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
                         $href = "{$url}/discussion/{$post->id}/{$post->slug}";
+                        $title = $this->config->site->name;
+                        $link = function($href) use ($title) {
+                            return Tag::linkTo([$href, $title, "local" => false]);
+                        };
 
                         if ($notification->type == 'P') {
-                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="'. $href . '">'.$this->config->site->name.'</a>. ';
+                            $link = $link($href);
                         } else {
-                            $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="' . $href . '#C' . $reply->id . '">'.$this->config->site->name.'</a>. ';
+                            $link = $link($href . '#C' . $reply->id);
                         }
 
-                        $htmlContent .= PHP_EOL .
-                            'Change your e-mail preferences <a href="'. $url . '/settings">here</a></p>';
+                        $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
+                            PHP_EOL . $link .
+                            PHP_EOL . 'Change your e-mail preferences <a href="'. $url . '/settings">here</a></p>';
 
                         $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
                         $bodyMessage->setCharset('UTF-8');
