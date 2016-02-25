@@ -46,7 +46,7 @@ class SendSpool extends Injectable
         }
 
         $from = $this->config->mail->fromEmail;
-        $url  = rtrim($this->config->site->url. '/');
+        $url  = rtrim($this->config->site->url, '/');
 
         if ($post && $user && $reply) {
             $isGitHubEmail = strpos($user->email, '@users.noreply.github.com');
@@ -77,10 +77,10 @@ class SendSpool extends Injectable
 
                         if ($notification->type == 'P') {
                             $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="'. $href . '">Phosphorum</a>. ';
+                                PHP_EOL . '<a href="'. $href . '">'.$this->config->site->name.'</a>. ';
                         } else {
                             $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                                PHP_EOL . '<a href="' . $href . '#C' . $reply->id . '">Phosphorum</a>. ';
+                                PHP_EOL . '<a href="' . $href . '#C' . $reply->id . '">'.$this->config->site->name.'</a>. ';
                         }
 
                         $htmlContent .= PHP_EOL .
