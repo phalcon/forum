@@ -103,7 +103,7 @@ class Indexer
     {
         $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
         if ($karma > 0) {
-            $params = array();
+            $params = [];
             $params['body']  = array(
                 'id'       => $post->id,
                 'title'    => $post->title,
