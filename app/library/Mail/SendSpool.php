@@ -76,7 +76,7 @@ class SendSpool extends Injectable
                         $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
                         $href = "{$url}/discussion/{$post->id}/{$post->slug}";
                         $title = $this->config->site->name;
-                        $link = function($href) use ($title) {
+                        $link = function ($href) use ($title) {
                             return Tag::linkTo([$href, $title, "local" => false]);
                         };
 
