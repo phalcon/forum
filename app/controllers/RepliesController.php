@@ -40,7 +40,7 @@ class RepliesController extends ControllerBase
     }
 
     /**
-     * Returs the raw comment as it as edited
+     * Returns the raw comment as it as edited
      *
      * @param $id
      *
@@ -48,7 +48,6 @@ class RepliesController extends ControllerBase
      */
     public function getAction($id)
     {
-
         $response = new Response();
 
         $usersId = $this->session->get('identity');
@@ -57,15 +56,15 @@ class RepliesController extends ControllerBase
             return $response;
         }
 
-        $parametersReply = array(
+        $parametersReply = [
             'id = ?0',
-            'bind' => array($id)
-        );
+            'bind' => [$id]
+        ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if ($postReply) {
-            $data = array('status' => 'OK', 'id' => $postReply->id, 'comment' => $postReply->content);
+            $data = ['status' => 'OK', 'id' => $postReply->id, 'comment' => $postReply->content];
         } else {
-            $data = array('status' => 'ERROR');
+            $data = ['status' => 'ERROR'];
         }
 
         $response->setJsonContent($data);
@@ -91,14 +90,14 @@ class RepliesController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $parametersReply = array(
+        $parametersReply = [
             'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
-            'bind' => array(
+            'bind' => [
                 $this->request->getPost('id'),
                 $usersId,
                 $this->session->get('identity-moderator')
-            )
-        );
+            ]
+        ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if (!$postReply) {
             return $this->response->redirect();
@@ -146,10 +145,10 @@ class RepliesController extends ControllerBase
             return $this->response->setStatusCode('401', 'Unauthorized');
         }
 
-        $parametersReply = array(
+        $parametersReply = [
             'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
-            'bind' => array($id, $usersId, $this->session->get('identity-moderator'))
-        );
+            'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
+        ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if ($postReply) {
 
@@ -202,16 +201,19 @@ class RepliesController extends ControllerBase
 
     /**
      * Votes a post up
+     *
+     * @param int $id
+     * @return Response
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
 
         if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = array(
+            $csrfTokenError = [
                 'status'  => 'error',
                 'message' => 'Token error. This might be CSRF attack.'
-            );
+            ];
             return $response->setJsonContent($csrfTokenError);
         }
 
@@ -220,58 +222,58 @@ class RepliesController extends ControllerBase
          */
         $postReply = PostsReplies::findFirstById($id);
         if (!$postReply) {
-            $contentNotExist = array(
+            $contentNotExist = [
                 'status'  => 'error',
                 'message' => 'Post reply does not exist'
-            );
+            ];
             return $response->setJsonContent($contentNotExist);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentLogIn = array(
+            $contentLogIn = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
-            );
+            ];
             return $response->setJsonContent($contentLogIn);
         }
 
         if ($user->votes <= 0) {
-            $contentDontHave = array(
+            $contentDontHave = [
                 'status'  => 'error',
-                'message' => 'You don\'t have enough votes available'
-            );
+                'message' => "You don't have enough votes available"
+            ];
             return $response->setJsonContent($contentDontHave);
         }
 
         $post = $postReply->post;
         if (!$post) {
-            $contentPostNotExist = array(
+            $contentPostNotExist = [
                 'status'  => 'error',
                 'message' => 'Post associated to the reply does not exist'
-            );
+            ];
             return $response->setJsonContent($contentPostNotExist);
         }
 
         if ($post->deleted) {
-            $contentDeleted = array(
+            $contentDeleted = [
                 'status'  => 'error',
                 'message' => 'Post associated to the reply is deleted'
-            );
+            ];
             return $response->setJsonContent($contentDeleted);
         }
 
-        $parametersVoted = array(
+        $parametersVoted = [
             'posts_replies_id = ?0 AND users_id = ?1',
-            'bind' => array($postReply->id, $user->id)
-        );
+            'bind' => [$postReply->id, $user->id]
+        ];
         $voted = PostsRepliesVotes::count($parametersVoted);
         if ($voted) {
-            $contentAleadyVoted = array(
+            $contentAlreadyVoted = [
                 'status'  => 'error',
                 'message' => 'You have already voted this reply'
-            );
-            return $response->setJsonContent($contentAleadyVoted);
+            ];
+            return $response->setJsonContent($contentAlreadyVoted);
         }
 
         $postReplyVote                   = new PostsRepliesVotes();
@@ -280,10 +282,10 @@ class RepliesController extends ControllerBase
         $postReplyVote->vote             = PostsRepliesVotes::VOTE_UP;
         if (!$postReplyVote->save()) {
             foreach ($postReplyVote->getMessages() as $message) {
-                $contentError = array(
+                $contentError = [
                     'status'  => 'error',
                     'message' => $message->getMessage()
-                );
+                ];
                 return $response->setJsonContent($contentError);
             }
         }
@@ -308,10 +310,10 @@ class RepliesController extends ControllerBase
 
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
-                    $contentError = array(
+                    $contentError = [
                         'status'  => 'error',
                         'message' => $message->getMessage()
-                    );
+                    ];
                     return $response->setJsonContent($contentError);
                 }
             }
@@ -327,24 +329,24 @@ class RepliesController extends ControllerBase
             $activity->save();
         }
 
-        $contentOk = array(
-            'status' => 'OK'
-        );
-        return $response->setJsonContent($contentOk);
+        return $response->setJsonContent(['status' => 'OK']);
     }
 
     /**
      * Votes a post down
+     *
+     * @param int $id
+     * @return Response
      */
     public function voteDownAction($id = 0)
     {
         $response = new Response();
 
         if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = array(
+            $csrfTokenError = [
                 'status'  => 'error',
                 'message' => 'Token error. This might be CSRF attack.'
-            );
+            ];
             return $response->setJsonContent($csrfTokenError);
         }
 
@@ -354,58 +356,58 @@ class RepliesController extends ControllerBase
          */
         $postReply = PostsReplies::findFirstById($id);
         if (!$postReply) {
-            $contentNotExist = array(
+            $contentNotExist = [
                 'status'  => 'error',
                 'message' => 'Post reply does not exist'
-            );
+            ];
             return $response->setJsonContent($contentNotExist);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentLogIn = array(
+            $contentLogIn = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
-            );
+            ];
             return $response->setJsonContent($contentLogIn);
         }
 
         if ($user->votes <= 0) {
-            $contentDontHave = array(
+            $contentDontHave = [
                 'status'  => 'error',
-                'message' => 'You don\'t have enough votes available'
-            );
+                'message' => "You don't have enough votes available"
+            ];
             return $response->setJsonContent($contentDontHave);
         }
 
         $post = $postReply->post;
         if (!$post) {
-            $contentPostNotExist = array(
+            $contentPostNotExist = [
                 'status'  => 'error',
                 'message' => 'Post associated to the reply does not exist'
-            );
+            ];
             return $response->setJsonContent($contentPostNotExist);
         }
 
         if ($post->deleted) {
-            $contentDeleted = array(
+            $contentDeleted = [
                 'status'  => 'error',
                 'message' => 'Post associated to the reply is deleted'
-            );
+            ];
             return $response->setJsonContent($contentDeleted);
         }
 
-        $parametersVoted = array(
+        $parametersVoted = [
             'posts_replies_id = ?0 AND users_id = ?1',
-            'bind' => array($postReply->id, $user->id)
-        );
+            'bind' => [$postReply->id, $user->id]
+        ];
         $voted = PostsRepliesVotes::count($parametersVoted);
         if ($voted) {
-            $contentAleadyVoted = array(
+            $contentAlreadyVoted = [
                 'status'  => 'error',
                 'message' => 'You have already voted this reply'
-            );
-            return $response->setJsonContent($contentAleadyVoted);
+            ];
+            return $response->setJsonContent($contentAlreadyVoted);
         }
 
         $postReplyVote                   = new PostsRepliesVotes();
@@ -414,10 +416,10 @@ class RepliesController extends ControllerBase
         $postReplyVote->vote             = PostsRepliesVotes::VOTE_DOWN;
         if (!$postReplyVote->save()) {
             foreach ($postReplyVote->getMessages() as $message) {
-                $contentError = array(
+                $contentError = [
                     'status'  => 'error',
                     'message' => $message->getMessage()
-                );
+                ];
                 return $response->setJsonContent($contentError);
             }
         }
@@ -442,27 +444,26 @@ class RepliesController extends ControllerBase
 
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
-                    $contentError = array(
+                    $contentError = [
                         'status'  => 'error',
                         'message' => $message->getMessage()
-                    );
+                    ];
                     return $response->setJsonContent($contentError);
                 }
             }
         }
 
-        $contentOk = array(
-            'status' => 'OK'
-        );
-        return $response->setJsonContent($contentOk);
+        return $response->setJsonContent(['status' => 'OK']);
     }
 
     /**
      * Shows the latest modification made to a post
+     *
+     * @param int $id
+     * @return Response|\Phalcon\Http\ResponseInterface
      */
     public function historyAction($id = 0)
     {
-
         $this->view->disable();
 
         /**
@@ -476,17 +477,17 @@ class RepliesController extends ControllerBase
 
         $a = explode("\n", $postReply->content);
 
-        $first         = true;
-        $parametersHistory = array(
+        $first = true;
+        $postHistory = null;
+        $parametersHistory = [
             'posts_replies_id = ?0',
-            'bind'  => array($postReply->id),
+            'bind'  => [$postReply->id],
             'order' => 'created_at DESC'
-        );
+        ];
 
         $postHistories = PostsRepliesHistory::find($parametersHistory);
 
         if (count($postHistories) > 1) {
-
             foreach ($postHistories as $postHistory) {
                 if ($first) {
                     if ($postHistory->content != $postReply->content) {
@@ -501,10 +502,9 @@ class RepliesController extends ControllerBase
         }
 
         if (is_object($postHistory)) {
-
             $b = explode("\n", $postHistory->content);
 
-            $diff     = new \Diff($b, $a, array());
+            $diff     = new \Diff($b, $a, []);
             $renderer = new \Diff_Renderer_Html_SideBySide();
 
             echo $diff->Render($renderer);
@@ -515,16 +515,19 @@ class RepliesController extends ControllerBase
 
     /**
      * Accepts a reply as correct answer
+     *
+     * @param int $id
+     * @return Response
      */
     public function acceptAction($id = 0)
     {
         $response = new Response();
 
         if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = array(
+            $csrfTokenError = [
                 'status'  => 'error',
                 'message' => 'Token error. This might be CSRF attack.'
-            );
+            ];
             return $response->setJsonContent($csrfTokenError);
         }
 
@@ -533,65 +536,64 @@ class RepliesController extends ControllerBase
          */
         $postReply = PostsReplies::findFirstById($id);
         if (!$postReply) {
-            $contentNotExist = array(
+            $contentNotExist = [
                 'status'  => 'error',
                 'message' => 'Post reply does not exist'
-            );
+            ];
             return $response->setJsonContent($contentNotExist);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentLogIn = array(
+            $contentLogIn = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
-            );
+            ];
             return $response->setJsonContent($contentLogIn);
         }
 
         if ($postReply->accepted == 'Y') {
-            $contentAlready = array(
+            $contentAlready = [
                 'status'  => 'error',
                 'message' => 'This reply is already accepted as answer'
-            );
+            ];
             return $response->setJsonContent($contentAlready);
         }
 
         if ($postReply->post->deleted) {
-            $contentDeleted = array(
+            $contentDeleted = [
                 'status'  => 'error',
                 'message' => 'Post associated to the reply is deleted'
-            );
+            ];
             return $response->setJsonContent($contentDeleted);
         }
 
         if ($postReply->post->accepted_answer == 'Y') {
-            $contentAlreadyAnswer = array(
+            $contentAlreadyAnswer = [
                 'status'  => 'error',
                 'message' => 'This post already has an accepted answer'
-            );
+            ];
             return $response->setJsonContent($contentAlreadyAnswer);
         }
 
         if ($postReply->post->users_id != $user->id && $user->moderator != 'Y') {
-            $contentCorrect = array(
+            $contentCorrect = [
                 'status'  => 'error',
-                'message' => 'You can\'t accept this answer as correct'
-            );
+                'message' => "You can't accept this answer as correct"
+            ];
             return $response->setJsonContent($contentCorrect);
         }
 
         if ($postReply->post->users_id != $postReply->users_id) {
-
             $postReply->post->user->karma += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
             $postReply->post->user->votes_points += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
 
             $points = (30 + intval(abs($user->karma - $postReply->user->karma) / 1000));
 
-            $parametersBounty = array(
+            $parametersBounty = [
                 'users_id = ?0 AND posts_replies_id = ?1',
-                'bind' => array($postReply->users_id, $postReply->id)
-            );
+                'bind' => [$postReply->users_id, $postReply->id]
+            ];
             $postBounty = PostsBounties::findFirst($parametersBounty);
 
             if ($postBounty) {
@@ -611,13 +613,12 @@ class RepliesController extends ControllerBase
         $postReply->post->accepted_answer = 'Y';
 
         if ($postReply->save()) {
-
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
-                    $contentError = array(
+                    $contentError = [
                         'status'  => 'error',
                         'message' => $message->getMessage()
-                    );
+                    ];
                     return $response->setJsonContent($contentError);
                 }
             }
@@ -633,9 +634,6 @@ class RepliesController extends ControllerBase
             $activity->save();
         }
 
-        $contentOk = array(
-            'status' => 'OK'
-        );
-        return $response->setJsonContent($contentOk);
+        return $response->setJsonContent(['status' => 'OK']);
     }
 }

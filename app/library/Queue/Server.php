@@ -24,11 +24,10 @@ namespace Phosphorum\Queue;
  */
 class Server
 {
-
     /**
      * Server constructor
      *
-     * @param Phalcon\Queue\Beanstalkd $queue
+     * @param \Phalcon\Queue\Beanstalk $queue
      */
     public function __construct($queue)
     {
@@ -39,6 +38,7 @@ class Server
      * Simulates putting a job in the queue
      *
      * @param array $job
+     * @return bool
      */
     public function put($job)
     {
