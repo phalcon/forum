@@ -2,7 +2,7 @@
     <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
         <h5 class="text-danger">Poll results:</h5>
         <hr>
-        {%- cache "poll-votes-" ~ post.id ~ '-' ~ post.user.id -%}
+        {%- cache "poll-votes-" ~ post.id -%}
             {%- for option in post.pollOptions -%}
                 {%- if result[option.id] is defined -%}
                     {%- set amount = result[option.id] -%}

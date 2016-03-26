@@ -30,9 +30,14 @@ install:
   - travis_retry composer self-update -q
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
+  - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
+  - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
-  - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  # PHP 5.4 issue
+  - mkdir -p $HOME/bin
+  - wget -O $HOME/bin/codecept.phar http://codeception.com/releases/2.1.6/php54/codecept.phar
+  - chmod +x $HOME/bin/codecept.phar
 
 before_script:
   - export DISPLAY=:99.0
@@ -47,15 +52,23 @@ before_script:
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - stty cols 160
+  # PHP 5.4 issue
+  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || vendor/bin/codecept build'
+  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || $HOME/bin/codecept.phar build'
+
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
-  - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  # PHP 5.4 issue
+  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || vendor/bin/codecept run'
+  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || $HOME/bin/codecept.phar run'
 
 notifications:
   email:
-    - andres@phalconphp.com
-    - eduar@phalconphp.com
-    - nikos@phalconphp.com
-    - serghei@phalconphp.com
+    recipients:
+      - andres@phalconphp.com
+      - eduar@phalconphp.com
+      - nikos@phalconphp.com
+      - serghei@phalconphp.com
+    on_success: change
+    on_failure: always

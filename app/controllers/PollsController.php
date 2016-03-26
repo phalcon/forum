@@ -127,7 +127,9 @@ class PollsController extends ControllerBase
         }
 
         $viewCache = $this->getDI()->getShared('viewCache');
-        $viewCache->delete('post-' . $this->posts_id);
+        $viewCache->delete('post-' . $post->id);
+        $viewCache->delete('poll-votes-' . $post->id);
+        $viewCache->delete('poll-options-' . $post->id);
 
         $contentOk = [
             'status' => 'OK'
