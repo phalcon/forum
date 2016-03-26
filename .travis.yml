@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.4
   - 5.5
   - 5.6
 
@@ -30,9 +29,14 @@ install:
   - travis_retry composer self-update -q
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
+  - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
+  - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
-  - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  # PHP 5.4 issue
+  - mkdir -p $HOME/bin
+  - wget -O $HOME/bin/codecept.phar http://codeception.com/releases/2.1.6/php54/codecept.phar
+  - chmod +x $HOME/bin/codecept.phar
 
 before_script:
   - export DISPLAY=:99.0
@@ -55,7 +59,10 @@ script:
 
 notifications:
   email:
-    - andres@phalconphp.com
-    - eduar@phalconphp.com
-    - nikos@phalconphp.com
-    - serghei@phalconphp.com
+    recipients:
+      - andres@phalconphp.com
+      - eduar@phalconphp.com
+      - nikos@phalconphp.com
+      - serghei@phalconphp.com
+    on_success: change
+    on_failure: always
