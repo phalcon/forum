@@ -33,10 +33,6 @@ install:
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  # PHP 5.4 issue
-  - mkdir -p $HOME/bin
-  - wget -O $HOME/bin/codecept.phar http://codeception.com/releases/2.1.6/php54/codecept.phar
-  - chmod +x $HOME/bin/codecept.phar
 
 before_script:
   - export DISPLAY=:99.0
