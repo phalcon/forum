@@ -15,7 +15,7 @@ It is used by:
 
 The master branch will always contain the latest stable version. If you wish
 to check older versions or newer ones currently under development, please
-switch to the relevant branch/tag.
+switch to the relevant [branch][19]/[tag][20].
 
 ## Get Started
 
@@ -28,15 +28,10 @@ To run this application on your machine, you need at least:
 * Internationalization ([intl][3]) extension
 * Mbstring ([mbstring][4]) extension
 * [Composer][5]
-* PHP >= 5.4
+* PHP >= 5.5
 * [Apache][6] Web Server with [mod_rewrite][7] enabled or [Nginx][8] Web Server
 * Latest stable [Phalcon Framework release][9] extension enabled
 * [Beanstalkd][10] server
-
-> Note:
-We highly recommend to use at least PHP 5.5.
-Support for PHP 5.4 will be only as long as it does not impose restrictions on the forum.
-This support may be stopped suddenly.
 
 ### Installation
 
@@ -46,7 +41,7 @@ Install composer in a common location or in your project:
 $ curl -s http://getcomposer.org/installer | php
 ```
 
-Create the composer.json file as follows:
+For Phalcon 2.0.x create the `composer.json` file as follows:
 
 ```json
 {
@@ -55,6 +50,16 @@ Create the composer.json file as follows:
     }
 }
 ```
+
+Phalcon 2.1.x related `composer.json`:
+```json
+{
+    "require": {
+        "phalcon/forum": "^2.1"
+    }
+}
+```
+
 
 Run the composer installer:
 
@@ -86,6 +91,13 @@ You can override application configuration by creating development configuration
 ```sh
 $ cp app/config/development.example.php app/config/development.php
 ```
+
+#### Schema Changes
+
+Changes to the database that you need to spend if your version...
+
+* Older than 2.0.0: `schemas/upgrade-to-2.0.0.sql`
+* Older than 2.0.1: `schemas/upgrade-to-2.0.1.sql`
 
 #### Initial Test Data
 
@@ -190,3 +202,5 @@ Phosphorum is open-sourced software licensed under the [New BSD License][14]. ©
 [16]: https://forum.zephir-lang.com/
 [17]: http://supervisord.org/
 [18]: https://developer.github.com/v3/oauth/
+[19]: https://github.com/phalcon/forum/branches
+[20]: https://github.com/phalcon/forum/tags
