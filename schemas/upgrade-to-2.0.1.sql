@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS `topic_tracking` (
+  `user_id` INT(11) NOT NULL,
+  `topic_id` TEXT NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE `posts_poll_options` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `posts_id` INT(10) UNSIGNED NOT NULL,
