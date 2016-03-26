@@ -52,11 +52,16 @@ before_script:
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - stty cols 160
+  # PHP 5.4 issue
+  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || vendor/bin/codecept build'
+  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || $HOME/bin/codecept.phar build'
+
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   # PHP 5.4 issue
-  - 'if [ "$TRAVIS_PHP_VERSION" != "5.4" ]; then vendor/bin/codecept build && vendor/bin/codecept run; else $HOME/bin/codecept.phar build && $HOME/bin/codecept.phar run; fi'
+  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || vendor/bin/codecept run'
+  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || $HOME/bin/codecept.phar run'
 
 notifications:
   email:
