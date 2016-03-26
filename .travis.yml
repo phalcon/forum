@@ -47,11 +47,15 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || vendor/bin/codecept run'
+  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || wget http://codeception.com/php54/codecept.phar && chmod a+x codecept.phar && ./codecept.phar build && ./codecept.phar run'
 
 notifications:
   email:
-    - andres@phalconphp.com
-    - eduar@phalconphp.com
-    - nikos@phalconphp.com
-    - serghei@phalconphp.com
+    recipients:
+      - andres@phalconphp.com
+      - eduar@phalconphp.com
+      - nikos@phalconphp.com
+      - serghei@phalconphp.com
+    on_success: change
+    on_failure: always
