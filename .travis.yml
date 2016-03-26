@@ -8,6 +8,11 @@ php:
 services:
   - memcached
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 sudo: false
 
 env:
@@ -29,6 +34,10 @@ install:
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  # PHP 5.4 issue
+  - mkdir -p $HOME/bin
+  - wget -O $HOME/bin/codecept.phar http://codeception.com/releases/2.1.6/php54/codecept.phar
+  - chmod +x $HOME/bin/codecept.phar
 
 before_script:
   - export DISPLAY=:99.0
@@ -46,9 +55,8 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
-  - vendor/bin/codecept build
-  - '[[ "$TRAVIS_PHP_VERSION" != "5.4" ]] || vendor/bin/codecept run'
-  - '[[ "$TRAVIS_PHP_VERSION" == "5.4" ]] || wget http://codeception.com/php54/codecept.phar && chmod a+x codecept.phar && ./codecept.phar build && ./codecept.phar run'
+  # PHP 5.4 issue
+  - 'if [ "$TRAVIS_PHP_VERSION" != "5.4" ]; then vendor/bin/codecept build && vendor/bin/codecept run; else $HOME/bin/codecept.phar build && $HOME/bin/codecept.phar run; fi'
 
 notifications:
   email:
