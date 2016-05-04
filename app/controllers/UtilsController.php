@@ -40,9 +40,7 @@ class UtilsController extends Controller
     public function karmaAction()
     {
         foreach (Users::find() as $user) {
-
             if ($user->karma === null) {
-
                 $parametersNumbersPost = array(
                     'users_id = ?0',
                     'bind' => array($user->id)
