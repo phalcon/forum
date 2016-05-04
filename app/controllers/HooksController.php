@@ -39,7 +39,6 @@ class HooksController extends ControllerBase
     {
         $response = new Response();
         if ($this->request->isPost()) {
-
             if (!isset($this->config->mandrillapp->secret)) {
                 return $response;
             }
@@ -54,7 +53,6 @@ class HooksController extends ControllerBase
             }
 
             foreach ($events as $event) {
-
                 if (!isset($event['event'])) {
                     continue;
                 }
@@ -115,7 +113,6 @@ class HooksController extends ControllerBase
                 $str = [];
                 $firstNoBaseReplyLine = false;
                 foreach (array_reverse(preg_split('/\r\n|\n/', trim($content))) as $line) {
-
                     if (!$firstNoBaseReplyLine) {
                         if (substr($line, 0, 1) == '>') {
                             continue;
@@ -146,7 +143,6 @@ class HooksController extends ControllerBase
                  * Only update the number of replies if the user that commented isn't the same that posted
                  */
                 if ($post->users_id != $user->id) {
-
                     $post->number_replies++;
                     $post->modified_at = time();
                     $post->user->increaseKarma(Karma::SOMEONE_REPLIED_TO_MY_POST);
@@ -161,12 +157,11 @@ class HooksController extends ControllerBase
                 $postReply->content = $content;
 
                 if ($postReply->save()) {
-
                     if ($post->users_id != $user->id && $canHaveBounty) {
                         $bounty = $post->getBounty();
                         $postBounty = new PostsBounties();
                         $postBounty->posts_id = $post->id;
-                        $postBounty->users_id = $users->id;
+                        $postBounty->users_id = $user->id;
                         $postBounty->posts_replies_id = $postReply->id;
                         $postBounty->points = $bounty['value'];
                         if (!$postBounty->save()) {
@@ -210,7 +205,6 @@ class HooksController extends ControllerBase
                     }
 
                     if ($notification['notificationType'] == 'Bounce') {
-
                         if (!isset($notification['bounce'])) {
                             break;
                         }
@@ -227,9 +221,7 @@ class HooksController extends ControllerBase
                             $notificationBounce->diagnostic = $recipient['diagnosticCode'];
                             $notificationBounce->save();
                         }
-
                     }
-
                 } while (0);
             }
         }
