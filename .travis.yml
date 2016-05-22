@@ -53,7 +53,8 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run functional
+  - vendor/bin/codecept run unit
 
 notifications:
   email:
