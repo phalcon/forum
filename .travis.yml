@@ -16,6 +16,8 @@ sudo: false
 
 env:
   - PHALCON_VERSION="2.1.x"
+  - PHALCON_VERSION="phalcon-v2.0.13"
+  - PHALCON_VERSION="phalcon-v2.0.12"
   - PHALCON_VERSION="phalcon-v2.0.11"
   - PHALCON_VERSION="phalcon-v2.0.10"
   - PHALCON_VERSION="phalcon-v2.0.9"
@@ -51,7 +53,8 @@ before_script:
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run functional
+  - vendor/bin/codecept run unit
 
 notifications:
   email:
