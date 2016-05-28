@@ -57,12 +57,24 @@ class Users extends Injectable
     {
         try {
             $client = new HttpClient();
+            $url    = sprintf(
+                '%s%s?access_token=%s',
+                $this->endPoint,
+                $method,
+                $this->accessToken
+            );
             return @json_decode(
-                $client->get($this->endPoint . $method . '?access_token=' . $this->accessToken)->send()->getBody(),
+                $client->get($url)->send()->getBody(),
                 true
             );
         } catch (\Exception $e) {
-            $this->logger->error("Invalid GitHub response for token: {$this->accessToken}. " . $e->getMessage());
+            $this->logger->error(
+                sprintf(
+                    'Invalid GitHub response for token: %s. %s',
+                    $this->accessToken,
+                    $e->getMessage()
+                )
+            );
             return null;
         }
     }
@@ -92,7 +104,8 @@ class Users extends Injectable
      */
     public function getEmail()
     {
-        if (isset($this->response['email']) && false !== strpos($this->response['email'], '@')) {
+        if (true === isset($this->response['email']) && 
+            false !== strpos($this->response['email'], '@')) {
             return $this->response['email'];
         }
 
