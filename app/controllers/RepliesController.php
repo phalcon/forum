@@ -151,7 +151,6 @@ class RepliesController extends ControllerBase
         ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if ($postReply) {
-
             if ($usersId == $postReply->users_id) {
                 $user = $postReply->user;
                 if ($user) {
@@ -302,7 +301,6 @@ class RepliesController extends ControllerBase
         }
 
         if ($postReply->save()) {
-
             if ($postReply->users_id != $user->id) {
                 $user->increaseKarma(Karma::VOTE_UP_ON_SOMEONE_ELSE_REPLY);
             }
@@ -436,7 +434,6 @@ class RepliesController extends ControllerBase
         }
 
         if ($postReply->save()) {
-
             if ($postReply->users_id != $user->id) {
                 $user->decreaseKarma(Karma::VOTE_DOWN_ON_SOMEONE_ELSE_REPLY);
             }

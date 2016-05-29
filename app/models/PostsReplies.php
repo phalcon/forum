@@ -118,7 +118,6 @@ class PostsReplies extends Model
     public function afterCreate()
     {
         if ($this->id > 0) {
-
             $activity           = new Activities();
             $activity->users_id = $this->users_id;
             $activity->posts_id = $this->posts_id;
@@ -132,7 +131,6 @@ class PostsReplies extends Model
              */
             foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
                 if ($this->users_id != $user->id) {
-
                     $notification                   = new Notifications();
                     $notification->users_id         = $user->id;
                     $notification->posts_id         = $this->posts_id;
@@ -157,7 +155,6 @@ class PostsReplies extends Model
              */
             foreach (PostsSubscribers::findByPostsId($this->posts_id) as $subscriber) {
                 if (!isset($toNotify[$subscriber->users_id])) {
-
                     $notification                   = new Notifications();
                     $notification->users_id         = $subscriber->users_id;
                     $notification->posts_id         = $this->posts_id;

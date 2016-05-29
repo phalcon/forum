@@ -87,7 +87,6 @@ class Indexer
             krsort($results);
 
             return array_values($results);
-
         } catch (\Exception $e) {
             return array();
         }
