@@ -91,10 +91,25 @@ class SessionController extends ControllerBase
                 return $this->indexRedirect();
             }
 
+            $userName = $githubUser->getLogin();
+            if (empty($userName)) {
+                $this->flashSession->error(
+                    'Invalid Github response. Please try again'
+                );
+                return $this->indexRedirect();
+            }
+
             /**
              * Edit/Create the user
              */
-            $user = ForumUsers::findFirstByAccessToken($response['access_token']);
+            $user = ForumUsers::findFirst(
+                [
+                    'conditions' => 'login = :login:',
+                    'bind'       => [
+                        'login' => $userName,
+                    ],
+                ]
+            );
             if ($user == false) {
                 $user               = new ForumUsers();
                 $user->token_type   = $response['token_type'];

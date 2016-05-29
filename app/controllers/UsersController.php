@@ -142,7 +142,7 @@ class UsersController extends ControllerBase
         }
 
         $this->tag->setTitle('My Settings');
-        $this->tag->setAutoEscape(false);
+        $this->tag->setAutoescape(false);
 
         $this->view->setVars([
             'avatar'        => $this->gravatar->getAvatar($user->email),
