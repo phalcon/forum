@@ -54,6 +54,8 @@ class ControllerBase extends Controller
         }
 
         $this->view->setVars([
+            'app_name'       => $this->config->get('site')->name,
+            'app_version'    => VERSION,
             'threads'        => Posts::count(),
             'last_threads'   => $lastThreads,
             'users'          => Users::count(),
