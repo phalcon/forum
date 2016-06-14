@@ -118,6 +118,13 @@ return new Config([
         'redirectUri'  => 'http://pforum.loc/login/oauth/access_token/'
     ],
 
+    // Visit https://www.dropbox.com/developers/apps and get your "accessToken" and "appSecret".
+    'dropbox' => [
+        'accessToken' => '',
+        'appSecret' => '',
+        'prefix' => '',
+    ],
+
     'amazonSns' => [
         'secret' => ''
     ],

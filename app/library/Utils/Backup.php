@@ -17,16 +17,17 @@
 
 namespace Phosphorum\Utils;
 
-use Dropbox\AuthInfo;
+use Phalcon\Config;
 use Dropbox\Client;
-use Dropbox\Path;
-use Dropbox\WriteMode;
 use Phalcon\DI\Injectable;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Dropbox\DropboxAdapter;
 
 /**
  * Backup
  *
  * Backups the default database to Dropbox (only MySQL/Unix)
+ * @property \Phalcon\Config config
  */
 class Backup extends Injectable
 {
@@ -36,47 +37,46 @@ class Backup extends Injectable
             throw new \Exception("This script only can be used in CLI");
         }
 
-        $config = $this->config->database;
+        $config = $this->config->get('database');
+
         system(sprintf(
-            '/usr/bin/mysqldump -u %s -p%s -r /tmp/phosphorum.sql %s',
-            $config->dbname,
+            '/usr/bin/mysqldump -u %s -h %s -p%s -r /tmp/phosphorum.sql %s',
             $config->username,
-            $config->password
+            $config->host,
+            $config->password,
+            $config->dbname
         ));
         system('bzip2 /tmp/phosphorum.sql');
+
+        $config = $this->config->get('dropbox');
+
+        if (!$config instanceof Config) {
+            throw new \Exception("Unable to retrieve Dropbox credentials. Please check Forum Configuration");
+        }
+
+        if (!$config->get('appSecret') || !$config->get('accessToken')) {
+            throw new \Exception("Please provide correct 'appSecret' and 'accessToken' config values");
+        }
 
         $sourcePath = '/tmp/phosphorum.sql.bz2';
         if (!file_exists($sourcePath)) {
             throw new \Exception("Backup could not be created");
         }
 
-        list($accessToken, $host) = AuthInfo::loadFromJsonFile(BASE_DIR . 'app/config/backup.auth');
-
-        $client = new Client($accessToken, "phosphorum", null, $host);
+        $client = new Client($config->get('accessToken'), $config->get('appSecret'));
+        $adapter = new DropboxAdapter($client, $config->get('prefix', null));
+        $filesystem = new Filesystem($adapter);
 
         $dropboxPath = '/phosphorum.sql.bz2';
 
-        $pathError = Path::findErrorNonRoot($dropboxPath);
-        if ($pathError !== null) {
-            throw new \Exception("Invalid <dropbox-path>: $pathError");
-        }
-
-        try {
-            $client->delete($dropboxPath);
-        } catch (\Exception $e) {
-            // ...
-        }
-
-        $size = null;
-        if (\stream_is_local($sourcePath)) {
-            $size = \filesize($sourcePath);
+        if ($filesystem->has($dropboxPath)) {
+            $filesystem->delete($dropboxPath);
         }
 
         $fp = fopen($sourcePath, "rb");
-        $metadata = $client->uploadFile($dropboxPath, WriteMode::add(), $fp, $size);
+        $filesystem->putStream($dropboxPath, $fp);
         fclose($fp);
 
-        //print_r($metadata);
         @unlink($sourcePath);
     }
 }
