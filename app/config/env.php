@@ -64,7 +64,7 @@ define('HOSTNAME', explode('.', gethostname())[ 0 ]);
 /**
  * @const VERSION Forum version
  */
-define('VERSION', '2.1.1');
+define('VERSION', '2.2.0');
 
 if (function_exists('mb_internal_encoding')) {
     // Set the MB extension encoding to the same character set
