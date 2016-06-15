@@ -14,12 +14,11 @@
   +------------------------------------------------------------------------+
 */
 
+
 html {
     font-size: 16px;
-}
-
-html, body {
-    height:100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -27,6 +26,7 @@ body {
     font-size: 1rem;
     color: #111;
     line-height: 1.5;
+    margin-bottom: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -132,10 +132,6 @@ ul.categories-dropdown > li > a {
     margin-top: 2rem;
     font-size: .85rem;
     height:100%;
-}
-
-.page-wrapper > .container:first-child {
-    min-height:73%;
 }
 
 .error-v4 {
@@ -403,6 +399,13 @@ div.reply-accepted {
 
 div.reply-accepted .post-content {
     min-height: 105px;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
 }
 
 .footer-statistic {

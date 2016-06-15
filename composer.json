@@ -28,9 +28,9 @@
         "kzykhys/ciconia": "~1.0",
         "phpspec/php-diff": "~1.0",
         "elasticsearch/elasticsearch": "~1.0",
-        "dropbox/dropbox-sdk": "^1.1",
-        "phalcon/incubator": "2.0.x-dev",
-        "phalcongelist/breadcrumbs": "dev-master@dev"
+        "phalcon/incubator": "2.1.x-dev",
+        "phalcongelist/breadcrumbs": "dev-master@dev",
+        "league/flysystem-dropbox" : "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
