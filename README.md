@@ -41,25 +41,15 @@ Install composer in a common location or in your project:
 $ curl -s http://getcomposer.org/installer | php
 ```
 
-For Phalcon 2.0.x create the `composer.json` file as follows:
+Create the `composer.json` file as follows:
 
 ```json
 {
     "require": {
-        "phalcon/forum": "^2.0"
+        "phalcon/forum": "~2.2"
     }
 }
 ```
-
-Phalcon 2.1.x related `composer.json`:
-```json
-{
-    "require": {
-        "phalcon/forum": "^2.1"
-    }
-}
-```
-
 
 Run the composer installer:
 
