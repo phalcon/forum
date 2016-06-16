@@ -44,7 +44,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
     public function processBlockQuote(Text $text)
     {
         $text->replace(
-            '{
+            '/{
             (?:
             (?:
               ^[ \t]*&gt;[ \t]? # \'>\' at the start of a line
@@ -54,7 +54,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
             )+
             )
             }
-            mx',
+            /mx',
             function (Text $bq) {
                 $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
                 $bq->replace('/^[ \t]+$/m', '');
