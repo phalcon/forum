@@ -13,3 +13,4 @@ selenium-server-standalone-*.jar
 chromedriver
 /public/google*.html
 .env
+phalcon.so
