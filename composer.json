@@ -23,6 +23,7 @@
     },
     "require": {
         "php": ">= 5.4",
+        "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-phalcon": ">=2.0.6",
