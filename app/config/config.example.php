@@ -145,10 +145,7 @@ return new Config([
     'elasticsearch' => [
         'index' => 'phosphorum',
         'hosts' => [
-            [
-                'host' => '127.0.0.1',
-                'port' => 9200,
-            ]
+            '127.0.0.1:9200'
         ],
     ],
 

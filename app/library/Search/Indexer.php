@@ -60,12 +60,7 @@ class Indexer extends Injectable
 
         if (empty($hosts)) {
             // Fallback
-            $hosts = [
-                [
-                    'host' => '127.0.0.1',
-                    'port' => 9200,
-                ]
-            ];
+            $hosts = ['127.0.0.1:9200'];
         }
 
         $this->client = new Client(['hosts' => $hosts]);
@@ -129,7 +124,7 @@ class Indexer extends Injectable
 
             return array_values($results);
         } catch (\Exception $e) {
-            $this->logger->error("Indexer: {$e->getMessage()}. Line: {$e->getLine()}. File: {$e->getFile()}");
+            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
             return [];
         }
     }
@@ -139,7 +134,7 @@ class Indexer extends Injectable
      *
      * @param Posts $post
      */
-    protected function doIndex($post)
+    protected function doIndex(Posts $post)
     {
         $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
         if ($karma > 0) {
@@ -191,7 +186,7 @@ class Indexer extends Injectable
             $this->client->indices()->delete($deleteParams);
         } catch (\Exception $e) {
             // the index does not exist yet
-            $this->logger->error("Indexer: {$e->getMessage()}. Line: {$e->getLine()}. File: {$e->getFile()}");
+            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
         }
 
         foreach (Posts::find('deleted != 1') as $post) {
