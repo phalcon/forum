@@ -35,7 +35,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
     {
         $this->markdown = $markdown;
 
-        $markdown->on('block', array($this, 'processBlockQuote'), 50);
+        $markdown->on('block', [$this, 'processBlockQuote'], 50);
     }
 
     /**
@@ -59,7 +59,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
                 $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
                 $bq->replace('/^[ \t]+$/m', '');
 
-                $this->markdown->emit('block', array($bq));
+                $this->markdown->emit('block', [$bq]);
 
                 $bq->replace('|\s*<pre>.+?</pre>|s', function (Text $pre) {
                     return $pre->replace('/^  /m', '');

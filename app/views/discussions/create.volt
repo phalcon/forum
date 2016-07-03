@@ -83,7 +83,7 @@
 
                 <div class="col-md-3">
                     <div id="recommended-posts-create">
-                        <strong>Suggested Posts</strong>
+                        <label style="width: 100%">Suggested Posts</label>
                         <div id="recommended-posts-create-content">There are no suggested posts</div>
                     </div>
                 </div>
