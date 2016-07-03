@@ -3,7 +3,7 @@ version: '2'
 services:
     application:
         build: opsfiles/containers/core
-        container_name: forum_volume
+        container_name: forum_application
         volumes:
             - .:/var/www/forum
         tty: true
