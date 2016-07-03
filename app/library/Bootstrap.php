@@ -37,6 +37,7 @@ use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Error\Handler as ErrorHandler;
+use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger\Adapter\File as FileLogger;
@@ -66,6 +67,7 @@ class Bootstrap
         'markdown',
         'notifications',
         'flash',
+        'elastic',
         'gravatar',
         'timezones',
         'breadcrumbs',
@@ -626,6 +628,31 @@ class Bootstrap
                 ]);
             }
         );
+    }
+
+    /**
+     * Initialize the Elasticsearch Service.
+     *
+     * @param DiInterface   $di     Dependency Injector
+     * @param Config        $config App config
+     * @param EventsManager $em     Events Manager
+     *
+     * @return void
+     */
+    protected function initElastic(DiInterface $di, Config $config, EventsManager $em)
+    {
+        $di->setShared('elastic', function () use ($config) {
+            /** @var Config $config */
+            $config = $config->get('elasticsearch', new Config);
+            $hosts  = $config->get('hosts', new Config)->toArray();
+
+            if (empty($hosts)) {
+                // Fallback
+                $hosts = ['127.0.0.1:9200'];
+            }
+
+            return new ElasticClient(['hosts' => $hosts]);
+        });
     }
 
     /**

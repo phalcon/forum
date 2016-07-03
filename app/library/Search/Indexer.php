@@ -18,7 +18,6 @@
 namespace Phosphorum\Search;
 
 use Phalcon\Config;
-use Elasticsearch\Client;
 use Phalcon\Di\Injectable;
 use Phosphorum\Models\Posts;
 use Phalcon\Logger\AdapterInterface;
@@ -38,7 +37,7 @@ class Indexer extends Injectable
 
     /**
      * Elasticsearch client
-     * @var Client
+     * @var \Elasticsearch\Client
      */
     protected $client;
 
@@ -52,18 +51,10 @@ class Indexer extends Injectable
     {
         $this->logger = $this->getDI()->get('logger', ['indexer.log']);
 
-        /** @var Config $config */
         $config = $this->getDI()->getShared('config');
         $this->config = $config->get('elasticsearch', new Config);
 
-        $hosts = $this->config->get('hosts', new Config)->toArray();
-
-        if (empty($hosts)) {
-            // Fallback
-            $hosts = ['127.0.0.1:9200'];
-        }
-
-        $this->client = new Client(['hosts' => $hosts]);
+        $this->client = $this->getDI()->getShared('elastic');
     }
 
     /**
