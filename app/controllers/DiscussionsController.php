@@ -934,18 +934,26 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Finds related posts
+     *
+     * @return Response
      */
     public function findRelatedAction()
     {
         $response = new Response();
+        $indexer  = new Indexer();
+        $results  = [];
 
-        $indexer = new Indexer();
-        $results = $indexer->search(['title' => $this->request->getPost('title')], 5);
+        if ($this->request->has('title')) {
+            if ($title = $this->request->getPost('title', 'trim')) {
+                $results = $indexer->search(['title' => $title], 5);
+            }
+        }
 
         $contentOk = [
             'status'  => 'OK',
             'results' => $results
         ];
+
         return $response->setJsonContent($contentOk);
     }
 

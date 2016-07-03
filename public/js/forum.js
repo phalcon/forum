@@ -627,6 +627,8 @@ var Forum = {
 
 				content.appendChild(div);
 			}
+		} else {
+			content.innerHTML = 'There are no suggested posts';
 		}
 	},
 

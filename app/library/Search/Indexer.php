@@ -21,6 +21,7 @@ use Phalcon\Config;
 use Phalcon\Di\Injectable;
 use Phosphorum\Models\Posts;
 use Phalcon\Logger\AdapterInterface;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 /**
  * Indexer
@@ -67,56 +68,100 @@ class Indexer extends Injectable
      */
     public function search(array $fields, $limit = 10, $returnPosts = false)
     {
+        $results = [];
+
+        $searchParams = [
+            'index' => $this->config->get('index', 'phosphorum'),
+            'type'  => 'post',
+            'body'  => [
+                'fields' => ['id', 'karma'],
+                'query'  => [],
+                'from'   => 0,
+                'size'   => intval($limit),
+            ]
+        ];
+
+        if (count($fields) == 1) {
+            $searchParams['body']['query']['match'] = $fields;
+        } else {
+            $terms = [];
+            foreach ($fields as $field => $value) {
+                $terms[] = ['term' => [$field => $value]];
+            }
+
+            $searchParams['body']['query']['bool'] = [
+                'must' => $terms
+            ];
+        }
+
+        $this->logger->info("searchParams: " . json_encode($searchParams, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
         try {
-            $searchParams['index'] = $this->config->get('index', 'phosphorum');
-            $searchParams['type']  = 'post';
-
-            $searchParams['body']['fields'] = ['id', 'karma'];
-
-            if (count($fields) == 1) {
-                $searchParams['body']['query']['match'] = $fields;
-            } else {
-                $terms = [];
-                foreach ($fields as $field => $value) {
-                    $terms[] = ['term' => [$field => $value]];
-                }
-                $searchParams['body']['query']['bool']['must'] = $terms;
-            }
-
-            $searchParams['body']['from'] = 0;
-            $searchParams['body']['size'] = $limit;
-
             $queryResponse = $this->client->search($searchParams);
+            $queryResponse = $this->parseElasticResponse($queryResponse);
 
-            $results = [];
-            if (is_array($queryResponse['hits'])) {
-                $d = 0.5;
-                foreach ($queryResponse['hits']['hits'] as $hit) {
-                    if ($post = Posts::findFirstById($hit['fields']['id'][0])) {
-                        if ($hit['fields']['karma'][0] > 0 && ($post->hasReplies() || $post->hasAcceptedAnswer())) {
-                            $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
-                            if (!$returnPosts) {
-                                $results[$score] = [
-                                    'slug'    => "discussion/{$post->id}/{$post->slug}",
-                                    'title'   => $post->title,
-                                    'created' => $post->getHumanCreatedAt()
-                                ];
-                            } else {
-                                $results[$score] = $post;
-                            }
+            $d = 0.5;
+            foreach ($queryResponse as $hit) {
+                if (!isset($hit['fields']['id'][0])) {
+                    continue;
+                }
 
-                            $d += 0.05;
-                        }
+                $id = $hit['fields']['id'][0];
+                $post = $post = Posts::findFirstById($id);
+
+                if (!$post || $post->deleted == Posts::IS_DELETED) {
+                    continue;
+                }
+
+                if ($hit['fields']['karma'][0] > 0 && ($post->hasReplies() || $post->hasAcceptedAnswer())) {
+                    $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
+                    if (!$returnPosts) {
+                        $results[$score] = $this->createPostArray($post);
+                    } else {
+                        $results[$score] = $post;
                     }
+
+                    $d += 0.05;
                 }
             }
-
-            krsort($results);
-
-            return array_values($results);
         } catch (\Exception $e) {
             $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
-            return [];
+        }
+
+        krsort($results);
+
+        return array_values($results);
+    }
+
+    /**
+     * Puts a post in the search server
+     *
+     * @param Posts $post
+     */
+    public function index(Posts $post)
+    {
+        $this->doIndex($post);
+    }
+
+    /**
+     * Indexes all posts in the forum in ES
+     */
+    public function indexAll()
+    {
+        $deleteParams = [
+            'index' => $this->config->get('index', 'phosphorum'),
+        ];
+
+        try {
+            $this->client->indices()->delete($deleteParams);
+        } catch (Missing404Exception $e) {
+            $this->logger->info('The index does not exist yet. Skip deleting...');
+        } catch (\Exception $e) {
+            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
+        }
+
+        foreach (Posts::find('deleted != ' . Posts::IS_DELETED) as $post) {
+            $this->doIndex($post);
         }
     }
 
@@ -127,9 +172,10 @@ class Indexer extends Injectable
      */
     protected function doIndex(Posts $post)
     {
-        $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
+        $params = [];
+        $karma  = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
+
         if ($karma > 0) {
-            $params = [];
             $params['body']  = [
                 'id'       => $post->id,
                 'title'    => $post->title,
@@ -140,48 +186,33 @@ class Indexer extends Injectable
             $params['index'] = $this->config->get('index', 'phosphorum');
             $params['type']  = 'post';
             $params['id']    = 'post-' . $post->id;
-            $ret = $this->client->index($params);
-            var_dump($ret);
+
+            $this->client->index($params);
         }
     }
 
-    public function searchCommon()
+    protected function createPostArray(Posts $post)
     {
-        $searchParams['index'] = $this->config->get('index', 'phosphorum');
-        $searchParams['type']  = 'post';
-
-        $searchParams['body']['common']['body']['fields'] = ['id', 'karma'];
-        $searchParams['body']['common']['body']['query'] = "nelly the elephant not as a cartoon";
-        $searchParams['body']['common']['body']["cutoff_frequency"] = 0.001;
-
-        $queryResponse = $this->client->search($searchParams);
+        return [
+            'slug'    => "discussion/{$post->id}/{$post->slug}",
+            'title'   => $post->title,
+            'created' => $post->getHumanCreatedAt(),
+        ];
     }
 
     /**
-     * Puts a post in the search server
+     * Parse Elasticsearch response
      *
-     * @param Posts $post
+     * @param mixed $response
+     * @return array
+     * @throws \Exception
      */
-    public function index($post)
+    protected function parseElasticResponse($response)
     {
-        $this->doIndex($post);
-    }
-
-    /**
-     * Indexes all posts in the forum in ES
-     */
-    public function indexAll()
-    {
-        try {
-            $deleteParams['index'] = $this->config->get('index', 'phosphorum');
-            $this->client->indices()->delete($deleteParams);
-        } catch (\Exception $e) {
-            // the index does not exist yet
-            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
+        if (!isset($response['hits']) || !isset($response['hits']['hits']) || !is_array($response['hits']['hits'])) {
+            throw new \Exception('The Elasticsearch client does not return expected response.');
         }
 
-        foreach (Posts::find('deleted != 1') as $post) {
-            $this->doIndex($post);
-        }
+        return $response['hits']['hits'];
     }
 }
