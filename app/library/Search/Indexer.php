@@ -94,8 +94,6 @@ class Indexer extends Injectable
             ];
         }
 
-        $this->logger->info("searchParams: " . json_encode($searchParams, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
         try {
             $queryResponse = $this->client->search($searchParams);
             $queryResponse = $this->parseElasticResponse($queryResponse);

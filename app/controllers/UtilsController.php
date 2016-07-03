@@ -41,16 +41,16 @@ class UtilsController extends Controller
     {
         foreach (Users::find() as $user) {
             if ($user->karma === null) {
-                $parametersNumbersPost = array(
+                $parametersNumbersPost = [
                     'users_id = ?0',
-                    'bind' => array($user->id)
-                );
+                    'bind' => [$user->id]
+                ];
                 $numberPosts = Posts::count($parametersNumbersPost);
 
-                $parametersNumberReplies = array(
+                $parametersNumberReplies = [
                     'users_id = ?0',
-                    'bind' => array($user->id)
-                );
+                    'bind' => [$user->id]
+                ];
                 $numberReplies = PostsReplies::count($parametersNumberReplies);
 
                 $user->karma = ($numberReplies * 10 + $numberPosts * 5);
