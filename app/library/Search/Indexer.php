@@ -18,6 +18,7 @@
 namespace Phosphorum\Search;
 
 use Elasticsearch\Client;
+use Phalcon\Di\Injectable;
 use Phosphorum\Models\Posts;
 
 /**
@@ -25,15 +26,21 @@ use Phosphorum\Models\Posts;
  *
  * This component uses ElasticSearch to search items in the forum
  */
-class Indexer
+class Indexer extends Injectable
 {
+    protected $logger;
+
+    public function __construct()
+    {
+        $this->logger = $this->getDI()->get('logger', ['indexer.log']);
+    }
 
     /**
      * Search documents in ElasticSearch by the specified criteria
      *
      * @param array $fields
-     * @param int $limit
-     * @param bool $returnPosts
+     * @param int   $limit
+     * @param bool  $returnPosts
      * @return array
      */
     public function search(array $fields, $limit = 10, $returnPosts = false)
@@ -44,14 +51,14 @@ class Indexer
             $searchParams['index'] = 'phosphorum';
             $searchParams['type']  = 'post';
 
-            $searchParams['body']['fields'] = array('id', 'karma');
+            $searchParams['body']['fields'] = ['id', 'karma'];
 
             if (count($fields) == 1) {
                 $searchParams['body']['query']['match'] = $fields;
             } else {
-                $terms = array();
+                $terms = [];
                 foreach ($fields as $field => $value) {
-                    $terms[] = array('term' => array($field => $value));
+                    $terms[] = ['term' => [$field => $value]];
                 }
                 $searchParams['body']['query']['bool']['must'] = $terms;
             }
@@ -61,23 +68,23 @@ class Indexer
 
             $queryResponse = $client->search($searchParams);
 
-            $results = array();
+            $results = [];
             if (is_array($queryResponse['hits'])) {
                 $d = 0.5;
                 foreach ($queryResponse['hits']['hits'] as $hit) {
-                    $post = Posts::findFirstById($hit['fields']['id'][0]);
-                    if ($post) {
+                    if ($post = Posts::findFirstById($hit['fields']['id'][0])) {
                         if ($hit['fields']['karma'][0] > 0 && ($post->hasReplies() || $post->hasAcceptedAnswer())) {
                             $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
                             if (!$returnPosts) {
-                                $results[$score] = array(
-                                    'slug'    => 'discussion/' . $post->id . '/' . $post->slug,
+                                $results[$score] = [
+                                    'slug'    => "discussion/{$post->id}/{$post->slug}",
                                     'title'   => $post->title,
                                     'created' => $post->getHumanCreatedAt()
-                                );
+                                ];
                             } else {
                                 $results[$score] = $post;
                             }
+
                             $d += 0.05;
                         }
                     }
@@ -88,7 +95,8 @@ class Indexer
 
             return array_values($results);
         } catch (\Exception $e) {
-            return array();
+            $this->logger->error("Indexer: {$e->getMessage()}. Line: {$e->getLine()}. File: {$e->getFile()}");
+            return [];
         }
     }
 
@@ -103,13 +111,13 @@ class Indexer
         $karma = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
         if ($karma > 0) {
             $params = [];
-            $params['body']  = array(
+            $params['body']  = [
                 'id'       => $post->id,
                 'title'    => $post->title,
                 'category' => $post->categories_id,
                 'content'  => $post->content,
                 'karma'    => $karma
-            );
+            ];
             $params['index'] = 'phosphorum';
             $params['type']  = 'post';
             $params['id']    = 'post-' . $post->id;
@@ -125,7 +133,7 @@ class Indexer
         $searchParams['index'] = 'phosphorum';
         $searchParams['type']  = 'post';
 
-        $searchParams['body']['common']['body']['fields'] = array('id', 'karma');
+        $searchParams['body']['common']['body']['fields'] = ['id', 'karma'];
         $searchParams['body']['common']['body']['query'] = "nelly the elephant not as a cartoon";
         $searchParams['body']['common']['body']["cutoff_frequency"] = 0.001;
 
