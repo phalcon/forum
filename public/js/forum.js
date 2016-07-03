@@ -601,7 +601,12 @@ var Forum = {
 
 	updateRecommendedPosts: function(response) {
 		Forum._search = false;
-		var data = JSON.parse(response);
+
+		var data = response;
+		if (typeof data != "object") {
+			data = JSON.parse(response);
+		}
+
 		var content = $('#recommended-posts-create-content')[0];
 		if (data.results.length > 0) {
 			content.innerHTML = '';
@@ -622,8 +627,6 @@ var Forum = {
 
 				content.appendChild(div);
 			}
-		} else {
-			content.innerHTML = 'There are no suggested posts';
 		}
 	},
 
