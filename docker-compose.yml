@@ -1,0 +1,92 @@
+version: '2'
+
+services:
+    application:
+        build: opsfiles/containers/core
+        container_name: forum_volume
+        volumes:
+            - .:/var/www/forum
+        tty: true
+
+    elasticsearch:
+        restart: always
+        image: elasticsearch:2.3
+        container_name: forum_elasticsearch
+        expose:
+            - "9200"
+            - "9300"
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+
+    mysql:
+        restart: always
+        image: mysql:5.7
+        container_name: forum_mysql
+        expose:
+            - "3306"
+        ports:
+            - "3306:3306"
+        volumes:
+            - forum_mysql:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: phosphorum
+            MYSQL_USER: root
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+    php:
+        image: phalconphp/php-fpm:5.6
+        restart: always
+        container_name: forum_php
+        expose:
+            - "9000"
+            - "10000"
+        ports:
+            - "9000:9000"
+            - "10000:10000"
+        volumes_from:
+            - application
+        depends_on:
+            - mysql
+            - elasticsearch
+
+    nginx:
+        restart: always
+        image: phalconphp/nginx
+        container_name: forum_nginx
+        expose:
+            - "80"
+            - "443"
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+             - php
+        volumes:
+            - ./opsfiles/nginx.conf:/etc/nginx/sites-enabled/forum.conf
+        volumes_from:
+            - application
+        environment:
+            # production | development | staging | testing
+            APPLICATION_ENV: development
+
+    ssh:
+       image: jeroenpeeters/docker-ssh
+       restart: always
+       container_name: forum_ssh
+       depends_on:
+         - php
+       ports:
+         - "2222:22"
+         - "8022:8022"
+       environment:
+         CONTAINER: forum_php
+         AUTH_MECHANISM: noAuth
+       volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+    forum_mysql:
+        driver: local
+    forum_elasticsearch:
+        driver: local
