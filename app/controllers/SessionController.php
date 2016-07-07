@@ -122,7 +122,7 @@ class SessionController extends ControllerBase
             }
 
             // Update session id
-            session_regenerate_id(true);
+            $this->session->regenerateId(true);
 
             /**
              * Update the user information
