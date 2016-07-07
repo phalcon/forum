@@ -251,7 +251,7 @@ class Bootstrap
      */
     protected function initSecurity(DiInterface $di, Config $config, EventsManager $em)
     {
-        $di->setShared('session', function () {
+        $di->setShared('security', function () {
             $security = new Security;
             $security->setWorkFactor(12);
 
