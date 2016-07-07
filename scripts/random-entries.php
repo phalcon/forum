@@ -15,13 +15,14 @@
  +------------------------------------------------------------------------+
 */
 
+use Phalcon\Di;
+use Phalcon\Tag;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\Categories;
 use Phalcon\Logger\Adapter\Stream;
-use Phalcon\Tag;
 use Faker\Factory as Faker;
 
 /**
@@ -36,7 +37,7 @@ $log   = new Stream('php://stdout');
 $log->info('Start');
 
 /** @var Phalcon\Db\AdapterInterface $database */
-$database = $di->getShared('db');
+$database = Di::getDefault()->getShared('db');
 
 $database->begin();
 
