@@ -53,8 +53,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
               \n*               # blanks
             )+
             )
-            }
-            mx',
+            }mx',
             function (Text $bq) {
                 $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
                 $bq->replace('/^[ \t]+$/m', '');
