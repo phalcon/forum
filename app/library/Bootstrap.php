@@ -20,6 +20,7 @@ namespace Phosphorum;
 use Phalcon\Config;
 use Phalcon\Loader;
 use Ciconia\Ciconia;
+use Phalcon\Security;
 use Phalcon\Mvc\View;
 use RuntimeException;
 use Phalcon\Mvc\Router;
@@ -56,6 +57,7 @@ class Bootstrap
 
     private $loaders = [
         'cache',
+        'security',
         'session',
         'view',
         'database',
@@ -235,6 +237,25 @@ class Bootstrap
             unset($config['backend'], $config['lifetime'], $config['frontend']);
 
             return new $backend($frontend, $config);
+        });
+    }
+
+    /**
+     * Initialize the Security Service.
+     *
+     * @param DiInterface   $di     Dependency Injector
+     * @param Config        $config App config
+     * @param EventsManager $em     Events Manager
+     *
+     * @return void
+     */
+    protected function initSecurity(DiInterface $di, Config $config, EventsManager $em)
+    {
+        $di->setShared('security', function () {
+            $security = new Security;
+            $security->setWorkFactor(12);
+
+            return $security;
         });
     }
 
