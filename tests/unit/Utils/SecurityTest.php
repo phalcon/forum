@@ -1,6 +1,5 @@
 <?php
 
-use Phalcon\Di;
 use Codeception\Specify;
 use Phalcon\Http\Request;
 use Codeception\Test\Unit;
@@ -107,21 +106,20 @@ class SecurityTest extends Unit
     /**
      * Set up the environment.
      *
-     * @return Di
+     * @return \Phalcon\DiInterface
      */
     private function setupDI()
     {
-        Di::reset();
+        $di = $this->tester->getDi();
+        $di::reset();
 
-        $di = new Di();
-
-        $di->setShared('session', function() {
+        $this->tester->haveServiceInDi('session', function() {
             return new PhalconMemorySession();
-        });
+        }, true);
 
-        $di->setShared('request', function() {
+        $this->tester->haveServiceInDi('request', function() {
             return new Request();
-        });
+        }, true);
 
         return $di;
     }
