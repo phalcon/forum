@@ -46,7 +46,7 @@ Create the `composer.json` file as follows:
 ```json
 {
     "require": {
-        "phalcon/forum": "~2.3"
+        "phalcon/forum": "~3.0"
     }
 }
 ```
