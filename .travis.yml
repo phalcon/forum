@@ -86,7 +86,7 @@ script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
   - vendor/bin/codecept run functional
-  - vendor/bin/codecept run unit
+  - vendor/bin/codecept run unit -vvv
 
 notifications:
   email:
