@@ -17,10 +17,10 @@
         "wiki":   "https://github.com/phalcon/forum/wiki"
     },
     "require": {
-        "php": ">= 5.4",
+        "php": ">= 5.5",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "ext-phalcon": ">=2.0.3",
+        "ext-phalcon": ">=2.0.6",
         "vlucas/phpdotenv": "^2.1",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
@@ -37,5 +37,10 @@
         "codeception/codeception": "^2.1",
         "codeception/mockery-module": "^0.2",
         "squizlabs/php_codesniffer": "^2.5"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "dev-dev"
+        }
     }
 }
