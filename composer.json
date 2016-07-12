@@ -22,11 +22,11 @@
         "wiki":   "https://github.com/phalcon/forum/wiki"
     },
     "require": {
-        "php": ">= 5.4",
+        "php": ">= 5.5",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "ext-phalcon": ">=2.0.6",
+        "ext-phalcon": ">=2.1.x-dev",
         "vlucas/phpdotenv": "~2.3",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
@@ -43,8 +43,15 @@
         "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "~1.6",
         "codeception/codeception": "~2.2",
+        "codeception/verify": "~0.3",
+        "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
         "squizlabs/php_codesniffer": "~2.6",
         "phalcon/zephir": "dev-master"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
     }
 }
