@@ -113,9 +113,9 @@ class SecurityTest extends Unit
         $di = $this->tester->getDi();
         $di::reset();
 
-        $this->tester->haveServiceInDi('session', function() {
-            return new PhalconMemorySession();
-        }, true);
+//        $this->tester->haveServiceInDi('session', function() {
+//            return new PhalconMemorySession();
+//        }, true);
 
         $this->tester->haveServiceInDi('request', function() {
             return new Request();
