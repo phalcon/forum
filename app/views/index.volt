@@ -54,7 +54,7 @@
 	</head>
 	<body class="with-top-navbar">
 		{{ content() }}
-		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.1,bootstrap@3.3.6,prettify@0.1(prettify.js+lang-css.js+lang-sql.js)"></script>
+		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.2.4,bootstrap@3.3.6,prettify@0.1(prettify.js+lang-css.js+lang-sql.js+lang-yaml.js)"></script>
 		{{ javascript_include("js/editor.js?v=" ~ app_version) }}
 		{{ javascript_include("js/forum.js?v=" ~ app_version) }}
 		{{ javascript_include("js/gs.js?v=" ~ app_version) }}

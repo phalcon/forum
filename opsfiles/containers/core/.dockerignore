@@ -1,0 +1,11 @@
+.idea
+.env.example
+.gitignore
+.travis.yml
+CONTRIBUTING.md
+README.md
+composer.lock
+docker-compose.yml
+docs
+phosphorum.sql.bz2
+selenium-server-standalone-*.jar

@@ -42,7 +42,7 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
 
         if ($this->getRenderer() instanceof HtmlRenderer) {
             // Output format depends on HTML for now
-            $markdown->on('block', array($this, 'processTable'));
+            $markdown->on('block', [$this, 'processTable']);
         }
     }
 
@@ -60,7 +60,7 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
      * @param Text  $text
      * @param array $options
      */
-    public function processTable(Text $text, array $options = array())
+    public function processTable(Text $text, array $options = [])
     {
         $lessThanTab = $options['tabWidth'] - 1;
 
@@ -180,7 +180,7 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
                 /* @var Tag $tag */
                 $tag = clone $baseTags->get($index);
                 $tag->setName('th');
-                $this->markdown->emit('inline', array($cell));
+                $this->markdown->emit('inline', [$cell]);
                 $tag->setText($cell->trim());
 
                 $cells->add($tag);
@@ -215,7 +215,7 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
                 $row->split('/\|/')->each(function (Text $cell, $index) use (&$baseTags, &$cells) {
                     /* @var Tag $tag */
                     $tag = clone $baseTags->get($index);
-                    $this->markdown->emit('inline', array($cell));
+                    $this->markdown->emit('inline', [$cell]);
                     $tag->setText($cell->trim());
 
                     $cells->add($tag);

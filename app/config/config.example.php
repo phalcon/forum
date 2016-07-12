@@ -143,7 +143,10 @@ return new Config([
     ],
 
     'elasticsearch' => [
-        'index' => 'phosphorum'
+        'index' => 'phosphorum',
+        'hosts' => [
+            '127.0.0.1:9200'
+        ],
     ],
 
     'mail' => [

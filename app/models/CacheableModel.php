@@ -27,36 +27,26 @@ use Phalcon\DI;
  */
 class CacheableModel extends Model
 {
-
     /**
      * Caches models data in memory
      *
-     * @param null $parameters
-     *
-     * @return Model
+     * @param mixed $parameters
+     * @return $this
      */
     public static function findFirst($parameters = null)
     {
-        $key = null;
-        if (isset($parameters[0]) && isset($parameters['bind'])) {
-            $key = $parameters[0] . '-' . join('-', $parameters['bind']);
-        } else {
-            if (isset($parameters['conditions']) && isset($parameters['bind'])) {
-                $key = $parameters['conditions'] . '-' . join('-', $parameters['bind']);
-            }
+        // Create an unique key based on the parameters
+        if ($key = self::createKey($parameters)) {
+            $parameters['cache'] = ['key' => $key];
         }
-        if ($key) {
-            $key                 = preg_replace('/[^0-9A-Za-z]/', '-', get_called_class() . '-' . $key);
-            $parameters['cache'] = array('key' => $key);
-        }
+
         return parent::findFirst($parameters);
     }
 
     /**
      * Allows to use the model as a resultset's row
      *
-     * @param $value
-     *
+     * @param mixed $value
      * @return $this
      */
     public function setIsFresh($value)
@@ -72,5 +62,32 @@ class CacheableModel extends Model
     public function getFirst()
     {
         return $this;
+    }
+
+    /**
+     * Returns a string key based on the query parameters
+     *
+     * @param mixed $parameters
+     * @return null|string
+     */
+    protected static function createKey($parameters)
+    {
+        if (!is_array($parameters) || !$parameters['bind']) {
+            return null;
+        }
+
+        $key = null;
+
+        if (isset($parameters[0])) {
+            $key = $parameters[0] . '-' . join('-', $parameters['bind']);
+        } elseif (isset($parameters['conditions'])) {
+            $key = $parameters['conditions'] . '-' . join('-', $parameters['bind']);
+        } else {
+            return null;
+        }
+
+        return strtolower(
+            preg_replace('#[^0-9A-Za-z]#', '-', substr(get_called_class(), 18) . '-' . $key)
+        );
     }
 }

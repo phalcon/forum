@@ -10,6 +10,8 @@ app/config/config.php
 app/config/development.php
 app/config/nginx.conf
 selenium-server-standalone-*.jar
+/*.sql.bz2
 chromedriver
 /public/google*.html
 .env
+phalcon.so

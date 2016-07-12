@@ -1,18 +1,28 @@
 language: php
 
+sudo: required
+dist: precise
+
 php:
   - 5.5
   - 5.6
+  - 7.0
+
+git:
+  depth: 1
+
+cache:
+  apt: true
+  ccache: true
+  timeout: 691200
+  directories:
+    - .temp
+    - vendor
+    - $HOME/.ccache
+    - $HOME/.composer/cache
 
 services:
   - memcached
-
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-
-sudo: false
 
 env:
   - PHALCON_VERSION="2.1.x"
@@ -25,22 +35,45 @@ env:
   - PHALCON_VERSION="phalcon-v2.0.7"
   - PHALCON_VERSION="phalcon-v2.0.6"
 
-install:
-  - wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar
+matrix:
+  exclude:
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.13"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.12"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.11"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.10"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.9"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.8"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.7"
+    - php: 7.0
+      env: PHALCON_VERSION="phalcon-v2.0.6"
+
+before_install:
+  - export ZEND_DONT_UNLOAD_MODULES=1; export CC="ccache gcc"; export PATH="$PATH:~/bin"; export DISPLAY=":99.0";
   - phpenv config-rm xdebug.ini
-  - travis_retry composer self-update -q
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - composer self-update -q
+  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  - bash tests/_ci/install_zephir.sh
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - (cd cphalcon/ext; export CFLAGS="-g0 -O0 -std=gnu90"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
+  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir generate)'
+  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir generate --backend=ZendEngine3)'
+  - sh -e /etc/init.d/xvfb start
+  - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
+  - java -jar selenium-server-standalone-2.53.1.jar -port 4444 >/dev/null 2>&1 &
+  - sleep 5
+
+install:
+  - (export PRE_PHP_INCLUDES=`php-config --includes`; cd cphalcon/ext/; for file in `find kernel -name "*.h"`; do $CC "$file" -I. $PRE_PHP_INCLUDES -o "$file.ghc"; done)
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
-  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - java -jar selenium-server-standalone-2.48.2.jar -port 4444 >/dev/null 2>&1 &
-  - sleep 5
   - cp ./app/config/config.example.php ./app/config/config.php
   - cp ./app/config/development.example.php ./app/config/development.php
   - cp ./.env.example ./.env
@@ -48,7 +81,6 @@ before_script:
   - cat schemas/forum.sql | mysql phosphorum
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
-  - stty cols 160
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
@@ -65,3 +97,9 @@ notifications:
       - serghei@phalconphp.com
     on_success: change
     on_failure: always
+
+addons:
+  apt:
+    packages:
+      - gdb
+      - re2c
