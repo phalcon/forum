@@ -49,6 +49,26 @@
         "squizlabs/php_codesniffer": "~2.6",
         "phalcon/zephir": "dev-master"
     },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ],
+        "cs-test": [
+            "vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
+        ],
+        "unit-test": [
+            "vendor/bin/codecept run unit"
+        ],
+        "functional-test": [
+            "vendor/bin/codecept run functional"
+        ],
+        "acceptance-test": [
+            "vendor/bin/codecept run acceptance"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "3.x-dev"
