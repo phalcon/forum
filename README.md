@@ -46,7 +46,7 @@ Create the `composer.json` file as follows:
 ```json
 {
     "require": {
-        "phalcon/forum": "~2.2"
+        "phalcon/forum": "~2.3"
     }
 }
 ```
@@ -147,10 +147,10 @@ Sure, for acceptance tests you also need [Selenium server][12] executable as wel
 You need Java installed in order to run the Selenium server. You can launch it by running this:
 
 ```bash
-$ java -jar selenium-server-standalone-2.37.0.jar
+$ java -jar selenium-server-standalone-2.53.1.jar
 ```
 
-> Note: replace 2.37.0 to your version.
+> Note: replace 2.53.1 to your version.
 
 > Note: Selenium may not support the most recent versions of Firefox.
 
