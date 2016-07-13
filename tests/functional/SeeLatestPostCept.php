@@ -17,7 +17,7 @@ $postId = $I->havePost([
 ]);
 
 $I->amOnPage('/');
-$I->seeInTitle('Discussions - Phalcon Framework');
+$I->seeInTitle('Discussions - ');
 $I->seeElement('.post-positive td');
 $I->see('Binding Parameters', '.post-positive td');
 $I->click('Binding Parameters');

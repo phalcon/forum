@@ -18,7 +18,7 @@ $postId = $I->havePost([
 ]);
 
 $I->amOnPage('/');
-$I->seeInTitle('Discussions - Phalcon Framework');
+$I->seeInTitle('Discussions - ');
 $I->seeLink('model->save() return TRUE when no matching database column');
 $I->click('model->save() return TRUE when no matching database column');
 $I->seeInCurrentUrl(sprintf('/discussion/%s/modelsave-return-true-when-no-matching-database-column', $postId));
