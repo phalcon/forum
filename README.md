@@ -1,4 +1,4 @@
-# Phosphorum 2
+# Phosphorum 3
 
 [![Build Status](https://secure.travis-ci.org/phalcon/forum.svg?branch=master)](http://travis-ci.org/phalcon/forum)
 
@@ -35,6 +35,8 @@ To run this application on your machine, you need at least:
 
 ### Installation
 
+#### 1. Getting project
+
 Install composer in a common location or in your project:
 
 ```sh
@@ -57,12 +59,22 @@ Run the composer installer:
 $ php composer.phar install
 ```
 
+Another way to get this project by using `composer create-project`:
+
+```sh
+$ composer create-project phalcon/forum
+```
+
+#### 2. Creating database
+
 Then you'll need to create the database and initialize schema:
 
 ```sh
 $ echo 'CREATE DATABASE forum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
 $ cat schemas/forum.sql | mysql -u root phosphorum
 ```
+
+#### 3. Set up project
 
 Copy environment config:
 
