@@ -26,33 +26,6 @@ services:
 
 env:
   - PHALCON_VERSION="2.1.x"
-  - PHALCON_VERSION="phalcon-v2.0.13"
-  - PHALCON_VERSION="phalcon-v2.0.12"
-  - PHALCON_VERSION="phalcon-v2.0.11"
-  - PHALCON_VERSION="phalcon-v2.0.10"
-  - PHALCON_VERSION="phalcon-v2.0.9"
-  - PHALCON_VERSION="phalcon-v2.0.8"
-  - PHALCON_VERSION="phalcon-v2.0.7"
-  - PHALCON_VERSION="phalcon-v2.0.6"
-
-matrix:
-  exclude:
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.13"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.12"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.11"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.10"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.9"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.8"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.7"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.6"
 
 before_install:
   - export ZEND_DONT_UNLOAD_MODULES=1; export CC="ccache gcc"; export PATH="$PATH:~/bin"; export DISPLAY=":99.0";
@@ -85,7 +58,7 @@ install:
 script:
   - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run functional
+  - vendor/bin/codecept run -vvv functional
   - vendor/bin/codecept run unit
 
 notifications:

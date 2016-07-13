@@ -1,6 +1,8 @@
 <?php
 
-class SlugTest extends \Codeception\TestCase\Test
+use Codeception\Test\Unit;
+
+class SlugTest extends Unit
 {
     /**
      * UnitTester Object
