@@ -1,10 +1,10 @@
 {
-    "name":        "phalcon/forum",
+    "name": "phalcon/forum",
     "description": "Phalcon Official Forum",
-    "keywords":    ["forum", "phalcon"],
-    "type":        "project",
-    "license":     "BSD-3-Clause",
-    "homepage":    "http://forum.phalconphp.com",
+    "keywords": ["forum", "phalcon"],
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "homepage": "http://forum.phalconphp.com",
     "authors": [
         {
             "name": "Phalcon Team",
@@ -22,7 +22,7 @@
         "wiki":   "https://github.com/phalcon/forum/wiki"
     },
     "require": {
-        "php": ">= 5.4",
+        "php": ">= 5.5",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
@@ -46,5 +46,10 @@
         "codeception/mockery-module": "^0.2",
         "squizlabs/php_codesniffer": "~2.6",
         "phalcon/zephir": "dev-master"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
     }
 }
