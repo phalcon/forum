@@ -17,8 +17,11 @@
 
 namespace Phosphorum\Controllers;
 
-use Phosphorum\Models\Posts;
+use DateTime;
+use DOMDocument;
+use DateTimeZone;
 use Phalcon\Http\Response;
+use Phosphorum\Models\Posts;
 
 /**
  * Class SitemapController
@@ -39,20 +42,16 @@ class SitemapController extends ControllerBase
     {
         $response = new Response();
 
-        $expireDate = new \DateTime();
+        $expireDate = new DateTime('now', new DateTimeZone('UTC'));
         $expireDate->modify('+1 day');
 
-        $response->setExpires($expireDate);
-
-        $response->setHeader('Content-Type', "application/xml; charset=UTF-8");
-
-        $sitemap = new \DOMDocument("1.0", "UTF-8");
+        $sitemap = new DOMDocument("1.0", "UTF-8");
 
         $urlset = $sitemap->createElement('urlset');
         $urlset->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $urlset->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        $baseUrl = $this->config->site->url;
+        $baseUrl = $this->config->get('site')->url;
 
         $url = $sitemap->createElement('url');
         $url->appendChild($sitemap->createElement('loc', $baseUrl));
@@ -77,8 +76,7 @@ class SitemapController extends ControllerBase
         ];
         $karma = Posts::maximum($parametersKarma);
 
-        $modifiedAt = new \DateTime();
-        $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
+        $modifiedAt = new DateTime('now', new DateTimeZone('UTC'));
 
         foreach ($posts as $post) {
             $modifiedAt->setTimestamp($post->modified_at);
@@ -101,7 +99,11 @@ class SitemapController extends ControllerBase
 
         $sitemap->appendChild($urlset);
 
-        $response->setContent($sitemap->saveXML());
+        $response
+            ->setExpires($expireDate)
+            ->setContent($sitemap->saveXML())
+            ->setContentType('application/xml; charset=utf-8');
+
         return $response;
     }
 }
