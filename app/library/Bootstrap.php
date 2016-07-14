@@ -50,6 +50,7 @@ use Phalcon\Cache\Frontend\Output as FrontOutput;
 use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phalcon\Logger\AdapterInterface as LoggerInterface;
+use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
@@ -428,35 +429,25 @@ class Bootstrap
      */
     protected function initQueue()
     {
-        $this->di->setShared('queue', function () {
-            /**
-             * @var DiInterface $this
-             * @var Config $config
-             */
-            $config = $this->getShared('config');
+        $this->di->setShared(
+            'queue',
+            function () {
+                $config = $this->getShared('config');
 
-            $config = $config->get('beanstalk');
-            $config->get('disabled', true);
+                $config = $config->get('beanstalk');
+                $config->get('disabled', true);
 
-            if ($config->get('disabled', true)) {
-                return new DummyServer();
-            }
-
-            if (!$host = $config->get('host', false)) {
-                $error = 'Beanstalk is not configured';
-
-                if (class_exists('\Phalcon\Queue\Beanstalk\Exception')) {
-                    $exception = '\Phalcon\Queue\Beanstalk\Exception';
-                } else {
-                    $exception = '\Phalcon\Exception';
+                if ($config->get('disabled', true)) {
+                    return new DummyServer();
                 }
 
-                throw new $exception($error);
+                if (!$host = $config->get('host', false)) {
+                    throw new BeanstalkException('Beanstalk is not configured');
+                }
+
+                return new Beanstalk(['host' => $host]);
             }
-
-            return new Beanstalk(['host' => $host]);
-
-        });
+        );
     }
 
     /**
