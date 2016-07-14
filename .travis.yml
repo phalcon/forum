@@ -59,6 +59,7 @@ script:
   - composer cs-test
   - composer unit-test
   - composer functional-test
+  - composer acceptance-test
 
 notifications:
   email:
