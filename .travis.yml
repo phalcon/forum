@@ -48,8 +48,7 @@ install:
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - cp ./app/config/config.example.php ./app/config/config.php
-  - cp ./app/config/development.example.php ./app/config/development.php
-  - cp ./.env.example ./.env
+  - echo "APP_ENV=testing" > ./.env
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
@@ -59,7 +58,7 @@ script:
   - composer cs-test
   - composer unit-test
   - composer functional-test
-  - composer acceptance-test
+  - ./vendor/bin/codecept run acceptance
 
 notifications:
   email:
