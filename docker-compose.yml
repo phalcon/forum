@@ -64,7 +64,7 @@ services:
         depends_on:
              - php
         volumes:
-            - ./opsfiles/nginx.conf:/etc/nginx/sites-enabled/forum.conf
+            - ./opsfiles/nginx.conf:/etc/nginx/sites-enabled/forum.conf:ro
         volumes_from:
             - application
         environment:
