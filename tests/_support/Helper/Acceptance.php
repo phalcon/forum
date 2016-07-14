@@ -2,6 +2,7 @@
 
 namespace Helper;
 
+use SimpleXMLElement;
 use Codeception\Module;
 
 /**
@@ -17,15 +18,20 @@ class Acceptance extends Module
     /**
      * Parse XML with Sitemap schema and return its URLs
      *
-     * @param $string
+     * @param string $string Response content
      * @return array
      */
     public function parseSitemap($string)
     {
         $urls = [];
-        $x = new \SimpleXMLElement($string);
-        foreach ($x->url as $n) {
-            $urls[] = $n->loc->__toString();
+        $xml  = new SimpleXMLElement($string);
+
+        foreach ($xml->url as $node) {
+            /** @var \SimpleXMLElement $node */
+            if ($node instanceof SimpleXMLElement) {
+                $urls[] = (string) $node->loc;
+            }
+
         }
 
         return $urls;

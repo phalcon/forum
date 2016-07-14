@@ -58,7 +58,7 @@ script:
   - composer cs-test
   - composer unit-test
   - composer functional-test
-  - ./vendor/bin/codecept run acceptance
+  - ./vendor/bin/codecept run acceptance -vvv
 
 notifications:
   email:
