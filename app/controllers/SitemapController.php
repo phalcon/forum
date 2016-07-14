@@ -102,7 +102,7 @@ class SitemapController extends ControllerBase
         $response
             ->setExpires($expireDate)
             ->setContent($sitemap->saveXML())
-            ->setContentType('application/xml; charset=utf-8');
+            ->setContentType('application/xml');
 
         return $response;
     }
