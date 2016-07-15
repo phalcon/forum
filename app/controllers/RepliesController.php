@@ -25,6 +25,7 @@ use Phosphorum\Models\PostsRepliesVotes;
 use Phosphorum\Models\ActivityNotifications;
 use Phosphorum\Models\Karma;
 use Phalcon\Http\Response;
+use Phosphorum\Mvc\Controllers\TokenTrait;
 
 /**
  * Class RepliesController
@@ -33,6 +34,7 @@ use Phalcon\Http\Response;
  */
 class RepliesController extends ControllerBase
 {
+    use TokenTrait;
 
     public function initialize()
     {
@@ -76,11 +78,6 @@ class RepliesController extends ControllerBase
      */
     public function updateAction()
     {
-        if (!$this->security->checkToken()) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return $this->response->redirect();
-        }
-
         $usersId = $this->session->get('identity');
         if (!$usersId) {
             return $this->response->redirect();
@@ -100,6 +97,11 @@ class RepliesController extends ControllerBase
         ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if (!$postReply) {
+            return $this->response->redirect();
+        }
+
+        if (!$this->security->checkToken('post-' . $postReply->post->id)) {
+            $this->flashSession->error('This post is outdated. Please try to update reply again.');
             return $this->response->redirect();
         }
 
@@ -133,13 +135,6 @@ class RepliesController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return $this->response->redirect();
-        }
-
         $usersId = $this->session->get('identity');
         if (!$usersId) {
             return $this->response->setStatusCode('401', 'Unauthorized');
@@ -149,7 +144,18 @@ class RepliesController extends ControllerBase
             'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
             'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
         ];
+
         $postReply = PostsReplies::findFirst($parametersReply);
+        if (!$postReply) {
+            $this->flashSession->error('Post reply does not exist');
+            return $this->response->redirect();
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $this->flashSession->error('This post is outdated. Please try to vote for the reply again.');
+            return $this->response->redirect();
+        }
+
         if ($postReply) {
             if ($usersId == $postReply->users_id) {
                 $user = $postReply->user;
@@ -188,16 +194,6 @@ class RepliesController extends ControllerBase
         return $this->response->redirect();
     }
 
-    protected function checkTokenGetJson()
-    {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Votes a post up
      *
@@ -207,14 +203,6 @@ class RepliesController extends ControllerBase
     public function voteUpAction($id = 0)
     {
         $response = new Response();
-
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
 
         /**
          * Find the post using get
@@ -226,6 +214,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to vote for the reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
@@ -340,15 +336,6 @@ class RepliesController extends ControllerBase
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
-
-
         /**
          * Find the post using get
          */
@@ -359,6 +346,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to vote for the reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
@@ -520,14 +515,6 @@ class RepliesController extends ControllerBase
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
-
         /**
          * Find the post using get
          */
@@ -538,6 +525,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to accept reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
