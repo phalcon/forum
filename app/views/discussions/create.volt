@@ -39,7 +39,12 @@
                     {% endif %}
 
                     <form method="post" autocomplete="off" role="form">
-                        {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
+                        {{
+                            hidden_field(
+                                security.getPrefixedTokenKey('create-post'),
+                                "value": security.getPrefixedToken('create-post')
+                            )
+                        }}
 
                         <div class="form-group">
                             <label>Title</label>
