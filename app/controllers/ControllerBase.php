@@ -18,6 +18,7 @@ use Phosphorum\Models\Users;
  * @property \Phalcon\Avatar\Avatarable gravatar
  * @property \Phalcon\Logger\AdapterInterface logger
  * @property \Phalcon\Breadcrumbs breadcrumbs
+ * @property \Phosphorum\Utils\Security $security
  */
 class ControllerBase extends Controller
 {
