@@ -40,7 +40,6 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
   - java -jar selenium-server-standalone-2.53.1.jar -port 4444 >/dev/null 2>&1 &
-  - sleep 5
 
 install:
   - (export PRE_PHP_INCLUDES=`php-config --includes`; cd cphalcon/ext/; for file in `find kernel -name "*.h"`; do $CC "$file" -I. $PRE_PHP_INCLUDES -o "$file.ghc"; done)
@@ -48,17 +47,19 @@ install:
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - cp ./app/config/config.example.php ./app/config/config.php
+  - cp ./app/config/development.example.php ./app/config/development.php
   - echo "APP_ENV=testing" > ./.env
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
-  - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - php -S 0.0.0.0:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - sleep 5
 
 script:
   - composer cs-test
   - composer unit-test
   - composer functional-test
-  - ./vendor/bin/codecept run acceptance -vvv
+  - echo "APP_ENV=development" > ./.env && ./vendor/bin/codecept run acceptance
 
 notifications:
   email:
