@@ -35,11 +35,11 @@ before_install:
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
   - bash tests/_ci/install_zephir.sh
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir generate)'
-  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir generate --backend=ZendEngine3)'
+  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir generate >/dev/null 2>&1 &)'
+  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir generate --backend=ZendEngine3 >/dev/null 2>&1 &)'
   - sh -e /etc/init.d/xvfb start
-  - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
-  - java -jar selenium-server-standalone-2.53.1.jar -port 4444 >/dev/null 2>&1 &
+  - wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -O selenium.jar
+  - java -jar selenium.jar -port 4444 >/dev/null 2>&1 &
 
 install:
   - (export PRE_PHP_INCLUDES=`php-config --includes`; cd cphalcon/ext/; for file in `find kernel -name "*.h"`; do $CC "$file" -I. $PRE_PHP_INCLUDES -o "$file.ghc"; done)
@@ -52,7 +52,7 @@ install:
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
-  - php -S 0.0.0.0:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - sleep 5
 
 script:
