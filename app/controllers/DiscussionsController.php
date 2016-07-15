@@ -144,7 +144,7 @@ class DiscussionsController extends ControllerBase
         $this->gravatar->setSize(48);
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('create-post')) {
                 $this->response->redirect();
                 return;
             }
