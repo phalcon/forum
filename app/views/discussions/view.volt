@@ -3,41 +3,24 @@
 {% include 'partials/flash-banner.volt' %}
 
 {%-
-  set currentUser = session.get('identity'), moderator = session.get('identity-moderator'),
-      tokenKey = security.getPrefixedTokenKey('post-' ~ post.id),
-      token = security.getPrefixedToken('post-' ~ post.id)
+    set currentUser = session.get('identity'), moderator = session.get('identity-moderator'),
+        tokenKey = security.getPrefixedTokenKey('post-' ~ post.id),
+        token = security.getPrefixedToken('post-' ~ post.id)
 -%}
 
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
-  {%- include 'partials/post-negative.volt' -%}
+    {%- include 'partials/post-negative.volt' -%}
 {%- elseif post.accepted_answer == 'Y' -%}
-  {%- include 'partials/post-accepted.volt' -%}
-{%- endif -%}
-
-{%- if post.canHaveBounty() -%}
-  {%- set bounty = post.getBounty() -%}
-  <div class="bs-callout bs-callout-info">
-    <h4>Bounty available!</h4>
-    {%- if bounty['type'] == "old" -%}
-      <p>
-        It has been a while and this question still does not have any answers.
-        Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer
-      </p>
-    {%- elseif bounty['type'] == "fast-reply" -%}
-      <p>
-        This post has recently posted.
-        Answer this question and get additional <span class="label label-info">+{{ bounty['value'] }}</span> points of karma/reputation if the original poster accepts your reply as correct answer
-      </p>
-    {%- endif -%}
-  </div>
+    {%- include 'partials/post-accepted.volt' -%}
+{%- elseif post.canHaveBounty() -%}
+    {%- include 'partials/post-bounty' with ['post': post] -%}
 {%- endif -%}
 
 <div itemscope itemtype="http://schema.org/Question">
-
-  <ol class="breadcrumb">
-    <li>{{ link_to('', 'Home') }}</li>
-    <li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</li>
-  </ol>
+    <ol class="breadcrumb">
+        <li>{{ link_to('', 'Home') }}</li>
+        <li>{{ link_to('category/' ~ post.category.id ~ '/' ~ post.category.slug, post.category.name) }}</li>
+    </ol>
 
   <div class="row table-title">
     <div class="col-md-8">
@@ -78,9 +61,9 @@
   </div>
 
   {%- if moderator == 'Y' -%}
-    <ul class="nav navbar-nav navbar-right">
+  <ul class="nav navbar-nav navbar-right">
 
-    </ul>
+  </ul>
   {%- endif -%}
 
   <div class="discussion">
@@ -353,13 +336,11 @@
 </div>
 
 {%- if currentUser -%}
-<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true" data-backdrop="static"
-   data-keyboard="false">
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <form method="post" autocomplete="off" role="form">
       {{ hidden_field(tokenKey, "value": token) }}
       <div class="modal-content">
-
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="replyModalLabel">Add Reply</h4>
@@ -371,14 +352,14 @@
             <li><a href="#" onclick="return false">Preview</a></li>
             <li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
           </ul>
-          <p>
+          <div>
             <div id="reply-comment-box">
               {{- hidden_field('id', 'value': post.id) -}}
               {{- hidden_field('reply-id') -}}
               <div id="comment-textarea"></div>
             </div>
             <div id="preview-box" style="display:none"></div>
-          </p>
+          </div>
         </div>
 
         <div class="modal-footer">
