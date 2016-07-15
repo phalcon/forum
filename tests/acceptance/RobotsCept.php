@@ -9,5 +9,5 @@ $I->wantTo('make sure that the robots.txt is exists');
 $I->sendGET('/robots.txt');
 $I->seeResponseCodeIs(200);
 
-$pattern = '#^User-agent: \*\nAllow: \/\nSitemap: https?:\/\/.+\/sitemap$#';
+$pattern = '#^User-agent: \*\nAllow: \/\nSitemap: https?:\/\/.+\/sitemap\.xml$#';
 $I->seeResponseRegexp($pattern, $I->grabResponse());
