@@ -286,7 +286,7 @@ class DiscussionsController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -349,7 +349,7 @@ class DiscussionsController extends ControllerBase
      */
     public function subscribeAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -390,7 +390,7 @@ class DiscussionsController extends ControllerBase
      */
     public function unsubscribeAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -499,7 +499,7 @@ class DiscussionsController extends ControllerBase
                 'author'    => $post->user
             ]);
         } else {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('post-' . $id)) {
                 $this->response->redirect();
                 return;
             }
@@ -643,17 +643,17 @@ class DiscussionsController extends ControllerBase
     /**
      * Votes a post up
      *
-     * @param int $id Post ID
+     * @param int $id The post ID.
      * @return Response
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
+        if (!$this->checkTokenGetJson('post-' . $id)) {
             $csrfTokenError = [
                 'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
+                'message' => 'This post is outdated. Please try to vote for the post again.'
             ];
             return $response->setJsonContent($csrfTokenError);
         }
@@ -747,15 +747,18 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Votes a post down
+     *
+     * @param int $id The post ID.
+     * @return Response
      */
     public function voteDownAction($id = 0)
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
+        if (!$this->checkTokenGetJson('post-' . $id)) {
             $csrfTokenError = [
                 'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
+                'message' => 'This post is outdated. Please try to vote for the post again.'
             ];
             return $response->setJsonContent($csrfTokenError);
         }
@@ -774,11 +777,11 @@ class DiscussionsController extends ControllerBase
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentlogIn = [
+            $responseContent = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
             ];
-            return $response->setJsonContent($contentlogIn);
+            return $response->setJsonContent($responseContent);
         }
 
         if ($user->votes <= 0) {

@@ -3,8 +3,8 @@
 {% include 'partials/flash-banner.volt' %}
 
 {%- set currentUser = session.get('identity'), moderator = session.get('identity-moderator') -%}
-{%- set tokenKey = security.getTokenKey() -%}
-{%- set token = security.getToken() -%}
+{%- set tokenKey = security.getPrefixedTokenKey('post-' ~ post.id) -%}
+{%- set token = security.getPrefixedToken('post-' ~ post.id) -%}
 
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
 	<div class="bs-callout bs-callout-danger">

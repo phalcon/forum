@@ -55,10 +55,10 @@ class PollsController extends ControllerBase
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
+        if (!$this->checkTokenGetJson('post-' . $id)) {
             $csrfTokenError = [
                 'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
+                'message' => 'This post is outdated. Please try to vote again.'
             ];
             return $response->setJsonContent($csrfTokenError);
         }

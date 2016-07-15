@@ -51,7 +51,7 @@ trait TokenTrait
     protected function checkTokenGetJson($prefix = null)
     {
         if ($prefix) {
-            $csrfKey = $prefix . ':' . $this->session->get($this->csrfSessionKey);
+            $csrfKey = $this->session->get($prefix . ':' . $this->csrfSessionKey);
             $csrfVal = $this->request->getQuery($csrfKey, null, '');
 
             return $this->security->checkPrefixedToken($prefix, $csrfKey, $csrfVal);
@@ -66,7 +66,7 @@ trait TokenTrait
     protected function checkTokenGet($prefix = null)
     {
         if ($prefix) {
-            $csrfKey = $prefix . ':' . $this->session->get($this->csrfSessionKey);
+            $csrfKey = $this->session->get($prefix . ':' . $this->csrfSessionKey);
             $csrfVal = $this->request->getQuery($csrfKey, null, '');
 
             if (!$this->security->checkPrefixedToken($prefix, $csrfKey, $csrfVal)) {
