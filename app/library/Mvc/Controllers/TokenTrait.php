@@ -22,42 +22,67 @@ namespace Phosphorum\Mvc\Controllers;
  *
  * @package Phosphorum\Mvc\Controllers
  *
- * @property \Phalcon\Security $security
+ * @property \Phosphorum\Utils\Security $security
  * @property \Phalcon\FlashInterface $flashSession
  * @property \Phalcon\Session\AdapterInterface $session
  * @property \Phalcon\Http\RequestInterface $request
  */
 trait TokenTrait
 {
-    protected function checkTokenPost()
+    protected $csrfSessionKey = '$PHALCON/CSRF/KEY$';
+    protected $csrfErrorMessage = 'This form has altered. Please try submitting it again.';
+
+    protected function checkTokenPost($prefix = null)
     {
-        if (!$this->security->checkToken()) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
+        if ($prefix) {
+            $result = $this->security->checkPrefixedToken($prefix);
+        } else {
+            $result = $this->security->checkToken();
+        }
+
+        if (!$result) {
+            $this->flashSession->error($this->csrfErrorMessage);
             return false;
         }
 
         return true;
     }
 
-    protected function checkTokenGetJson()
+    protected function checkTokenGetJson($prefix = null)
     {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
+        if ($prefix) {
+            $csrfKey = $prefix . ':' . $this->session->get($this->csrfSessionKey);
+            $csrfVal = $this->request->getQuery($csrfKey, null, '');
 
-        return $this->security->checkToken(
-            $csrfKey,
-            $this->request->getQuery($csrfKey, null, 'dummy')
-        );
+            return $this->security->checkPrefixedToken($prefix, $csrfKey, $csrfVal);
+        }
+
+        $csrfKey = $this->session->get($this->csrfSessionKey);
+        $csrfVal = $this->request->getQuery($csrfKey, null, '');
+
+        return $this->security->checkToken($csrfKey, $csrfVal);
     }
 
-    protected function checkTokenGet()
+    protected function checkTokenGet($prefix = null)
     {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
+        if ($prefix) {
+            $csrfKey = $prefix . ':' . $this->session->get($this->csrfSessionKey);
+            $csrfVal = $this->request->getQuery($csrfKey, null, '');
 
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return false;
+            if (!$this->security->checkPrefixedToken($prefix, $csrfKey, $csrfVal)) {
+                $this->flashSession->error($this->csrfErrorMessage);
+                return false;
+            }
+        } else {
+            $csrfKey = $this->session->get($this->csrfSessionKey);
+            $csrfVal = $this->request->getQuery($csrfKey, null, '');
+
+            if (!$this->security->checkToken($csrfKey, $csrfVal)) {
+                $this->flashSession->error($this->csrfErrorMessage);
+                return false;
+            }
         }
+
         return true;
     }
 }
