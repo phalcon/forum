@@ -211,7 +211,7 @@ class DiscussionsController extends ControllerBase
         }
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('edit-post-'.$id)) {
                 $this->response->redirect();
                 return;
             }
