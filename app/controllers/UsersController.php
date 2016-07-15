@@ -118,7 +118,7 @@ class UsersController extends ControllerBase
         }
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('settings')) {
                 $this->response->redirect();
                 return;
             }
