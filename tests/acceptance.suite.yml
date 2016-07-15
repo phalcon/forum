@@ -9,10 +9,10 @@ modules:
     enabled:
         - \Helper\Acceptance
         - REST:
-           depends: PhpBrowser
-           url: http://localhost:8000
+            depends: PhpBrowser
+            url: 'http://localhost:8000'
         - WebDriver:
-            url: http://localhost:8000
+            url: 'http://localhost:8000'
             browser: 'firefox'
             window_size: 1200x768
             wait: 10

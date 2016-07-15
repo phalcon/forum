@@ -21,17 +21,15 @@ $router = new Router(false);
 $router->removeExtraSlashes(true);
 
 $router->add(
-    '/sitemap',
+    '/sitemap.xml',
     [
        'controller' => 'sitemap',
        'action'     => 'index'
     ]
 );
 
-// We have rewrite rule for Nginx
-// robots.txt => robots
 $router->add(
-    '/robots',
+    '/robots.txt',
     [
         'controller' => 'robots',
         'action'     => 'index'

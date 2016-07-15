@@ -79,11 +79,6 @@ if (function_exists('mb_substitute_character')) {
 if (ENV_PRODUCTION === APPLICATION_ENV) {
     header_remove('X-Powered-By');
     error_reporting(E_ALL ^ E_NOTICE);
-
-    // assertion code will not be generated, making the assertions zero-cost
-    if (PHP_VERSION_ID >= 70000) {
-        ini_set('zend.assertions', -1);
-    }
 }
 
 if (ENV_DEVELOPMENT === APPLICATION_ENV) {

@@ -126,7 +126,6 @@ class SendSpool extends Injectable
                 echo $message->getMessage(), PHP_EOL;
             }
         }
-
     }
 
     /**
