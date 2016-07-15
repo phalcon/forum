@@ -26,6 +26,7 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "ext-phalcon": ">=2.1.x-dev",
         "vlucas/phpdotenv": "~2.3",
         "aws/aws-sdk-php": "^2.5",
