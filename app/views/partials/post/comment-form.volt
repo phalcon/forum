@@ -1,8 +1,10 @@
 <div class="row">
     {%- if currentUser -%}
         <div class="col-md-1 small" align="center">
-            <img src="https://secure.gravatar.com/avatar/{{ session.get('identity-gravatar') }}?s=48&amp;r=pg&amp;d=identicon" class="img-rounded" width="48" height="48"><br>
-            <span>{{ link_to('', 'You') }}</span>
+            {{ image(gravatar.getAvatar(session.get('identity-email')), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
+            <div>
+                {{ link_to('user/' ~ session.get('identity') ~ '/me', 'You') }}
+            </div>
         </div>
         <div class="col-md-11">
 
@@ -14,21 +16,21 @@
 
             <form method="post" autocomplete="off" role="form">
                 {{ hidden_field(tokenKey, "value": token, "id": "csrf-token") }}
-                <p>
-                <div id="comment-box">
-                    {{- hidden_field('id', 'value': post.id) -}}
-                    {{- text_area("content", "rows": 5, "class": "form-control") -}}
+                <div style="width: 100%">
+                    <div id="comment-box">
+                        {{- hidden_field('id', 'value': post.id) -}}
+                        {{- text_area("content", "rows": 5, "class": "form-control") -}}
+                    </div>
+                    <div id="preview-box" style="display:none"></div>
                 </div>
-                <div id="preview-box" style="display:none"></div>
-                </p>
-                <p>
-                <div class="pull-left">
-                    {{- link_to('', 'Back to discussions') -}}
+                <div style="width: 100%">
+                    <div class="pull-left">
+                        {{- link_to('/', 'Back to discussions') -}}
+                    </div>
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-success">Add Comment</button>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <button type="submit" class="btn btn-success">Add Comment</button>
-                </div>
-                </p>
             </form>
         </div>
     {%- else -%}
