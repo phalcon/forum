@@ -7,7 +7,8 @@
         moderator    = session.get('identity-moderator'),
         tokenKey     = security.getPrefixedTokenKey('post-' ~ post.id),
         token        = security.getPrefixedToken('post-' ~ post.id),
-        postAutorUrl = 'user/' ~ post.user.id ~ '/' ~ post.user.login
+        postAutorUrl = 'user/' ~ post.user.id ~ '/' ~ post.user.login,
+        postAutorName= '<span itemprop="name">' ~ post.user.name|e ~ '</span>'
 -%}
 
 {%- if (post.votes_up - post.votes_down) <= -3 -%}
@@ -20,37 +21,29 @@
 
 <div itemscope itemtype="http://schema.org/Question">
     {%- include 'partials/post/breadcrumbs' with ['post': post] -%}
-    {%- include 'partials/post/post-title' with ['post': post] -%}
-
-    {%- if moderator == 'Y' -%}
-        {%- include 'partials/post/moderator-nav' with ['post': post] -%}
-    {%- endif -%}
+    {%-
+        include 'partials/post/post-title' with [
+            'post': post,
+            'gravatar': this.gravatar,
+            'postAutorName': postAutorName,
+            'postAutorUrl': postAutorUrl
+        ]
+    -%}
 
     <div class="discussion">
         <div class="row reply-block">
-            <div class="col-md-1 small" align="center">
-                {{ image(gravatar.getAvatar(post.user.email), 'width': 48, 'height': 48, 'class': 'img-rounded') }}<br>
-                <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-                    {{- link_to(postAutorUrl, '<span itemprop="name">' ~ post.user.name|e ~ '</span>', 'class': 'user-moderator-' ~ post.user.moderator) -}}
-                </span><br>
+            <div class="col-md-1 col-sm-1 hidden-xs text-center">
+                {{ image(gravatar.getAvatar(post.user.email), 'class': 'img-rounded avatar') }}<br>
+                <span itemprop="author" itemscope itemtype="http://schema.org/Person" class="avatar-name">
+                    {{- link_to(postAutorUrl, postAutorName, 'class': 'user-moderator-' ~ post.user.moderator) -}}
+                </span>
                 <span class="karma">{{ post.user.getHumanKarma() }}</span>
             </div>
-
-            <div class="col-md-11 post-body{% if (post.votes_up - post.votes_down) <= -3 %} post-negative-body{% endif %}">
-                <div class="posts-buttons" align="right">
-                    {% if post.edited_at > 0 %}
-                        <span class="action-date action-edit" data-id="{{ post.id }}" data-toggle="modal" data-target="#historyModal">
-                            edited <span>{{ post.getHumanEditedAt() }}</span>
-                        </span><br/>
-                    {% endif %}
-                    <a name="C{{ post.id }}" href="#C{{ post.id }}">
-                        <time class="action-date">{{ post.getHumanCreatedAt() }}</time>
-                    </a>
-                </div>
-
+            <div class="col-md-11 col-sm-11 col-xs-12 post-body{% if (post.votes_up - post.votes_down) <= -3 %} post-negative-body{% endif %}">
+                {%- include 'partials/post/posts-date' with ['post': post] -%}
                 <div class="post-content">
                     {%- cache "post-body-" ~ post.id -%}
-                        <div itemprop="text">
+                        <div>
                             {{- markdown.render(post.content|e) -}}
                         </div>
                     {%- endcache -%}
@@ -64,7 +57,7 @@
                     {% endif %}
                 </div>
 
-                <div class="posts-buttons" align="right">
+                <div class="posts-buttons text-right">
                     {%-
                         include 'partials/post/posts-buttons' with [
                             'post': post,
