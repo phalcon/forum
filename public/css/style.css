@@ -287,6 +287,20 @@ pre.prettyprint {
     padding: 2px;
 }
 
+.mobile-author a.user-moderator-Y > span,
+.mobile-author a.user-moderator-N > span {
+    font-weight: 600!important;
+    color: #111;
+    display: inline-block;
+    margin-right: .8rem;
+}
+
+.mobile-author > time,
+.mobile-author > time {
+    color: rgba(46, 52, 54, 0.87);
+}
+
+
 .bs-callout {
     margin: 1.1rem 0 1.1rem .5rem;
     padding: 1.1rem;

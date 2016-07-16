@@ -9,7 +9,7 @@
         <div class="visible-xs-block mobile-author">
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
                 {{- link_to(postAutorUrl, postAutorName, 'class': 'user-moderator-' ~ post.user.moderator) -}}
-            </span>,
+            </span>
             <time itemprop="dateCreated" datetime="{{ date('c', post.created_at) }}">
                 {{- post.getHumanCreatedAt() -}}
             </time>
