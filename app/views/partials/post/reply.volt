@@ -26,7 +26,7 @@
 
 <div itemprop="{{ answerType }}" itemscope itemtype="http://schema.org/Answer" class="{{ answerClass1 ~ answerClass2 ~ answerClass3}}">
     <div class="col-md-1 small" align="center">
-        {{ image(gravatar.getAvatar(reply.user.email), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
+        {{ image(gravatar.getAvatar(reply.user.email), 'class': 'img-rounded') }}
         <br>
 
         <span itemprop="author" itemscope itemtype="http://schema.org/Person">
