@@ -188,14 +188,6 @@ p {
     margin: 10px 0 15px;
 }
 
-.posts-buttons {
-    float: right;
-}
-
-.posts-buttons a:hover {
-    text-decoration: underline;
-}
-
 .discussion .small {
     width: 90px;
     text-align: center;
@@ -238,10 +230,24 @@ pre.prettyprint {
     cursor: pointer;
 }
 
+.post-body {
+    position: relative;
+}
+
 .post-content {
     max-width: 900px;
     min-height: 70px;
     padding-left: 5px;
+}
+
+.post-content p:first-child {
+    margin-top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .post-content {
+        padding-left: 0;
+    }
 }
 
 @media (min-width: 1280px) {
@@ -448,8 +454,20 @@ div#footer a {
     font-size: 12px;
 }
 
+.posts-date {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-right: 1rem;
+    width: 100px;
+}
+
 .posts-buttons .btn-default {
     color: #919191;
+}
+
+.posts-buttons a:hover {
+    text-decoration: underline;
 }
 
 .table-title td {
@@ -458,6 +476,44 @@ div#footer a {
 
 .table-title h1 {
     margin: 0;
+}
+
+@media only screen and (max-width: 992px) {
+    .table-title h1 {
+        font-size: 1.55rem;
+        padding-bottom: 0.8rem!important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .table-title h1 {
+        font-size: 1.45rem;
+        padding-bottom: 1rem!important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .table-title h1 {
+        font-size: 1.2rem;
+        padding-bottom: 0.8rem!important;
+    }
+
+    .mobile-author {
+        font-size: .8rem;
+    }
+
+    .img-rounded {
+        width: 32px!important;
+        height: 32px!important;
+    }
+}
+
+.wrapper-stats,
+.wrapper-author {
+    -webkit-transition: width .3s, height .3s, background-color .3s, transform .3s;
+       -moz-transition: width .3s, height .3s, background-color .3s, transform .3s;
+         -o-transition: width .3s, height .3s, background-color .3s, transform .3s;
+            transition: width .3s, height .3s, background-color .3s, transform .3s;
 }
 
 .table-stats {
@@ -507,7 +563,6 @@ blockquote p {
 }
 
 @media (max-width: 320px) {
-
     .discussion .small img {
         width: 32px;
         height: 32px;
@@ -611,6 +666,13 @@ table.list-discussions a:visited {
     }
 }
 
+@media only screen and (max-width: 480px) {
+    .breadcrumb {
+        padding: .6rem .6rem .6rem 0;
+        margin-bottom: 0;
+    }
+}
+
 pre {
     background: #fefefe;
 }
@@ -704,7 +766,6 @@ div#sticky-progress {
     font-weight: 400;
     -webkit-transition: background-color .3s ease;
        -moz-transition: background-color .3s ease;
-        -ms-transition: background-color .3s ease;
          -o-transition: background-color .3s ease;
             transition: background-color .3s ease;
 }
@@ -728,6 +789,7 @@ div#sticky-progress {
 
 .badge3 {
     background-size: initial;
+    /*noinspection CssUnknownTarget*/
     background: transparent url("/icon/badges.gif?v=1") -7px -3px;
 }
 
