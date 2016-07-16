@@ -134,6 +134,12 @@ ul.categories-dropdown > li > a {
     height:100%;
 }
 
+@media only screen and (max-width: 768px) {
+    .page-wrapper {
+        margin-top: 1rem;
+    }
+}
+
 .error-v4 {
     float: left;
     position: relative;
@@ -272,8 +278,8 @@ pre.prettyprint {
 }
 
 .bs-callout {
-    margin: 20px 0 20px 10px;
-    padding: 20px;
+    margin: 1.1rem 0 1.1rem .5rem;
+    padding: 1.1rem;
     border: 1px solid #eee;
     border-left: 3px solid #eee;
     background: #fefefe;
@@ -318,6 +324,26 @@ pre.prettyprint {
 
 .bs-callout p:last-child {
     margin-bottom: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .bs-callout {
+        margin: .5rem 0 1.1rem 0;
+        padding: .6rem;
+    }
+
+    .bs-callout h4 {
+        font-size: 1.1rem;
+    }
+
+    .bs-callout p {
+        color: rgba(46, 52, 54, 0.87);
+        font-size: .86rem;
+    }
+
+    .bs-callout p:last-child {
+        margin-bottom: .2rem;
+    }
 }
 
 .help-container {
@@ -571,6 +597,18 @@ table.list-discussions a:visited {
 
 .breadcrumb > li + li:before {
     content: "> "!important;
+}
+
+@media only screen and (max-width: 768px) {
+    .breadcrumb {
+        padding: .6rem;
+        margin-bottom: .9rem;
+    }
+
+    .flash-banner .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 pre {

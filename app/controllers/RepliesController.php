@@ -617,12 +617,14 @@ class RepliesController extends ControllerBase
         }
 
         if ($user->id != $postReply->users_id) {
-            $activity                       = new ActivityNotifications();
-            $activity->users_id             = $postReply->users_id;
-            $activity->posts_id             = $postReply->post->id;
-            $activity->posts_replies_id     = $postReply->id;
-            $activity->users_origin_id      = $user->id;
-            $activity->type                 = 'A';
+            $activity = new ActivityNotifications([
+                'users_id'         => $postReply->users_id,
+                'posts_id'         => $postReply->post->id,
+                'posts_replies_id' => $postReply->id,
+                'users_origin_id'  => $user->id,
+                'type'             => 'A',
+            ]);
+
             $activity->save();
         }
 
