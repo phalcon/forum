@@ -75,7 +75,7 @@
                 <br>
                 {%- if post.accepted_answer != 'Y' -%}
                     <a class="btn btn-default btn-xs reply-accept" data-id="{{ reply.id }}">
-                        <span class="glyphicon glyphicon-ok"></span>&nbsp;Accept Answer
+                        <span class="glyphicon glyphicon-ok"></span>&nbsp;Accept<span class="hidden-xs"> Answer</span>
                     </a>&nbsp;
                 {%- endif -%}
             {%- endif -%}
