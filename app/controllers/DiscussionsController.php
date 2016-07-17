@@ -17,26 +17,29 @@
 
 namespace Phosphorum\Controllers;
 
+use Diff;
+use Phalcon\Mvc\View;
+use Phalcon\Http\Response;
+use Phosphorum\Models\Karma;
 use Phosphorum\Models\Posts;
+use Phosphorum\Models\Users;
+use Phosphorum\Models\IrcLog;
+use Phosphorum\Search\Indexer;
 use Phosphorum\Models\PostsViews;
-use Phosphorum\Models\PostsReplies;
-use Phosphorum\Models\PostsBounties;
-use Phosphorum\Models\PostsHistory;
 use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsSubscribers;
-use Phosphorum\Models\PostsPollOptions;
-use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
-use Phosphorum\Models\ActivityNotifications;
-use Phosphorum\Models\IrcLog;
-use Phosphorum\Models\Users;
-use Phosphorum\Models\Karma;
+use Diff_Renderer_Html_SideBySide;
+use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\PostsHistory;
+use Phalcon\Http\ResponseInterface;
+use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\TopicTracking;
-use Phosphorum\Search\Indexer;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\View;
+use Phosphorum\Models\PostsPollVotes;
+use Phosphorum\Models\PostsPollOptions;
+use Phosphorum\Models\PostsSubscribers;
 use Phosphorum\Mvc\Controllers\TokenTrait;
+use Phosphorum\Models\ActivityNotifications;
 
 /**
  * Class DiscussionsController
@@ -282,7 +285,7 @@ class DiscussionsController extends ControllerBase
      * Deletes the Post
      *
      * @param int $id
-     * @return Response|\Phalcon\Http\ResponseInterface
+     * @return ResponseInterface
      */
     public function deleteAction($id)
     {
@@ -345,7 +348,7 @@ class DiscussionsController extends ControllerBase
      * Subscribe to a post to receive e-mail notifications
      *
      * @param string $id
-     * @return Response
+     * @return ResponseInterface
      */
     public function subscribeAction($id)
     {
@@ -386,7 +389,7 @@ class DiscussionsController extends ControllerBase
      * Unsubscribe from a post of receiving e-mail notifications
      *
      * @param string $id
-     * @return Response
+     * @return ResponseInterface
      */
     public function unsubscribeAction($id)
     {
@@ -594,6 +597,9 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Shows the latest modification made to a post
+     *
+     * @param int $id
+     * @return ResponseInterface
      */
     public function historyAction($id = 0)
     {
@@ -610,41 +616,37 @@ class DiscussionsController extends ControllerBase
 
         $a = explode("\n", $post->content);
 
-        $first         = true;
-        $parameters    = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
+        $parameters = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
 
-        /** @var PostsHistory[] $postHistories */
+        /** @var \Phalcon\Mvc\Model\Resultset\Simple $postHistories */
         $postHistories = PostsHistory::find($parameters);
 
-        if (count($postHistories) > 1) {
-            foreach ($postHistories as $postHistory) {
-                if ($first) {
-                    $first = false;
-                    continue;
-                }
-                break;
-            }
+        if (!$postHistories->valid()) {
+            $this->flash->notice('No history available to show');
+            return null;
+        }
+
+        if ($postHistories->count() > 1) {
+            /** @var \Phosphorum\Models\PostsHistory $postHistory */
+            $postHistory = $postHistories->offsetGet(1);
         } else {
+            /** @var \Phosphorum\Models\PostsHistory $postHistory */
             $postHistory = $postHistories->getFirst();
         }
 
-        if (is_object($postHistory)) {
-            $b = explode("\n", $postHistory->content);
+        $b = explode("\n", $postHistory->content);
 
-            $diff     = new \Diff($b, $a, []);
-            $renderer = new \Diff_Renderer_Html_SideBySide();
+        $diff     = new Diff($b, $a, []);
+        $renderer = new Diff_Renderer_Html_SideBySide();
 
-            echo $diff->Render($renderer);
-        } else {
-            $this->flash->notice('No history available to show');
-        }
+        echo $diff->render($renderer);
     }
 
     /**
      * Votes a post up
      *
      * @param int $id The post ID.
-     * @return Response
+     * @return ResponseInterface
      */
     public function voteUpAction($id = 0)
     {
@@ -749,7 +751,7 @@ class DiscussionsController extends ControllerBase
      * Votes a post down
      *
      * @param int $id The post ID.
-     * @return Response
+     * @return ResponseInterface
      */
     public function voteDownAction($id = 0)
     {
@@ -938,7 +940,7 @@ class DiscussionsController extends ControllerBase
     /**
      * Finds related posts
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function findRelatedAction()
     {

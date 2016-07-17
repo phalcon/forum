@@ -197,9 +197,9 @@ class Posts extends Model
      */
     public function beforeCreate()
     {
-        $postView            = new PostsViews();
-        $postView->ipaddress = $this->getDI()->getShared('request')->getClientAddress();
-        $this->views         = $postView;
+        $this->views = new PostsViews([
+            'ipaddress' => $this->getDI()->getShared('request')->getClientAddress(),
+        ]);
     }
 
     public function afterCreate()
@@ -257,11 +257,27 @@ class Posts extends Model
     {
         $this->clearCache();
 
-        $history           = new PostsHistory();
-        $history->posts_id = $this->id;
-        $history->users_id = $this->getDI()->getShared('session')->get('identity');
-        $history->content  = $this->content;
-        $history->save();
+        $history = new PostsHistory([
+            'posts_id' => $this->id,
+            'users_id' => $this->getDI()->getShared('session')->get('identity'),
+            'content'  => $this->content,
+        ]);
+
+        if (!$history->save()) {
+            /** @var \Phalcon\Logger\AdapterInterface $logger */
+            $logger   = $this->getDI()->get('logger');
+            $messages = $history->getMessages();
+            $reason   = [];
+
+            foreach ($messages as $message) {
+                /** @var \Phalcon\Mvc\Model\MessageInterface $message */
+                $reason[] = $message->getMessage();
+            }
+
+            $logger->error('Unable to store post history. Reason: {reason}', [
+                'reason' => implode('. ', $reason)
+            ]);
+        }
     }
 
     public function afterDelete()
