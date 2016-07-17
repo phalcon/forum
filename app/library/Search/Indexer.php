@@ -50,7 +50,7 @@ class Indexer extends Injectable
 
     public function __construct()
     {
-        $this->logger = $this->getDI()->get('logger', ['indexer.log']);
+        $this->logger = $this->getDI()->get('logger', ['indexer']);
 
         $config = $this->getDI()->getShared('config');
         $this->config = $config->get('elasticsearch', new Config);

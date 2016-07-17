@@ -160,6 +160,10 @@ class Bootstrap
             $filename = trim($filename ?: $config->get('logger')->filename, '\\/');
             $path     = rtrim($config->get('logger')->path, '\\/') . DIRECTORY_SEPARATOR;
 
+            if (false === strpos($filename, '.log')) {
+                $filename = "$filename.log";
+            }
+
             $formatter = new FormatterLine($format, $config->get('logger')->date);
             $logger = new FileLogger($path . $filename);
 
@@ -387,7 +391,7 @@ class Bootstrap
                         }
 
                         // To disable logging change logLevel in config
-                        $that->get('logger', ['db.log'])->debug($string);
+                        $that->get('logger', ['db'])->debug($string);
                     }
                 }
             );

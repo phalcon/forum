@@ -44,7 +44,7 @@ class Users extends Injectable
     public function __construct($accessToken)
     {
         $this->accessToken = $accessToken;
-        $this->logger      = $this->getDI()->get('logger', ['auth.log']);
+        $this->logger      = $this->getDI()->get('logger', ['auth']);
         $this->response    = $this->request('/user');
     }
 

@@ -85,7 +85,7 @@ class Digest extends Injectable
 
         $e = $this->escaper;
         /** @var \Phalcon\Logger\AdapterInterface $logger */
-        $logger = $this->getDI()->get('logger', ['mail.log']);
+        $logger = $this->getDI()->get('logger', ['mail']);
 
         $stories = [];
         foreach (Posts::find($parameters) as $i => $post) {
