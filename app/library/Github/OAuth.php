@@ -49,7 +49,7 @@ class OAuth extends Injectable
         $this->redirectUriAuthorize = $config->get('redirectUri');
         $this->clientId             = $config->get('clientId');
         $this->clientSecret         = $config->get('clientSecret');
-        $this->logger               = $this->getDI()->get('logger', ['auth.log']);
+        $this->logger               = $this->getDI()->get('logger', ['auth']);
     }
 
     public function authorize()
