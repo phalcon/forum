@@ -3,7 +3,7 @@
 namespace Helper;
 
 use Codeception\Module;
-use Codeception\TestCase;
+use Codeception\TestInterface;
 use Mockery;
 
 /**
@@ -17,7 +17,7 @@ use Mockery;
 class Unit extends Module
 {
     /**
-     * @var \Codeception\Module\Phalcon1
+     * @var \Codeception\Module\Phalcon
      */
     protected $phalcon = null;
 
@@ -28,16 +28,16 @@ class Unit extends Module
      */
     public function _initialize()
     {
-        $this->phalcon = $this->getModule('Phalcon2');
+        $this->phalcon = $this->getModule('Phalcon');
     }
 
     /**
      * Executed after each test
      * HOOK: after suite
      *
-     * @param TestCase $test
+     * @param TestInterface $test
      */
-    public function _after(TestCase $test)
+    public function _after(TestInterface $test)
     {
         Mockery::close();
     }
@@ -55,7 +55,7 @@ class Unit extends Module
     /**
      * Get Phalcon module
      *
-     * @return \Codeception\Module\Phalcon1
+     * @return \Codeception\Module\Phalcon
      */
     public function getPhalcon()
     {
