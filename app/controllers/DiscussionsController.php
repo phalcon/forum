@@ -708,7 +708,7 @@ class DiscussionsController extends ControllerBase
             foreach ($postVote->getMessages() as $message) {
                 $contentError = [
                     'status'  => 'error',
-                    'message' => $message->getMessage()
+                    'message' => (string) $message->getMessage()
                 ];
                 return $response->setJsonContent($contentError);
             }
@@ -726,7 +726,7 @@ class DiscussionsController extends ControllerBase
                 foreach ($user->getMessages() as $message) {
                     $contentErrorSave = [
                         'status'  => 'error',
-                        'message' => $message->getMessage()
+                        'message' => (string) $message->getMessage()
                     ];
                     return $response->setJsonContent($contentErrorSave);
                 }

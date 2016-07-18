@@ -259,6 +259,11 @@ class Posts extends Model
     {
         $this->clearCache();
 
+        // In case of updating post through creating PostsViews
+        if (!$this->getDI()->getShared('session')->has('identity')) {
+            return;
+        }
+
         $history = new PostsHistory([
             'posts_id' => $this->id,
             'users_id' => $this->getDI()->getShared('session')->get('identity'),
