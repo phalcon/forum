@@ -37,7 +37,7 @@ use Phosphorum\Models\TopicTracking;
 use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\PostsSubscribers;
-use Phalcon\Diff\Render\Html\SideBySide;
+use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phosphorum\Mvc\Controllers\TokenTrait;
 use Phosphorum\Models\ActivityNotifications;
 
@@ -598,32 +598,31 @@ class DiscussionsController extends ControllerBase
     /**
      * Shows the latest modification made to a post
      *
-     * @param int $id
-     * @return ResponseInterface
+     * @param int $id The Post id.
      */
     public function historyAction($id = 0)
     {
-        $this->view->disable();
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 
         /**
          * Find the post using get
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $this->flashSession->error('The discussion does not exist');
-            return $this->response->redirect();
+            $this->view->setVar('difference', 'The discussion does not exist');
+            return;
         }
 
-        $a = explode("\n", $post->content);
-
-        $parameters = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
-
         /** @var \Phalcon\Mvc\Model\Resultset\Simple $postHistories */
-        $postHistories = PostsHistory::find($parameters);
+        $postHistories = PostsHistory::find([
+            'posts_id = ?0',
+            'bind' => [$post->id],
+            'order' => 'created_at DESC'
+        ]);
 
         if (!$postHistories->valid()) {
             $this->flash->notice('No history available to show');
-            return null;
+            return;
         }
 
         if ($postHistories->count() > 1) {
@@ -636,15 +635,14 @@ class DiscussionsController extends ControllerBase
 
         $b = explode("\n", $postHistory->content);
 
-        $diff = new Diff($b, $a, []);
+        $diff = new Diff($b, explode("\n", $post->content), []);
         $difference = $diff->render(new SideBySide);
 
         if (empty(trim($difference))) {
-            $this->flash->notice('No history available to show');
-            return null;
+            $difference = 'No history available to show';
         }
 
-        echo $difference;
+        $this->view->setVar('difference', $difference);
     }
 
     /**
