@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Controllers;
 
-use Diff;
+use Phalcon\Diff;
 use Phalcon\Mvc\View;
 use Phalcon\Http\Response;
 use Phosphorum\Models\Karma;
@@ -29,15 +29,16 @@ use Phosphorum\Models\PostsViews;
 use Phosphorum\Models\PostsVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
-use Diff_Renderer_Html_SideBySide;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsHistory;
 use Phalcon\Http\ResponseInterface;
 use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\TopicTracking;
 use Phosphorum\Models\PostsPollVotes;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\PostsSubscribers;
+use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phosphorum\Mvc\Controllers\TokenTrait;
 use Phosphorum\Models\ActivityNotifications;
 
@@ -458,6 +459,16 @@ class DiscussionsController extends ControllerBase
                 return;
             }
 
+            /** @var \Phalcon\Mvc\Model\Resultset\Simple $postHistories */
+            $postHistories = PostsHistory::find([
+                'posts_id = ?0',
+                'bind' => [$post->id],
+                'order' => 'created_at DESC'
+            ]);
+
+            $difference = $this->getDifference($postHistories, $post);
+            $this->view->setVar('is_edited', !empty(trim($difference)));
+
             $ipAddress = $this->request->getClientAddress();
 
             $parameters = [
@@ -598,48 +609,40 @@ class DiscussionsController extends ControllerBase
     /**
      * Shows the latest modification made to a post
      *
-     * @param int $id
-     * @return ResponseInterface
+     * @param int $id The Post id.
      */
     public function historyAction($id = 0)
     {
-        $this->view->disable();
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 
         /**
          * Find the post using get
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $this->flashSession->error('The discussion does not exist');
-            return $this->response->redirect();
+            $this->view->setVar('difference', 'The discussion does not exist or it has been deleted.');
+            return;
         }
 
-        $a = explode("\n", $post->content);
-
-        $parameters = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
-
         /** @var \Phalcon\Mvc\Model\Resultset\Simple $postHistories */
-        $postHistories = PostsHistory::find($parameters);
+        $postHistories = PostsHistory::find([
+            'posts_id = ?0',
+            'bind' => [$post->id],
+            'order' => 'created_at DESC'
+        ]);
 
         if (!$postHistories->valid()) {
             $this->flash->notice('No history available to show');
-            return null;
+            return;
         }
 
-        if ($postHistories->count() > 1) {
-            /** @var \Phosphorum\Models\PostsHistory $postHistory */
-            $postHistory = $postHistories->offsetGet(1);
-        } else {
-            /** @var \Phosphorum\Models\PostsHistory $postHistory */
-            $postHistory = $postHistories->getFirst();
+        $difference = $this->getDifference($postHistories, $post);
+
+        if (empty(trim($difference))) {
+            $difference = 'No history available to show';
         }
 
-        $b = explode("\n", $postHistory->content);
-
-        $diff     = new Diff($b, $a, []);
-        $renderer = new Diff_Renderer_Html_SideBySide();
-
-        echo $diff->render($renderer);
+        $this->view->setVar('difference', $difference);
     }
 
     /**
@@ -988,5 +991,35 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->view->setVar('posts', []);
         }
+    }
+
+    /**
+     * Gets difference.
+     *
+     * @param Simple $postHistories
+     * @param Posts $post
+     *
+     * @return string
+     */
+    protected function getDifference(Simple $postHistories, Posts $post)
+    {
+        if (!$postHistories->valid()) {
+            return '';
+        }
+
+        if ($postHistories->count() > 1) {
+            /** @var \Phosphorum\Models\PostsHistory $postHistory */
+            $postHistory = $postHistories->offsetGet(1);
+        } else {
+            /** @var \Phosphorum\Models\PostsHistory $postHistory */
+            $postHistory = $postHistories->getFirst();
+        }
+
+        $b = explode("\n", $postHistory->content);
+
+        $diff = new Diff($b, explode("\n", $post->content), []);
+        $difference = $diff->render(new SideBySide);
+
+        return $difference;
     }
 }

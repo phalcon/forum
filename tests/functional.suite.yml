@@ -11,6 +11,6 @@ modules:
     enabled:
         - \Helper\Functional
         - Filesystem
-        - Phalcon2:
+        - Phalcon:
             bootstrap: 'public/index.php'
             cleanup: true

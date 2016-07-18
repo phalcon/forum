@@ -12,6 +12,7 @@ app/config/development.php
 app/config/nginx.conf
 selenium-server-standalone-*.jar
 /*.sql.bz2
+/*.sql
 chromedriver
 /public/google*.html
 .env

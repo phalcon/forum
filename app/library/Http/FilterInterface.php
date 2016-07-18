@@ -15,37 +15,17 @@
  +------------------------------------------------------------------------+
 */
 
-
-namespace Phosphorum\Models;
-
-use Phalcon\Mvc\Model;
+namespace Phosphorum\Http;
 
 /**
- * Class PostsHistory
+ * HTTP Filter Interface
  *
- * @property \Phosphorum\Models\Posts post
- *
- * @package Phosphorum\Models
+ * @package Phosphorum\Http
  */
-class PostsHistory extends Model
+interface FilterInterface
 {
-    public $id;
-
-    public $posts_id;
-
-    public $users_id;
-
-    public $content;
-
-    public $created_at;
-
-    public function beforeValidationOnCreate()
-    {
-        $this->created_at = time();
-    }
-
-    public function initialize()
-    {
-        $this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', ['alias' => 'post']);
-    }
+    /**
+     * @return boolean
+     */
+    public function check();
 }

@@ -1,22 +1,19 @@
 <?php
 
-namespace Step\Functional;
-
-use Codeception\Scenario;
-use Faker\Factory as Faker;
 use Phalcon\Tag;
+use Phosphorum\Models\Posts;
+use Phosphorum\Models\Users;
+use Phosphorum\Models\Categories;
+use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\PostsHistory;
 
-class UserSteps extends \FunctionalTester
+/**
+ * Helper Trait
+ *
+ * @property \Faker\Generator $faker
+ */
+trait HelperTrait
 {
-    protected $faker;
-
-    public function __construct(Scenario $scenario)
-    {
-        parent::__construct($scenario);
-
-        $this->faker = Faker::create();
-    }
-
     /**
      * Creates a random user and return it id
      *
@@ -35,10 +32,9 @@ class UserSteps extends \FunctionalTester
             'timezone' => $this->faker->timezone,
         ];
 
-
         $attributes = array_merge($default, $attributes);
 
-        $id = $I->haveRecord('Phosphorum\Models\Users', $attributes);
+        $id = $I->haveRecord(Users::class, $attributes);
         $I->haveInSession('identity', $id);
         $I->haveInSession('identity-name', $attributes['name']);
 
@@ -90,10 +86,7 @@ class UserSteps extends \FunctionalTester
             unset($attributes['slug'], $default['slug']);
         }
 
-        return $I->haveRecord(
-            'Phosphorum\Models\Categories',
-            array_merge($default, $attributes)
-        );
+        return $I->haveRecord(Categories::class, array_merge($default, $attributes));
     }
 
     /**
@@ -119,10 +112,25 @@ class UserSteps extends \FunctionalTester
             unset($attributes['slug'], $default['slug']);
         }
 
-        return $I->haveRecord(
-            'Phosphorum\Models\Posts',
-            array_merge($default, $attributes)
-        );
+        return $I->haveRecord(Posts::class, array_merge($default, $attributes));
+    }
+
+    /**
+     * Creates a random post history and return its id
+     *
+     * @param array $attributes Model attributes [Optional]
+     * @return int
+     */
+    public function havePostHistory(array $attributes = [])
+    {
+        $I       = $this;
+        $default = [
+            'posts_id' => $this->faker->numberBetween(),
+            'users_id' => $this->faker->numberBetween(),
+            'content'  => $this->faker->paragraph(),
+        ];
+
+        return $I->haveRecord(PostsHistory::class, array_merge($default, $attributes));
     }
 
     /**
@@ -140,9 +148,28 @@ class UserSteps extends \FunctionalTester
             'content'  => $this->faker->paragraph(),
         ];
 
-        return $I->haveRecord(
-            'Phosphorum\Models\PostsReplies',
-            array_merge($default, $attributes)
-        );
+        return $I->haveRecord(PostsReplies::class, array_merge($default, $attributes));
+    }
+
+    /**
+     * Parse XML with Sitemap schema and return its URLs
+     *
+     * @param string $string Response content
+     * @return array
+     */
+    public function parseSitemap($string)
+    {
+        $urls = [];
+        $xml  = new SimpleXMLElement($string);
+
+        foreach ($xml->url as $node) {
+            /** @var SimpleXMLElement $node */
+            if ($node instanceof SimpleXMLElement) {
+                $urls[] = (string) $node->loc;
+            }
+
+        }
+
+        return $urls;
     }
 }

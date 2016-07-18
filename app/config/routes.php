@@ -16,6 +16,7 @@
 */
 
 use Phalcon\Mvc\Router;
+use Phosphorum\Http\Filter\Ajax;
 
 $router = new Router(false);
 $router->removeExtraSlashes(true);
@@ -178,7 +179,7 @@ $router->add(
        'controller' => 'replies',
        'action'     => 'history'
     ]
-);
+)->beforeMatch([new Ajax, 'check']);
 
 $router->add(
     '/discussion/history/{id:[0-9]+}',
@@ -186,7 +187,7 @@ $router->add(
        'controller' => 'discussions',
        'action'     => 'history'
     ]
-);
+)->beforeMatch([new Ajax, 'check']);
 
 $router->add(
     '/discussion/vote-up/{id:[0-9]+}',

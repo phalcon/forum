@@ -15,37 +15,27 @@
  +------------------------------------------------------------------------+
 */
 
+namespace Phosphorum\Http\Filter;
 
-namespace Phosphorum\Models;
-
-use Phalcon\Mvc\Model;
+use Phalcon\Mvc\User\Component;
+use Phosphorum\Http\FilterInterface;
 
 /**
- * Class PostsHistory
+ * AJAX HTTP filter
  *
- * @property \Phosphorum\Models\Posts post
- *
- * @package Phosphorum\Models
+ * @package Phosphorum\Http\Filter
  */
-class PostsHistory extends Model
+class Ajax extends Component implements FilterInterface
 {
-    public $id;
-
-    public $posts_id;
-
-    public $users_id;
-
-    public $content;
-
-    public $created_at;
-
-    public function beforeValidationOnCreate()
+    /**
+     * Check if the request was made with Ajax
+     *
+     * @return bool
+     */
+    public function check()
     {
-        $this->created_at = time();
-    }
+        $request = $this->di->getShared('request');
 
-    public function initialize()
-    {
-        $this->belongsTo('posts_id', 'Phosphorum\Models\Posts', 'id', ['alias' => 'post']);
+        return $request->isAjax();
     }
 }

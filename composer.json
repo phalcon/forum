@@ -33,7 +33,7 @@
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
         "swiftmailer/swiftmailer": "^5.4",
         "kzykhys/ciconia": "~1.0",
-        "phpspec/php-diff": "~1.0",
+        "phalcongelist/php-diff": "~2.0",
         "elasticsearch/elasticsearch": "~1.0",
         "phalcon/incubator": "2.1.x-dev",
         "phalcongelist/breadcrumbs": "dev-master@dev",
@@ -52,7 +52,9 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
+            "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('app/config/development.example.php', 'app/config/development.php);\"",
+            "php -r \"copy('app/config/config.example.php', 'app/config/config.php);\""
         ],
         "cs-test": [
             "vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
