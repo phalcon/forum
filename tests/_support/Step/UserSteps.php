@@ -1,6 +1,6 @@
 <?php
 
-namespace Step\Functional;
+namespace Step;
 
 use HelperTrait;
 use Codeception\Scenario;

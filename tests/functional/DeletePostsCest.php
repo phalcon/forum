@@ -1,6 +1,6 @@
 <?php
 
-use Step\Functional\UserSteps;
+use Step\UserSteps;
 
 class DeletePostsCest
 {
