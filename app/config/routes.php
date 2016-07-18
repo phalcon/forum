@@ -178,7 +178,18 @@ $router->add(
        'controller' => 'replies',
        'action'     => 'history'
     ]
-);
+)->beforeMatch(function ($uri, $route) {
+    /**
+     * @var string $uri
+     * @var \Phalcon\Mvc\Router\Route $route
+     * @var \Phalcon\Di\FactoryDefault $this
+     * @var \Phalcon\Http\Request $request
+     */
+    $request = $this->getShared('request');
+
+    // Check if the request was made with Ajax
+    return $request->isAjax();
+});
 
 $router->add(
     '/discussion/history/{id:[0-9]+}',
@@ -186,7 +197,18 @@ $router->add(
        'controller' => 'discussions',
        'action'     => 'history'
     ]
-);
+)->beforeMatch(function ($uri, $route) {
+    /**
+     * @var string $uri
+     * @var \Phalcon\Mvc\Router\Route $route
+     * @var \Phalcon\Di\FactoryDefault $this
+     * @var \Phalcon\Http\Request $request
+     */
+    $request = $this->getShared('request');
+
+    // Check if the request was made with Ajax
+    return $request->isAjax();
+});
 
 $router->add(
     '/discussion/vote-up/{id:[0-9]+}',
