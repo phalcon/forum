@@ -34,10 +34,6 @@ class Ajax extends Component implements FilterInterface
      */
     public function check()
     {
-        if (!$this->di->has('request')) {
-            return $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-        }
-
         $request = $this->di->getShared('request');
 
         return $request->isAjax();
