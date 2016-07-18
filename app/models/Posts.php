@@ -19,8 +19,10 @@ namespace Phosphorum\Models;
 
 use DateTime;
 use DateTimeZone;
+use Phalcon\Diff;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
@@ -530,5 +532,29 @@ class Posts extends Model
             $viewCache->delete('post-users-' . $this->id);
             $viewCache->delete('sidebar');
         }
+    }
+
+    public function getDifference()
+    {
+        $history = PostsHistory::findLast($this);
+
+        if (!$history->valid()) {
+            return false;
+        }
+
+        if ($history->count() > 1) {
+            $history = $history->offsetGet(1);
+        } else {
+            $history = $history->getFirst();
+        }
+
+        /** @var PostsHistory $history */
+
+        $b = explode("\n", $history->content);
+
+        $diff = new Diff($b, explode("\n", $this->content), []);
+        $difference = $diff->render(new SideBySide);
+
+        return $difference;
     }
 }
