@@ -17,7 +17,9 @@
 
 namespace Phosphorum\Models;
 
+use Phalcon\Diff;
 use Phalcon\Mvc\Model;
+use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
@@ -299,5 +301,29 @@ class PostsReplies extends Model
             $viewCache->delete('post-users-' . $this->posts_id);
             $viewCache->delete('reply-body-' . $this->id);
         }
+    }
+
+    public function getDifference()
+    {
+        $history = PostsRepliesHistory::findLast($this);
+
+        if (!$history->valid()) {
+            return false;
+        }
+
+        if ($history->count() > 1) {
+            $history = $history->offsetGet(1);
+        } else {
+            $history = $history->getFirst();
+        }
+
+        /** @var PostsRepliesHistory $history */
+
+        $b = explode("\n", $history->content);
+
+        $diff = new Diff($b, explode("\n", $this->content), []);
+        $difference = $diff->render(new SideBySide);
+
+        return $difference;
     }
 }
