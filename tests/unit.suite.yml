@@ -8,6 +8,6 @@ modules:
     enabled:
         - \Helper\Unit
         - Asserts
-        - Phalcon2:
+        - Phalcon:
             bootstrap: 'public/index.php'
             cleanup: true
