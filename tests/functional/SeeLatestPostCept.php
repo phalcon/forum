@@ -3,7 +3,7 @@
  * @var Codeception\Scenario $scenario
  */
 
-$I = new Step\Functional\UserSteps($scenario);
+$I = new Step\UserSteps($scenario);
 
 $I->wantTo('see latest post on front page at top of table');
 
