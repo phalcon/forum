@@ -52,7 +52,9 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
+            "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('app/config/development.example.php', 'app/config/development.php);\"",
+            "php -r \"copy('app/config/config.example.php', 'app/config/config.php);\""
         ],
         "cs-test": [
             "vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
