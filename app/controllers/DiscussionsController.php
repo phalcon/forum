@@ -620,7 +620,7 @@ class DiscussionsController extends ControllerBase
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $this->view->setVar('difference', 'The discussion does not exist');
+            $this->view->setVar('difference', 'The discussion does not exist or it has been deleted.');
             return;
         }
 
