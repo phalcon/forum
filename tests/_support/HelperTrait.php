@@ -5,6 +5,7 @@ use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\PostsReplies;
+use Phosphorum\Models\PostsHistory;
 
 /**
  * Helper Trait
@@ -112,6 +113,24 @@ trait HelperTrait
         }
 
         return $I->haveRecord(Posts::class, array_merge($default, $attributes));
+    }
+
+    /**
+     * Creates a random post history and return its id
+     *
+     * @param array $attributes Model attributes [Optional]
+     * @return int
+     */
+    public function havePostHistory(array $attributes = [])
+    {
+        $I       = $this;
+        $default = [
+            'posts_id' => $this->faker->numberBetween(),
+            'users_id' => $this->faker->numberBetween(),
+            'content'  => $this->faker->paragraph(),
+        ];
+
+        return $I->haveRecord(PostsHistory::class, array_merge($default, $attributes));
     }
 
     /**
