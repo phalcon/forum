@@ -17,6 +17,8 @@
 
 namespace Phosphorum\Models;
 
+use DateTime;
+use DateTimeZone;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
@@ -274,7 +276,8 @@ class Posts extends Model
                 $reason[] = $message->getMessage();
             }
 
-            $logger->error('Unable to store post history. Reason: {reason}', [
+            $logger->error('Unable to store post history. Post id: {id}. Reason: {reason}', [
+                'id'     => $this->id,
                 'reason' => implode('. ', $reason)
             ]);
         }
@@ -286,15 +289,14 @@ class Posts extends Model
     }
 
     /**
-     * Returns a W3C date to be used in the sitemap
+     * Returns a W3C date to be used in the sitemap.
      *
      * @return string
      */
     public function getUTCModifiedAt()
     {
-        $modifiedAt = new \DateTime();
-        $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
-        $modifiedAt->setTimestamp($this->modified_at);
+        $modifiedAt = new DateTime('@' . $this->modified_at, new DateTimeZone('UTC'));
+
         return $modifiedAt->format('Y-m-d\TH:i:s\Z');
     }
 
