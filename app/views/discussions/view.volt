@@ -40,7 +40,7 @@
                 <span class="karma">{{ post.user.getHumanKarma() }}</span>
             </div>
             <div class="col-md-11 col-sm-11 col-xs-12 post-body{% if (post.votes_up - post.votes_down) <= -3 %} post-negative-body{% endif %}">
-                {%- include 'partials/post/post-date' with ['post': post] -%}
+                {%- include 'partials/post/post-date' with ['post': post, 'is_edited': is_edited] -%}
                 <div class="post-content">
                     {%- cache "post-body-" ~ post.id -%}
                         <div>
