@@ -31,7 +31,6 @@ trait HelperTrait
             'timezone' => $this->faker->timezone,
         ];
 
-
         $attributes = array_merge($default, $attributes);
 
         $id = $I->haveRecord(Users::class, $attributes);
