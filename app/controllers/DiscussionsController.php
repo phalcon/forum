@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Controllers;
 
-use Diff;
+use Phalcon\Diff;
 use Phalcon\Mvc\View;
 use Phalcon\Http\Response;
 use Phosphorum\Models\Karma;
@@ -29,7 +29,6 @@ use Phosphorum\Models\PostsViews;
 use Phosphorum\Models\PostsVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
-use Diff_Renderer_Html_SideBySide;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsHistory;
 use Phalcon\Http\ResponseInterface;
@@ -38,6 +37,7 @@ use Phosphorum\Models\TopicTracking;
 use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\PostsSubscribers;
+use Phalcon\Diff\Render\Html\SideBySide;
 use Phosphorum\Mvc\Controllers\TokenTrait;
 use Phosphorum\Models\ActivityNotifications;
 
@@ -636,10 +636,15 @@ class DiscussionsController extends ControllerBase
 
         $b = explode("\n", $postHistory->content);
 
-        $diff     = new Diff($b, $a, []);
-        $renderer = new Diff_Renderer_Html_SideBySide();
+        $diff = new Diff($b, $a, []);
+        $difference = $diff->render(new SideBySide);
 
-        echo $diff->render($renderer);
+        if (empty(trim($difference))) {
+            $this->flash->notice('No history available to show');
+            return null;
+        }
+
+        echo $difference;
     }
 
     /**
