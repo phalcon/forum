@@ -18,19 +18,20 @@
 namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Class PostsRepliesHistory
  *
  * @property \Phosphorum\Models\PostsReplies postReply
  *
- * @method static PostsRepliesHistory[] find($parameters = null)
+ * @method static ResultsetInterface|PostsRepliesHistory[] find($parameters = null)
  *
  * @package Phosphorum\Models
  */
 class PostsRepliesHistory extends Model
 {
-
     public $id;
 
     public $posts_replies_id;
@@ -48,13 +49,20 @@ class PostsRepliesHistory extends Model
 
     public function initialize()
     {
-        $this->belongsTo(
-            'posts_replies_id',
-            'Phosphorum\Models\PostsReplies',
-            'id',
-            array(
-                'alias' => 'postReply'
-            )
-        );
+        $this->belongsTo('posts_replies_id', PostsReplies::class, 'id', ['alias' => 'postReply']);
+    }
+
+    /**
+     * @param PostsReplies $reply
+     *
+     * @return ResultsetInterface|Simple
+     */
+    public static function findLast(PostsReplies $reply)
+    {
+        return self::find([
+            'posts_replies_id = ?0',
+            'bind' => [$reply->id],
+            'order' => 'created_at DESC'
+        ]);
     }
 }
