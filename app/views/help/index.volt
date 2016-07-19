@@ -34,7 +34,7 @@
             <h3>About</h3>
             <ul class="nav">
                 <li>{{ link_to('help/stats', 'Forum Statistics') }}</li>
-                <li>{{ link_to('help/about', 'About Phalcon/Phosphorum') }}</li>
+                <li>{{ link_to('help/about', 'About ' ~ config.site.software) }}</li>
             </ul>
         </div>
         <div class="col-md-4 help-category-box">
