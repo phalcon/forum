@@ -296,29 +296,34 @@ class Bootstrap
             $view  = new View;
             $view->registerEngines([
                 // Setting up Volt Engine
-                '.volt'  => function ($view, $di) {
+                // See https://docs.phalconphp.com/en/latest/reference/volt.html#setting-up-the-volt-engine
+                '.volt' => function ($view, $di) {
                     /** @var DiInterface $this */
                     $config = $this->getShared('config');
-
-                    $volt   = new VoltEngine($view, $di);
-                    $voltConfig = $config->get('volt')->toArray();
+                    $volt = new VoltEngine($view, $di);
 
                     $options = [
-                        'compiledPath'      => $voltConfig['cacheDir'],
-                        'compiledExtension' => $voltConfig['compiledExt'],
-                        'compiledSeparator' => $voltConfig['separator'],
-                        'compileAlways'     => ENV_DEVELOPMENT === APPLICATION_ENV && $voltConfig['forceCompile'],
+                        'compiledPath' => function ($templatePath) {
+                            /** @var DiInterface $this */
+                            $config = $this->getShared('config')->get('volt')->toArray();
+
+                            $filename = str_replace(
+                                ['\\', '/'],
+                                $config['separator'],
+                                trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
+                            );
+                            $filename = basename($filename, '.volt') . $config['compiledExt'];
+
+                            return rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR . $filename;
+                        },
+                        'compileAlways' => boolval($config->get('volt')->forceCompile),
                     ];
 
                     $volt->setOptions($options);
 
-                    $compiler = $volt->getCompiler();
-
-                    $compiler->addFunction('number_format', function ($resolvedArgs) {
+                    $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
                         return 'number_format(' . $resolvedArgs . ')';
-                    });
-
-                    $compiler->addFunction('chr', function ($resolvedArgs) {
+                    })->addFunction('chr', function ($resolvedArgs) {
                         return 'chr(' . $resolvedArgs . ')';
                     });
 
