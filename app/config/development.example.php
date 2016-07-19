@@ -18,6 +18,12 @@
 use Phalcon\Config;
 
 return new Config([
+    'application' => [
+        'debug' => true,
+    ],
+    'volt' => [
+        'forceCompile' => true,
+    ],
     'metadata' => [
         'adapter' => 'Memory',
     ],
