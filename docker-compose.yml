@@ -30,7 +30,7 @@ services:
         volumes:
             - forum_mysql:/var/lib/mysql
         environment:
-            MYSQL_DATABASE: phosphorum
+            MYSQL_DATABASE: zforum
             MYSQL_USER: root
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
