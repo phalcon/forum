@@ -334,6 +334,23 @@ $router->add(
 );
 
 $router->add(
+    '/stick/discussion/{id:[0-9]+}',
+    [
+        'controller' => 'discussions',
+        'action'     => 'stick'
+    ]
+);
+
+$router->add(
+    '/unstick/discussion/{id:[0-9]+}',
+    [
+        'controller' => 'discussions',
+        'action'     => 'unstick'
+    ]
+);
+
+
+$router->add(
     '/subscribe/discussion/{id:[0-9]+}',
     [
        'controller' => 'discussions',

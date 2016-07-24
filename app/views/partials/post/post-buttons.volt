@@ -3,6 +3,14 @@
     {{ link_to('delete/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', 'class': 'btn btn-default btn-xs btn-delete-post') }}&nbsp;
 {%- endif %}
 
+{%- if moderator == 'Y' -%}
+    {%- if post.sticked == 'N' -%}
+        {{ link_to('stick/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-pushpin"></span>&nbsp;Stick', 'class': 'btn btn-default btn-xs btn-edit-post') }}
+    {%- else -%}
+        {{ link_to('unstick/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon-pushpin"></span>&nbsp;Unstick', 'class': 'btn btn-default btn-xs btn-edit-post') }}
+    {%- endif %}
+{%- endif %}
+
 {%- if currentUser -%}
   {% if post.isSubscribed(currentUser) %}
       {{ link_to('unsubscribe/discussion/' ~ post.id ~ '?' ~ tokenKey ~ '=' ~ token, '<span class="glyphicon glyphicon glyphicon-eye-close"></span>&nbsp;Unsubscribe', "class": "btn btn-default btn-xs") }}

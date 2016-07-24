@@ -187,6 +187,94 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
+     * Stick post.
+     *
+     * @param int $id Post ID
+     * @return ResponseInterface
+     */
+    public function stickAction($id)
+    {
+        if (!$this->checkTokenGet('post-' . $id)) {
+            return $this->response->redirect();
+        }
+
+        if (!$usersId = $this->session->get('identity')) {
+            $this->flashSession->error('You must be logged first');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        $parameters = [
+            "id = ?0 AND sticked = ?1 AND 'Y' = ?2",
+            'bind' => [$id, Posts::IS_UNSTICKED, $this->session->get('identity-moderator')]
+        ];
+
+        if (!$post = Posts::findFirst($parameters)) {
+            $this->flashSession->error('The discussion does not exist');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        if (Posts::IS_DELETED == $post->deleted) {
+            $this->flashSession->error("The post is deleted");
+            return $this->response->redirect();
+        }
+
+        $post->sticked = Posts::IS_STICKED;
+        if ($post->save()) {
+            $this->flashSession->success('Discussion was successfully sticked');
+            return $this->response->redirect();
+        }
+
+        $this->flashSession->error(join('<br>', $post->getMessages()));
+        return $this->response->redirect();
+    }
+
+    /**
+     * Unstick post.
+     *
+     * @param int $id Post ID
+     * @return ResponseInterface
+     */
+    public function unstickAction($id)
+    {
+        if (!$this->checkTokenGet('post-' . $id)) {
+            return $this->response->redirect();
+        }
+
+        if (!$usersId = $this->session->get('identity')) {
+            $this->flashSession->error('You must be logged first');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        $parameters = [
+            "id = ?0 AND sticked = ?1 AND 'Y' = ?2",
+            'bind' => [$id, Posts::IS_STICKED, $this->session->get('identity-moderator')]
+        ];
+
+        if (!$post = Posts::findFirst($parameters)) {
+            $this->flashSession->error('The discussion does not exist');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        if (Posts::IS_DELETED == $post->deleted) {
+            $this->flashSession->error("The post is deleted");
+            return $this->response->redirect();
+        }
+
+        $post->sticked = Posts::IS_UNSTICKED;
+        if ($post->save()) {
+            $this->flashSession->success('Discussion was successfully unsticked');
+            return $this->response->redirect();
+        }
+
+        $this->flashSession->error(join('<br>', $post->getMessages()));
+        return $this->response->redirect();
+    }
+
+    /**
      * This shows the create post form and also store the related post
      *
      * @param int $id Post ID
@@ -306,7 +394,7 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        if ($post->deleted == 'Y') {
+        if (Posts::IS_DELETED == $post->deleted) {
             $this->flashSession->error("The post is already deleted");
             return $this->response->redirect();
         }
@@ -316,7 +404,7 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $post->deleted = 1;
+        $post->deleted = Posts::IS_DELETED;
         if ($post->save()) {
             $usersId = $this->session->get('identity');
             if ($post->users_id != $usersId) {
