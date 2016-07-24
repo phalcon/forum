@@ -53,6 +53,8 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 class Posts extends Model
 {
     const IS_DELETED = 1;
+    const IS_STICKED = 'Y';
+    const IS_UNSTICKED = 'N';
 
     public $id;
 
@@ -185,7 +187,7 @@ class Posts extends Model
         $this->deleted         = 0;
         $this->number_views    = 0;
         $this->number_replies  = 0;
-        $this->sticked         = 'N';
+        $this->sticked         = self::IS_UNSTICKED;
         $this->accepted_answer = 'N';
         $this->locked          = 'N';
         $this->status          = 'A';
@@ -409,7 +411,7 @@ class Posts extends Model
     public function canHaveBounty()
     {
         $canHave = $this->accepted_answer != 'Y'
-            && $this->sticked != 'Y'
+            && $this->sticked != self::IS_STICKED
             && $this->number_replies == 0
             && $this->categories_id != 15
             && // announcements
