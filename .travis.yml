@@ -35,8 +35,8 @@ before_install:
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
   - bash tests/_ci/install_zephir.sh
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir generate >/dev/null 2>&1 &)'
-  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir generate --backend=ZendEngine3 >/dev/null 2>&1 &)'
+  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir fullclean && zephir generate >/dev/null 2>&1 &)'
+  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir fullclean && zephir generate --backend=ZendEngine3 >/dev/null 2>&1 &)'
   - sh -e /etc/init.d/xvfb start
   - wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -O selenium.jar
   - java -jar selenium.jar -port 4444 >/dev/null 2>&1 &
