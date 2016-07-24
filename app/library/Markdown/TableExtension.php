@@ -131,7 +131,7 @@ class TableExtension implements ExtensionInterface, RendererAwareInterface
         $tBody->setText("\n" .$bodyRows->join("\n") . "\n");
 
         $table = new Tag('table');
-        $table->setAttributes(array('class' => 'table'));
+        $table->setAttributes(['class' => 'table']);
         $table->setText("\n" . $tHead . "\n" . $tBody . "\n");
 
         return new Text($table->render());
