@@ -54,7 +54,7 @@ class SendSpool extends Injectable
             if ($user->email && $user->notifications != 'N' && false === $isGitHubEmail) {
                 try {
                     $message = new \Swift_Message("[{$this->config->site->name} Forum] " . $post->title);
-                    $message->setTo(array($user->email => $user->name));
+                    $message->setTo([$user->email => $user->name]);
                     $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
 
                     $e = $this->escaper;
@@ -62,12 +62,12 @@ class SendSpool extends Injectable
                     if ($notification->type == 'P') {
                         $originalContent = $post->content;
                         $htmlContent = $this->markdown->render($e->escapeHtml($post->content));
-                        $message->setFrom(array($from => $post->user->name));
+                        $message->setFrom([$from => $post->user->name]);
                     } else {
                         $reply = $notification->reply;
                         $originalContent = $reply->content;
                         $htmlContent = $this->markdown->render($e->escapeHtml($reply->content));
-                        $message->setFrom(array($from => $reply->user->name));
+                        $message->setFrom([$from => $reply->user->name]);
                     }
 
                     if (trim($originalContent)) {

@@ -19,7 +19,7 @@ class UrlAutoLinkExtension implements ExtensionInterface
      */
     public function register(Markdown $markdown)
     {
-        $markdown->on('inline', array($this, 'processStandardUrl'), 35);
+        $markdown->on('inline', [$this, 'processStandardUrl'], 35);
     }
 
     /**
@@ -29,7 +29,7 @@ class UrlAutoLinkExtension implements ExtensionInterface
      */
     public function processStandardUrl(Text $text)
     {
-        $hashes = array();
+        $hashes = [];
 
         // escape <code>
         $text->replace('{<code>.*?</code>}m', function (Text $w) use (&$hashes) {
