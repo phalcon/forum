@@ -48,7 +48,7 @@
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
         "squizlabs/php_codesniffer": "~2.6",
-        "phalcon/zephir": "dev-master"
+        "phalcon/zephir": "~0.9.4"
     },
     "scripts": {
         "post-root-package-install": [
