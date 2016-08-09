@@ -27,7 +27,7 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "ext-phalcon": ">=2.1.x-dev",
+        "ext-phalcon": "~3.0.0",
         "vlucas/phpdotenv": "~2.3",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
@@ -35,7 +35,7 @@
         "kzykhys/ciconia": "~1.0",
         "phalcongelist/php-diff": "~2.0",
         "elasticsearch/elasticsearch": "~1.0",
-        "phalcon/incubator": "2.1.x-dev",
+        "phalcon/incubator": "~3.0.0",
         "phalcongelist/breadcrumbs": "dev-master@dev",
         "league/flysystem-dropbox" : "^1.0"
     },
@@ -47,8 +47,7 @@
         "codeception/verify": "~0.3",
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
-        "squizlabs/php_codesniffer": "~2.6",
-        "phalcon/zephir": "~0.9.4"
+        "squizlabs/php_codesniffer": "~2.6"
     },
     "scripts": {
         "post-root-package-install": [
