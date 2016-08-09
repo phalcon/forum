@@ -25,25 +25,24 @@ services:
   - memcached
 
 env:
-  - PHALCON_VERSION="2.1.x"
+  global:
+    - ZEND_DONT_UNLOAD_MODULES=1 CC="ccache gcc" PATH="$PATH:~/bin" DISPLAY=":99.0"
+  matrix:
+    - PHALCON_VERSION="3.0.x"
+    - PHALCON_VERSION="v3.0.0"
 
 before_install:
-  - export ZEND_DONT_UNLOAD_MODULES=1; export CC="ccache gcc"; export PATH="$PATH:~/bin"; export DISPLAY=":99.0";
   - phpenv config-rm xdebug.ini
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - bash tests/_ci/install_zephir.sh
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir fullclean && zephir generate >/dev/null 2>&1 &)'
-  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir fullclean && zephir generate --backend=ZendEngine3 >/dev/null 2>&1 &)'
   - sh -e /etc/init.d/xvfb start
   - wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -O selenium.jar
   - java -jar selenium.jar -port 4444 >/dev/null 2>&1 &
 
 install:
-  - (export PRE_PHP_INCLUDES=`php-config --includes`; cd cphalcon/ext/; for file in `find kernel -name "*.h"`; do $CC "$file" -I. $PRE_PHP_INCLUDES -o "$file.ghc"; done)
-  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
+  - (cd cphalcon/build; bash install &>/dev/null)
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - cp ./app/config/config.example.php ./app/config/config.php
