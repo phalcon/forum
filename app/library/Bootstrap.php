@@ -550,7 +550,7 @@ class Bootstrap
             $ciconia->addExtension(new Markdown\MentionExtension);
             $ciconia->addExtension(new Markdown\BlockQuoteExtension);
             $ciconia->addExtension(new Markdown\UrlAutoLinkExtension);
-            $ciconia->addExtension(new Markdown\NewLineExtension);
+            //$ciconia->addExtension(new Markdown\NewLineExtension);
             $ciconia->addExtension(new FencedCodeBlockExtension);
 
             return $ciconia;
