@@ -56,16 +56,16 @@
             "php -r \"copy('app/config/config.example.php', 'app/config/config.php);\""
         ],
         "cs-test": [
-            "vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
+            "bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
         ],
         "unit-test": [
-            "vendor/bin/codecept run unit"
+            "bin/codecept run unit"
         ],
         "functional-test": [
-            "vendor/bin/codecept run functional"
+            "bin/codecept run functional"
         ],
         "acceptance-test": [
-            "vendor/bin/codecept run acceptance"
+            "bin/codecept run acceptance"
         ]
     },
     "config": {
