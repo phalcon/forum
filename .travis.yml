@@ -58,7 +58,7 @@ script:
   - composer cs-test
   - composer unit-test
   - composer functional-test
-  - echo "APP_ENV=development" > ./.env && ./vendor/bin/codecept run acceptance
+  - echo "APP_ENV=development" > ./.env && ./bin/codecept run acceptance
 
 notifications:
   email:
