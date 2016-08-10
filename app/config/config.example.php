@@ -18,6 +18,10 @@
 use Phalcon\Config;
 use Phalcon\Logger;
 
+if (!defined('BASE_DIR')) {
+    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'env.php';
+}
+
 return new Config([
     'site' => [
         'name'        => 'Phalcon Framework',
