@@ -26,7 +26,6 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
-use Phalcon\Cli\Console;
 use Phalcon\Events\Event;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
@@ -55,7 +54,7 @@ use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
 {
-    /** @var Application|Console  */
+    /** @var \Phalcon\Application  */
     private $app;
 
     /** @var  DiInterface */
@@ -107,7 +106,7 @@ class Bootstrap
     /**
      * Runs the Application
      *
-     * @return Application|Console|string
+     * @return \Phalcon\Application|string
      */
     public function run()
     {
