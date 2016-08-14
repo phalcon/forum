@@ -34,6 +34,7 @@ use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
 use Phosphorum\Utils\Security;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -192,8 +193,6 @@ class Bootstrap
 
         $loader->register();
         $this->di->setShared('loader', $loader);
-
-        return $loader;
     }
 
     /**
@@ -295,7 +294,6 @@ class Bootstrap
             $view  = new View;
             $view->registerEngines([
                 // Setting up Volt Engine
-                // See https://docs.phalconphp.com/en/latest/reference/volt.html#setting-up-the-volt-engine
                 '.volt' => function ($view, $di) {
                     /** @var DiInterface $this */
                     $config = $this->getShared('config');
@@ -329,7 +327,7 @@ class Bootstrap
                     return $volt;
                 },
                 // Setting up Php Engine
-                '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
+                '.phtml' => Php::class
             ]);
 
             $view->setViewsDir($config->get('application')->viewsDir);
