@@ -112,4 +112,24 @@ class ControllerBase extends Controller
 
         return [$itemBuilder, $totalBuilder];
     }
+    /**
+     * Validation Google captcha
+     * @return bool
+     */
+    protected function checkCaptcha()
+    {
+        $secret = $this->config->reCaptcha->secret;
+        $recaptchaResponse = $_POST['g-recaptcha-response'];
+
+        if (!isset($recaptchaResponse) || !isset($secret)) {
+            return false;
+        }
+        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
+        $resp = $recaptcha->verify($recaptchaResponse, $_SERVER['REMOTE_ADDR']);
+
+        if (!$resp->isSuccess()) {
+            return false;
+        }
+        return true;
+    }
 }

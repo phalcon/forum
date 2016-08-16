@@ -175,4 +175,8 @@ return new Config([
         'controller' => 'error',
         'action'     => 'index',
     ],
+    'reCaptcha' => [
+        'siteKey' => '6LcLwCcTAAAAAGIDp_P0nRAz7K1DniEmhZ3txWgI',
+        'secret' => '6LcLwCcTAAAAAIW3lwB5NdnQPXVLPzHLmrvcAeC7'
+    ]
 ]);

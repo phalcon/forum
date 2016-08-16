@@ -128,7 +128,7 @@ class DiscussionsController extends ControllerBase
             'canonical'    => ''
         ]);
     }
-
+    
     /**
      * This shows the create post form and also store the related post
      */
@@ -144,7 +144,7 @@ class DiscussionsController extends ControllerBase
         $this->gravatar->setSize(48);
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost('create-post')) {
+            if (!$this->checkTokenPost('create-post') || !$this->checkCaptcha()) {
                 $this->response->redirect();
                 return;
             }
@@ -182,7 +182,8 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->view->setVar('firstTime', Posts::countByUsersId($usersId) == 0);
         }
-
+        $siteKey = isset($this->config->reCaptcha->siteKey) ? $this->config->reCaptcha->siteKey : '';
+        $this->view->setVar('siteKey', $siteKey);
         $this->view->setVar('categories', Categories::find(['order' => 'name']));
     }
 

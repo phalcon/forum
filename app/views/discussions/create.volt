@@ -75,6 +75,8 @@
 
                         {% include 'partials/poll-form.volt' %}
 
+                        <div class="g-recaptcha" data-sitekey="{{siteKey}}"></div>
+
                         <div class="pull-left">
                             {{ link_to('', 'Back to discussions') }}
                         </div>
@@ -97,3 +99,4 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
