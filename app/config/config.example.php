@@ -176,7 +176,7 @@ return new Config([
         'action'     => 'index',
     ],
     'reCaptcha' => [
-        'siteKey' => '6LcLwCcTAAAAAGIDp_P0nRAz7K1DniEmhZ3txWgI',
-        'secret' => '6LcLwCcTAAAAAIW3lwB5NdnQPXVLPzHLmrvcAeC7'
+        'siteKey' => 'xxx-xxx-xxx-xxx-xxx-xxx',
+        'secret' => 'xxx-xxx-xxx-xxx-xxx-xxx'
     ]
 ]);
