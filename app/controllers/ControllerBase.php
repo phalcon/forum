@@ -114,7 +114,7 @@ class ControllerBase extends Controller
     }
     /**
      * Validation Google captcha
-     * 
+     *
      * @return boolean
      */
     protected function checkCaptcha()
