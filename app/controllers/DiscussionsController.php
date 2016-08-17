@@ -134,6 +134,7 @@ class DiscussionsController extends ControllerBase
      */
     public function createAction()
     {
+
         if (!$usersId = $this->session->get('identity')) {
             $this->flashSession->error('You must be logged first');
             $this->response->redirect();
@@ -184,6 +185,7 @@ class DiscussionsController extends ControllerBase
         }
         $siteKey = isset($this->config->reCaptcha->siteKey) ? $this->config->reCaptcha->siteKey : '';
         $this->view->setVar('siteKey', $siteKey);
+        $this->view->setVar('isUserTrust', $this->isUserTrust());
         $this->view->setVar('categories', Categories::find(['order' => 'name']));
     }
 

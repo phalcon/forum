@@ -74,9 +74,9 @@
                         </div>
 
                         {% include 'partials/poll-form.volt' %}
-
+                        {% if isUserTrust == false %}
                         <div class="g-recaptcha" data-sitekey="{{siteKey}}"></div>
-
+                        {% endif %}
                         <div class="pull-left">
                             {{ link_to('', 'Back to discussions') }}
                         </div>

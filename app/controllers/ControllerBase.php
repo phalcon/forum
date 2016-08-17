@@ -114,16 +114,21 @@ class ControllerBase extends Controller
     }
     /**
      * Validation Google captcha
-     * @return bool
+     * 
+     * @return boolean
      */
     protected function checkCaptcha()
     {
         $secret = $this->config->reCaptcha->secret;
         $recaptchaResponse = $_POST['g-recaptcha-response'];
 
+        if ($this->isUserTrust()) {
+            return true;
+        }
         if (!isset($recaptchaResponse) || !isset($secret)) {
             return false;
         }
+
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
         $resp = $recaptcha->verify($recaptchaResponse, $_SERVER['REMOTE_ADDR']);
 
@@ -131,5 +136,19 @@ class ControllerBase extends Controller
             return false;
         }
         return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isUserTrust()
+    {
+        $karma = $this->session->get('identity-karma');
+
+        if (isset($karma) && $karma > 300) {
+            return true;
+        }
+        return false;
     }
 }
