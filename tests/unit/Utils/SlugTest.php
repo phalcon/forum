@@ -1,6 +1,9 @@
 <?php
 
-class SlugTest extends \Codeception\TestCase\Test
+use Phosphorum\Utils\Slug;
+use Codeception\Test\Unit;
+
+class SlugTest extends Unit
 {
     /**
      * UnitTester Object
@@ -9,16 +12,13 @@ class SlugTest extends \Codeception\TestCase\Test
     protected $tester;
 
     /**
-     * @var \Phosphorum\Utils\Slug
-     */
-    protected $slug;
-
-    /**
      * Executed before each test
      */
     protected function _before()
     {
-        $this->slug = $this->tester->getDi()->getShared('slug');
+        $this->tester->haveServiceInDi('slug', function () {
+            return new Slug();
+        });
     }
 
     /**
@@ -79,9 +79,11 @@ class SlugTest extends \Codeception\TestCase\Test
             $this->markTestSkipped('Slug::transliterateViaCharMap requires mbstring for overload string functions');
         }
 
-        $reflectionMethod = new ReflectionMethod($this->slug, 'transliterateViaCharMap');
+        $slug = $this->tester->grabServiceFromDi('slug');
+
+        $reflectionMethod = new ReflectionMethod($slug, 'transliterateViaCharMap');
         $reflectionMethod->setAccessible(true);
-        $this->assertEquals($expected, $reflectionMethod->invoke($this->slug, $input));
+        $this->assertEquals($expected, $reflectionMethod->invoke($slug, $input));
     }
 
     /**
@@ -95,9 +97,11 @@ class SlugTest extends \Codeception\TestCase\Test
             $this->markTestSkipped('Slug::transliterateViaIntl requires php-intl extension');
         }
 
-        $reflectionMethod = new ReflectionMethod($this->slug, 'transliterateViaIntl');
+        $slug = $this->tester->grabServiceFromDi('slug');
+
+        $reflectionMethod = new ReflectionMethod($slug, 'transliterateViaIntl');
         $reflectionMethod->setAccessible(true);
-        $this->assertEquals($expected, $reflectionMethod->invoke($this->slug, $input));
+        $this->assertEquals($expected, $reflectionMethod->invoke($slug, $input));
     }
 
     /**
@@ -115,13 +119,15 @@ class SlugTest extends \Codeception\TestCase\Test
             $this->markTestSkipped('Slug::transliterateViaCharMap requires mbstring for overload string functions');
         }
 
-        $transliterateViaCharMap = new ReflectionMethod($this->slug, 'transliterateViaCharMap');
+        $slug = $this->tester->grabServiceFromDi('slug');
+
+        $transliterateViaCharMap = new ReflectionMethod($slug, 'transliterateViaCharMap');
         $transliterateViaCharMap->setAccessible(true);
 
-        $transliterateViaIntl = new ReflectionMethod($this->slug, 'transliterateViaIntl');
+        $transliterateViaIntl = new ReflectionMethod($slug, 'transliterateViaIntl');
         $transliterateViaIntl->setAccessible(true);
 
-        $this->assertEquals($transliterateViaCharMap->invoke($this->slug, $input), $transliterateViaIntl->invoke($this->slug, $input));
+        $this->assertEquals($transliterateViaCharMap->invoke($slug, $input), $transliterateViaIntl->invoke($slug, $input));
     }
 
     /**
@@ -131,6 +137,8 @@ class SlugTest extends \Codeception\TestCase\Test
      */
     public function testShouldConvertNonAsciiStringToValidUrl($input, $expected)
     {
-        $this->assertEquals($expected, $this->slug->generate($input));
+        $slug = $this->tester->grabServiceFromDi('slug');
+
+        $this->assertEquals($expected, $slug->generate($input));
     }
 }

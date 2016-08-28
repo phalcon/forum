@@ -44,10 +44,10 @@ class Digest extends Injectable
         $lastMonths = new \DateTime();
         $lastMonths->modify('-6 month');
 
-        $parameters = array(
+        $parameters = [
             'modified_at >= ?0 AND digest = "Y" AND notifications <> "N"',
             'bind'  => [$lastMonths->getTimestamp()]
-        );
+        ];
 
         $users = [];
         foreach (Users::find($parameters) as $user) {
@@ -85,7 +85,7 @@ class Digest extends Injectable
 
         $e = $this->escaper;
         /** @var \Phalcon\Logger\AdapterInterface $logger */
-        $logger = $this->getDI()->get('logger', ['mail.log']);
+        $logger = $this->getDI()->get('logger', ['mail']);
 
         $stories = [];
         foreach (Posts::find($parameters) as $i => $post) {

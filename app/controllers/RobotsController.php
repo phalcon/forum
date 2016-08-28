@@ -17,6 +17,8 @@
 
 namespace Phosphorum\Controllers;
 
+use DateTime;
+use DateTimeZone;
 use Phalcon\Http\Response;
 
 /**
@@ -41,19 +43,20 @@ class RobotsController extends ControllerBase
     {
         $response = new Response();
 
-        $expireDate = new \DateTime();
+        $expireDate = new DateTime('now', new DateTimeZone('UTC'));
         $expireDate->modify('+1 month');
         $response->setExpires($expireDate);
 
         $response->setHeader('Content-Type', "text/plain; charset=UTF-8");
 
-        $baseUrl = rtrim($this->config->site->url, '/');
+        $baseUrl = rtrim($this->config->get('site')->url, '/');
         $content=<<<EOL
 User-agent: *
 Allow: /
-Sitemap: $baseUrl/sitemap
+Sitemap: $baseUrl/sitemap.xml
 EOL;
         $response->setContent($content);
+
         return $response;
     }
 }

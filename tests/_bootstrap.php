@@ -1,3 +1,2 @@
 <?php
-
-putenv('APP_ENV=testing');
+// Here you can initialize variables that will be available to your tests

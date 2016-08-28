@@ -19,6 +19,8 @@
 namespace Phosphorum\Models;
 
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Class PostsHistory
@@ -29,7 +31,6 @@ use Phalcon\Mvc\Model;
  */
 class PostsHistory extends Model
 {
-
     public $id;
 
     public $posts_id;
@@ -47,13 +48,20 @@ class PostsHistory extends Model
 
     public function initialize()
     {
-        $this->belongsTo(
-            'posts_id',
-            'Phosphorum\Models\Posts',
-            'id',
-            array(
-                'alias' => 'post'
-            )
-        );
+        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post']);
+    }
+
+    /**
+     * @param Posts $post
+     *
+     * @return ResultsetInterface|Simple
+     */
+    public static function findLast(Posts $post)
+    {
+        return self::find([
+            'posts_id = ?0',
+            'bind' => [$post->id],
+            'order' => 'created_at DESC'
+        ]);
     }
 }

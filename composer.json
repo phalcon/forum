@@ -26,15 +26,16 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "ext-phalcon": ">=2.0.6",
+        "ext-json": "*",
+        "ext-phalcon": "~3.0.0",
         "vlucas/phpdotenv": "~2.3",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
         "swiftmailer/swiftmailer": "^5.4",
         "kzykhys/ciconia": "~1.0",
-        "phpspec/php-diff": "~1.0",
+        "phalcongelist/php-diff": "~2.0",
         "elasticsearch/elasticsearch": "~1.0",
-        "phalcon/incubator": "2.1.x-dev",
+        "phalcon/incubator": "~3.0.0",
         "phalcongelist/breadcrumbs": "dev-master@dev",
         "league/flysystem-dropbox" : "^1.0"
     },
@@ -43,13 +44,36 @@
         "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "~1.6",
         "codeception/codeception": "~2.2",
+        "codeception/verify": "~0.3",
+        "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
-        "squizlabs/php_codesniffer": "~2.6",
-        "phalcon/zephir": "dev-master"
+        "squizlabs/php_codesniffer": "~2.6"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('app/config/development.example.php', 'app/config/development.php);\"",
+            "php -r \"copy('app/config/config.example.php', 'app/config/config.php);\""
+        ],
+        "cs-test": [
+            "bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
+        ],
+        "unit-test": [
+            "bin/codecept run unit"
+        ],
+        "functional-test": [
+            "bin/codecept run functional"
+        ],
+        "acceptance-test": [
+            "bin/codecept run acceptance"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "3.x-dev"
         }
     }
 }

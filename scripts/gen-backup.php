@@ -25,7 +25,6 @@ use Phalcon\DI\Injectable;
 
 class GenerateBackup extends Injectable
 {
-
     public function run()
     {
         $backup = new Backup;
@@ -34,7 +33,7 @@ class GenerateBackup extends Injectable
 }
 
 try {
-    $task = new GenerateBackup($config);
+    $task = new GenerateBackup;
     $task->run();
 } catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;

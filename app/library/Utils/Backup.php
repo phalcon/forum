@@ -46,7 +46,7 @@ class Backup extends Injectable
             $config->password,
             $config->dbname
         ));
-        system('bzip2 /tmp/phosphorum.sql');
+        system('bzip2 -f /tmp/phosphorum.sql');
 
         $config = $this->config->get('dropbox');
 

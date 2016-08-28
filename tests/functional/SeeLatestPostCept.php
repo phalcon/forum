@@ -3,7 +3,7 @@
  * @var Codeception\Scenario $scenario
  */
 
-$I = new Step\Functional\UserSteps($scenario);
+$I = new Step\UserSteps($scenario);
 
 $I->wantTo('see latest post on front page at top of table');
 
@@ -17,7 +17,7 @@ $postId = $I->havePost([
 ]);
 
 $I->amOnPage('/');
-$I->seeInTitle('Discussions - Phalcon Framework');
+$I->seeInTitle('Discussions - ');
 $I->seeElement('.post-positive td');
 $I->see('Binding Parameters', '.post-positive td');
 $I->click('Binding Parameters');

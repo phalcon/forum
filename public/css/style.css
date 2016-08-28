@@ -134,6 +134,12 @@ ul.categories-dropdown > li > a {
     height:100%;
 }
 
+@media only screen and (max-width: 768px) {
+    .page-wrapper {
+        margin-top: 1rem;
+    }
+}
+
 .error-v4 {
     float: left;
     position: relative;
@@ -168,6 +174,10 @@ ul.categories-dropdown > li > a {
     color: #717171;
 }
 
+.discussion {
+    position: relative;
+}
+
 .discussion div.row {
     padding-bottom: 20px;
     border-bottom: 1px solid #dadada;
@@ -180,14 +190,6 @@ ul.categories-dropdown > li > a {
 
 p {
     margin: 10px 0 15px;
-}
-
-.posts-buttons {
-    float: right;
-}
-
-.posts-buttons a:hover {
-    text-decoration: underline;
 }
 
 .discussion .small {
@@ -232,10 +234,24 @@ pre.prettyprint {
     cursor: pointer;
 }
 
+.post-body {
+
+}
+
 .post-content {
     max-width: 900px;
     min-height: 70px;
     padding-left: 5px;
+}
+
+.post-content p:first-child {
+    margin-top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .post-content {
+        padding-left: 0;
+    }
 }
 
 @media (min-width: 1280px) {
@@ -271,9 +287,23 @@ pre.prettyprint {
     padding: 2px;
 }
 
+.mobile-author a.user-moderator-Y > span,
+.mobile-author a.user-moderator-N > span {
+    font-weight: 600!important;
+    color: #111;
+    display: inline-block;
+    margin-right: .8rem;
+}
+
+.mobile-author > time,
+.mobile-author > time {
+    color: rgba(46, 52, 54, 0.87);
+}
+
+
 .bs-callout {
-    margin: 20px 0 20px 10px;
-    padding: 20px;
+    margin: 1.1rem 0 1.1rem .5rem;
+    padding: 1.1rem;
     border: 1px solid #eee;
     border-left: 3px solid #eee;
     background: #fefefe;
@@ -318,6 +348,26 @@ pre.prettyprint {
 
 .bs-callout p:last-child {
     margin-bottom: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .bs-callout {
+        margin: .5rem 0 1.1rem 0;
+        padding: .6rem;
+    }
+
+    .bs-callout h4 {
+        font-size: 1.1rem;
+    }
+
+    .bs-callout p {
+        color: rgba(46, 52, 54, 0.87);
+        font-size: .86rem;
+    }
+
+    .bs-callout p:last-child {
+        margin-bottom: .2rem;
+    }
 }
 
 .help-container {
@@ -422,8 +472,20 @@ div#footer a {
     font-size: 12px;
 }
 
+.posts-date {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-right: 1rem;
+    width: 100px;
+}
+
 .posts-buttons .btn-default {
     color: #919191;
+}
+
+.posts-buttons a:hover {
+    text-decoration: underline;
 }
 
 .table-title td {
@@ -432,6 +494,44 @@ div#footer a {
 
 .table-title h1 {
     margin: 0;
+}
+
+@media only screen and (max-width: 992px) {
+    .table-title h1 {
+        font-size: 1.55rem;
+        padding-bottom: 0.8rem!important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .table-title h1 {
+        font-size: 1.45rem;
+        padding-bottom: 1rem!important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .table-title h1 {
+        font-size: 1.2rem;
+        padding-bottom: 0.8rem!important;
+    }
+
+    .mobile-author {
+        font-size: .8rem;
+    }
+
+    .img-rounded {
+        width: 32px!important;
+        height: 32px!important;
+    }
+}
+
+.wrapper-stats,
+.wrapper-author {
+    -webkit-transition: width .3s, height .3s, background-color .3s, transform .3s;
+       -moz-transition: width .3s, height .3s, background-color .3s, transform .3s;
+         -o-transition: width .3s, height .3s, background-color .3s, transform .3s;
+            transition: width .3s, height .3s, background-color .3s, transform .3s;
 }
 
 .table-stats {
@@ -481,7 +581,6 @@ blockquote p {
 }
 
 @media (max-width: 320px) {
-
     .discussion .small img {
         width: 32px;
         height: 32px;
@@ -571,6 +670,25 @@ table.list-discussions a:visited {
 
 .breadcrumb > li + li:before {
     content: "> "!important;
+}
+
+@media only screen and (max-width: 768px) {
+    .breadcrumb {
+        padding: .6rem;
+        margin-bottom: .9rem;
+    }
+
+    .flash-banner .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .breadcrumb {
+        padding: .6rem .6rem .6rem 0;
+        margin-bottom: 0;
+    }
 }
 
 pre {
@@ -666,7 +784,6 @@ div#sticky-progress {
     font-weight: 400;
     -webkit-transition: background-color .3s ease;
        -moz-transition: background-color .3s ease;
-        -ms-transition: background-color .3s ease;
          -o-transition: background-color .3s ease;
             transition: background-color .3s ease;
 }
@@ -690,6 +807,7 @@ div#sticky-progress {
 
 .badge3 {
     background-size: initial;
+    /*noinspection CssUnknownTarget*/
     background: transparent url("/icon/badges.gif?v=1") -7px -3px;
 }
 

@@ -16,22 +16,21 @@
 */
 
 use Phalcon\Mvc\Router;
+use Phosphorum\Http\Filter\Ajax;
 
 $router = new Router(false);
 $router->removeExtraSlashes(true);
 
 $router->add(
-    '/sitemap',
+    '/sitemap.xml',
     [
        'controller' => 'sitemap',
        'action'     => 'index'
     ]
 );
 
-// We have rewrite rule for Nginx
-// robots.txt => robots
 $router->add(
-    '/robots',
+    '/robots.txt',
     [
         'controller' => 'robots',
         'action'     => 'index'
@@ -180,7 +179,7 @@ $router->add(
        'controller' => 'replies',
        'action'     => 'history'
     ]
-);
+)->beforeMatch([new Ajax, 'check']);
 
 $router->add(
     '/discussion/history/{id:[0-9]+}',
@@ -188,7 +187,7 @@ $router->add(
        'controller' => 'discussions',
        'action'     => 'history'
     ]
-);
+)->beforeMatch([new Ajax, 'check']);
 
 $router->add(
     '/discussion/vote-up/{id:[0-9]+}',
@@ -333,6 +332,23 @@ $router->add(
        'action'     => 'edit'
     ]
 );
+
+$router->add(
+    '/stick/discussion/{id:[0-9]+}',
+    [
+        'controller' => 'discussions',
+        'action'     => 'stick'
+    ]
+);
+
+$router->add(
+    '/unstick/discussion/{id:[0-9]+}',
+    [
+        'controller' => 'discussions',
+        'action'     => 'unstick'
+    ]
+);
+
 
 $router->add(
     '/subscribe/discussion/{id:[0-9]+}',

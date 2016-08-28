@@ -2,6 +2,7 @@
 
 namespace Helper;
 
+use HelperTrait;
 use Codeception\Module;
 
 /**
@@ -14,22 +15,7 @@ use Codeception\Module;
  */
 class Acceptance extends Module
 {
-    /**
-     * Parse XML with Sitemap schema and return its URLs
-     *
-     * @param $string
-     * @return array
-     */
-    public function parseSitemap($string)
-    {
-        $urls = [];
-        $x = new \SimpleXMLElement($string);
-        foreach ($x->url as $n) {
-            $urls[] = $n->loc->__toString();
-        }
-
-        return $urls;
-    }
+    use HelperTrait;
 
     public function seeResponseRegexp($regexp, $content)
     {

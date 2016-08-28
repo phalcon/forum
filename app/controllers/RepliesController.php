@@ -17,14 +17,15 @@
 
 namespace Phosphorum\Controllers;
 
+use Phalcon\Mvc\View;
+use Phalcon\Http\Response;
+use Phosphorum\Models\Karma;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\PostsReplies;
 use Phosphorum\Models\PostsBounties;
-use Phosphorum\Models\PostsRepliesHistory;
 use Phosphorum\Models\PostsRepliesVotes;
+use Phosphorum\Mvc\Controllers\TokenTrait;
 use Phosphorum\Models\ActivityNotifications;
-use Phosphorum\Models\Karma;
-use Phalcon\Http\Response;
 
 /**
  * Class RepliesController
@@ -33,6 +34,7 @@ use Phalcon\Http\Response;
  */
 class RepliesController extends ControllerBase
 {
+    use TokenTrait;
 
     public function initialize()
     {
@@ -43,7 +45,6 @@ class RepliesController extends ControllerBase
      * Returns the raw comment as it as edited
      *
      * @param $id
-     *
      * @return Response
      */
     public function getAction($id)
@@ -52,7 +53,7 @@ class RepliesController extends ControllerBase
 
         $usersId = $this->session->get('identity');
         if (!$usersId) {
-            $response->setStatusCode('401', 'Unauthorized');
+            $response->setStatusCode(401, 'Unauthorized');
             return $response;
         }
 
@@ -76,11 +77,6 @@ class RepliesController extends ControllerBase
      */
     public function updateAction()
     {
-        if (!$this->security->checkToken()) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return $this->response->redirect();
-        }
-
         $usersId = $this->session->get('identity');
         if (!$usersId) {
             return $this->response->redirect();
@@ -100,6 +96,11 @@ class RepliesController extends ControllerBase
         ];
         $postReply = PostsReplies::findFirst($parametersReply);
         if (!$postReply) {
+            return $this->response->redirect();
+        }
+
+        if (!$this->security->checkToken('post-' . $postReply->post->id)) {
+            $this->flashSession->error('This post is outdated. Please try to update reply again.');
             return $this->response->redirect();
         }
 
@@ -133,13 +134,6 @@ class RepliesController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            $this->flashSession->error('Token error. This might be CSRF attack.');
-            return $this->response->redirect();
-        }
-
         $usersId = $this->session->get('identity');
         if (!$usersId) {
             return $this->response->setStatusCode('401', 'Unauthorized');
@@ -149,7 +143,18 @@ class RepliesController extends ControllerBase
             'id = ?0 AND (users_id = ?1 OR "Y" = ?2)',
             'bind' => [$id, $usersId, $this->session->get('identity-moderator')]
         ];
+
         $postReply = PostsReplies::findFirst($parametersReply);
+        if (!$postReply) {
+            $this->flashSession->error('Post reply does not exist');
+            return $this->response->redirect();
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $this->flashSession->error('This post is outdated. Please try to vote for the reply again.');
+            return $this->response->redirect();
+        }
+
         if ($postReply) {
             if ($usersId == $postReply->users_id) {
                 $user = $postReply->user;
@@ -188,16 +193,6 @@ class RepliesController extends ControllerBase
         return $this->response->redirect();
     }
 
-    protected function checkTokenGetJson()
-    {
-        $csrfKey = $this->session->get('$PHALCON/CSRF/KEY$');
-        $csrfToken = $this->request->getQuery($csrfKey, null, 'dummy');
-        if (!$this->security->checkToken($csrfKey, $csrfToken)) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Votes a post up
      *
@@ -207,14 +202,6 @@ class RepliesController extends ControllerBase
     public function voteUpAction($id = 0)
     {
         $response = new Response();
-
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
 
         /**
          * Find the post using get
@@ -226,6 +213,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to vote for the reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
@@ -340,15 +335,6 @@ class RepliesController extends ControllerBase
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
-
-
         /**
          * Find the post using get
          */
@@ -359,6 +345,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to vote for the reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
@@ -454,60 +448,25 @@ class RepliesController extends ControllerBase
     }
 
     /**
-     * Shows the latest modification made to a post
+     * Shows the latest modification made to a post reply
      *
-     * @param int $id
-     * @return Response|\Phalcon\Http\ResponseInterface
+     * @param int $id The PostsReplies id.
      */
     public function historyAction($id = 0)
     {
-        $this->view->disable();
+        $this->view->enable();
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 
         /**
-         * Find the post using get
+         * Find the post reply using get
          */
         $postReply = PostsReplies::findFirstById($id);
         if (!$postReply) {
-            $this->flashSession->error('The reply does not exist');
-            return $this->response->redirect();
+            $this->view->setVar('difference', 'The reply does not exist or it has been deleted.');
+            return;
         }
 
-        $a = explode("\n", $postReply->content);
-
-        $first = true;
-        $postHistory = null;
-        $parametersHistory = [
-            'posts_replies_id = ?0',
-            'bind'  => [$postReply->id],
-            'order' => 'created_at DESC'
-        ];
-
-        $postHistories = PostsRepliesHistory::find($parametersHistory);
-
-        if (count($postHistories) > 1) {
-            foreach ($postHistories as $postHistory) {
-                if ($first) {
-                    if ($postHistory->content != $postReply->content) {
-                        $first = false;
-                    }
-                    continue;
-                }
-                break;
-            }
-        } else {
-            $postHistory = $postHistories->getFirst();
-        }
-
-        if (is_object($postHistory)) {
-            $b = explode("\n", $postHistory->content);
-
-            $diff     = new \Diff($b, $a, []);
-            $renderer = new \Diff_Renderer_Html_SideBySide();
-
-            echo $diff->Render($renderer);
-        } else {
-            $this->flash->notice('No history available to show');
-        }
+        $this->view->setVar('difference', $postReply->getDifference() ?: 'No history available to show');
     }
 
     /**
@@ -520,14 +479,6 @@ class RepliesController extends ControllerBase
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
-            $csrfTokenError = [
-                'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
-            ];
-            return $response->setJsonContent($csrfTokenError);
-        }
-
         /**
          * Find the post using get
          */
@@ -538,6 +489,14 @@ class RepliesController extends ControllerBase
                 'message' => 'Post reply does not exist'
             ];
             return $response->setJsonContent($contentNotExist);
+        }
+
+        if (!$this->checkTokenGetJson('post-' . $postReply->post->id)) {
+            $csrfTokenError = [
+                'status'  => 'error',
+                'message' => 'This post is outdated. Please try to accept reply again.'
+            ];
+            return $response->setJsonContent($csrfTokenError);
         }
 
         $user = Users::findFirstById($this->session->get('identity'));
@@ -622,12 +581,14 @@ class RepliesController extends ControllerBase
         }
 
         if ($user->id != $postReply->users_id) {
-            $activity                       = new ActivityNotifications();
-            $activity->users_id             = $postReply->users_id;
-            $activity->posts_id             = $postReply->post->id;
-            $activity->posts_replies_id     = $postReply->id;
-            $activity->users_origin_id      = $user->id;
-            $activity->type                 = 'A';
+            $activity = new ActivityNotifications([
+                'users_id'         => $postReply->users_id,
+                'posts_id'         => $postReply->post->id,
+                'posts_replies_id' => $postReply->id,
+                'users_origin_id'  => $user->id,
+                'type'             => 'A',
+            ]);
+
             $activity->save();
         }
 

@@ -18,6 +18,10 @@
 use Phalcon\Config;
 use Phalcon\Logger;
 
+if (!defined('BASE_DIR')) {
+    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'env.php';
+}
+
 return new Config([
     'site' => [
         'name'        => 'Phalcon Framework',
@@ -133,7 +137,7 @@ return new Config([
         'host'     => "",
         'port'     => 25,
         'security' => "tls",
-        'username' => "",
+        'username' => "forum@pforum.loc",
         'password' => ""
     ],
 
@@ -156,8 +160,8 @@ return new Config([
 
     'logger' => [
         'path'     => BASE_DIR . 'app/logs/',
-        'format'   => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
-        'date'     => 'D j H:i:s',
+        'format'   => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
+        'date'     => 'd-M-Y H:i:s',
         'logLevel' => Logger::WARNING,
         'filename' => 'application.log',
     ],
@@ -165,8 +169,8 @@ return new Config([
     'error' => [
         'logger'    => BASE_DIR . 'app/logs/error.log',
         'formatter' => [
-            'format' => '%date% ' . HOSTNAME . ' php: [%type%] %message%',
-            'date'   => 'D j H:i:s',
+            'format' => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
+            'date'   => 'd-M-Y H:i:s',
         ],
         'controller' => 'error',
         'action'     => 'index',

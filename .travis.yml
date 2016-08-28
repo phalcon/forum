@@ -25,68 +25,40 @@ services:
   - memcached
 
 env:
-  - PHALCON_VERSION="2.1.x"
-  - PHALCON_VERSION="phalcon-v2.0.13"
-  - PHALCON_VERSION="phalcon-v2.0.12"
-  - PHALCON_VERSION="phalcon-v2.0.11"
-  - PHALCON_VERSION="phalcon-v2.0.10"
-  - PHALCON_VERSION="phalcon-v2.0.9"
-  - PHALCON_VERSION="phalcon-v2.0.8"
-  - PHALCON_VERSION="phalcon-v2.0.7"
-  - PHALCON_VERSION="phalcon-v2.0.6"
-
-matrix:
-  exclude:
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.13"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.12"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.11"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.10"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.9"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.8"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.7"
-    - php: 7.0
-      env: PHALCON_VERSION="phalcon-v2.0.6"
+  global:
+    - ZEND_DONT_UNLOAD_MODULES=1 CC="ccache gcc" PATH="$PATH:~/bin" DISPLAY=":99.0"
+  matrix:
+    - PHALCON_VERSION="3.0.x"
+    - PHALCON_VERSION="v3.0.0"
 
 before_install:
-  - export ZEND_DONT_UNLOAD_MODULES=1; export CC="ccache gcc"; export PATH="$PATH:~/bin"; export DISPLAY=":99.0";
   - phpenv config-rm xdebug.ini
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - bash tests/_ci/install_zephir.sh
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - '[[ "$TRAVIS_PHP_VERSION" == "7.0" ]] || (cd cphalcon; zephir generate)'
-  - '[[ "$TRAVIS_PHP_VERSION" != "7.0" ]] || (cd cphalcon; zephir generate --backend=ZendEngine3)'
   - sh -e /etc/init.d/xvfb start
-  - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
-  - java -jar selenium-server-standalone-2.53.1.jar -port 4444 >/dev/null 2>&1 &
-  - sleep 5
+  - wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -O selenium.jar
+  - java -jar selenium.jar -port 4444 >/dev/null 2>&1 &
 
 install:
-  - (export PRE_PHP_INCLUDES=`php-config --includes`; cd cphalcon/ext/; for file in `find kernel -name "*.h"`; do $CC "$file" -I. $PRE_PHP_INCLUDES -o "$file.ghc"; done)
-  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
+  - (cd cphalcon/build; bash install &>/dev/null)
   - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
   - php --ri phalcon
   - cp ./app/config/config.example.php ./app/config/config.php
   - cp ./app/config/development.example.php ./app/config/development.php
-  - cp ./.env.example ./.env
+  - echo "APP_ENV=testing" > ./.env
   - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
   - cat schemas/forum.sql | mysql phosphorum
   - php ./scripts/random-entries.php >/dev/null 2>&1 &
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - sleep 5
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --colors --extensions=php --ignore=app/cache/*,app/config/* app/
-  - vendor/bin/codecept build
-  - vendor/bin/codecept run functional
-  - vendor/bin/codecept run unit
+  - composer cs-test
+  - composer unit-test
+  - composer functional-test
+  - echo "APP_ENV=development" > ./.env && ./bin/codecept run acceptance
 
 notifications:
   email:

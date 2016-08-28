@@ -15,8 +15,12 @@
         </div>
         <div class="col-md-10">
             <form method="post" autocomplete="off" role="form">
-                {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
-
+                {{
+                    hidden_field(
+                        security.getPrefixedTokenKey('edit-post-' ~ post.id),
+                        "value": security.getPrefixedToken('edit-post-' ~ post.id)
+                    )
+                }}
                 <div class="form-group">
                     {{ hidden_field("id") }}
                 </div>

@@ -30,7 +30,7 @@ services:
         volumes:
             - forum_mysql:/var/lib/mysql
         environment:
-            MYSQL_DATABASE: phosphorum
+            MYSQL_DATABASE: zforum
             MYSQL_USER: root
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
@@ -64,7 +64,7 @@ services:
         depends_on:
              - php
         volumes:
-            - ./opsfiles/nginx.conf:/etc/nginx/sites-enabled/forum.conf
+            - ./opsfiles/nginx.conf:/etc/nginx/sites-enabled/forum.conf:ro
         volumes_from:
             - application
         environment:

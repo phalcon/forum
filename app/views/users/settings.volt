@@ -50,7 +50,7 @@
 
                 <div class="col-md-12">
                     <form method="post" role="form">
-                        {{ hidden_field(security.getTokenKey(), "value": security.getToken()) }}
+                        {{ hidden_field(security.getPrefixedTokenKey('settings'), "value": security.getPrefixedToken('settings')) }}
                         <fieldset>
                             <legend>
                                 Notification Settings

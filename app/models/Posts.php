@@ -17,8 +17,12 @@
 
 namespace Phosphorum\Models;
 
+use DateTime;
+use DateTimeZone;
+use Phalcon\Diff;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
@@ -49,6 +53,8 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 class Posts extends Model
 {
     const IS_DELETED = 1;
+    const IS_STICKED = 'Y';
+    const IS_UNSTICKED = 'N';
 
     public $id;
 
@@ -181,7 +187,7 @@ class Posts extends Model
         $this->deleted         = 0;
         $this->number_views    = 0;
         $this->number_replies  = 0;
-        $this->sticked         = 'N';
+        $this->sticked         = self::IS_UNSTICKED;
         $this->accepted_answer = 'N';
         $this->locked          = 'N';
         $this->status          = 'A';
@@ -197,9 +203,9 @@ class Posts extends Model
      */
     public function beforeCreate()
     {
-        $postView            = new PostsViews();
-        $postView->ipaddress = $this->getDI()->getShared('request')->getClientAddress();
-        $this->views         = $postView;
+        $this->views = new PostsViews([
+            'ipaddress' => $this->getDI()->getShared('request')->getClientAddress(),
+        ]);
     }
 
     public function afterCreate()
@@ -257,11 +263,33 @@ class Posts extends Model
     {
         $this->clearCache();
 
-        $history           = new PostsHistory();
-        $history->posts_id = $this->id;
-        $history->users_id = $this->getDI()->getShared('session')->get('identity');
-        $history->content  = $this->content;
-        $history->save();
+        // In case of updating post through creating PostsViews
+        if (!$this->getDI()->getShared('session')->has('identity')) {
+            return;
+        }
+
+        $history = new PostsHistory([
+            'posts_id' => $this->id,
+            'users_id' => $this->getDI()->getShared('session')->get('identity'),
+            'content'  => $this->content,
+        ]);
+
+        if (!$history->save()) {
+            /** @var \Phalcon\Logger\AdapterInterface $logger */
+            $logger   = $this->getDI()->get('logger');
+            $messages = $history->getMessages();
+            $reason   = [];
+
+            foreach ($messages as $message) {
+                /** @var \Phalcon\Mvc\Model\MessageInterface $message */
+                $reason[] = $message->getMessage();
+            }
+
+            $logger->error('Unable to store post history. Post id: {id}. Reason: {reason}', [
+                'id'     => $this->id,
+                'reason' => implode('. ', $reason)
+            ]);
+        }
     }
 
     public function afterDelete()
@@ -270,15 +298,14 @@ class Posts extends Model
     }
 
     /**
-     * Returns a W3C date to be used in the sitemap
+     * Returns a W3C date to be used in the sitemap.
      *
      * @return string
      */
     public function getUTCModifiedAt()
     {
-        $modifiedAt = new \DateTime();
-        $modifiedAt->setTimezone(new \DateTimeZone('UTC'));
-        $modifiedAt->setTimestamp($this->modified_at);
+        $modifiedAt = new DateTime('@' . $this->modified_at, new DateTimeZone('UTC'));
+
         return $modifiedAt->format('Y-m-d\TH:i:s\Z');
     }
 
@@ -384,7 +411,7 @@ class Posts extends Model
     public function canHaveBounty()
     {
         $canHave = $this->accepted_answer != 'Y'
-            && $this->sticked != 'Y'
+            && $this->sticked != self::IS_STICKED
             && $this->number_replies == 0
             && $this->categories_id != 15
             && // announcements
@@ -507,5 +534,29 @@ class Posts extends Model
             $viewCache->delete('post-users-' . $this->id);
             $viewCache->delete('sidebar');
         }
+    }
+
+    public function getDifference()
+    {
+        $history = PostsHistory::findLast($this);
+
+        if (!$history->valid()) {
+            return false;
+        }
+
+        if ($history->count() > 1) {
+            $history = $history->offsetGet(1);
+        } else {
+            $history = $history->getFirst();
+        }
+
+        /** @var PostsHistory $history */
+
+        $b = explode("\n", $history->content);
+
+        $diff = new Diff($b, explode("\n", $this->content), []);
+        $difference = $diff->render(new SideBySide);
+
+        return $difference;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use Step\Functional\UserSteps;
+use Step\UserSteps;
 
 class DeletePostsCest
 {
@@ -18,7 +18,7 @@ class DeletePostsCest
         );
 
         $I->amOnPage("/discussion/{$postId}/abc");
-        $I->seeInTitle('Is there a way to validate only some fields? - Discussion - Phalcon Framework');
+        $I->seeInTitle('Is there a way to validate only some fields? - Discussion');
         $I->seeElement(['css' => 'a.btn-delete-post']);
 
         $I->click(['css' => 'a.btn-delete-post']);

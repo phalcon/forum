@@ -20,7 +20,6 @@ namespace Phosphorum;
 use Phalcon\Config;
 use Phalcon\Loader;
 use Ciconia\Ciconia;
-use Phalcon\Security;
 use Phalcon\Mvc\View;
 use RuntimeException;
 use Phalcon\Mvc\Router;
@@ -29,10 +28,12 @@ use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phalcon\Cli\Console;
 use Phalcon\Events\Event;
+use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Application;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
+use Phosphorum\Utils\Security;
 use Phalcon\Di\FactoryDefault;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
@@ -49,13 +50,22 @@ use Phalcon\Cache\Frontend\Output as FrontOutput;
 use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phalcon\Logger\AdapterInterface as LoggerInterface;
+use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
 {
+    /** @var Application|Console  */
     private $app;
 
+    /** @var  DiInterface */
+    private $di;
+
     private $loaders = [
+        'eventsManager',
+        'config',
+        'logger',
+        'loader',
         'cache',
         'security',
         'session',
@@ -80,37 +90,24 @@ class Bootstrap
      */
     public function __construct()
     {
-        $di = new FactoryDefault;
-
-        $em = new EventsManager;
-        $em->enablePriorities(true);
-
-        $config = $this->initConfig();
-
-        // Register the configuration itself as a service
-        $di->setShared('config', $config);
-
+        $this->di = new FactoryDefault;
         $this->app = new Application;
-
-        $this->initLogger($di, $config, $em);
-        $this->initLoader($di, $config, $em);
 
         foreach ($this->loaders as $service) {
             $serviceName = ucfirst($service);
-            $this->{'init' . $serviceName}($di, $config, $em);
+            $this->{'init' . $serviceName}();
         }
 
-        $di->setShared('eventsManager', $em);
-        $di->setShared('app', $this->app);
+        $this->app->setEventsManager($this->di->getShared('eventsManager'));
 
-        $this->app->setEventsManager($em);
-        $this->app->setDI($di);
+        $this->di->setShared('app', $this->app);
+        $this->app->setDI($this->di);
     }
 
     /**
      * Runs the Application
      *
-     * @return $this|string
+     * @return Application|Console|string
      */
     public function run()
     {
@@ -136,22 +133,36 @@ class Bootstrap
     }
 
     /**
-     * Initialize the Logger.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
+     * Initialize the Application Events Manager.
      */
-    protected function initLogger(DiInterface $di, Config $config, EventsManager $em)
+    protected function initEventsManager()
+    {
+        $this->di->setShared('eventsManager', function () {
+            $em = new EventsManager;
+            $em->enablePriorities(true);
+
+            return $em;
+        });
+    }
+
+    /**
+     * Initialize the Logger.
+     */
+    protected function initLogger()
     {
         ErrorHandler::register();
 
-        $di->set('logger', function ($filename = null, $format = null) use ($config) {
+        $this->di->set('logger', function ($filename = null, $format = null) {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $format   = $format ?: $config->get('logger')->format;
             $filename = trim($filename ?: $config->get('logger')->filename, '\\/');
             $path     = rtrim($config->get('logger')->path, '\\/') . DIRECTORY_SEPARATOR;
+
+            if (false === strpos($filename, '.log')) {
+                $filename = "$filename.log";
+            }
 
             $formatter = new FormatterLine($format, $config->get('logger')->date);
             $logger = new FileLogger($path . $filename);
@@ -167,15 +178,10 @@ class Bootstrap
      * Initialize the Loader.
      *
      * Adds all required namespaces.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return Loader
      */
-    protected function initLoader(DiInterface $di, Config $config, EventsManager $em)
+    protected function initLoader()
     {
+        $config = $this->di->getShared('config');
         $loader = new Loader;
         $loader->registerNamespaces(
             [
@@ -185,10 +191,8 @@ class Bootstrap
             ]
         );
 
-        $loader->setEventsManager($em);
         $loader->register();
-
-        $di->setShared('loader', $loader);
+        $this->di->setShared('loader', $loader);
 
         return $loader;
     }
@@ -198,16 +202,13 @@ class Bootstrap
      *
      * The frontend must always be Phalcon\Cache\Frontend\Output and the service 'viewCache'
      * must be registered as always open (not shared) in the services container (DI).
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initCache(DiInterface $di, Config $config, EventsManager $em)
+    protected function initCache()
     {
-        $di->set('viewCache', function () use ($config) {
+        $this->di->set('viewCache', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $frontend = new FrontOutput(['lifetime' => $config->get('viewCache')->lifetime]);
 
             $config  = $config->get('viewCache')->toArray();
@@ -217,7 +218,10 @@ class Bootstrap
             return new $backend($frontend, $config);
         });
 
-        $di->setShared('modelsCache', function () use ($config) {
+        $this->di->setShared('modelsCache', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $frontend = '\Phalcon\Cache\Frontend\\' . $config->get('modelsCache')->frontend;
             $frontend = new $frontend(['lifetime' => $config->get('modelsCache')->lifetime]);
 
@@ -228,7 +232,10 @@ class Bootstrap
             return new $backend($frontend, $config);
         });
 
-        $di->setShared('dataCache', function () use ($config) {
+        $this->di->setShared('dataCache', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $frontend = '\Phalcon\Cache\Frontend\\' . $config->get('dataCache')->frontend;
             $frontend = new $frontend(['lifetime' => $config->get('dataCache')->lifetime]);
 
@@ -242,16 +249,10 @@ class Bootstrap
 
     /**
      * Initialize the Security Service.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initSecurity(DiInterface $di, Config $config, EventsManager $em)
+    protected function initSecurity()
     {
-        $di->setShared('security', function () {
+        $this->di->setShared('security', function () {
             $security = new Security;
             $security->setWorkFactor(12);
 
@@ -263,16 +264,13 @@ class Bootstrap
      * Initialize the Session Service.
      *
      * Start the session the first time some component request the session service.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initSession(DiInterface $di, Config $config, EventsManager $em)
+    protected function initSession()
     {
-        $di->setShared('session', function () use ($config) {
+        $this->di->setShared('session', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $adapter = '\Phalcon\Session\Adapter\\' . $config->get('session')->adapter;
 
             /** @var \Phalcon\Session\AdapterInterface $session */
@@ -287,40 +285,45 @@ class Bootstrap
      * Initialize the View.
      *
      * Setting up the view component.
-     *
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return Loader
      */
-    protected function initView(DiInterface $di, Config $config, EventsManager $em)
+    protected function initView()
     {
-        $di->set('view', function () use ($di, $config, $em) {
+        $this->di->set('view', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+            $em     = $this->getShared('eventsManager');
+
             $view  = new View;
             $view->registerEngines([
                 // Setting up Volt Engine
-                '.volt'  => function ($view, $di) use ($config) {
-                    $volt   = new VoltEngine($view, $di);
-                    $voltConfig = $config->get('volt')->toArray();
+                // See https://docs.phalconphp.com/en/latest/reference/volt.html#setting-up-the-volt-engine
+                '.volt' => function ($view, $di) {
+                    /** @var DiInterface $this */
+                    $config = $this->getShared('config');
+                    $volt = new VoltEngine($view, $di);
 
                     $options = [
-                        'compiledPath'      => $voltConfig['cacheDir'],
-                        'compiledExtension' => $voltConfig['compiledExt'],
-                        'compiledSeparator' => $voltConfig['separator'],
-                        'compileAlways'     => ENV_DEVELOPMENT === APPLICATION_ENV && $voltConfig['forceCompile'],
+                        'compiledPath' => function ($templatePath) {
+                            /** @var DiInterface $this */
+                            $config = $this->getShared('config')->get('volt')->toArray();
+
+                            $filename = str_replace(
+                                ['\\', '/'],
+                                $config['separator'],
+                                trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
+                            );
+                            $filename = basename($filename, '.volt') . $config['compiledExt'];
+
+                            return rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR . $filename;
+                        },
+                        'compileAlways' => boolval($config->get('volt')->forceCompile),
                     ];
 
                     $volt->setOptions($options);
 
-                    $compiler = $volt->getCompiler();
-
-                    $compiler->addFunction('number_format', function ($resolvedArgs) {
+                    $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
                         return 'number_format(' . $resolvedArgs . ')';
-                    });
-
-                    $compiler->addFunction('chr', function ($resolvedArgs) {
+                    })->addFunction('chr', function ($resolvedArgs) {
                         return 'chr(' . $resolvedArgs . ')';
                     });
 
@@ -332,14 +335,15 @@ class Bootstrap
 
             $view->setViewsDir($config->get('application')->viewsDir);
 
-            $em->attach('view', function ($event, $view) use ($di, $config) {
+            $that = $this;
+            $em->attach('view', function ($event, $view) use ($that, $config) {
                 /**
                  * @var LoggerInterface $logger
                  * @var View $view
                  * @var Event $event
-                 * @var DiInterface $di
+                 * @var DiInterface $that
                  */
-                $logger = $di->get('logger');
+                $logger = $that->get('logger');
                 $logger->debug(sprintf('Event %s. Path: %s', $event->getType(), $view->getActiveRenderPath()));
 
                 if ('notFoundView' == $event->getType()) {
@@ -359,17 +363,15 @@ class Bootstrap
      * Initialize the Database connection.
      *
      * Database connection is created based in the parameters defined in the configuration file.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initDatabase(DiInterface $di, Config $config, EventsManager $em)
+    protected function initDatabase()
     {
-        $di->setShared('db', function () use ($config, $em, $di) {
-            $config  = $config->get('database')->toArray();
+        $this->di->setShared('db', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config')->get('database')->toArray();
+            $em     = $this->getShared('eventsManager');
+            $that   = $this;
+
             $adapter = '\Phalcon\Db\Adapter\Pdo\\' . $config['adapter'];
             unset($config['adapter']);
 
@@ -379,11 +381,11 @@ class Bootstrap
             // Listen all the database events
             $em->attach(
                 'db',
-                function ($event, $connection) use ($di) {
+                function ($event, $connection) use ($that) {
                     /**
                      * @var \Phalcon\Events\Event $event
                      * @var \Phalcon\Db\AdapterInterface $connection
-                     * @var \Phalcon\DiInterface $di
+                     * @var DiInterface $that
                      */
                     if ($event->getType() == 'beforeQuery') {
                         $variables = $connection->getSQLVariables();
@@ -394,7 +396,7 @@ class Bootstrap
                         }
 
                         // To disable logging change logLevel in config
-                        $di->get('logger', ['db.log'])->debug($string);
+                        $that->get('logger', ['db'])->debug($string);
                     }
                 }
             );
@@ -405,14 +407,20 @@ class Bootstrap
             return $connection;
         });
 
-        $di->setShared('modelsManager', function () use ($em) {
+        $this->di->setShared('modelsManager', function () {
+            /** @var DiInterface $this */
+            $em = $this->getShared('eventsManager');
+
             $modelsManager = new ModelsManager;
             $modelsManager->setEventsManager($em);
 
             return $modelsManager;
         });
 
-        $di->setShared('modelsMetadata', function () use ($config, $em) {
+        $this->di->setShared('modelsMetadata', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $config = $config->get('metadata')->toArray();
             $adapter = '\Phalcon\Mvc\Model\Metadata\\' . $config['adapter'];
             unset($config['adapter']);
@@ -427,53 +435,41 @@ class Bootstrap
      * Initialize the Queue Service.
      *
      * Queue to deliver e-mails in real-time and other tasks.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initQueue(DiInterface $di, Config $config, EventsManager $em)
+    protected function initQueue()
     {
-        $di->setShared('queue', function () use ($config) {
-            $config = $config->get('beanstalk');
-            $config->get('disabled', true);
+        $this->di->setShared(
+            'queue',
+            function () {
+                $config = $this->getShared('config');
 
-            if ($config->get('disabled', true)) {
-                return new DummyServer();
-            }
+                $config = $config->get('beanstalk');
+                $config->get('disabled', true);
 
-            if (!$host = $config->get('host', false)) {
-                $error = 'Beanstalk is not configured';
-
-                if (class_exists('\Phalcon\Queue\Beanstalk\Exception')) {
-                    $exception = '\Phalcon\Queue\Beanstalk\Exception';
-                } else {
-                    $exception = '\Phalcon\Exception';
+                if ($config->get('disabled', true)) {
+                    return new DummyServer();
                 }
 
-                throw new $exception($error);
+                if (!$host = $config->get('host', false)) {
+                    throw new BeanstalkException('Beanstalk is not configured');
+                }
+
+                return new Beanstalk(['host' => $host]);
             }
-
-            return new Beanstalk(['host' => $host]);
-
-        });
+        );
     }
 
     /**
      * Initialize the Router.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initRouter(DiInterface $di, Config $config, EventsManager $em)
+    protected function initRouter()
     {
-        $di->setShared('router', function () use ($config, $em) {
-            /** @var \Phalcon\Mvc\Router $router */
+        $this->di->setShared('router', function () {
+            /**
+             * @var DiInterface $this
+             * @var \Phalcon\Mvc\Router $router
+             */
+            $em     = $this->getShared('eventsManager');
             $router = include BASE_DIR . 'app/config/routes.php';
 
             if (!isset($_GET['_url'])) {
@@ -494,16 +490,13 @@ class Bootstrap
      * Initialize the Url service.
      *
      * The URL component is used to generate all kind of urls in the application.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initUrl(DiInterface $di, Config $config, EventsManager $em)
+    protected function initUrl()
     {
-        $di->setShared('url', function () use ($config) {
+        $this->di->setShared('url', function () {
+            /** @var DiInterface $this */
+            $config = $this->getShared('config');
+
             $url = new UrlResolver;
 
             if (ENV_PRODUCTION === APPLICATION_ENV) {
@@ -520,16 +513,13 @@ class Bootstrap
 
     /**
      * Initialize the Dispatcher.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initDispatcher(DiInterface $di, Config $config, EventsManager $em)
+    protected function initDispatcher()
     {
-        $di->setShared('dispatcher', function () use ($em) {
+        $this->di->setShared('dispatcher', function () {
+            /** @var DiInterface $this */
+            $em = $this->getShared('eventsManager');
+
             $dispatcher = new Dispatcher;
 
             $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
@@ -541,30 +531,18 @@ class Bootstrap
 
     /**
      * Initialize the Slug component.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initSlug(DiInterface $di, Config $config, EventsManager $em)
+    protected function initSlug()
     {
-        $di->setShared('slug', ['className' => '\Phosphorum\Utils\Slug']);
+        $this->di->setShared('slug', ['className' => Slug::class]);
     }
 
     /**
      * Initialize the Markdown renderer.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initMarkdown(DiInterface $di, Config $config, EventsManager $em)
+    protected function initMarkdown()
     {
-        $di->setShared('markdown', function () {
+        $this->di->setShared('markdown', function () {
             $ciconia = new Ciconia;
 
             $ciconia->addExtension(new Markdown\UnderscoredUrlsExtension);
@@ -572,6 +550,7 @@ class Bootstrap
             $ciconia->addExtension(new Markdown\MentionExtension);
             $ciconia->addExtension(new Markdown\BlockQuoteExtension);
             $ciconia->addExtension(new Markdown\UrlAutoLinkExtension);
+            //$ciconia->addExtension(new Markdown\NewLineExtension);
             $ciconia->addExtension(new FencedCodeBlockExtension);
 
             return $ciconia;
@@ -580,32 +559,23 @@ class Bootstrap
 
     /**
      * Initialize the real-time notifications checker.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initNotifications(DiInterface $di, Config $config, EventsManager $em)
+    protected function initNotifications()
     {
-        $di->setShared('notifications', function () {
+        $this->di->setShared('notifications', function () {
             return new NotificationsChecker();
         });
     }
 
     /**
      * Initialize the Breadcrumbs component.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initBreadcrumbs(DiInterface $di, Config $config, EventsManager $em)
+    protected function initBreadcrumbs()
     {
-        $di->setShared('breadcrumbs', function () use ($em) {
+        $this->di->setShared('breadcrumbs', function () {
+            /** @var DiInterface $this */
+            $em = $this->getShared('eventsManager');
+
             $breadcrumbs = new Breadcrumbs;
             $breadcrumbs->setEventsManager($em);
             $breadcrumbs->setSeparator('');
@@ -618,16 +588,10 @@ class Bootstrap
      * Initialize the Flash Service.
      *
      * Register the Flash Service with the Twitter Bootstrap classes
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initFlash(DiInterface $di, Config $config, EventsManager $em)
+    protected function initFlash()
     {
-        $di->setShared('flash', function () {
+        $this->di->setShared('flash', function () {
             return new Flash(
                 [
                     'error'   => 'alert alert-danger fade in',
@@ -638,33 +602,27 @@ class Bootstrap
             );
         });
 
-        $di->setShared(
-            'flashSession',
-            function () {
-                return new FlashSession([
-                    'error'   => 'alert alert-danger fade in',
-                    'success' => 'alert alert-success fade in',
-                    'notice'  => 'alert alert-info fade in',
-                    'warning' => 'alert alert-warning fade in',
-                ]);
-            }
-        );
+        $this->di->setShared('flashSession', function () {
+            return new FlashSession([
+                'error'   => 'alert alert-danger fade in',
+                'success' => 'alert alert-success fade in',
+                'notice'  => 'alert alert-info fade in',
+                'warning' => 'alert alert-warning fade in',
+            ]);
+        });
     }
 
     /**
      * Initialize the Elasticsearch Service.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initElastic(DiInterface $di, Config $config, EventsManager $em)
+    protected function initElastic()
     {
-        $di->setShared('elastic', function () use ($config) {
-            /** @var Config $config */
-            $config = $config->get('elasticsearch', new Config);
+        $this->di->setShared('elastic', function () {
+            /**
+             * @var DiInterface $this
+             * @var Config $config
+             */
+            $config = $this->getShared('config')->get('elasticsearch', new Config);
             $hosts  = $config->get('hosts', new Config)->toArray();
 
             if (empty($hosts)) {
@@ -678,88 +636,76 @@ class Bootstrap
 
     /**
      * Initialize the Gravatar Service.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initGravatar(DiInterface $di, Config $config, EventsManager $em)
+    protected function initGravatar()
     {
-        $di->setShared('gravatar', function () use ($config) {
+        $this->di->setShared('gravatar', function () {
+            /** @var  DiInterface $this $config */
+            $config = $this->getShared('config');
+
             return new Gravatar($config->get('gravatar', new Config));
         });
     }
 
     /**
      * Initialize time zones.
-     *
-     * @param DiInterface   $di     Dependency Injector
-     * @param Config        $config App config
-     * @param EventsManager $em     Events Manager
-     *
-     * @return void
      */
-    protected function initTimezones(DiInterface $di, Config $config, EventsManager $em)
+    protected function initTimezones()
     {
-        $di->setShared('timezones', function () use ($config) {
+        $this->di->setShared('timezones', function () {
             return require_once BASE_DIR . 'app/config/timezones.php';
         });
     }
 
     /**
-     * Prepare and return the Config.
-     *
-     * @param  string $path Config path [Optional]
-     * @return Config
-     *
-     * @throws \RuntimeException
+     * Initialize the Application Config.
      */
-    protected function initConfig($path = null)
+    protected function initConfig()
     {
-        $path = $path ?: BASE_DIR . 'app/config/';
+        $this->di->setShared('config', function () {
+            $path = BASE_DIR . 'app/config/';
 
-        if (!is_readable($path . 'config.php')) {
-            throw new RuntimeException(
-                'Unable to read config from ' . $path . 'config.php'
-            );
-        }
-
-        $config = include $path . 'config.php';
-
-        if (is_array($config)) {
-            $config = new Config($config);
-        }
-
-        if (!$config instanceof Config) {
-            $type = gettype($config);
-            if ($type == 'boolean') {
-                $type .= ($type ? ' (true)' : ' (false)');
-            } elseif (is_object($type)) {
-                $type = get_class($type);
+            if (!is_readable($path . 'config.php')) {
+                throw new RuntimeException(
+                    'Unable to read config from ' . $path . 'config.php'
+                );
             }
 
-            throw new RuntimeException(
-                sprintf(
-                    'Unable to read config file. Config must be either an array or Phalcon\Config instance. Got %s',
-                    $type
-                )
-            );
-        }
+            $config = include $path . 'config.php';
 
-        if (is_readable($path . APPLICATION_ENV . '.php')) {
-            $override = include_once $path . APPLICATION_ENV . '.php';
-
-            if (is_array($override)) {
-                $override = new Config($override);
+            if (is_array($config)) {
+                $config = new Config($config);
             }
 
-            if ($override instanceof Config) {
-                $config->merge($override);
-            }
-        }
+            if (!$config instanceof Config) {
+                $type = gettype($config);
+                if ($type == 'boolean') {
+                    $type .= ($type ? ' (true)' : ' (false)');
+                } elseif (is_object($type)) {
+                    $type = get_class($type);
+                }
 
-        return $config;
+                throw new RuntimeException(
+                    sprintf(
+                        'Unable to read config file. Config must be either an array or Phalcon\Config instance. Got %s',
+                        $type
+                    )
+                );
+            }
+
+            if (is_readable($path . APPLICATION_ENV . '.php')) {
+                $override = include_once $path . APPLICATION_ENV . '.php';
+
+                if (is_array($override)) {
+                    $override = new Config($override);
+                }
+
+                if ($override instanceof Config) {
+                    $config->merge($override);
+                }
+            }
+
+            return $config;
+        });
     }
 }

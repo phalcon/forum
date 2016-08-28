@@ -17,26 +17,26 @@
 
 namespace Phosphorum\Controllers;
 
+use Phalcon\Mvc\View;
+use Phalcon\Http\Response;
+use Phosphorum\Models\Karma;
 use Phosphorum\Models\Posts;
+use Phosphorum\Models\Users;
+use Phosphorum\Models\IrcLog;
+use Phosphorum\Search\Indexer;
 use Phosphorum\Models\PostsViews;
-use Phosphorum\Models\PostsReplies;
-use Phosphorum\Models\PostsBounties;
-use Phosphorum\Models\PostsHistory;
 use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsSubscribers;
-use Phosphorum\Models\PostsPollOptions;
-use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\Categories;
 use Phosphorum\Models\Activities;
-use Phosphorum\Models\ActivityNotifications;
-use Phosphorum\Models\IrcLog;
-use Phosphorum\Models\Users;
-use Phosphorum\Models\Karma;
+use Phosphorum\Models\PostsReplies;
+use Phalcon\Http\ResponseInterface;
+use Phosphorum\Models\PostsBounties;
 use Phosphorum\Models\TopicTracking;
-use Phosphorum\Search\Indexer;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\View;
+use Phosphorum\Models\PostsPollVotes;
+use Phosphorum\Models\PostsPollOptions;
+use Phosphorum\Models\PostsSubscribers;
 use Phosphorum\Mvc\Controllers\TokenTrait;
+use Phosphorum\Models\ActivityNotifications;
 
 /**
  * Class DiscussionsController
@@ -144,7 +144,7 @@ class DiscussionsController extends ControllerBase
         $this->gravatar->setSize(48);
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('create-post')) {
                 $this->response->redirect();
                 return;
             }
@@ -187,6 +187,94 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
+     * Stick post.
+     *
+     * @param int $id Post ID
+     * @return ResponseInterface
+     */
+    public function stickAction($id)
+    {
+        if (!$this->checkTokenGet('post-' . $id)) {
+            return $this->response->redirect();
+        }
+
+        if (!$usersId = $this->session->get('identity')) {
+            $this->flashSession->error('You must be logged first');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        $parameters = [
+            "id = ?0 AND sticked = ?1 AND 'Y' = ?2",
+            'bind' => [$id, Posts::IS_UNSTICKED, $this->session->get('identity-moderator')]
+        ];
+
+        if (!$post = Posts::findFirst($parameters)) {
+            $this->flashSession->error('The discussion does not exist');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        if (Posts::IS_DELETED == $post->deleted) {
+            $this->flashSession->error("The post is deleted");
+            return $this->response->redirect();
+        }
+
+        $post->sticked = Posts::IS_STICKED;
+        if ($post->save()) {
+            $this->flashSession->success('Discussion was successfully sticked');
+            return $this->response->redirect();
+        }
+
+        $this->flashSession->error(join('<br>', $post->getMessages()));
+        return $this->response->redirect();
+    }
+
+    /**
+     * Unstick post.
+     *
+     * @param int $id Post ID
+     * @return ResponseInterface
+     */
+    public function unstickAction($id)
+    {
+        if (!$this->checkTokenGet('post-' . $id)) {
+            return $this->response->redirect();
+        }
+
+        if (!$usersId = $this->session->get('identity')) {
+            $this->flashSession->error('You must be logged first');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        $parameters = [
+            "id = ?0 AND sticked = ?1 AND 'Y' = ?2",
+            'bind' => [$id, Posts::IS_STICKED, $this->session->get('identity-moderator')]
+        ];
+
+        if (!$post = Posts::findFirst($parameters)) {
+            $this->flashSession->error('The discussion does not exist');
+            $this->response->redirect();
+            return $this->response->redirect();
+        }
+
+        if (Posts::IS_DELETED == $post->deleted) {
+            $this->flashSession->error("The post is deleted");
+            return $this->response->redirect();
+        }
+
+        $post->sticked = Posts::IS_UNSTICKED;
+        if ($post->save()) {
+            $this->flashSession->success('Discussion was successfully unsticked');
+            return $this->response->redirect();
+        }
+
+        $this->flashSession->error(join('<br>', $post->getMessages()));
+        return $this->response->redirect();
+    }
+
+    /**
      * This shows the create post form and also store the related post
      *
      * @param int $id Post ID
@@ -211,7 +299,7 @@ class DiscussionsController extends ControllerBase
         }
 
         if ($this->request->isPost()) {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('edit-post-'.$id)) {
                 $this->response->redirect();
                 return;
             }
@@ -282,11 +370,11 @@ class DiscussionsController extends ControllerBase
      * Deletes the Post
      *
      * @param int $id
-     * @return Response|\Phalcon\Http\ResponseInterface
+     * @return ResponseInterface
      */
     public function deleteAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -306,7 +394,7 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        if ($post->deleted == 'Y') {
+        if (Posts::IS_DELETED == $post->deleted) {
             $this->flashSession->error("The post is already deleted");
             return $this->response->redirect();
         }
@@ -316,7 +404,7 @@ class DiscussionsController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $post->deleted = 1;
+        $post->deleted = Posts::IS_DELETED;
         if ($post->save()) {
             $usersId = $this->session->get('identity');
             if ($post->users_id != $usersId) {
@@ -345,11 +433,11 @@ class DiscussionsController extends ControllerBase
      * Subscribe to a post to receive e-mail notifications
      *
      * @param string $id
-     * @return Response
+     * @return ResponseInterface
      */
     public function subscribeAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -386,11 +474,11 @@ class DiscussionsController extends ControllerBase
      * Unsubscribe from a post of receiving e-mail notifications
      *
      * @param string $id
-     * @return Response
+     * @return ResponseInterface
      */
     public function unsubscribeAction($id)
     {
-        if (!$this->checkTokenGet()) {
+        if (!$this->checkTokenGet('post-' . $id)) {
             return $this->response->redirect();
         }
 
@@ -455,6 +543,9 @@ class DiscussionsController extends ControllerBase
                 return;
             }
 
+            $difference = $post->getDifference();
+            $this->view->setVar('is_edited', !empty(trim($difference)));
+
             $ipAddress = $this->request->getClientAddress();
 
             $parameters = [
@@ -499,7 +590,7 @@ class DiscussionsController extends ControllerBase
                 'author'    => $post->user
             ]);
         } else {
-            if (!$this->checkTokenPost()) {
+            if (!$this->checkTokenPost('post-' . $id)) {
                 $this->response->redirect();
                 return;
             }
@@ -594,66 +685,39 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Shows the latest modification made to a post
+     *
+     * @param int $id The Post id.
      */
     public function historyAction($id = 0)
     {
-        $this->view->disable();
+        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 
         /**
          * Find the post using get
          */
         $post = Posts::findFirstById($id);
         if (!$post) {
-            $this->flashSession->error('The discussion does not exist');
-            return $this->response->redirect();
+            $this->view->setVar('difference', 'The discussion does not exist or it has been deleted.');
+            return;
         }
 
-        $a = explode("\n", $post->content);
-
-        $first         = true;
-        $parameters    = ['posts_id = ?0', 'bind' => [$post->id], 'order' => 'created_at DESC'];
-
-        /** @var PostsHistory[] $postHistories */
-        $postHistories = PostsHistory::find($parameters);
-
-        if (count($postHistories) > 1) {
-            foreach ($postHistories as $postHistory) {
-                if ($first) {
-                    $first = false;
-                    continue;
-                }
-                break;
-            }
-        } else {
-            $postHistory = $postHistories->getFirst();
-        }
-
-        if (is_object($postHistory)) {
-            $b = explode("\n", $postHistory->content);
-
-            $diff     = new \Diff($b, $a, []);
-            $renderer = new \Diff_Renderer_Html_SideBySide();
-
-            echo $diff->Render($renderer);
-        } else {
-            $this->flash->notice('No history available to show');
-        }
+        $this->view->setVar('difference', $post->getDifference() ?: 'No history available to show');
     }
 
     /**
      * Votes a post up
      *
-     * @param int $id Post ID
-     * @return Response
+     * @param int $id The post ID.
+     * @return ResponseInterface
      */
     public function voteUpAction($id = 0)
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
+        if (!$this->checkTokenGetJson('post-' . $id)) {
             $csrfTokenError = [
                 'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
+                'message' => 'This post is outdated. Please try to vote for the post again.'
             ];
             return $response->setJsonContent($csrfTokenError);
         }
@@ -703,7 +767,7 @@ class DiscussionsController extends ControllerBase
             foreach ($postVote->getMessages() as $message) {
                 $contentError = [
                     'status'  => 'error',
-                    'message' => $message->getMessage()
+                    'message' => (string) $message->getMessage()
                 ];
                 return $response->setJsonContent($contentError);
             }
@@ -721,7 +785,7 @@ class DiscussionsController extends ControllerBase
                 foreach ($user->getMessages() as $message) {
                     $contentErrorSave = [
                         'status'  => 'error',
-                        'message' => $message->getMessage()
+                        'message' => (string) $message->getMessage()
                     ];
                     return $response->setJsonContent($contentErrorSave);
                 }
@@ -747,15 +811,18 @@ class DiscussionsController extends ControllerBase
 
     /**
      * Votes a post down
+     *
+     * @param int $id The post ID.
+     * @return ResponseInterface
      */
     public function voteDownAction($id = 0)
     {
         $response = new Response();
 
-        if (!$this->checkTokenGetJson()) {
+        if (!$this->checkTokenGetJson('post-' . $id)) {
             $csrfTokenError = [
                 'status'  => 'error',
-                'message' => 'Token error. This might be CSRF attack.'
+                'message' => 'This post is outdated. Please try to vote for the post again.'
             ];
             return $response->setJsonContent($csrfTokenError);
         }
@@ -774,11 +841,11 @@ class DiscussionsController extends ControllerBase
 
         $user = Users::findFirstById($this->session->get('identity'));
         if (!$user) {
-            $contentlogIn = [
+            $responseContent = [
                 'status'  => 'error',
                 'message' => 'You must log in first to vote'
             ];
-            return $response->setJsonContent($contentlogIn);
+            return $response->setJsonContent($responseContent);
         }
 
         if ($user->votes <= 0) {
@@ -935,7 +1002,7 @@ class DiscussionsController extends ControllerBase
     /**
      * Finds related posts
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function findRelatedAction()
     {
