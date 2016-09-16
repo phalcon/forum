@@ -2,10 +2,11 @@
 
 namespace Phosphorum\Controllers;
 
+use ReCaptcha\ReCaptcha;
 use Phalcon\Mvc\Controller;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Class ControllerBase
@@ -120,7 +121,7 @@ class ControllerBase extends Controller
     protected function checkCaptcha()
     {
         $secret = $this->config->reCaptcha->secret;
-        $recaptchaResponse = $_POST['g-recaptcha-response'];
+        $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
 
         if ($this->isUserTrust()) {
             return true;
@@ -129,8 +130,8 @@ class ControllerBase extends Controller
             return false;
         }
 
-        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
-        $resp = $recaptcha->verify($recaptchaResponse, $_SERVER['REMOTE_ADDR']);
+        $recaptcha = new ReCaptcha($secret);
+        $resp = $recaptcha->verify($recaptchaResponse, $this->request->getClientAddress());
 
         if (!$resp->isSuccess()) {
             return false;
