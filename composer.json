@@ -37,7 +37,8 @@
         "elasticsearch/elasticsearch": "~1.0",
         "phalcon/incubator": "~3.0.0",
         "phalcongelist/breadcrumbs": "dev-master@dev",
-        "league/flysystem-dropbox" : "^1.0"
+        "league/flysystem-dropbox" : "^1.0",
+        "google/recaptcha": "~1.1"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0.4",

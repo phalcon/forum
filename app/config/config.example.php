@@ -175,4 +175,8 @@ return new Config([
         'controller' => 'error',
         'action'     => 'index',
     ],
+    'reCaptcha' => [
+        'siteKey' => 'xxx-xxx-xxx-xxx-xxx-xxx',
+        'secret' => 'xxx-xxx-xxx-xxx-xxx-xxx'
+    ]
 ]);

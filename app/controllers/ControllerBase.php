@@ -2,10 +2,11 @@
 
 namespace Phosphorum\Controllers;
 
+use ReCaptcha\ReCaptcha;
 use Phalcon\Mvc\Controller;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Class ControllerBase
@@ -111,5 +112,44 @@ class ControllerBase extends Controller
             ->columns('COUNT(*) AS count');
 
         return [$itemBuilder, $totalBuilder];
+    }
+    /**
+     * Validation Google captcha
+     *
+     * @return boolean
+     */
+    protected function checkCaptcha()
+    {
+        $secret = $this->config->reCaptcha->secret;
+        $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
+
+        if ($this->isUserTrust()) {
+            return true;
+        }
+        if (!isset($recaptchaResponse) || !isset($secret)) {
+            return false;
+        }
+
+        $recaptcha = new ReCaptcha($secret);
+        $resp = $recaptcha->verify($recaptchaResponse, $this->request->getClientAddress());
+
+        if (!$resp->isSuccess()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isUserTrust()
+    {
+        $karma = $this->session->get('identity-karma');
+
+        if (isset($karma) && $karma > 300) {
+            return true;
+        }
+        return false;
     }
 }

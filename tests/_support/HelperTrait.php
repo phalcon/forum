@@ -30,6 +30,7 @@ trait HelperTrait
             'login'    => $login,
             'email'    => $this->faker->email,
             'timezone' => $this->faker->timezone,
+            'karma'    => 400
         ];
 
         $attributes = array_merge($default, $attributes);
@@ -37,6 +38,7 @@ trait HelperTrait
         $id = $I->haveRecord(Users::class, $attributes);
         $I->haveInSession('identity', $id);
         $I->haveInSession('identity-name', $attributes['name']);
+        $I->haveInSession('identity-karma', $attributes['karma']);
 
         return $id;
     }
