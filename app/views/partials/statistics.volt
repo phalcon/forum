@@ -6,7 +6,7 @@
                 <div class="panel-heading">Statistics</div>
                 <div class="panel-body">
                     Our users have posted a total of <strong>{{ threads }}</strong> Posts<br>
-                    We <strong>{{users}}</strong> registered users<br>
+                    We have <strong>{{users}}</strong> registered users<br>
                     {%- if users_latest is defined and users_latest is not empty  -%}
                         The newest member is <strong>{{ users_latest }}</strong>
                     {% endif %}
