@@ -71,21 +71,6 @@ services:
             # production | development | staging | testing
             APPLICATION_ENV: development
 
-    ssh:
-        image: jeroenpeeters/docker-ssh
-        restart: always
-        container_name: forum_ssh
-        depends_on:
-            - php
-        ports:
-            - "2222:22"
-            - "8022:8022"
-        environment:
-            CONTAINER: forum_php
-            AUTH_MECHANISM: noAuth
-        volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock"
-
 volumes:
     forum_mysql:
         driver: local
