@@ -55,10 +55,10 @@ install:
   - sleep 5
 
 script:
-  - composer cs-test
-  - composer unit-test
-  - composer functional-test
-  - echo "APP_ENV=development" > ./.env && ./bin/codecept run acceptance
+  - ./bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
+  - ./bin/codecept run unit
+  - ./bin/codecept run -vvv functional
+  - ./bin/codecept run acceptance
 
 notifications:
   email:
