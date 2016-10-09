@@ -26,6 +26,7 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
+use Phosphorum\ReCaptcha;
 use Phalcon\Events\Event;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
@@ -83,6 +84,7 @@ class Bootstrap
         'gravatar',
         'timezones',
         'breadcrumbs',
+        'recaptcha',
     ];
 
     /**
@@ -309,7 +311,13 @@ class Bootstrap
                                 $config['separator'],
                                 trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
                             );
+
                             $filename = basename($filename, '.volt') . $config['compiledExt'];
+                            $cacheDir = rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR;
+
+                            if (!is_dir($cacheDir)) {
+                                @mkdir($cacheDir, 0755, true);
+                            }
 
                             return rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR . $filename;
                         },
@@ -652,6 +660,16 @@ class Bootstrap
         $this->di->setShared('timezones', function () {
             return require_once BASE_DIR . 'app/config/timezones.php';
         });
+    }
+
+    protected function initRecaptcha()
+    {
+        $this->di->setShared(
+            'recaptcha',
+            function () {
+                return new ReCaptcha;
+            }
+        );
     }
 
     /**
