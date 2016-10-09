@@ -18,7 +18,18 @@
 use Phalcon\Config;
 
 return new Config([
+    'site' => [
+        'url' => 'http://localhost:8000/',
+    ],
     'application' => [
+        'development'    => [
+            'staticBaseUri' => 'http://localhost:8000/',
+            'baseUri'       => 'http://localhost:8000/'
+        ],
+        'production' => [
+            'staticBaseUri' => 'http://localhost:8000/',
+            'baseUri'       => 'http://localhost:8000/'
+        ],
         'debug' => true,
     ],
     'volt' => [
