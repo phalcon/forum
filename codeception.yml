@@ -19,11 +19,7 @@ settings:
     # We set a high limit for them by default.
     memory_limit: 1024M
     log: true
-coverage:
-    enabled: true
-    whitelist:
-      include:
-        - app/*
+
 extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension

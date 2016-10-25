@@ -75,7 +75,7 @@ return new Config([
             'staticBaseUri' => 'http://static.phosphorum.com/',
             'baseUri'       => '/'
         ],
-        'debug' => true
+        'debug' => false
     ],
 
     'volt' => [

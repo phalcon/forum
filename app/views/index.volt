@@ -51,6 +51,10 @@
 		{{- stylesheet_link("css/fonts.css?v=" ~ app_version, true) -}}
 		{{- stylesheet_link("css/diff.css?v=" ~ app_version, true) -}}
 		{{- stylesheet_link("css/style.css?v=" ~ app_version, true) -}}
+		{#- reCaptcha -#}
+		{%- if recaptcha.isEnabled() -%}
+			{{- recaptcha.getJs() -}}
+		{%- endif -%}
 	</head>
 	<body class="with-top-navbar">
 		{{ content() }}
