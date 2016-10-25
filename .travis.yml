@@ -32,7 +32,7 @@ env:
     - PHALCON_VERSION="v3.0.0"
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
@@ -63,10 +63,7 @@ script:
 notifications:
   email:
     recipients:
-      - andres@phalconphp.com
-      - eduar@phalconphp.com
-      - nikos@phalconphp.com
-      - serghei@phalconphp.com
+      - build@phalconphp.com
     on_success: change
     on_failure: always
 
