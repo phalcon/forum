@@ -5,7 +5,7 @@ use Dotenv\Dotenv;
 define('BASE_DIR', realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR);
 
 // Include Composer autoloader
-include BASE_DIR . 'vendor/autoload.php';
+require BASE_DIR . 'vendor/autoload.php';
 
 // Load environment variables
 $dotenv = new Dotenv(realpath(BASE_DIR));
