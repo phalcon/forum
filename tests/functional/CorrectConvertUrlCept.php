@@ -21,7 +21,6 @@ $postId = $I->havePost([
 
 $I->amOnPage('/discussions');
 $I->seeInTitle('Discussions - ');
-$I->seeLink('Is there a precompiled binary for 64 bit Centos out there');
-$I->click('Is there a precompiled binary for 64 bit Centos out there');
-$I->seeInCurrentUrl(sprintf('/discussion/%s/is-there-a-precompiled-binary-for-64-bit-centos-out-there', $postId));
+$I->seeLink('Is there a precompiled binary for 64 bit Centos out there', sprintf('/discussion/%s/is-there-a-precompiled-binary-for-64-bit-centos-out-there', $postId));
+$I->amOnPage(sprintf('/discussion/%s/is-there-a-precompiled-binary-for-64-bit-centos-out-there', $postId));
 $I->seeLink('this reddit topic', 'http://www.reddit.com/r/PHP/comments/2s7bbr/phalconphp%5vs%5php%5disappointing%5results/');

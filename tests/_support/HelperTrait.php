@@ -20,8 +20,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function amRegularUser(array $attributes = [])
+    public function amRegularUser($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $name    = $this->faker->name;
         $login   = $this->faker->userName;
@@ -49,8 +51,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function amAdmin(array $attributes = [])
+    public function amAdmin($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $default = [
             'name'     => 'Phalcon',
@@ -70,8 +74,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function haveCategory(array $attributes = [])
+    public function haveCategory($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $name    = $this->faker->company;
         $default = [
@@ -97,8 +103,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function havePost(array $attributes = [])
+    public function havePost($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $title   = $this->faker->title;
         $default = [
@@ -123,8 +131,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function havePostHistory(array $attributes = [])
+    public function havePostHistory($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $default = [
             'posts_id' => $this->faker->numberBetween(),
@@ -141,8 +151,10 @@ trait HelperTrait
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function haveReply(array $attributes = [])
+    public function haveReply($attributes = null)
     {
+        $attributes = $attributes ?: [];
+
         $I       = $this;
         $default = [
             'posts_id' => $this->faker->numberBetween(),
@@ -151,27 +163,5 @@ trait HelperTrait
         ];
 
         return $I->haveRecord(PostsReplies::class, array_merge($default, $attributes));
-    }
-
-    /**
-     * Parse XML with Sitemap schema and return its URLs
-     *
-     * @param string $string Response content
-     * @return array
-     */
-    public function parseSitemap($string)
-    {
-        $urls = [];
-        $xml  = new SimpleXMLElement($string);
-
-        foreach ($xml->url as $node) {
-            /** @var SimpleXMLElement $node */
-            if ($node instanceof SimpleXMLElement) {
-                $urls[] = (string) $node->loc;
-            }
-
-        }
-
-        return $urls;
     }
 }

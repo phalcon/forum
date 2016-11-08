@@ -33,9 +33,10 @@ class GenerateBackup extends Injectable
 }
 
 try {
-    $task = new GenerateBackup;
+    $task = new GenerateBackup();
     $task->run();
 } catch (Exception $e) {
-    echo $e->getMessage(), PHP_EOL;
-    echo $e->getTraceAsString();
+    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
+    fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
+    exit(1);
 }

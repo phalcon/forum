@@ -15,43 +15,39 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Controllers;
-
-use DateTime;
-use DOMDocument;
-use DateTimeZone;
-use Phalcon\Http\Response;
-use Phosphorum\Models\Posts;
-
 /**
- * Class SitemapController
- *
- * @package Phosphorum\Controllers
+ * This script generates backup and uploads it to Dropbox
  */
-class SitemapController extends ControllerBase
-{
-    public function initialize()
-    {
-        $this->view->disable();
-    }
+require 'cli-bootstrap.php';
 
-    /**
-     * Generate the website sitemap
-     */
-    public function indexAction()
+use Phalcon\Di;
+use Phalcon\Config;
+use Phalcon\DI\Injectable;
+use Phosphorum\Models\Posts;
+use League\Flysystem\Filesystem;
+use Phalcon\Logger\Adapter\Stream;
+use League\Flysystem\Adapter\Local;
+
+class GenerateSitemap extends Injectable
+{
+    public function run()
     {
-        $response = new Response();
+        $log = new Stream('php://stdout');
+
+        /** @var Config $config */
+        $config = Di::getDefault()->getShared('config');
 
         $expireDate = new DateTime('now', new DateTimeZone('UTC'));
         $expireDate->modify('+1 day');
 
         $sitemap = new DOMDocument("1.0", "UTF-8");
+        $sitemap->formatOutput = true;
 
         $urlset = $sitemap->createElement('urlset');
         $urlset->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $urlset->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        $baseUrl = $this->config->get('site')->url;
+        $baseUrl = $config->get('site')->url;
 
         $url = $sitemap->createElement('url');
         $url->appendChild($sitemap->createElement('loc', $baseUrl));
@@ -60,8 +56,8 @@ class SitemapController extends ControllerBase
         $urlset->appendChild($url);
 
         $karmaSql = 'number_views + ' .
-            '((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + ' .
-            'number_replies';
+                    '((IF(votes_up IS NOT NULL, votes_up, 0) - IF(votes_down IS NOT NULL, votes_down, 0)) * 4) + ' .
+                    'number_replies';
 
         $parametersPosts = [
             'conditions' => 'deleted != 1',
@@ -99,11 +95,28 @@ class SitemapController extends ControllerBase
 
         $sitemap->appendChild($urlset);
 
-        $response
-            ->setExpires($expireDate)
-            ->setContent($sitemap->saveXML())
-            ->setContentType('application/xml');
+        $adapter = new Local(dirname(dirname(__FILE__)) . '/public');
+        $filesystem = new Filesystem($adapter);
 
-        return $response;
+        if ($filesystem->has('sitemap.xml')) {
+            $result = $filesystem->update('sitemap.xml', $sitemap->saveXML() . PHP_EOL);
+        } else {
+            $result = $filesystem->write('sitemap.xml', $sitemap->saveXML() . PHP_EOL);
+        }
+
+        if ($result) {
+            $log->info('The sitemap.xml was successfully updated');
+        } else {
+            $log->error('Failed to update the sitemap.xml file');
+        }
     }
+}
+
+try {
+    $task = new GenerateSitemap();
+    $task->run();
+} catch (Exception $e) {
+    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
+    fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
+    exit(1);
 }

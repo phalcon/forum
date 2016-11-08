@@ -23,13 +23,28 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension
+
+# Get params from .env file
+params:
+    - .env
+
 # Global modules configuration.
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
-            password: ''
+            dsn: "%DB_DSN%"
+            user: "%DB_USERNAME%"
+            password: "%DB_PASSWORD%"
             dump: tests/_data/dump.sql
+            populate: false
+            cleanup: false
+        Phalcon:
+            bootstrap: 'tests/_config/bootstrap.php'
+            cleanup: false
+            savepoints: false
+        PhpBrowser:
+            url: "%APP_URL%"
+            curl:
+                CURLOPT_RETURNTRANSFER: true
 
-error_level: "E_ALL | E_STRICT"
+error_level: "E_ALL"

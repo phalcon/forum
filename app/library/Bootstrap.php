@@ -26,7 +26,6 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
-use Phosphorum\ReCaptcha;
 use Phalcon\Events\Event;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
@@ -113,11 +112,17 @@ class Bootstrap
      */
     public function run()
     {
-        if (ENV_TESTING === APPLICATION_ENV) {
-            return $this->app;
-        }
-
         return $this->getOutput();
+    }
+
+    /**
+     * Get the Application.
+     *
+     * @return \Phalcon\Application|Application
+     */
+    public function getApplication()
+    {
+        return $this->app;
     }
 
     /**
@@ -449,13 +454,12 @@ class Bootstrap
                 $config = $this->getShared('config');
 
                 $config = $config->get('beanstalk');
-                $config->get('disabled', true);
 
-                if ($config->get('disabled', true)) {
+                if (!$config->get('enabled')) {
                     return new DummyServer();
                 }
 
-                if (!$host = $config->get('host', false)) {
+                if (!$host = $config->get('host')) {
                     throw new BeanstalkException('Beanstalk is not configured');
                 }
 
