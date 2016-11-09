@@ -6,8 +6,8 @@
 class_name: UnitTester
 modules:
     enabled:
-        - \Helper\Unit
+        - Helper\Unit
+        - Filesystem
         - Asserts
-        - Phalcon:
-            bootstrap: 'public/index.php'
-            cleanup: true
+        - Phalcon
+        - Db

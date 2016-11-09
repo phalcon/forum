@@ -9,8 +9,7 @@
 class_name: FunctionalTester
 modules:
     enabled:
-        - \Helper\Functional
+        - Helper\Functional
         - Filesystem
-        - Phalcon:
-            bootstrap: 'public/index.php'
-            cleanup: true
+        - Phalcon
+        - Db

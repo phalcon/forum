@@ -16,24 +16,55 @@
 */
 
 /**
- * Index all existing documents to elastic search
+ * This script generates backup and uploads it to Dropbox
  */
 require 'cli-bootstrap.php';
 
-use Phosphorum\Search\Indexer;
+use Phalcon\Di;
+use Phalcon\Config;
 use Phalcon\DI\Injectable;
+use League\Flysystem\Filesystem;
+use Phalcon\Logger\Adapter\Stream;
+use League\Flysystem\Adapter\Local;
 
-class SearchTasks extends Injectable
+class GenerateRobotsFile extends Injectable
 {
     public function run()
     {
-        $search = new Indexer();
-        $search->indexAll();
+        $log = new Stream('php://stdout');
+
+        /** @var Config $config */
+        $config = Di::getDefault()->getShared('config');
+
+        $expireDate = new DateTime('now', new DateTimeZone('UTC'));
+        $expireDate->modify('+1 month');
+
+        $baseUrl = rtrim($config->get('site')->url, '/');
+        $content=<<<EOL
+User-agent: *
+Allow: /
+Sitemap: $baseUrl/sitemap.xml
+EOL;
+
+        $adapter = new Local(dirname(dirname(__FILE__)) . '/public');
+        $filesystem = new Filesystem($adapter);
+
+        if ($filesystem->has('robots.txt')) {
+            $result = $filesystem->update('robots.txt', $content);
+        } else {
+            $result = $filesystem->write('robots.txt', $content);
+        }
+
+        if ($result) {
+            $log->info('The robots.txt was successfully updated');
+        } else {
+            $log->error('Failed to update the robots.txt file');
+        }
     }
 }
 
 try {
-    $task = new SearchTasks();
+    $task = new GenerateRobotsFile();
     $task->run();
 } catch (Exception $e) {
     fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);

@@ -34,7 +34,7 @@ define('ENV_TESTING', 'testing');
 /**
  * @const APPLICATION_ENV Current application stage
  */
-define('APPLICATION_ENV', getenv('APP_ENV') ?: ENV_PRODUCTION);
+define('APPLICATION_ENV', env('APP_ENV') ?: ENV_DEVELOPMENT);
 
 /**
  * @const APP_START_TIME The start time of the application, used for profiling
