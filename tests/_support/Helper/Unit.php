@@ -2,9 +2,9 @@
 
 namespace Helper;
 
+use Mockery;
 use Codeception\Module;
 use Codeception\TestInterface;
-use Mockery;
 
 /**
  * Unit Helper

@@ -15,48 +15,50 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Controllers;
+namespace Phosphorum;
 
-use DateTime;
-use DateTimeZone;
-use Phalcon\Http\Response;
+use Phalcon\Config;
+use Phalcon\Di\Injectable;
+use Phalcon\Tag;
+use ReCaptcha\ReCaptcha as GoogleCaptcha;
 
 /**
- * Class RobotsController
+ * Class ReCaptcha
+ * @package Phosphorum
  *
- * We have rewrite rule for Nginx
- * robots.txt => robots
- *
- * @package Phosphorum\Controllers
+ * @property \Phalcon\Config config
  */
-class RobotsController extends ControllerBase
+class ReCaptcha extends Injectable
 {
-    public function initialize()
+    /**
+     * @var GoogleCaptcha
+     */
+    protected $captcha;
+
+    protected $enabled = false;
+
+    public function __construct()
     {
-        $this->view->disable();
+        /** @var Config $config */
+        $config = $this->config->get('reCaptcha');
+        if ($config instanceof Config && $config->offsetGet('secret') && $config->offsetGet('siteKey')) {
+            $this->enabled = true;
+            $this->captcha = new GoogleCaptcha($config->offsetGet('secret'));
+        }
     }
 
-    /**
-     * Generate the website robots.txt
-     */
-    public function indexAction()
+    public function isEnabled()
     {
-        $response = new Response();
+        return (bool) $this->enabled;
+    }
 
-        $expireDate = new DateTime('now', new DateTimeZone('UTC'));
-        $expireDate->modify('+1 month');
-        $response->setExpires($expireDate);
+    public function getCaptcha()
+    {
+        return $this->captcha;
+    }
 
-        $response->setHeader('Content-Type', "text/plain; charset=UTF-8");
-
-        $baseUrl = rtrim($this->config->get('site')->url, '/');
-        $content=<<<EOL
-User-agent: *
-Allow: /
-Sitemap: $baseUrl/sitemap.xml
-EOL;
-        $response->setContent($content);
-
-        return $response;
+    public function getJs()
+    {
+        return Tag::javascriptInclude('https://www.google.com/recaptcha/api.js', false);
     }
 }

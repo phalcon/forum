@@ -1,12 +1,22 @@
 language: php
 
 sudo: required
-dist: precise
+dist: trusty
 
 php:
   - 5.5
   - 5.6
-  - 7.0
+
+matrix:
+  include:
+    - php: 7.0
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
+    - php: 7.0
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.2"
+
+services:
+  - mysql
+  - memcached
 
 git:
   depth: 1
@@ -17,56 +27,51 @@ cache:
   timeout: 691200
   directories:
     - .temp
-    - vendor
     - $HOME/.ccache
     - $HOME/.composer/cache
 
-services:
-  - memcached
-
 env:
   global:
-    - ZEND_DONT_UNLOAD_MODULES=1 CC="ccache gcc" PATH="$PATH:~/bin" DISPLAY=":99.0"
+    - ZEND_DONT_UNLOAD_MODULES=1
+    - CC="ccache gcc"
+    - PATH="$PATH:~/bin"
+    - DISPLAY=":99.0"
+    - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
   matrix:
-    - PHALCON_VERSION="3.0.x"
     - PHALCON_VERSION="v3.0.0"
+    - PHALCON_VERSION="v3.0.2"
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
+  - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - sh -e /etc/init.d/xvfb start
-  - wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -O selenium.jar
-  - java -jar selenium.jar -port 4444 >/dev/null 2>&1 &
+  - travis_retry composer require --dev "phalcon/zephir:dev-master" --ignore-platform-reqs
+  - ( bash tests/_ci/install_zephir.sh )
+  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
 
 install:
-  - (cd cphalcon/build; bash install &>/dev/null)
-  - phpenv config-add ./tests/_ci/phalcon.ini &> /dev/null
-  - php --ri phalcon
-  - cp ./app/config/config.example.php ./app/config/config.php
-  - cp ./app/config/development.example.php ./app/config/development.php
-  - echo "APP_ENV=testing" > ./.env
-  - mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
-  - cat schemas/forum.sql | mysql phosphorum
-  - php ./scripts/random-entries.php >/dev/null 2>&1 &
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
+  - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
+  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+
+before_script:
+  - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
+  - cat schemas/forum.sql | mysql -uroot phosphorum
+  - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
-  - sleep 5
+  - ulimit -c unlimited -S || true
 
 script:
-  - composer cs-test
-  - composer unit-test
-  - composer functional-test
-  - echo "APP_ENV=development" > ./.env && ./bin/codecept run acceptance
+  - vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
+  - vendor/bin/codecept build
+  - vendor/bin/codecept run
 
 notifications:
   email:
     recipients:
-      - andres@phalconphp.com
-      - eduar@phalconphp.com
-      - nikos@phalconphp.com
-      - serghei@phalconphp.com
+      - build@phalconphp.com
     on_success: change
     on_failure: always
 
@@ -75,3 +80,15 @@ addons:
     packages:
       - gdb
       - re2c
+
+addons:
+  apt:
+    packages:
+      - gdb
+      - re2c
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
+  hosts:
+    - db
+    - pforum.loc

@@ -105,7 +105,7 @@ class Indexer extends Injectable
                 }
 
                 $id = $hit['fields']['id'][0];
-                $post = $post = Posts::findFirstById($id);
+                $post = Posts::findFirstById($id);
 
                 if (!$post || $post->deleted == Posts::IS_DELETED) {
                     continue;

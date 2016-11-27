@@ -22,22 +22,6 @@ $router = new Router(false);
 $router->removeExtraSlashes(true);
 
 $router->add(
-    '/sitemap.xml',
-    [
-       'controller' => 'sitemap',
-       'action'     => 'index'
-    ]
-);
-
-$router->add(
-    '/robots.txt',
-    [
-        'controller' => 'robots',
-        'action'     => 'index'
-    ]
-);
-
-$router->add(
     '/help/stats',
     [
        'controller' => 'help',

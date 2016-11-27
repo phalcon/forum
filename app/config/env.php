@@ -5,7 +5,7 @@ use Dotenv\Dotenv;
 define('BASE_DIR', realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR);
 
 // Include Composer autoloader
-include BASE_DIR . 'vendor/autoload.php';
+require BASE_DIR . 'vendor/autoload.php';
 
 // Load environment variables
 $dotenv = new Dotenv(realpath(BASE_DIR));
@@ -34,7 +34,7 @@ define('ENV_TESTING', 'testing');
 /**
  * @const APPLICATION_ENV Current application stage
  */
-define('APPLICATION_ENV', getenv('APP_ENV') ?: ENV_PRODUCTION);
+define('APPLICATION_ENV', env('APP_ENV') ?: ENV_DEVELOPMENT);
 
 /**
  * @const APP_START_TIME The start time of the application, used for profiling
@@ -64,7 +64,7 @@ define('HOSTNAME', explode('.', gethostname())[ 0 ]);
 /**
  * @const VERSION Forum version
  */
-define('VERSION', '3.0.0');
+define('VERSION', '3.0.1');
 
 if (function_exists('mb_internal_encoding')) {
     // Set the MB extension encoding to the same character set

@@ -7,14 +7,8 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - \Helper\Acceptance
-        - REST:
-            depends: PhpBrowser
-            url: 'http://localhost:8000'
-        - WebDriver:
-            url: 'http://localhost:8000'
-            browser: 'firefox'
-            window_size: 1200x768
-            wait: 10
-            capabilities:
-                unexpectedAlertBehaviour: 'accept'
+        - Helper\Acceptance
+        - Filesystem
+        - Phalcon:
+            part: services
+        - PhpBrowser

@@ -159,6 +159,7 @@ class SessionController extends ControllerBase
             $this->session->set('identity-timezone', $user->timezone);
             $this->session->set('identity-theme', $user->theme);
             $this->session->set('identity-moderator', $user->moderator);
+            $this->session->set('identity-karma', $user->karma);
 
             if ($user->getOperationMade() == Model::OP_CREATE) {
                 $this->flashSession->success('Welcome ' . $user->name);

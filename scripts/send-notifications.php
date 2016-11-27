@@ -36,6 +36,7 @@ try {
     $task = new SendSpoolTask($config);
     $task->run();
 } catch (Exception $e) {
-    echo $e->getMessage(), PHP_EOL;
-    echo $e->getTraceAsString();
+    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
+    fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
+    exit(1);
 }

@@ -26,7 +26,6 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
-use Phalcon\Cli\Console;
 use Phalcon\Events\Event;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
@@ -35,6 +34,7 @@ use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
 use Phosphorum\Utils\Security;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -55,7 +55,7 @@ use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
 {
-    /** @var Application|Console  */
+    /** @var \Phalcon\Application  */
     private $app;
 
     /** @var  DiInterface */
@@ -83,6 +83,7 @@ class Bootstrap
         'gravatar',
         'timezones',
         'breadcrumbs',
+        'recaptcha',
     ];
 
     /**
@@ -107,15 +108,21 @@ class Bootstrap
     /**
      * Runs the Application
      *
-     * @return Application|Console|string
+     * @return \Phalcon\Application|string
      */
     public function run()
     {
-        if (ENV_TESTING === APPLICATION_ENV) {
-            return $this->app;
-        }
-
         return $this->getOutput();
+    }
+
+    /**
+     * Get the Application.
+     *
+     * @return \Phalcon\Application|Application
+     */
+    public function getApplication()
+    {
+        return $this->app;
     }
 
     /**
@@ -193,8 +200,6 @@ class Bootstrap
 
         $loader->register();
         $this->di->setShared('loader', $loader);
-
-        return $loader;
     }
 
     /**
@@ -296,7 +301,6 @@ class Bootstrap
             $view  = new View;
             $view->registerEngines([
                 // Setting up Volt Engine
-                // See https://docs.phalconphp.com/en/latest/reference/volt.html#setting-up-the-volt-engine
                 '.volt' => function ($view, $di) {
                     /** @var DiInterface $this */
                     $config = $this->getShared('config');
@@ -312,7 +316,13 @@ class Bootstrap
                                 $config['separator'],
                                 trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
                             );
+
                             $filename = basename($filename, '.volt') . $config['compiledExt'];
+                            $cacheDir = rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR;
+
+                            if (!is_dir($cacheDir)) {
+                                @mkdir($cacheDir, 0755, true);
+                            }
 
                             return rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR . $filename;
                         },
@@ -330,7 +340,7 @@ class Bootstrap
                     return $volt;
                 },
                 // Setting up Php Engine
-                '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
+                '.phtml' => Php::class
             ]);
 
             $view->setViewsDir($config->get('application')->viewsDir);
@@ -444,13 +454,12 @@ class Bootstrap
                 $config = $this->getShared('config');
 
                 $config = $config->get('beanstalk');
-                $config->get('disabled', true);
 
-                if ($config->get('disabled', true)) {
+                if (!$config->get('enabled')) {
                     return new DummyServer();
                 }
 
-                if (!$host = $config->get('host', false)) {
+                if (!$host = $config->get('host')) {
                     throw new BeanstalkException('Beanstalk is not configured');
                 }
 
@@ -655,6 +664,16 @@ class Bootstrap
         $this->di->setShared('timezones', function () {
             return require_once BASE_DIR . 'app/config/timezones.php';
         });
+    }
+
+    protected function initRecaptcha()
+    {
+        $this->di->setShared(
+            'recaptcha',
+            function () {
+                return new ReCaptcha;
+            }
+        );
     }
 
     /**

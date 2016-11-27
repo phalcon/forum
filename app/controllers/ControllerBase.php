@@ -3,9 +3,9 @@
 namespace Phosphorum\Controllers;
 
 use Phalcon\Mvc\Controller;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Class ControllerBase
@@ -19,6 +19,7 @@ use Phosphorum\Models\Users;
  * @property \Phalcon\Logger\AdapterInterface logger
  * @property \Phalcon\Breadcrumbs breadcrumbs
  * @property \Phosphorum\Utils\Security $security
+ * @property \Phosphorum\ReCaptcha $recaptcha
  */
 class ControllerBase extends Controller
 {
@@ -111,5 +112,50 @@ class ControllerBase extends Controller
             ->columns('COUNT(*) AS count');
 
         return [$itemBuilder, $totalBuilder];
+    }
+    /**
+     * Validation Google captcha
+     *
+     * @return boolean
+     */
+    protected function checkCaptcha()
+    {
+        if (!$this->recaptcha->isEnabled()) {
+            return true;
+        }
+
+        if ($this->isUserTrust()) {
+            return true;
+        }
+
+        if ($this->request->hasPost('g-recaptcha-response')) {
+            $this->flashSession->error('Please confirm that you are not a bot.');
+            return false;
+        }
+
+        $captcha = $this->recaptcha->getCaptcha();
+        $resp = $captcha->verify($this->request->getPost('g-recaptcha-response'), $this->request->getClientAddress());
+
+        if (!$resp->isSuccess()) {
+            $this->flashSession->error('Please confirm that you are not a bot.');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isUserTrust()
+    {
+        $karma = $this->session->get('identity-karma');
+
+        if (isset($karma) && $karma > 300) {
+            return true;
+        }
+
+        return false;
     }
 }

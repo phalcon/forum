@@ -1,15 +1,22 @@
 {
     "name": "phalcon/forum",
     "description": "Phalcon Official Forum",
-    "keywords": ["forum", "phalcon"],
+    "keywords": [
+        "forum",
+        "phalcon",
+        "discussion",
+        "question",
+        "answer",
+        "qa"
+    ],
     "type": "project",
     "license": "BSD-3-Clause",
-    "homepage": "http://forum.phalconphp.com",
+    "homepage": "https://forum.phalconphp.com/",
     "authors": [
         {
             "name": "Phalcon Team",
             "email": "team@phalconphp.com",
-            "homepage": "http://phalconphp.com/en/team"
+            "homepage": "https://phalconphp.com/en/team"
         },
         {
             "name": "Contributors",
@@ -27,53 +34,49 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "ext-phalcon": "~3.0.0",
-        "vlucas/phpdotenv": "~2.3",
+        "ext-phalcon": "~3.0",
+        "vlucas/phpdotenv": "~2.4",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
         "swiftmailer/swiftmailer": "^5.4",
         "kzykhys/ciconia": "~1.0",
         "phalcongelist/php-diff": "~2.0",
         "elasticsearch/elasticsearch": "~1.0",
-        "phalcon/incubator": "~3.0.0",
+        "phalcon/incubator": "~3.0",
         "phalcongelist/breadcrumbs": "dev-master@dev",
-        "league/flysystem-dropbox" : "^1.0"
+        "league/flysystem-dropbox" : "^1.0",
+        "google/recaptcha": "~1.1"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0.4",
         "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "~1.6",
-        "codeception/codeception": "~2.2",
+        "codeception/codeception": "2.2.x-dev",
         "codeception/verify": "~0.3",
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
-        "squizlabs/php_codesniffer": "~2.6"
+        "squizlabs/php_codesniffer": "~2.7",
+        "phalcongelist/dd": "^1"
+    },
+    "suggest": {
+        "ext-yaml": "*"
+    },
+    "autoload": {
+        "files": [
+            "app/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phosphorum\\Test\\Unit\\": "tests/unit/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\"",
-            "php -r \"copy('app/config/development.example.php', 'app/config/development.php);\"",
-            "php -r \"copy('app/config/config.example.php', 'app/config/config.php);\""
-        ],
-        "cs-test": [
-            "bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/"
-        ],
-        "unit-test": [
-            "bin/codecept run unit"
-        ],
-        "functional-test": [
-            "bin/codecept run functional"
-        ],
-        "acceptance-test": [
-            "bin/codecept run acceptance"
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
     },
     "config": {
-        "bin-dir": "bin"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.x-dev"
-        }
+        "preferred-install": "dist"
     }
 }

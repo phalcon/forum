@@ -15,27 +15,11 @@
  +------------------------------------------------------------------------+
 */
 
-use Phalcon\Config;
+require_once __DIR__ . '/../../app/config/env.php';
+require_once __DIR__ . '/../../app/library/Bootstrap.php';
 
-return new Config([
-    'application' => [
-        'debug' => true,
-    ],
-    'volt' => [
-        'forceCompile' => true,
-    ],
-    'metadata' => [
-        'adapter' => 'Memory',
-    ],
-    'dataCache' => [
-        'backend'  => 'Memory',
-        'frontend' => 'None',
-    ],
-    'modelsCache' => [
-        'backend'  => 'Memory',
-        'frontend' => 'None',
-    ],
-    'viewCache' => [
-        'backend' => 'Memory',
-    ],
-]);
+// Create the Application
+$bootstrap = new Phosphorum\Bootstrap();
+
+// Run the Application
+return $bootstrap->getApplication();
