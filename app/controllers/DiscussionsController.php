@@ -128,13 +128,12 @@ class DiscussionsController extends ControllerBase
             'canonical'    => ''
         ]);
     }
-    
+
     /**
      * This shows the create post form and also store the related post
      */
     public function createAction()
     {
-
         if (!$usersId = $this->session->get('identity')) {
             $this->flashSession->error('You must be logged first');
             $this->response->redirect();
@@ -152,21 +151,24 @@ class DiscussionsController extends ControllerBase
 
             $title = $this->request->getPost('title', 'trim');
 
-            $post                = new Posts();
-            $post->users_id      = $usersId;
-            $post->categories_id = $this->request->getPost('categoryId');
-            $post->title         = $title;
-            $post->slug          = $this->slug->generate($title);
-            $post->content       = $this->request->getPost('content');
+            $post = new Posts([
+                'users_id'      => $usersId,
+                'categories_id' => $this->request->getPost('categoryId'),
+                'title'         => $title,
+                'slug'          => $this->slug->generate($title),
+                'content'       => $this->request->getPost('content'),
+            ]);
 
             if ($post->save()) {
                 $user = Users::findFirstById($usersId);
 
                 if ($pollOptions = $this->request->getPost('pollOptions', ['trim'], [])) {
                     foreach ($pollOptions as $opt) {
-                        $option = new PostsPollOptions();
-                        $option->posts_id = $post->id;
-                        $option->title = htmlspecialchars($opt, ENT_QUOTES);
+                        $option = new PostsPollOptions([
+                            'posts_id' => $post->id,
+                            'title'    => $this->escaper->escapeHtml($opt),
+                        ]);
+
                         $option->save();
                     }
                 }
@@ -183,10 +185,17 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->view->setVar('firstTime', Posts::countByUsersId($usersId) == 0);
         }
-        $siteKey = isset($this->config->reCaptcha->siteKey) ? $this->config->reCaptcha->siteKey : '';
-        $this->view->setVar('siteKey', $siteKey);
-        $this->view->setVar('isUserTrust', $this->isUserTrust());
-        $this->view->setVar('categories', Categories::find(['order' => 'name']));
+
+        $siteKey = '';
+        if ($this->config->offsetExists('reCaptcha') && $this->config->get('reCaptcha')->siteKey) {
+            $siteKey = $this->config->get('reCaptcha')->siteKey;
+        }
+
+        $this->view->setVars([
+            'siteKey'     => $siteKey,
+            'isUserTrust' => $this->isUserTrust(),
+            'categories'  => Categories::find(['order' => 'name']),
+        ]);
     }
 
     /**
@@ -354,7 +363,7 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
-            $this->tag->displayTo('content', $post->content);
+            $this->tag->displayTo('content', $this->escaper->escapeHtml($post->content));
             $this->tag->displayTo('categoryId', $post->categories_id);
         }
 

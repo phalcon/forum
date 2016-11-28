@@ -10,9 +10,7 @@ php:
 matrix:
   include:
     - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.2"
+      env: ZEND_BACKEND="--backend=ZendEngine3"
 
 services:
   - mysql
@@ -37,8 +35,6 @@ env:
     - PATH="$PATH:~/bin"
     - DISPLAY=":99.0"
     - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
-  matrix:
-    - PHALCON_VERSION="v3.0.0"
     - PHALCON_VERSION="v3.0.2"
 
 before_install:
