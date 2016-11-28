@@ -15,6 +15,45 @@
   +------------------------------------------------------------------------+
 */
 
+if (!function_exists('app_path')) {
+    /**
+     * Get the application path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function app_path($path = '')
+    {
+        return dirname(__FILE__) . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('cache_path')) {
+    /**
+     * Get the cache path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function cache_path($path = '')
+    {
+        return app_path('cache') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('config_path')) {
+    /**
+     * Get the configuration path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function config_path($path = '')
+    {
+        return app_path('config') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
 if (!function_exists('value')) {
     /**
      * Return the default value of the given value.
