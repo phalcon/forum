@@ -151,12 +151,13 @@ class DiscussionsController extends ControllerBase
 
             $title = $this->request->getPost('title', 'trim');
 
-            $post                = new Posts();
-            $post->users_id      = $usersId;
-            $post->categories_id = $this->request->getPost('categoryId');
-            $post->title         = $title;
-            $post->slug          = $this->slug->generate($title);
-            $post->content       = $this->request->getPost('content');
+            $post = new Posts([
+                'users_id'      => $usersId,
+                'categories_id' => $this->request->getPost('categoryId'),
+                'title'         => $title,
+                'slug'          => $this->slug->generate($title),
+                'content'       => $this->request->getPost('content'),
+            ]);
 
             if ($post->save()) {
                 $user = Users::findFirstById($usersId);
@@ -362,7 +363,7 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
-            $this->tag->displayTo('content', $post->content);
+            $this->tag->displayTo('content', $this->escaper->escapeHtml($post->content));
             $this->tag->displayTo('categoryId', $post->categories_id);
         }
 
