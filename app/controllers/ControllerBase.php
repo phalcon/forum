@@ -128,7 +128,7 @@ class ControllerBase extends Controller
             return true;
         }
 
-        if ($this->request->hasPost('g-recaptcha-response')) {
+        if (!$this->request->hasPost('g-recaptcha-response')) {
             $this->flashSession->error('Please confirm that you are not a bot.');
             return false;
         }
