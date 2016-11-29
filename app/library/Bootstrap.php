@@ -43,6 +43,7 @@ use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger\Adapter\File as FileLogger;
+use Phosphorum\Config\Factory as ConfigFactory;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
@@ -63,9 +64,9 @@ class Bootstrap
 
     private $loaders = [
         'eventsManager',
+        'loader',
         'config',
         'logger',
-        'loader',
         'cache',
         'security',
         'session',
@@ -188,13 +189,12 @@ class Bootstrap
      */
     protected function initLoader()
     {
-        $config = $this->di->getShared('config');
         $loader = new Loader;
         $loader->registerNamespaces(
             [
-                'Phosphorum\Models'      => $config->get('application')->modelsDir,
-                'Phosphorum\Controllers' => $config->get('application')->controllersDir,
-                'Phosphorum'             => $config->get('application')->libraryDir
+                'Phosphorum\Models'      => app_path('models'),
+                'Phosphorum\Controllers' => app_path('controllers'),
+                'Phosphorum'             => app_path('library')
             ]
         );
 
@@ -682,49 +682,7 @@ class Bootstrap
     protected function initConfig()
     {
         $this->di->setShared('config', function () {
-            $path = BASE_DIR . 'app/config/';
-
-            if (!is_readable($path . 'config.php')) {
-                throw new RuntimeException(
-                    'Unable to read config from ' . $path . 'config.php'
-                );
-            }
-
-            $config = include $path . 'config.php';
-
-            if (is_array($config)) {
-                $config = new Config($config);
-            }
-
-            if (!$config instanceof Config) {
-                $type = gettype($config);
-                if ($type == 'boolean') {
-                    $type .= ($type ? ' (true)' : ' (false)');
-                } elseif (is_object($type)) {
-                    $type = get_class($type);
-                }
-
-                throw new RuntimeException(
-                    sprintf(
-                        'Unable to read config file. Config must be either an array or Phalcon\Config instance. Got %s',
-                        $type
-                    )
-                );
-            }
-
-            if (is_readable($path . APPLICATION_ENV . '.php')) {
-                $override = include_once $path . APPLICATION_ENV . '.php';
-
-                if (is_array($override)) {
-                    $override = new Config($override);
-                }
-
-                if ($override instanceof Config) {
-                    $config->merge($override);
-                }
-            }
-
-            return $config;
+            return ConfigFactory::create();
         });
     }
 }
