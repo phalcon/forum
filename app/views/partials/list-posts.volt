@@ -36,7 +36,12 @@
                 <th class="hidden-xs">Last Reply</th>
             </tr>
         {%- for post in posts -%}
-            <tr class="{% if (post.votes_up - post.votes_down) <= -3 %}post-negative{% else %}post-positive{% endif %}" itemscope itemtype="http://schema.org/Question">
+            {%- if (post.votes_up - post.votes_down) <= -3 -%}
+                {%- set row_class = "post-negative" -%}
+            {%- else -%}
+                {%- set row_class = "post-positive" -%}
+            {%- endif -%}
+            <tr class="{% if post.sticked == "Y" %}row-sticked{% endif %} {{ row_class }}" itemscope itemtype="http://schema.org/Question">
                 {%  if config.theme.use_topics_icon %}
                 <td>
                     {%- if logged != '' -%}
