@@ -2,7 +2,7 @@
     <div class="row">
 		{% include 'partials/breadcrumbs.volt' %}
         <div class="col-md-6 help-head">
-            <h1>Statistics</h1>
+            <h2>Statistics</h2>
             <section>
 				{% cache "stats" 3600 %}
 				<table class="table table-stripped" align="left" style="width:300px">
@@ -47,7 +47,7 @@
             </section>
         </div>
         <div class="col-md-6 help-head">
-            <h1>The most active users</h1>
+            <h2>The most active users</h2>
             <section>
                 {% cache "activity" 3600 %}
                 <table class="table table-stripped" align="left" style="width:300px">
