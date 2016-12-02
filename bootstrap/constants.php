@@ -1,15 +1,24 @@
 <?php
 
-use Dotenv\Dotenv;
+/*
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
+*/
 
-define('BASE_DIR', realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR);
-
-// Include Composer autoloader
-require BASE_DIR . 'vendor/autoload.php';
-
-// Load environment variables
-$dotenv = new Dotenv(realpath(BASE_DIR));
-$dotenv->load();
+/**
+ * @const BASE_DIR The path to the Phosphorum project root
+ */
+defined('BASE_DIR') || define('BASE_DIR', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
 /**
  * @const ENV_PRODUCTION Application production stage
@@ -34,7 +43,7 @@ define('ENV_TESTING', 'testing');
 /**
  * @const APPLICATION_ENV Current application stage
  */
-define('APPLICATION_ENV', env('APP_ENV') ?: ENV_DEVELOPMENT);
+define('APPLICATION_ENV', getenv('APP_ENV') ?: ENV_DEVELOPMENT);
 
 /**
  * @const APP_START_TIME The start time of the application, used for profiling

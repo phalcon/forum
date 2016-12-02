@@ -26,7 +26,7 @@ if (!function_exists('app_path')) {
      */
     function app_path($path = '')
     {
-        return dirname(__FILE__) . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
 
