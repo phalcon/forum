@@ -29,6 +29,7 @@ class Activities extends Abstrakt
      *
      * Will return Simple result set with fields:
      * - `id`
+     * - `login`
      * - `name`
      * - `amount`
      *
@@ -42,7 +43,7 @@ class Activities extends Abstrakt
 
         return $modelsManager->createBuilder()
             ->from(['a' => Entity::class])
-            ->columns(['u.id', 'u.name', 'COUNT(a.users_id) AS amount'])
+            ->columns(['u.id', 'u.login', 'u.name', 'COUNT(a.users_id) AS amount'])
             ->leftJoin(UsersEntity::class, ' a.users_id = u.id', 'u')
             ->where('u.banned = :banned:', ['banned' => 'N'])
             ->groupBy(['a.users_id'])
