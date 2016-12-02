@@ -23,14 +23,13 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * Class Activities
  *
- * @property \Phosphorum\Models\Users user
- * @property \Phosphorum\Models\Posts post
+ * @property Users user
+ * @property Posts post
  *
  * @package Phosphorum\Models
  */
 class Activities extends Model
 {
-
     public $id;
 
     public $users_id;
@@ -46,25 +45,9 @@ class Activities extends Model
 
     public function initialize()
     {
-        $this->belongsTo(
-            'users_id',
-            'Phosphorum\Models\Users',
-            'id',
-            [
-                'alias'    => 'user',
-                'reusable' => true
-            ]
-        );
+        $this->belongsTo('users_id', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
 
-        $this->belongsTo(
-            'posts_id',
-            'Phosphorum\Models\Posts',
-            'id',
-            [
-                'alias'    => 'post',
-                'reusable' => true
-            ]
-        );
+        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post', 'reusable' => true]);
 
         $this->addBehavior(
             new Timestampable([
