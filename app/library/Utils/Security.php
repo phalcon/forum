@@ -118,13 +118,13 @@ class Security extends PhSecurity
             $tokenValue = $request->getPost($tokenKey);
         }
 
-        $returnValue = ($tokenValue == $session->get($prefixedValue));
+        $equals = hash_equals($session->get($prefixedValue), $tokenValue);
 
-        if ($returnValue && $destroyIfValid) {
+        if ($equals && $destroyIfValid) {
             $this->destroyPrefixedToken($prefix);
         }
 
-        return $returnValue;
+        return $equals;
     }
 
     /**
