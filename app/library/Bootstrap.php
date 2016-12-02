@@ -17,22 +17,23 @@
 
 namespace Phosphorum;
 
+use Phalcon\Di;
+use Dotenv\Dotenv;
 use Phalcon\Config;
-use Phalcon\Loader;
 use Ciconia\Ciconia;
 use Phalcon\Mvc\View;
-use RuntimeException;
 use Phalcon\Di\Service;
 use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phalcon\Events\Event;
+use Phosphorum\Providers;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\Application;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
+use InvalidArgumentException;
 use Phosphorum\Utils\Security;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View\Engine\Php;
@@ -43,12 +44,14 @@ use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phosphorum\Config\Factory as ConfigFactory;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
 use Phalcon\Cache\Frontend\Output as FrontOutput;
+use Phosphorum\Providers\ServiceProviderInterface;
 use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phalcon\Logger\AdapterInterface as LoggerInterface;
@@ -57,15 +60,23 @@ use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
 {
-    /** @var \Phalcon\Application  */
+    /**
+     * The internal application core.
+     * @var \Phalcon\Application
+     */
     private $app;
+
+    /**
+     * The application mode.
+     * @var string
+     */
+    protected $mode;
 
     /** @var  DiInterface */
     private $di;
 
     private $loaders = [
         'eventsManager',
-        'loader',
         'config',
         'logger',
         'cache',
@@ -90,18 +101,33 @@ class Bootstrap
 
     /**
      * Bootstrap constructor.
+     *
+     * @param string $mode The application mode: "normal", "cli", "api".
      */
-    public function __construct()
+    public function __construct($mode = 'normal')
     {
+        $dotenv = new Dotenv(realpath(BASE_DIR));
+        $dotenv->load();
+
         $this->di = new FactoryDefault;
-        $this->app = new Application;
+        $this->app = $this->createInternalApplication($mode);
+
+        $this->di->setShared('dotenv', $dotenv);
+        $this->di->setShared('bootstrap', $this);
+
+        Di::setDefault($this->di);
+
+        /**
+         * This service should be registered first
+         */
+        $this->initializeServiceProvider(new Providers\EventsManager\ServiceProvider($this->di));
 
         foreach ($this->loaders as $service) {
             $serviceName = ucfirst($service);
             $this->{'init' . $serviceName}();
         }
 
-        $this->app->setEventsManager($this->di->getShared('eventsManager'));
+        $this->app->setEventsManager(container('eventsManager'));
 
         $this->di->setShared('app', $this->app);
         $this->app->setDI($this->di);
@@ -126,7 +152,7 @@ class Bootstrap
     /**
      * Get the Application.
      *
-     * @return \Phalcon\Application|Application
+     * @return \Phalcon\Application|\Phalcon\Mvc\Micro
      */
     public function getApplication()
     {
@@ -140,7 +166,7 @@ class Bootstrap
      */
     public function getOutput()
     {
-        if ($this->app instanceof Application) {
+        if ($this->app instanceof MvcApplication) {
             return $this->app->handle()->getContent();
         }
 
@@ -169,7 +195,7 @@ class Bootstrap
 
         $this->di->set('logger', function ($filename = null, $format = null) {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $format   = $format ?: $config->get('logger')->format;
             $filename = trim($filename ?: $config->get('logger')->filename, '\\/');
@@ -190,26 +216,6 @@ class Bootstrap
     }
 
     /**
-     * Initialize the Loader.
-     *
-     * Adds all required namespaces.
-     */
-    protected function initLoader()
-    {
-        $loader = new Loader;
-        $loader->registerNamespaces(
-            [
-                'Phosphorum\Models'      => app_path('models'),
-                'Phosphorum\Controllers' => app_path('controllers'),
-                'Phosphorum'             => app_path('library')
-            ]
-        );
-
-        $loader->register();
-        $this->di->setShared('loader', $loader);
-    }
-
-    /**
      * Initialize the Cache.
      *
      * The frontend must always be Phalcon\Cache\Frontend\Output and the service 'viewCache'
@@ -219,7 +225,7 @@ class Bootstrap
     {
         $this->di->set('viewCache', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $frontend = new FrontOutput(['lifetime' => $config->get('viewCache')->lifetime]);
 
@@ -232,7 +238,7 @@ class Bootstrap
 
         $this->di->setShared('modelsCache', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $frontend = '\Phalcon\Cache\Frontend\\' . $config->get('modelsCache')->frontend;
             $frontend = new $frontend(['lifetime' => $config->get('modelsCache')->lifetime]);
@@ -246,7 +252,7 @@ class Bootstrap
 
         $this->di->setShared('dataCache', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $frontend = '\Phalcon\Cache\Frontend\\' . $config->get('dataCache')->frontend;
             $frontend = new $frontend(['lifetime' => $config->get('dataCache')->lifetime]);
@@ -281,7 +287,7 @@ class Bootstrap
     {
         $this->di->setShared('session', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $adapter = '\Phalcon\Session\Adapter\\' . $config->get('session')->adapter;
 
@@ -302,21 +308,21 @@ class Bootstrap
     {
         $this->di->set('view', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
-            $em     = $this->getShared('eventsManager');
+            $config = container('config');
+            $em     = container('eventsManager');
 
             $view  = new View;
             $view->registerEngines([
                 // Setting up Volt Engine
                 '.volt' => function ($view, $di) {
                     /** @var DiInterface $this */
-                    $config = $this->getShared('config');
+                    $config = container('config');
                     $volt = new VoltEngine($view, $di);
 
                     $options = [
                         'compiledPath' => function ($templatePath) {
                             /** @var DiInterface $this */
-                            $config = $this->getShared('config')->get('volt')->toArray();
+                            $config = container('config')->get('volt')->toArray();
 
                             $filename = str_replace(
                                 ['\\', '/'],
@@ -385,8 +391,8 @@ class Bootstrap
     {
         $this->di->setShared('db', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config')->get('database')->toArray();
-            $em     = $this->getShared('eventsManager');
+            $config = container('config')->get('database')->toArray();
+            $em     = container('eventsManager');
             $that   = $this;
 
             $adapter = '\Phalcon\Db\Adapter\Pdo\\' . $config['adapter'];
@@ -426,7 +432,7 @@ class Bootstrap
 
         $this->di->setShared('modelsManager', function () {
             /** @var DiInterface $this */
-            $em = $this->getShared('eventsManager');
+            $em = container('eventsManager');
 
             $modelsManager = new ModelsManager;
             $modelsManager->setEventsManager($em);
@@ -436,7 +442,7 @@ class Bootstrap
 
         $this->di->setShared('modelsMetadata', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $config = $config->get('metadata')->toArray();
             $adapter = '\Phalcon\Mvc\Model\Metadata\\' . $config['adapter'];
@@ -458,7 +464,7 @@ class Bootstrap
         $this->di->setShared(
             'queue',
             function () {
-                $config = $this->getShared('config');
+                $config = container('config');
 
                 $config = $config->get('beanstalk');
 
@@ -485,7 +491,7 @@ class Bootstrap
              * @var DiInterface $this
              * @var \Phalcon\Mvc\Router $router
              */
-            $em     = $this->getShared('eventsManager');
+            $em     = container('eventsManager');
             $router = include BASE_DIR . 'app/config/routes.php';
 
             if (!isset($_GET['_url'])) {
@@ -511,7 +517,7 @@ class Bootstrap
     {
         $this->di->setShared('url', function () {
             /** @var DiInterface $this */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             $url = new UrlResolver;
 
@@ -534,7 +540,7 @@ class Bootstrap
     {
         $this->di->setShared('dispatcher', function () {
             /** @var DiInterface $this */
-            $em = $this->getShared('eventsManager');
+            $em = container('eventsManager');
 
             $dispatcher = new Dispatcher;
 
@@ -590,7 +596,7 @@ class Bootstrap
     {
         $this->di->setShared('breadcrumbs', function () {
             /** @var DiInterface $this */
-            $em = $this->getShared('eventsManager');
+            $em = container('eventsManager');
 
             $breadcrumbs = new Breadcrumbs;
             $breadcrumbs->setEventsManager($em);
@@ -638,7 +644,7 @@ class Bootstrap
              * @var DiInterface $this
              * @var Config $config
              */
-            $config = $this->getShared('config')->get('elasticsearch', new Config);
+            $config = container('config')->get('elasticsearch', new Config);
             $hosts  = $config->get('hosts', new Config)->toArray();
 
             if (empty($hosts)) {
@@ -657,7 +663,7 @@ class Bootstrap
     {
         $this->di->setShared('gravatar', function () {
             /** @var  DiInterface $this $config */
-            $config = $this->getShared('config');
+            $config = container('config');
 
             return new Gravatar($config->get('gravatar', new Config));
         });
@@ -692,6 +698,70 @@ class Bootstrap
         $this->di->setShared('config', function () {
             return ConfigFactory::create();
         });
+    }
+
+    /**
+     * Initialize the Service Providers.
+     *
+     * @param  string[] $providers
+     * @return $this
+     */
+    protected function initializeServiceProviders(array $providers)
+    {
+        foreach ($providers as $name => $class) {
+            $this->initializeServiceProvider(new $class($this->di));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Initialize the Service Provider.
+     *
+     * Usually the Service Provider register a service in the Dependency Injector Container.
+     *
+     * @param  ServiceProviderInterface $serviceProvider
+     * @return $this
+     */
+    protected function initializeServiceProvider(ServiceProviderInterface $serviceProvider)
+    {
+        $serviceProvider->register();
+        $serviceProvider->boot();
+
+        return $this;
+    }
+
+    /**
+     * Create internal application to handle requests.
+     *
+     * @param  string $mode The application mode.
+     * @return MvcApplication|\Phalcon\Cli\Console
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function createInternalApplication($mode)
+    {
+        $this->mode = $mode;
+
+        switch ($mode) {
+            case 'normal':
+                return new MvcApplication($this->di);
+            case 'cli':
+                throw new InvalidArgumentException(
+                    'Not implemented yet.'
+                );
+            case 'api':
+                throw new InvalidArgumentException(
+                    'Not implemented yet.'
+                );
+            default:
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid application mode. Expected either "normal" either "cli" or "api". Got %s',
+                        is_scalar($mode) ? $mode : var_export($mode, true)
+                    )
+                );
+        }
     }
 
     /**

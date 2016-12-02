@@ -51,7 +51,7 @@
         "phpdocumentor/reflection-docblock": "2.0.4",
         "phpunit/phpunit": "^4.8",
         "fzaninotto/faker": "~1.6",
-        "codeception/codeception": "2.2.5",
+        "codeception/codeception": "^2.2",
         "codeception/verify": "~0.3",
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
@@ -60,11 +60,6 @@
     },
     "suggest": {
         "ext-yaml": "*"
-    },
-    "autoload": {
-        "files": [
-            "app/helpers.php"
-        ]
     },
     "autoload-dev": {
         "psr-4": {

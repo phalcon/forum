@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Models\Services;
 
-use Phalcon\Di;
 use Phalcon\DiInterface;
 use Phalcon\Di\Injectable;
 
@@ -35,6 +34,6 @@ abstract class Abstrakt extends Injectable
      */
     public function __construct(DiInterface $di = null)
     {
-        $this->setDI($di ?: Di::getDefault());
+        $this->setDI($di ?: container());
     }
 }
