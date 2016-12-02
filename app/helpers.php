@@ -116,3 +116,34 @@ if (!function_exists('container')) {
         return call_user_func_array([$default, 'get'], $args);
     }
 }
+
+
+if (!function_exists('hash_equals')) {
+    /**
+     * Timing attack safe string comparison.
+     * Support for PHP 5.5
+     *
+     * @param  string $knownString The string of known length to compare against
+     * @param  string $userString  The user-supplied string
+     * @return bool
+     */
+    function hash_equals($knownString, $userString)
+    {
+        if (!is_string($knownString) || !is_string($userString)) {
+            return false;
+        }
+
+        if (strlen($knownString) !== strlen($userString)) {
+            return false;
+        }
+
+        $res = $knownString ^ $userString;
+        $ret = 0;
+
+        for ($i = strlen($res) - 1; $i >= 0; $i--) {
+            $ret |= ord($res[$i]);
+        }
+
+        return !$ret;
+    }
+}
