@@ -13,7 +13,6 @@ matrix:
       env: ZEND_BACKEND="--backend=ZendEngine3"
 
 services:
-  - mysql
   - memcached
 
 git:
@@ -53,18 +52,20 @@ install:
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
 before_script:
+  # Create database and user
   - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-  - cat schemas/forum.sql | mysql -uroot phosphorum
+  - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
+  - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
+  - cat schemas/forum.sql | mysql -u root phosphorum
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
 
 script:
+  - php tests/pdo.php
   - vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run tests/unit/
-  - vendor/bin/codecept run tests/acceptance/
-  - vendor/bin/codecept run tests/functional/
+  - vendor/bin/codecept run
 
 notifications:
   email:
