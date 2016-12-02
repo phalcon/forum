@@ -15,6 +15,8 @@
   +------------------------------------------------------------------------+
 */
 
+use Phalcon\Di;
+
 if (!function_exists('app_path')) {
     /**
      * Get the application path.
@@ -92,5 +94,25 @@ if (!function_exists('env')) {
                 return null;
         }
         return $value;
+    }
+}
+
+if (!function_exists('container')) {
+    /**
+     * Calls the default Dependency Injection container.
+     *
+     * @param  mixed
+     * @return mixed|\Phalcon\DiInterface
+     */
+    function container()
+    {
+        $default = Di::getDefault();
+        $args = func_get_args();
+
+        if (empty($args)) {
+            return $default;
+        }
+
+        return call_user_func_array([$default, 'get'], $args);
     }
 }

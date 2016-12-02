@@ -17,13 +17,13 @@
 
 namespace Phosphorum\Controllers;
 
-use Phalcon\Http\Response;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
+use Phosphorum\Models\IrcLog;
 use Phosphorum\Models\Notifications;
 use Phosphorum\Models\ActivityNotifications;
-use Phosphorum\Models\IrcLog;
 use Phosphorum\Badges\Manager as BadgeManager;
+use Phosphorum\Models\Services\Service\Activities;
 
 /**
  * Class HelpController
@@ -123,6 +123,7 @@ class HelpController extends ControllerBase
             'unotifications'=> ActivityNotifications::count(),
             'views'         => Posts::sum(['column' => 'number_views']),
             'irc'           => IrcLog::count(),
+            'activities'    => container(Activities::class)->getMostActiveUsers(),
         ]);
     }
 }

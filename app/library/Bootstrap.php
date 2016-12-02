@@ -22,6 +22,7 @@ use Phalcon\Loader;
 use Ciconia\Ciconia;
 use Phalcon\Mvc\View;
 use RuntimeException;
+use Phalcon\Di\Service;
 use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
@@ -43,6 +44,7 @@ use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger\Adapter\File as FileLogger;
+use Phosphorum\Config\Factory as ConfigFactory;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
@@ -63,9 +65,9 @@ class Bootstrap
 
     private $loaders = [
         'eventsManager',
+        'loader',
         'config',
         'logger',
-        'loader',
         'cache',
         'security',
         'session',
@@ -103,6 +105,12 @@ class Bootstrap
 
         $this->di->setShared('app', $this->app);
         $this->app->setDI($this->di);
+
+        /** @noinspection PhpIncludeInspection */
+        $services = require config_path('services.php');
+        if (is_array($services)) {
+            $this->initializeServices($services);
+        }
     }
 
     /**
@@ -188,13 +196,12 @@ class Bootstrap
      */
     protected function initLoader()
     {
-        $config = $this->di->getShared('config');
         $loader = new Loader;
         $loader->registerNamespaces(
             [
-                'Phosphorum\Models'      => $config->get('application')->modelsDir,
-                'Phosphorum\Controllers' => $config->get('application')->controllersDir,
-                'Phosphorum'             => $config->get('application')->libraryDir
+                'Phosphorum\Models'      => app_path('models'),
+                'Phosphorum\Controllers' => app_path('controllers'),
+                'Phosphorum'             => app_path('library')
             ]
         );
 
@@ -662,7 +669,8 @@ class Bootstrap
     protected function initTimezones()
     {
         $this->di->setShared('timezones', function () {
-            return require_once BASE_DIR . 'app/config/timezones.php';
+            /** @noinspection PhpIncludeInspection */
+            return require_once config_path('timezones.php');
         });
     }
 
@@ -682,49 +690,32 @@ class Bootstrap
     protected function initConfig()
     {
         $this->di->setShared('config', function () {
-            $path = BASE_DIR . 'app/config/';
-
-            if (!is_readable($path . 'config.php')) {
-                throw new RuntimeException(
-                    'Unable to read config from ' . $path . 'config.php'
-                );
-            }
-
-            $config = include $path . 'config.php';
-
-            if (is_array($config)) {
-                $config = new Config($config);
-            }
-
-            if (!$config instanceof Config) {
-                $type = gettype($config);
-                if ($type == 'boolean') {
-                    $type .= ($type ? ' (true)' : ' (false)');
-                } elseif (is_object($type)) {
-                    $type = get_class($type);
-                }
-
-                throw new RuntimeException(
-                    sprintf(
-                        'Unable to read config file. Config must be either an array or Phalcon\Config instance. Got %s',
-                        $type
-                    )
-                );
-            }
-
-            if (is_readable($path . APPLICATION_ENV . '.php')) {
-                $override = include_once $path . APPLICATION_ENV . '.php';
-
-                if (is_array($override)) {
-                    $override = new Config($override);
-                }
-
-                if ($override instanceof Config) {
-                    $config->merge($override);
-                }
-            }
-
-            return $config;
+            return ConfigFactory::create();
         });
+    }
+
+    /**
+     * Register services in the Dependency Injector Container.
+     * This allows to inject dependencies by using abstract classes.
+     *
+     * <code>
+     * $services = [
+     *     '\My\Namespace\Services\UserInterface' => '\My\Concrete\UserService',
+     * ];
+     *
+     * $bootstrap->initializeModelServices($services)
+     * </code>
+     *
+     * @param  string[] $services
+     * @return $this
+     */
+    protected function initializeServices(array $services)
+    {
+        foreach ($services as $abstract => $concrete) {
+            $service = new Service($abstract, $concrete, true);
+            $this->di->setRaw($abstract, $service);
+        }
+
+        return $this;
     }
 }
