@@ -62,7 +62,9 @@ before_script:
 script:
   - vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run tests/unit/
+  - vendor/bin/codecept run tests/acceptance/
+  - vendor/bin/codecept run tests/functional/
 
 notifications:
   email:
