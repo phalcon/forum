@@ -22,6 +22,7 @@ use Phalcon\Loader;
 use Ciconia\Ciconia;
 use Phalcon\Mvc\View;
 use RuntimeException;
+use Phalcon\Di\Service;
 use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
@@ -104,6 +105,12 @@ class Bootstrap
 
         $this->di->setShared('app', $this->app);
         $this->app->setDI($this->di);
+
+        /** @noinspection PhpIncludeInspection */
+        $services = require config_path('services.php');
+        if (is_array($services)) {
+            $this->initializeServices($services);
+        }
     }
 
     /**
@@ -662,7 +669,8 @@ class Bootstrap
     protected function initTimezones()
     {
         $this->di->setShared('timezones', function () {
-            return require_once BASE_DIR . 'app/config/timezones.php';
+            /** @noinspection PhpIncludeInspection */
+            return require_once config_path('timezones.php');
         });
     }
 
@@ -684,5 +692,30 @@ class Bootstrap
         $this->di->setShared('config', function () {
             return ConfigFactory::create();
         });
+    }
+
+    /**
+     * Register services in the Dependency Injector Container.
+     * This allows to inject dependencies by using abstract classes.
+     *
+     * <code>
+     * $services = [
+     *     '\My\Namespace\Services\UserInterface' => '\My\Concrete\UserService',
+     * ];
+     *
+     * $bootstrap->initializeModelServices($services)
+     * </code>
+     *
+     * @param  string[] $services
+     * @return $this
+     */
+    protected function initializeServices(array $services)
+    {
+        foreach ($services as $abstract => $concrete) {
+            $service = new Service($abstract, $concrete, true);
+            $this->di->setRaw($abstract, $service);
+        }
+
+        return $this;
     }
 }
