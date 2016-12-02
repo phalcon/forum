@@ -62,7 +62,6 @@ before_script:
   - ulimit -c unlimited -S || true
 
 script:
-  - php tests/pdo.php
   - vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
   - vendor/bin/codecept build
   - vendor/bin/codecept run
