@@ -15,10 +15,10 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Utils;
+namespace Phosphorum\Providers\UrlResolver;
 
 /**
- * Slug
+ * Phosphorum\Providers\UrlResolver\Slug
  *
  * Transforms a string or part thereof using an ICU transliterator.
  */
@@ -77,11 +77,8 @@ class Slug
      */
     public function generate($string, $delimiter = '-')
     {
-        if (function_exists('transliterator_transliterate')) {
-            $string = $this->transliterateViaCharMap($string);
-        } else {
-            $string = $this->transliterateViaIntl($string);
-        }
+        $method = $this->getTransliterateMethod();
+        $string = $this->{$method}($string);
 
         $string = preg_replace('#[^\\pL\d]+#u', $delimiter, $string);
         $string = preg_replace('#[-\s]+#', $delimiter, $string);
@@ -107,5 +104,14 @@ class Slug
         $string = strtolower($string);
 
         return preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+#S', '', $string);
+    }
+
+    protected function getTransliterateMethod()
+    {
+        if (function_exists('transliterator_transliterate')) {
+            return 'transliterateViaIntl';
+        } else {
+            return 'transliterateViaCharMap';
+        }
     }
 }

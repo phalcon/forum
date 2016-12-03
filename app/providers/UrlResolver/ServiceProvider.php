@@ -63,5 +63,7 @@ class ServiceProvider extends Abstrakt
                 return $url;
             }
         );
+
+        $this->di->setShared('slug', ['className' => Slug::class]);
     }
 }

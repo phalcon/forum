@@ -1,7 +1,7 @@
 <?php
 
-use Phosphorum\Utils\Slug;
 use Codeception\Test\Unit;
+use Phosphorum\Providers\UrlResolver\Slug;
 
 class SlugTest extends Unit
 {

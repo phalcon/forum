@@ -42,7 +42,7 @@ class ServiceProvider extends Abstrakt
     {
         $this->di->setShared(
             $this->serviceName,
-            function() {
+            function () {
                 $dispatcher = new Dispatcher();
 
                 $dispatcher->setDefaultNamespace('Phosphorum\Controllers');

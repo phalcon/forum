@@ -14,7 +14,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  *
  * @property \Phalcon\Cache\BackendInterface viewCache
  * @property \Phalcon\Config config
- * @property \Phosphorum\Utils\Slug slug
+ * @property \Phosphorum\Providers\UrlResolver\Slug slug
  * @property \Phalcon\Avatar\Avatarable gravatar
  * @property \Phalcon\Logger\AdapterInterface logger
  * @property \Phalcon\Breadcrumbs breadcrumbs

@@ -26,7 +26,6 @@ use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
-use Phosphorum\Utils\Slug;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
@@ -57,7 +56,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'slug',
         'markdown',
         'notifications',
         'flash',
@@ -148,14 +146,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Slug component.
-     */
-    protected function initSlug()
-    {
-        $this->di->setShared('slug', ['className' => Slug::class]);
     }
 
     /**
