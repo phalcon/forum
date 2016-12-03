@@ -40,27 +40,11 @@ return [
         'use_https'     => true,
     ],
 
-    'database' => [
-        'adapter'  => env('DB_ADAPTER'),
-        'host'     => env('DB_HOST'),
-        'username' => env('DB_USERNAME'),
-        'password' => env('DB_PASSWORD'),
-        'dbname'   => env('DB_DATABASE'),
-        'charset'  => env('DB_CHARSET')
-    ],
-
-    'metadata' => [
-        'adapter'     => env('METADATA_DRIVER'),
-        'metaDataDir' => cache_path('metaData') . DIRECTORY_SEPARATOR,
-    ],
-
     'application' => [
-        'controllersDir' => BASE_DIR . '/app/controllers/',
-        'modelsDir'      => BASE_DIR . '/app/models/',
-        'viewsDir'       => BASE_DIR . '/app/views/',
-        'pluginsDir'     => BASE_DIR . '/app/plugins/',
-        'libraryDir'     => BASE_DIR . '/app/library/',
-        'phalconDir'     => BASE_DIR . '/app/Phalcon/',
+        'controllersDir' => app_path('controllers') . DIRECTORY_SEPARATOR,
+        'modelsDir'      => app_path('models') . DIRECTORY_SEPARATOR,
+        'viewsDir'       => app_path('views') . DIRECTORY_SEPARATOR,
+        'libraryDir'     => app_path('library') . DIRECTORY_SEPARATOR,
         'staticBaseUri'  => env('APP_STATIC_URL'),
         'baseUri'        => env('APP_BASE_URI'),
         'debug'          => env('APP_DEBUG'),
@@ -119,9 +103,9 @@ return [
     ],
 
     'error' => [
-        'logger'    => BASE_DIR . 'app/logs/error.log',
+        'logger'    => app_path('logs/error.log'),
         'formatter' => [
-            'format' => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
+            'format' => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
             'date'   => 'd-M-Y H:i:s',
         ],
         'controller' => 'error',

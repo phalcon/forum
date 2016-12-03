@@ -15,15 +15,14 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Config;
+namespace Phosphorum\Providers\Queue;
 
-use RuntimeException;
 use Phosphorum\Providers\Abstrakt;
 
 /**
- * Phosphorum\Providers\Config\ServiceProvider
+ * Phosphorum\Providers\Queue\ServiceProvider
  *
- * @package Phosphorum\Providers\Config
+ * @package Phosphorum\Providers\Queue
  */
 class ServiceProvider extends Abstrakt
 {
@@ -31,54 +30,31 @@ class ServiceProvider extends Abstrakt
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'config';
-
-    /**
-     * Config files.
-     * @var array
-     */
-    protected $configs = [
-        'logger',
-        'cache',
-        'session',
-        'database',
-        'metadata',
-        'queue',
-        'config',
-    ];
+    protected $serviceName = 'queue';
 
     /**
      * {@inheritdoc}
      *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = config_path('config.php');
-
-        if (!file_exists($configPath) || !is_file($configPath)) {
-            throw new RuntimeException(
-                sprintf(
-                    'The application config not found. Please make sure that the file "%s" is present',
-                    $configPath
-                )
-            );
-        }
-    }
-
-    /**
-     * {@inheritdoc}
+     * Queue to deliver e-mails in real-time and other tasks.
      *
      * @return void
      */
     public function register()
     {
-        $configs = $this->configs;
-
         $this->di->setShared(
             $this->serviceName,
-            function () use ($configs) {
-                return Factory::create($configs);
+            function () {
+                $config = container('config')->queue;
+
+                $driver  = $config->drivers->{$config->default};
+
+                if ($config->default !== 'fake') {
+                    $adapter = '\Phalcon\Queue\\' . $driver->adapter;
+
+                    return new $adapter($driver->toArray());
+                }
+
+                return new Fake();
             }
         );
     }

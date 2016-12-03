@@ -29,11 +29,9 @@ use Phalcon\DiInterface;
 use Phosphorum\Providers;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
-use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
@@ -41,7 +39,6 @@ use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Providers\ServiceProviderInterface;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
-use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
@@ -62,7 +59,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'queue',
         'router',
         'dispatcher',
         'slug',
@@ -156,33 +152,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Queue Service.
-     *
-     * Queue to deliver e-mails in real-time and other tasks.
-     */
-    protected function initQueue()
-    {
-        $this->di->setShared(
-            'queue',
-            function () {
-                $config = container('config');
-
-                $config = $config->get('beanstalk');
-
-                if (!$config->get('enabled')) {
-                    return new DummyServer();
-                }
-
-                if (!$host = $config->get('host')) {
-                    throw new BeanstalkException('Beanstalk is not configured');
-                }
-
-                return new Beanstalk(['host' => $host]);
-            }
-        );
     }
 
     /**

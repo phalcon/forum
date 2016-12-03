@@ -48,7 +48,7 @@ class ServiceProvider extends Abstrakt
         $this->di->setShared(
             $this->serviceName,
             function () {
-                $config = container('config')->get('database');
+                $config = container('config')->database;
                 $em     = container('eventsManager');
 
                 $driver  = $config->drivers->{$config->default};
