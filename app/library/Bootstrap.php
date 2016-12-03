@@ -39,7 +39,6 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
-use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
@@ -82,7 +81,6 @@ class Bootstrap
         'database',
         'queue',
         'router',
-        'url',
         'dispatcher',
         'slug',
         'markdown',
@@ -494,31 +492,6 @@ class Bootstrap
             $router->notFound(['controller' => 'error', 'action' => 'route404']);
 
             return $router;
-        });
-    }
-
-    /**
-     * Initialize the Url service.
-     *
-     * The URL component is used to generate all kind of urls in the application.
-     */
-    protected function initUrl()
-    {
-        $this->di->setShared('url', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $url = new UrlResolver;
-
-            if (ENV_PRODUCTION === APPLICATION_ENV) {
-                $url->setBaseUri($config->get('application')->production->baseUri);
-                $url->setStaticBaseUri($config->get('application')->production->staticBaseUri);
-            } else {
-                $url->setBaseUri($config->get('application')->development->baseUri);
-                $url->setStaticBaseUri($config->get('application')->development->staticBaseUri);
-            }
-
-            return $url;
         });
     }
 

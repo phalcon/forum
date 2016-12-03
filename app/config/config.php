@@ -18,12 +18,6 @@
 use Phalcon\Config;
 use Phalcon\Logger;
 
-if (!defined('BASE_DIR')) {
-    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'env.php';
-}
-
-defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[0]);
-
 return new Config([
     'site' => [
         'name'        => env('APP_NAME'),
@@ -60,7 +54,7 @@ return new Config([
 
     'metadata' => [
         'adapter'     => env('METADATA_DRIVER'),
-        'metaDataDir' => BASE_DIR . 'app/cache/metaData/',
+        'metaDataDir' => cache_path('metaData') . DIRECTORY_SEPARATOR,
     ],
 
     'application' => [
@@ -70,21 +64,15 @@ return new Config([
         'pluginsDir'     => BASE_DIR . '/app/plugins/',
         'libraryDir'     => BASE_DIR . '/app/library/',
         'phalconDir'     => BASE_DIR . '/app/Phalcon/',
-        'development'    => [
-            'staticBaseUri' => env('APP_STATIC_URL'),
-            'baseUri'       => env('APP_BASE_URI'),
-        ],
-        'production' => [
-            'staticBaseUri' => env('APP_STATIC_URL'),
-            'baseUri'       => env('APP_BASE_URI'),
-        ],
-        'debug' => env('APP_DEBUG'),
+        'staticBaseUri'  => env('APP_STATIC_URL'),
+        'baseUri'        => env('APP_BASE_URI'),
+        'debug'          => env('APP_DEBUG'),
     ],
 
     'volt' => [
         'compiledExt'  => '.php',
         'separator'    => '_',
-        'cacheDir'     => BASE_DIR . 'app/cache/volt/',
+        'cacheDir'     => cache_path('volt') . DIRECTORY_SEPARATOR,
         'forceCompile' => env('APP_DEBUG'),
     ],
 
@@ -93,7 +81,7 @@ return new Config([
         'frontend' => env('DATA_CACHE_FRONTEND'),
         'lifetime' => env('DATA_CACHE_LIFETIME'),
         'prefix'   => env('DATA_CACHE_PREFIX'),
-        'cacheDir' => BASE_DIR . 'app/cache/data/',
+        'cacheDir' => cache_path('data') . DIRECTORY_SEPARATOR,
     ],
 
     'modelsCache' => [
@@ -104,14 +92,14 @@ return new Config([
         'host'     => env('MEMCACHED_HOST'),
         'port'     => env('MEMCACHED_PORT'),
         'weight'   => env('MEMCACHED_HOST'),
-        'cacheDir' => BASE_DIR . 'app/cache/models/',
+        'cacheDir' => cache_path('models') . DIRECTORY_SEPARATOR,
     ],
 
     'viewCache' => [
         'backend'  => env('VIEW_CACHE_DRIVER'),
         'lifetime' => env('VIEW_CACHE_LIFETIME'),
         'prefix'   => env('VIEW_CACHE_PREFIX'),
-        'cacheDir' => BASE_DIR . 'app/cache/views/',
+        'cacheDir' => cache_path('views') . DIRECTORY_SEPARATOR,
     ],
 
     'session' => [
