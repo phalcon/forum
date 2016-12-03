@@ -17,8 +17,25 @@
 
 namespace Phosphorum\Providers\Queue;
 
+/**
+ * Phosphorum\Providers\Queue\Fake
+ *
+ * @package Phosphorum\Providers\Queue
+ */
 class Fake
 {
+    protected $queue;
+
+    /**
+     * Server constructor
+     *
+     * @param mixed $queue
+     */
+    public function __construct($queue)
+    {
+        $this->queue = $queue;
+    }
+
     /**
      * Simulates putting a job in the queue
      *

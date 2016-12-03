@@ -54,7 +54,7 @@ class ServiceProvider extends Abstrakt
                     return new $adapter($driver->toArray());
                 }
 
-                return new Fake();
+                return new Fake(null);
             }
         );
     }
