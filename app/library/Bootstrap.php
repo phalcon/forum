@@ -62,7 +62,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'database',
         'queue',
         'router',
         'dispatcher',
@@ -157,25 +156,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Database connection.
-     */
-    protected function initDatabase()
-    {
-        $this->di->setShared('modelsMetadata', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $config = $config->get('metadata')->toArray();
-            $adapter = '\Phalcon\Mvc\Model\Metadata\\' . $config['adapter'];
-            unset($config['adapter']);
-
-            $metaData = new $adapter($config);
-
-            return $metaData;
-        });
     }
 
     /**

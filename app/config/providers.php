@@ -28,6 +28,7 @@ return [
     Phosphorum\Providers\View\ServiceProvider::class,
     Phosphorum\Providers\Database\ServiceProvider::class,
     Phosphorum\Providers\ModelsManager\ServiceProvider::class,
+    Phosphorum\Providers\ModelsMetadata\ServiceProvider::class,
 
     // Third Party Providers
     // ...

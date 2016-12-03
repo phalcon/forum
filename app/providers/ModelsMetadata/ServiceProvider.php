@@ -15,15 +15,14 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Config;
+namespace Phosphorum\Providers\ModelsMetadata;
 
-use RuntimeException;
 use Phosphorum\Providers\Abstrakt;
 
 /**
- * Phosphorum\Providers\Config\ServiceProvider
+ * Phosphorum\Providers\ModelsMetadata\ServiceProvider
  *
- * @package Phosphorum\Providers\Config
+ * @package Phosphorum\Providers\ModelsMetadata
  */
 class ServiceProvider extends Abstrakt
 {
@@ -31,39 +30,7 @@ class ServiceProvider extends Abstrakt
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'config';
-
-    /**
-     * Config files.
-     * @var array
-     */
-    protected $configs = [
-        'logger',
-        'cache',
-        'session',
-        'database',
-        'metadata',
-        'config',
-    ];
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = config_path('config.php');
-
-        if (!file_exists($configPath) || !is_file($configPath)) {
-            throw new RuntimeException(
-                sprintf(
-                    'The application config not found. Please make sure that the file "%s" is present',
-                    $configPath
-                )
-            );
-        }
-    }
+    protected $serviceName = 'modelsMetadata';
 
     /**
      * {@inheritdoc}
@@ -72,12 +39,21 @@ class ServiceProvider extends Abstrakt
      */
     public function register()
     {
-        $configs = $this->configs;
-
         $this->di->setShared(
             $this->serviceName,
-            function () use ($configs) {
-                return Factory::create($configs);
+            function() {
+                $config = container('config')->metadata;
+
+                $driver   = $config->drivers->{$config->default};
+                $adapter  = '\Phalcon\Mvc\Model\Metadata\\' . $driver->adapter;
+                $defaults = [
+                    'prefix'   => $config->prefix,
+                    'lifetime' => $config->lifetime,
+                ];
+
+                return new $adapter(
+                    array_merge($driver->toArray(), $defaults)
+                );
             }
         );
     }
