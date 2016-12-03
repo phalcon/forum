@@ -19,6 +19,11 @@ settings:
     # We set a high limit for them by default.
     memory_limit: 1024M
     log: true
+coverage:
+    enabled: true
+    whitelist:
+      include:
+        - app/*
 
 extensions:
     enabled:
@@ -39,7 +44,7 @@ modules:
             populate: false
             cleanup: false
         Phalcon:
-            bootstrap: 'tests/_config/bootstrap.php'
+            bootstrap: "tests/_config/bootstrap.php"
             cleanup: false
             savepoints: false
         PhpBrowser:
