@@ -22,7 +22,6 @@ use Dotenv\Dotenv;
 use Phalcon\Config;
 use Ciconia\Ciconia;
 use Phalcon\Di\Service;
-use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
@@ -59,7 +58,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'router',
         'dispatcher',
         'slug',
         'markdown',
@@ -152,33 +150,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Router.
-     */
-    protected function initRouter()
-    {
-        $this->di->setShared('router', function () {
-            /**
-             * @var DiInterface $this
-             * @var \Phalcon\Mvc\Router $router
-             */
-            $em     = container('eventsManager');
-            $router = include BASE_DIR . 'app/config/routes.php';
-
-            if (!isset($_GET['_url'])) {
-                $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
-            }
-
-            $router->removeExtraSlashes(true);
-            $router->setEventsManager($em);
-
-            $router->setDefaultNamespace('\Phosphorum\Controllers');
-            $router->notFound(['controller' => 'error', 'action' => 'route404']);
-
-            return $router;
-        });
     }
 
     /**
