@@ -76,13 +76,6 @@ return new Config([
         'forceCompile' => env('APP_DEBUG'),
     ],
 
-    'viewCache' => [
-        'backend'  => env('VIEW_CACHE_DRIVER'),
-        'lifetime' => env('VIEW_CACHE_LIFETIME'),
-        'prefix'   => env('VIEW_CACHE_PREFIX'),
-        'cacheDir' => cache_path('views') . DIRECTORY_SEPARATOR,
-    ],
-
     'session' => [
         'adapter' => env('SESSION_DRIVER'),
     ],

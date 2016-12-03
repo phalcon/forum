@@ -19,6 +19,7 @@ return [
     'cache' => [
 
         'default' => env('CACHE_DRIVER', 'file'),
+        'views'   => env('VIEW_CACHE_DRIVER', 'views'),
 
         'drivers' => [
 
@@ -44,6 +45,11 @@ return [
             'file' => [
                 'adapter'  => 'File',
                 'cacheDir' => cache_path('data') . DIRECTORY_SEPARATOR
+            ],
+
+            'views' => [
+                'adapter'  => 'File',
+                'cacheDir' => cache_path('views') . DIRECTORY_SEPARATOR
             ],
 
             'redis' => [

@@ -47,7 +47,6 @@ use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
-use Phalcon\Cache\Frontend\Output as FrontOutput;
 use Phosphorum\Providers\ServiceProviderInterface;
 use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
@@ -74,7 +73,6 @@ class Bootstrap
 
     private $loaders = [
         'logger',
-        'cache',
         'security',
         'session',
         'view',
@@ -199,28 +197,6 @@ class Bootstrap
             $logger->setLogLevel($config->get('logger')->logLevel);
 
             return $logger;
-        });
-    }
-
-    /**
-     * Initialize the Cache.
-     *
-     * The frontend must always be Phalcon\Cache\Frontend\Output and the service 'viewCache'
-     * must be registered as always open (not shared) in the services container (DI).
-     */
-    protected function initCache()
-    {
-        $this->di->set('viewCache', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $frontend = new FrontOutput(['lifetime' => $config->get('viewCache')->lifetime]);
-
-            $config  = $config->get('viewCache')->toArray();
-            $backend = '\Phalcon\Cache\Backend\\' . $config['backend'];
-            unset($config['backend'], $config['lifetime']);
-
-            return new $backend($frontend, $config);
         });
     }
 
