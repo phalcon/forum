@@ -93,7 +93,7 @@ class Security extends PhSecurity
      * @param string $prefix
      * @param string $tokenKey
      * @param string $tokenValue
-     * @param bool $destroyIfValid
+     * @param bool   $destroyIfValid
      * @return bool
      */
     public function checkPrefixedToken($prefix, $tokenKey = null, $tokenValue = null, $destroyIfValid = true)
@@ -103,6 +103,10 @@ class Security extends PhSecurity
 
         /** @var \Phalcon\Session\AdapterInterface $session */
         $session = $this->getDI()->getShared('session');
+
+        if (!$session->has($prefixedValue)) {
+            return false;
+        }
 
         if (!$tokenKey) {
             $tokenKey = $session->get($prefixedKey);
@@ -118,15 +122,13 @@ class Security extends PhSecurity
             $tokenValue = $request->getPost($tokenKey);
         }
 
-        if (!is_string($session->get($prefixedValue)) || !is_string($tokenValue)) {
+        $knownToken = $session->get($prefixedValue);
+
+        if (!is_string($knownToken) || !is_string($tokenValue)) {
             return false;
         }
 
-        if (strlen($session->get($prefixedValue)) !== strlen($tokenValue)) {
-            return false;
-        }
-
-        $equals = hash_equals($session->get($prefixedValue), $tokenValue);
+        $equals = hash_equals($knownToken, $tokenValue);
 
         if ($equals && $destroyIfValid) {
             $this->destroyPrefixedToken($prefix);
