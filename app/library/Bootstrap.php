@@ -45,7 +45,6 @@ use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Logger\Adapter\File as FileLogger;
-use Phosphorum\Config\Factory as ConfigFactory;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
@@ -75,7 +74,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'config',
         'logger',
         'cache',
         'security',
@@ -119,6 +117,12 @@ class Bootstrap
          * This service should be registered first
          */
         $this->initializeServiceProvider(new Providers\EventsManager\ServiceProvider($this->di));
+
+        /** @noinspection PhpIncludeInspection */
+        $providers = require config_path('providers.php');
+        if (is_array($providers)) {
+            $this->initializeServiceProviders($providers);
+        }
 
         foreach ($this->loaders as $service) {
             $serviceName = ucfirst($service);
@@ -673,16 +677,6 @@ class Bootstrap
                 return new ReCaptcha;
             }
         );
-    }
-
-    /**
-     * Initialize the Application Config.
-     */
-    protected function initConfig()
-    {
-        $this->di->setShared('config', function () {
-            return ConfigFactory::create();
-        });
     }
 
     /**

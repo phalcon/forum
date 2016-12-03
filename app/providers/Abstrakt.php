@@ -65,6 +65,7 @@ abstract class Abstrakt extends Component implements ServiceProviderInterface
     public function boot()
     {
     }
+
     /**
      * {@inheritdoc}
      *
