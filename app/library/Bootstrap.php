@@ -167,47 +167,6 @@ class Bootstrap
      */
     protected function initDatabase()
     {
-        $this->di->setShared('db', function () {
-            /** @var DiInterface $this */
-            $config = container('config')->get('database')->toArray();
-            $em     = container('eventsManager');
-            $that   = $this;
-
-            $adapter = '\Phalcon\Db\Adapter\Pdo\\' . $config['adapter'];
-            unset($config['adapter']);
-
-            /** @var \Phalcon\Db\Adapter\Pdo $connection */
-            $connection = new $adapter($config);
-
-            // Listen all the database events
-            $em->attach(
-                'db',
-                function ($event, $connection) use ($that) {
-                    /**
-                     * @var \Phalcon\Events\Event $event
-                     * @var \Phalcon\Db\AdapterInterface $connection
-                     * @var DiInterface $that
-                     */
-                    if ($event->getType() == 'beforeQuery') {
-                        $variables = $connection->getSQLVariables();
-                        $string    = $connection->getSQLStatement();
-
-                        if ($variables) {
-                            $string .= ' [' . join(',', $variables) . ']';
-                        }
-
-                        // To disable logging change logLevel in config
-                        $that->get('logger', ['db'])->debug($string);
-                    }
-                }
-            );
-
-            // Assign the eventsManager to the db adapter instance
-            $connection->setEventsManager($em);
-
-            return $connection;
-        });
-
         $this->di->setShared('modelsManager', function () {
             /** @var DiInterface $this */
             $em = container('eventsManager');

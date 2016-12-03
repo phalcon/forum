@@ -41,6 +41,7 @@ class ServiceProvider extends Abstrakt
         'logger',
         'cache',
         'session',
+        'database',
         'config',
     ];
 

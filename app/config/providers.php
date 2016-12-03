@@ -26,6 +26,7 @@ return [
     Phosphorum\Providers\Session\ServiceProvider::class,
     Phosphorum\Providers\VoltTemplate\ServiceProvider::class,
     Phosphorum\Providers\View\ServiceProvider::class,
+    Phosphorum\Providers\Database\ServiceProvider::class,
 
     // Third Party Providers
     // ...
