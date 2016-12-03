@@ -38,6 +38,7 @@ class ServiceProvider extends Abstrakt
      * @var array
      */
     protected $configs = [
+        'logger',
         'cache',
         'config',
     ];

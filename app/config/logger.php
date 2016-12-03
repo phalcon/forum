@@ -16,13 +16,15 @@
 */
 
 return [
-    // Application Service Providers
-    Phosphorum\Providers\Config\ServiceProvider::class,
-    Phosphorum\Providers\UrlResolver\ServiceProvider::class,
-    Phosphorum\Providers\ModelsCache\ServiceProvider::class,
-    Phosphorum\Providers\ViewCache\ServiceProvider::class,
-    Phosphorum\Providers\Logger\ServiceProvider::class,
+    'logger' => [
+        'path'     => app_path('logs'),
 
-    // Third Party Providers
-    // ...
+        'format'   => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
+
+        'date'     => 'd-M-Y H:i:s',
+
+        'level'    => env('LOGGER_LEVEL', 'info'),
+
+        'filename' => 'application',
+    ],
 ];

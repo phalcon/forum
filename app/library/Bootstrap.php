@@ -43,12 +43,10 @@ use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
-use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\View\Exception as ViewException;
 use Phosphorum\Providers\ServiceProviderInterface;
-use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phalcon\Logger\AdapterInterface as LoggerInterface;
 use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
@@ -72,7 +70,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'logger',
         'security',
         'session',
         'view',
@@ -119,6 +116,8 @@ class Bootstrap
         if (is_array($providers)) {
             $this->initializeServiceProviders($providers);
         }
+
+        ErrorHandler::register();
 
         foreach ($this->loaders as $service) {
             $serviceName = ucfirst($service);
@@ -169,35 +168,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Logger.
-     */
-    protected function initLogger()
-    {
-        ErrorHandler::register();
-
-        $this->di->set('logger', function ($filename = null, $format = null) {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $format   = $format ?: $config->get('logger')->format;
-            $filename = trim($filename ?: $config->get('logger')->filename, '\\/');
-            $path     = rtrim($config->get('logger')->path, '\\/') . DIRECTORY_SEPARATOR;
-
-            if (false === strpos($filename, '.log')) {
-                $filename = "$filename.log";
-            }
-
-            $formatter = new FormatterLine($format, $config->get('logger')->date);
-            $logger = new FileLogger($path . $filename);
-
-            $logger->setFormatter($formatter);
-            $logger->setLogLevel($config->get('logger')->logLevel);
-
-            return $logger;
-        });
     }
 
     /**

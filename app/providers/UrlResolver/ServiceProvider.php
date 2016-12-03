@@ -48,13 +48,13 @@ class ServiceProvider extends Abstrakt
 
                 $url = new Url();
 
-                if (isset($config->application->staticBaseUri)) {
+                if (!empty($config->application->staticBaseUri)) {
                     $url->setStaticBaseUri($config->application->staticBaseUri);
                 } else {
                     $url->setStaticBaseUri('/');
                 }
 
-                if (isset($config->application->baseUri)) {
+                if (!empty($config->application->baseUri)) {
                     $url->setBaseUri($config->application->baseUri);
                 } else {
                     $url->setBaseUri('/');

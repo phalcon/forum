@@ -87,12 +87,9 @@ if (function_exists('mb_substitute_character')) {
 
 if (ENV_PRODUCTION === APPLICATION_ENV) {
     header_remove('X-Powered-By');
-    error_reporting(E_ALL ^ E_NOTICE);
 }
 
 if (ENV_DEVELOPMENT === APPLICATION_ENV) {
-    error_reporting(E_ALL);
-
     // Enable xdebug parameter collection in development mode to improve fatal stack traces.
     // Highly recommends use at least XDebug 2.2.3 for a better compatibility with Phalcon
     if (extension_loaded('xdebug')) {
