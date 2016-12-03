@@ -24,6 +24,7 @@ return [
     Phosphorum\Providers\Logger\ServiceProvider::class,
     Phosphorum\Providers\Security\ServiceProvider::class,
     Phosphorum\Providers\Session\ServiceProvider::class,
+    Phosphorum\Providers\VoltTemplate\ServiceProvider::class,
 
     // Third Party Providers
     // ...

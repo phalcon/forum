@@ -70,7 +70,7 @@ return [
         'compiledExt'  => '.php',
         'separator'    => '_',
         'cacheDir'     => cache_path('volt') . DIRECTORY_SEPARATOR,
-        'forceCompile' => env('APP_DEBUG'),
+        'forceCompile' => env('APP_DEBUG', true),
     ],
 
     'mandrillapp' => [
