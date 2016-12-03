@@ -24,5 +24,5 @@ return [
 
     'level'    => env('LOGGER_LEVEL', 'info'),
 
-    'filename' => 'application',
+    'filename' => env('LOGGER_DEFAULT_FILENAME', 'application'),
 ];

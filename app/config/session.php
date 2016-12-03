@@ -34,9 +34,9 @@ return [
         ],
     ],
 
-    'prefix'   => 'forum_session_',
+    'prefix'   => env('SESSION_PREFIX', 'forum_session_'),
 
-    'uniqueId' => substr(md5(env('APP_PROJECT', 'Phalcon')), 0, 16) . '_',
+    'uniqueId' => env('SESSION_UNIQUE_ID', 'phosphorum_'),
 
     'lifetime' => env('SESSION_LIFETIME', 3600),
 ];
