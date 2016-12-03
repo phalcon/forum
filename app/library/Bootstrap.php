@@ -47,7 +47,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'timezones',
         'breadcrumbs',
         'recaptcha',
     ];
@@ -148,17 +147,6 @@ class Bootstrap
             $breadcrumbs->setSeparator('');
 
             return $breadcrumbs;
-        });
-    }
-
-    /**
-     * Initialize time zones.
-     */
-    protected function initTimezones()
-    {
-        $this->di->setShared('timezones', function () {
-            /** @noinspection PhpIncludeInspection */
-            return require_once config_path('timezones.php');
         });
     }
 

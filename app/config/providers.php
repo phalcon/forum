@@ -36,6 +36,8 @@ return [
     Phosphorum\Providers\Notifications\ServiceProvider::class,
     Phosphorum\Providers\Flash\ServiceProvider::class,
     Phosphorum\Providers\SearchEngine\ServiceProvider::class,
+    Phosphorum\Providers\Avatar\ServiceProvider::class,
+    Phosphorum\Providers\Timezones\ServiceProvider::class,
 
     // Third Party Providers
     // ...
