@@ -4,7 +4,6 @@ use Codeception\Specify;
 use Phalcon\Http\Request;
 use Codeception\Test\Unit;
 use Phosphorum\Utils\Security;
-use Codeception\Lib\Connector\PhalconMemorySession;
 
 class SecurityTest extends Unit
 {
@@ -112,10 +111,6 @@ class SecurityTest extends Unit
     {
         $di = $this->tester->getDi();
         $di::reset();
-
-//        $this->tester->haveServiceInDi('session', function() {
-//            return new PhalconMemorySession();
-//        }, true);
 
         $this->tester->haveServiceInDi('request', function() {
             return new Request();

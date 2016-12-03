@@ -10,12 +10,9 @@ php:
 matrix:
   include:
     - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.2"
+      env: ZEND_BACKEND="--backend=ZendEngine3"
 
 services:
-  - mysql
   - memcached
 
 git:
@@ -37,8 +34,6 @@ env:
     - PATH="$PATH:~/bin"
     - DISPLAY=":99.0"
     - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
-  matrix:
-    - PHALCON_VERSION="v3.0.0"
     - PHALCON_VERSION="v3.0.2"
 
 before_install:
@@ -57,8 +52,11 @@ install:
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
 before_script:
+  # Create database and user
   - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-  - cat schemas/forum.sql | mysql -uroot phosphorum
+  - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
+  - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
+  - cat schemas/forum.sql | mysql -u root phosphorum
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true

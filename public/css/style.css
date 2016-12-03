@@ -421,11 +421,6 @@ div.reply-negative p {
     font-size: .9em;
 }
 
-div.reply-positive div,
-div.reply-positive p {
-    font-size: 1.1em;
-}
-
 div.reply-negative td.small img {
     width: 32px;
     height: 32px;
@@ -720,6 +715,10 @@ ul.preview-nav {
 
 div.login-comment {
     margin-top: 20px;
+}
+
+.row-sticked {
+    background-color: rgba(112, 185, 154, 0.12)!important;
 }
 
 div#suggested-posts h3 {

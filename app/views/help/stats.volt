@@ -1,11 +1,11 @@
 <div class="help-container">
     <div class="row">
 		{% include 'partials/breadcrumbs.volt' %}
-        <div class="col-md-8 col-md-offset-2 help-head">
-            <h1>Statistics</h1>
+        <div class="col-md-6 help-head">
+            <h2>Statistics</h2>
             <section>
 				{% cache "stats" 3600 %}
-				<table class="table table-stripped" align="center" style="width:300px">
+				<table class="table table-stripped" align="left" style="width:300px">
 					<tr>
 						<td>Threads</td>
 						<td align="right">{{ number_format(threads) }}</td>
@@ -44,6 +44,25 @@
 					</tr>
 				</table>
 				{% endcache %}
+            </section>
+        </div>
+        <div class="col-md-6 help-head">
+            <h2>The most active users</h2>
+            <section>
+                {% cache "activity" 3600 %}
+                <table class="table table-stripped" align="left" style="width:300px">
+                    {% for activity in activities %}
+                        <tr>
+                            <td>
+                                <a href="{{ url("user/" ~ activity.id ~ "/" ~ activity.login) }}" title="{{ activity.name }}">
+                                    {{ activity.name }}
+                                </a>
+                            </td>
+                            <td align="right">{{ activity.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% endcache %}
             </section>
         </div>
     </div>
