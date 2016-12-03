@@ -32,7 +32,7 @@ class Factory
         $merge = self::merge();
 
         foreach ($providers as $provider) {
-            $merge($default, config_path("$provider.php"));
+            $merge($default, config_path("$provider.php"), $provider == 'config' ? null : $provider);
         }
 
         $overridePath = config_path(APPLICATION_ENV) . '.php';
@@ -45,7 +45,7 @@ class Factory
 
     protected static function merge()
     {
-        return function (Config &$config, $path) {
+        return function (Config &$config, $path, $name = null) {
             if (file_exists($path)) {
                 /** @noinspection PhpIncludeInspection */
                 $toMerge = require $path;
@@ -55,8 +55,15 @@ class Factory
                 }
 
                 if ($toMerge instanceof Config) {
-                    /** @var Config $config */
-                    $config->merge($toMerge);
+                    if ($name) {
+                        if (!$config->offsetExists($name) || !$config->{$name} instanceof Config) {
+                            $config->offsetSet($name, new Config());
+                        }
+
+                        $config->get($name)->merge($toMerge);
+                    } else {
+                        $config->merge($toMerge);
+                    }
                 }
             }
         };

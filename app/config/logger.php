@@ -16,15 +16,13 @@
 */
 
 return [
-    'logger' => [
-        'path'     => app_path('logs'),
+    'path'     => app_path('logs'),
 
-        'format'   => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
+    'format'   => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
 
-        'date'     => 'd-M-Y H:i:s',
+    'date'     => 'd-M-Y H:i:s',
 
-        'level'    => env('LOGGER_LEVEL', 'info'),
+    'level'    => env('LOGGER_LEVEL', 'info'),
 
-        'filename' => 'application',
-    ],
+    'filename' => 'application',
 ];
