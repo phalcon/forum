@@ -15,14 +15,14 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Notification;
+namespace Phosphorum\Providers\Notifications;
 
 use Phosphorum\Providers\Abstrakt;
 
 /**
- * Phosphorum\Providers\Notification\ServiceProvider
+ * Phosphorum\Providers\Notifications\ServiceProvider
  *
- * @package Phosphorum\Providers\Notification
+ * @package Phosphorum\Providers\Notifications
  */
 class ServiceProvider extends Abstrakt
 {

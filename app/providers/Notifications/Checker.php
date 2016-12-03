@@ -15,16 +15,16 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Notification;
+namespace Phosphorum\Providers\Notifications;
 
 use Phosphorum\Models\ActivityNotifications;
 
 /**
- * Phosphorum\Providers\Notification\Checker
+ * Phosphorum\Providers\Notifications\Checker
  *
  * Checks if the user has unread notifications or not
  *
- * @package Phosphorum\Providers\Notification
+ * @package Phosphorum\Providers\Notifications
  */
 class Checker
 {

@@ -33,7 +33,8 @@ return [
     Phosphorum\Providers\Routing\ServiceProvider::class,
     Phosphorum\Providers\Dispatcher\ServiceProvider::class,
     Phosphorum\Providers\Markdown\ServiceProvider::class,
-    Phosphorum\Providers\Notification\ServiceProvider::class,
+    Phosphorum\Providers\Notifications\ServiceProvider::class,
+    Phosphorum\Providers\Flash\ServiceProvider::class,
 
     // Third Party Providers
     // ...

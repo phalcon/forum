@@ -27,10 +27,8 @@ use Phosphorum\Providers;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Flash\Direct as Flash;
 use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
-use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Providers\ServiceProviderInterface;
 
@@ -52,7 +50,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'flash',
         'elastic',
         'gravatar',
         'timezones',
@@ -156,34 +153,6 @@ class Bootstrap
             $breadcrumbs->setSeparator('');
 
             return $breadcrumbs;
-        });
-    }
-
-    /**
-     * Initialize the Flash Service.
-     *
-     * Register the Flash Service with the Twitter Bootstrap classes
-     */
-    protected function initFlash()
-    {
-        $this->di->setShared('flash', function () {
-            return new Flash(
-                [
-                    'error'   => 'alert alert-danger fade in',
-                    'success' => 'alert alert-success fade in',
-                    'notice'  => 'alert alert-info fade in',
-                    'warning' => 'alert alert-warning fade in',
-                ]
-            );
-        });
-
-        $this->di->setShared('flashSession', function () {
-            return new FlashSession([
-                'error'   => 'alert alert-danger fade in',
-                'success' => 'alert alert-success fade in',
-                'notice'  => 'alert alert-info fade in',
-                'warning' => 'alert alert-warning fade in',
-            ]);
         });
     }
 
