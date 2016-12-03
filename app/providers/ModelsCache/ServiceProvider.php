@@ -50,7 +50,7 @@ class ServiceProvider extends Abstrakt
 
                 return new $adapter(
                     new Data(['lifetime' => $config->lifetime]),
-                    array_merge($driver->toArray(), ['prefix' => $config->prefix])
+                    array_merge($driver->toArray(), ['prefix' => 'PMC_'.$config->prefix])
                 );
             }
         );

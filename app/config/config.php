@@ -76,25 +76,6 @@ return new Config([
         'forceCompile' => env('APP_DEBUG'),
     ],
 
-    'dataCache' => [
-        'backend'  => env('DATA_CACHE_DRIVER'),
-        'frontend' => env('DATA_CACHE_FRONTEND'),
-        'lifetime' => env('DATA_CACHE_LIFETIME'),
-        'prefix'   => env('DATA_CACHE_PREFIX'),
-        'cacheDir' => cache_path('data') . DIRECTORY_SEPARATOR,
-    ],
-
-    'modelsCache' => [
-        'backend'  => env('MODELS_CACHE_DRIVER'),
-        'frontend' => env('MODELS_CACHE_FRONTEND'),
-        'lifetime' => env('MODELS_CACHE_LIFETIME'),
-        'prefix'   => env('MODELS_CACHE_PREFIX'),
-        'host'     => env('MEMCACHED_HOST'),
-        'port'     => env('MEMCACHED_PORT'),
-        'weight'   => env('MEMCACHED_HOST'),
-        'cacheDir' => cache_path('models') . DIRECTORY_SEPARATOR,
-    ],
-
     'viewCache' => [
         'backend'  => env('VIEW_CACHE_DRIVER'),
         'lifetime' => env('VIEW_CACHE_LIFETIME'),
