@@ -38,6 +38,7 @@ return [
     Phosphorum\Providers\SearchEngine\ServiceProvider::class,
     Phosphorum\Providers\Avatar\ServiceProvider::class,
     Phosphorum\Providers\Timezones\ServiceProvider::class,
+    Phosphorum\Providers\Breadcrumbs\ServiceProvider::class,
 
     // Third Party Providers
     // ...

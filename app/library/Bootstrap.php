@@ -20,7 +20,6 @@ namespace Phosphorum;
 use Phalcon\Di;
 use Dotenv\Dotenv;
 use Phalcon\Di\Service;
-use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
 use InvalidArgumentException;
@@ -47,7 +46,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'breadcrumbs',
         'recaptcha',
     ];
 
@@ -131,23 +129,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Breadcrumbs component.
-     */
-    protected function initBreadcrumbs()
-    {
-        $this->di->setShared('breadcrumbs', function () {
-            /** @var DiInterface $this */
-            $em = container('eventsManager');
-
-            $breadcrumbs = new Breadcrumbs;
-            $breadcrumbs->setEventsManager($em);
-            $breadcrumbs->setSeparator('');
-
-            return $breadcrumbs;
-        });
     }
 
     protected function initRecaptcha()
