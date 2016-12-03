@@ -15,10 +15,7 @@
  +------------------------------------------------------------------------+
 */
 
-use Phalcon\Config;
-use Phalcon\Logger;
-
-return new Config([
+return [
     'site' => [
         'name'        => env('APP_NAME'),
         'url'         => env('APP_URL'),
@@ -125,14 +122,6 @@ return new Config([
         'fromEmail' => env('MAIL_FROM_ADDRESS'),
     ],
 
-    'logger' => [
-        'path'     => BASE_DIR . '/app/logs/',
-        'format'   => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
-        'date'     => 'd-M-Y H:i:s',
-        'logLevel' => Logger::INFO,
-        'filename' => 'application.log',
-    ],
-
     'error' => [
         'logger'    => BASE_DIR . 'app/logs/error.log',
         'formatter' => [
@@ -142,8 +131,9 @@ return new Config([
         'controller' => 'error',
         'action'     => 'index',
     ],
+
     'reCaptcha' => [
         'siteKey' => env('RECAPTCHA_KEY'),
         'secret' => env('RECAPTCHA_SECRET'),
     ]
-]);
+];

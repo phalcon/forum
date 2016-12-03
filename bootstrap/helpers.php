@@ -113,7 +113,11 @@ if (!function_exists('container')) {
             return $default;
         }
 
-        return call_user_func_array([$default, 'get'], $args);
+        if (!$default) {
+            trigger_error('Unable to resolve Dependency Injection container.', E_USER_ERROR);
+        }
+
+        return call_user_func_array([$default, 'getShared'], $args);
     }
 }
 

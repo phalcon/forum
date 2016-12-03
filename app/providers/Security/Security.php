@@ -15,12 +15,12 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Utils;
+namespace Phosphorum\Providers\Security;
 
 use Phalcon\Security as PhSecurity;
 
 /***
- * Phosphorum\Utils\Security
+ * Phosphorum\Providers\Security\Security
  *
  * This component provides a set of functions to improve the security in Forum application.
  * Prefixed version.
@@ -35,7 +35,7 @@ use Phalcon\Security as PhSecurity;
  * }
  * </code>
  *
- * @package Phosphorum\Utils
+ * @package Phosphorum\Providers\Security
  * @property \Phalcon\Security\Random $_random
  */
 class Security extends PhSecurity
@@ -57,8 +57,8 @@ class Security extends PhSecurity
             $tokenKey = $this->_random->base64Safe($this->_numberBytes);
 
             $this->prefixedTokenKeys[$key] = $tokenKey;
-            /** @var \Phalcon\Session\AdapterInterface $session */
-            $session = $this->getDI()->getShared('session');
+
+            $session = container('session');
             $session->set($key, $tokenKey);
         }
 
@@ -79,8 +79,8 @@ class Security extends PhSecurity
             $token = $this->_random->base64Safe($this->_numberBytes);
 
             $this->prefixedTokens[$key] = $token;
-            /** @var \Phalcon\Session\AdapterInterface $session */
-            $session = $this->getDI()->getShared('session');
+
+            $session = container('session');
             $session->set($key, $token);
         }
 
@@ -101,8 +101,7 @@ class Security extends PhSecurity
         $prefixedKey = $prefix . ':' . $this->_tokenKeySessionID;
         $prefixedValue = $prefix . ':' . $this->_tokenValueSessionID;
 
-        /** @var \Phalcon\Session\AdapterInterface $session */
-        $session = $this->getDI()->getShared('session');
+        $session = container('session');
 
         if (!$session->has($prefixedValue)) {
             return false;
@@ -117,8 +116,7 @@ class Security extends PhSecurity
         }
 
         if (!$tokenValue) {
-            /** @var \Phalcon\Http\Request $request */
-            $request = $this->getDI()->getShared('request');
+            $request = container('request');
             $tokenValue = $request->getPost($tokenKey);
         }
 
@@ -147,8 +145,8 @@ class Security extends PhSecurity
     {
         $prefixedValue = $prefix . ':' . $this->_tokenValueSessionID;
 
-        /** @var \Phalcon\Session\AdapterInterface $session */
-        $session = $this->getDI()->getShared('session');
+        $session = container('session');
+
         return $session->get($prefixedValue);
     }
 
@@ -163,8 +161,7 @@ class Security extends PhSecurity
         $prefixedKey = $prefix . ':' . $this->_tokenKeySessionID;
         $prefixedValue = $prefix . ':' . $this->_tokenValueSessionID;
 
-        /** @var \Phalcon\Session\AdapterInterface $session */
-        $session = $this->getDI()->getShared('session');
+        $session = container('session');
 
         $session->remove($prefixedKey);
         $session->remove($prefixedValue);

@@ -22,7 +22,7 @@ namespace Phosphorum\Mvc\Controllers;
  *
  * @package Phosphorum\Mvc\Controllers
  *
- * @property \Phosphorum\Utils\Security $security
+ * @property \Phosphorum\Providers\Security\Security $security
  * @property \Phalcon\FlashInterface $flashSession
  * @property \Phalcon\Session\AdapterInterface $session
  * @property \Phalcon\Http\RequestInterface $request

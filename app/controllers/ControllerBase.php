@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  * @property \Phalcon\Avatar\Avatarable gravatar
  * @property \Phalcon\Logger\AdapterInterface logger
  * @property \Phalcon\Breadcrumbs breadcrumbs
- * @property \Phosphorum\Utils\Security $security
+ * @property \Phosphorum\Providers\Security\Security $security
  * @property \Phosphorum\ReCaptcha $recaptcha
  */
 class ControllerBase extends Controller

@@ -3,7 +3,7 @@
 use Codeception\Specify;
 use Phalcon\Http\Request;
 use Codeception\Test\Unit;
-use Phosphorum\Utils\Security;
+use Phosphorum\Providers\Security\Security;
 
 class SecurityTest extends Unit
 {
@@ -110,7 +110,6 @@ class SecurityTest extends Unit
     private function setupDI()
     {
         $di = $this->tester->getDi();
-        $di::reset();
 
         $this->tester->haveServiceInDi('request', function() {
             return new Request();

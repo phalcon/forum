@@ -34,7 +34,6 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
-use Phosphorum\Utils\Security;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Queue\DummyServer;
@@ -70,7 +69,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'security',
         'session',
         'view',
         'database',
@@ -168,19 +166,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Security Service.
-     */
-    protected function initSecurity()
-    {
-        $this->di->setShared('security', function () {
-            $security = new Security;
-            $security->setWorkFactor(12);
-
-            return $security;
-        });
     }
 
     /**
