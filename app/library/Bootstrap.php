@@ -45,10 +45,6 @@ class Bootstrap
     /** @var  DiInterface */
     private $di;
 
-    private $loaders = [
-        'recaptcha',
-    ];
-
     /**
      * Bootstrap constructor.
      *
@@ -79,11 +75,6 @@ class Bootstrap
         }
 
         ErrorHandler::register();
-
-        foreach ($this->loaders as $service) {
-            $serviceName = ucfirst($service);
-            $this->{'init' . $serviceName}();
-        }
 
         $this->app->setEventsManager(container('eventsManager'));
 
@@ -129,16 +120,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    protected function initRecaptcha()
-    {
-        $this->di->setShared(
-            'recaptcha',
-            function () {
-                return new ReCaptcha;
-            }
-        );
     }
 
     /**

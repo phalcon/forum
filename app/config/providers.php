@@ -39,6 +39,7 @@ return [
     Phosphorum\Providers\Avatar\ServiceProvider::class,
     Phosphorum\Providers\Timezones\ServiceProvider::class,
     Phosphorum\Providers\Breadcrumbs\ServiceProvider::class,
+    Phosphorum\Providers\Captcha\ServiceProvider::class,
 
     // Third Party Providers
     // ...
