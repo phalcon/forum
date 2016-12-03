@@ -223,20 +223,6 @@ class Bootstrap
             return new $backend($frontend, $config);
         });
 
-        $this->di->setShared('modelsCache', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $frontend = '\Phalcon\Cache\Frontend\\' . $config->get('modelsCache')->frontend;
-            $frontend = new $frontend(['lifetime' => $config->get('modelsCache')->lifetime]);
-
-            $config  = $config->get('modelsCache')->toArray();
-            $backend = '\Phalcon\Cache\Backend\\' . $config['backend'];
-            unset($config['backend'], $config['lifetime'], $config['frontend']);
-
-            return new $backend($frontend, $config);
-        });
-
         $this->di->setShared('dataCache', function () {
             /** @var DiInterface $this */
             $config = container('config');
