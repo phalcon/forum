@@ -27,7 +27,6 @@ use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
 use Phosphorum\Utils\Slug;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
@@ -58,7 +57,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'dispatcher',
         'slug',
         'markdown',
         'notifications',
@@ -150,24 +148,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Dispatcher.
-     */
-    protected function initDispatcher()
-    {
-        $this->di->setShared('dispatcher', function () {
-            /** @var DiInterface $this */
-            $em = container('eventsManager');
-
-            $dispatcher = new Dispatcher;
-
-            $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
-            $dispatcher->setEventsManager($em);
-
-            return $dispatcher;
-        });
     }
 
     /**

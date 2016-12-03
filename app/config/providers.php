@@ -31,6 +31,7 @@ return [
     Phosphorum\Providers\ModelsMetadata\ServiceProvider::class,
     Phosphorum\Providers\Queue\ServiceProvider::class,
     Phosphorum\Providers\Routing\ServiceProvider::class,
+    Phosphorum\Providers\Dispatcher\ServiceProvider::class,
 
     // Third Party Providers
     // ...
