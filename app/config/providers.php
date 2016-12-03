@@ -2,7 +2,7 @@
 
 return [
     // Application Service Providers
-    Phosphorum\Providers\EventManager\ServiceProvider::class
+    Phosphorum\Providers\Config\ServiceProvider::class
 
     // Third Party Providers
     // ...
