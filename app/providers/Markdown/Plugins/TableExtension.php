@@ -1,19 +1,34 @@
 <?php
 
-namespace Phosphorum\Markdown;
+/*
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file docs/LICENSE.txt.                        |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
+*/
 
-use Ciconia\Common\Collection;
+namespace Phosphorum\Providers\Markdown\Plugins;
+
+use Ciconia\Markdown;
 use Ciconia\Common\Tag;
 use Ciconia\Common\Text;
+use Ciconia\Common\Collection;
 use Ciconia\Exception\SyntaxError;
-use Ciconia\Extension\ExtensionInterface;
-use Ciconia\Markdown;
 use Ciconia\Renderer\HtmlRenderer;
-use Ciconia\Renderer\RendererAwareInterface;
 use Ciconia\Renderer\RendererAwareTrait;
+use Ciconia\Extension\ExtensionInterface;
+use Ciconia\Renderer\RendererAwareInterface;
 
 /**
- * Gfm tables
+ * Phosphorum\Providers\Markdown\Plugins\TableExtension
  *
  * @author Kazuyuki Hayashi <hayashi@valnur.net>
  */

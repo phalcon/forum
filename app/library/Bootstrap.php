@@ -20,9 +20,7 @@ namespace Phosphorum;
 use Phalcon\Di;
 use Dotenv\Dotenv;
 use Phalcon\Config;
-use Ciconia\Ciconia;
 use Phalcon\Di\Service;
-use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
@@ -35,7 +33,6 @@ use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Providers\ServiceProviderInterface;
-use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
@@ -56,7 +53,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'markdown',
         'notifications',
         'flash',
         'elastic',
@@ -146,26 +142,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Markdown renderer.
-     */
-    protected function initMarkdown()
-    {
-        $this->di->setShared('markdown', function () {
-            $ciconia = new Ciconia;
-
-            $ciconia->addExtension(new Markdown\UnderscoredUrlsExtension);
-            $ciconia->addExtension(new Markdown\TableExtension);
-            $ciconia->addExtension(new Markdown\MentionExtension);
-            $ciconia->addExtension(new Markdown\BlockQuoteExtension);
-            $ciconia->addExtension(new Markdown\UrlAutoLinkExtension);
-            //$ciconia->addExtension(new Markdown\NewLineExtension);
-            $ciconia->addExtension(new FencedCodeBlockExtension);
-
-            return $ciconia;
-        });
     }
 
     /**
