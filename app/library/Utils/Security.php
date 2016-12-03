@@ -118,6 +118,14 @@ class Security extends PhSecurity
             $tokenValue = $request->getPost($tokenKey);
         }
 
+        if (!is_string($session->get($prefixedValue)) || !is_string($tokenValue)) {
+            return false;
+        }
+
+        if (strlen($session->get($prefixedValue)) !== strlen($tokenValue)) {
+            return false;
+        }
+
         $equals = hash_equals($session->get($prefixedValue), $tokenValue);
 
         if ($equals && $destroyIfValid) {
