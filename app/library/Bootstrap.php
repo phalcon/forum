@@ -43,7 +43,6 @@ use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
-use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phosphorum\Config\Factory as ConfigFactory;
@@ -76,7 +75,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'eventsManager',
         'config',
         'logger',
         'cache',
@@ -171,19 +169,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Application Events Manager.
-     */
-    protected function initEventsManager()
-    {
-        $this->di->setShared('eventsManager', function () {
-            $em = new EventsManager;
-            $em->enablePriorities(true);
-
-            return $em;
-        });
     }
 
     /**
