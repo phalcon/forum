@@ -39,7 +39,6 @@ use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
-use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phosphorum\Providers\ServiceProviderInterface;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
@@ -162,21 +161,9 @@ class Bootstrap
 
     /**
      * Initialize the Database connection.
-     *
-     * Database connection is created based in the parameters defined in the configuration file.
      */
     protected function initDatabase()
     {
-        $this->di->setShared('modelsManager', function () {
-            /** @var DiInterface $this */
-            $em = container('eventsManager');
-
-            $modelsManager = new ModelsManager;
-            $modelsManager->setEventsManager($em);
-
-            return $modelsManager;
-        });
-
         $this->di->setShared('modelsMetadata', function () {
             /** @var DiInterface $this */
             $config = container('config');

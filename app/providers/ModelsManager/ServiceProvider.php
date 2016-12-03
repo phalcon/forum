@@ -15,20 +15,39 @@
  +------------------------------------------------------------------------+
 */
 
-return [
-    // Application Service Providers
-    Phosphorum\Providers\Config\ServiceProvider::class,
-    Phosphorum\Providers\UrlResolver\ServiceProvider::class,
-    Phosphorum\Providers\ModelsCache\ServiceProvider::class,
-    Phosphorum\Providers\ViewCache\ServiceProvider::class,
-    Phosphorum\Providers\Logger\ServiceProvider::class,
-    Phosphorum\Providers\Security\ServiceProvider::class,
-    Phosphorum\Providers\Session\ServiceProvider::class,
-    Phosphorum\Providers\VoltTemplate\ServiceProvider::class,
-    Phosphorum\Providers\View\ServiceProvider::class,
-    Phosphorum\Providers\Database\ServiceProvider::class,
-    Phosphorum\Providers\ModelsManager\ServiceProvider::class,
+namespace Phosphorum\Providers\ModelsManager;
 
-    // Third Party Providers
-    // ...
-];
+use Phalcon\Mvc\Model\Manager;
+use Phosphorum\Providers\Abstrakt;
+
+/**
+ * Phosphorum\Providers\ModelsManager\ServiceProvider
+ *
+ * @package Phosphorum\Providers\ModelsManager
+ */
+class ServiceProvider extends Abstrakt
+{
+    /**
+     * The Service name.
+     * @var string
+     */
+    protected $serviceName = 'modelsManager';
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->di->setShared(
+            $this->serviceName,
+            function () {
+                $modelsManager = new Manager();
+                $modelsManager->setEventsManager(container('eventsManager'));
+
+                return $modelsManager;
+            }
+        );
+    }
+}
