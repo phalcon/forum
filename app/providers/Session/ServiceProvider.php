@@ -15,15 +15,14 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Config;
+namespace Phosphorum\Providers\Session;
 
-use RuntimeException;
 use Phosphorum\Providers\Abstrakt;
 
 /**
- * Phosphorum\Providers\Config\ServiceProvider
+ * Phosphorum\Providers\Session\ServiceProvider
  *
- * @package Phosphorum\Providers\Config
+ * @package Phosphorum\Providers\Session
  */
 class ServiceProvider extends Abstrakt
 {
@@ -31,37 +30,7 @@ class ServiceProvider extends Abstrakt
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'config';
-
-    /**
-     * Config files.
-     * @var array
-     */
-    protected $configs = [
-        'logger',
-        'cache',
-        'session',
-        'config',
-    ];
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = config_path('config.php');
-
-        if (!file_exists($configPath) || !is_file($configPath)) {
-            throw new RuntimeException(
-                sprintf(
-                    'The application config not found. Please make sure that the file "%s" is present',
-                    $configPath
-                )
-            );
-        }
-    }
+    protected $serviceName = 'session';
 
     /**
      * {@inheritdoc}
@@ -70,12 +39,24 @@ class ServiceProvider extends Abstrakt
      */
     public function register()
     {
-        $configs = $this->configs;
-
         $this->di->setShared(
             $this->serviceName,
-            function () use ($configs) {
-                return Factory::create($configs);
+            function () {
+                $config = container('config')->session;
+
+                $driver   = $config->drivers->{$config->default};
+                $adapter  = '\Phalcon\Session\Adapter\\' . $driver->adapter;
+                $defaults = [
+                    'prefix'   => $config->prefix,
+                    'uniqueId' => $config->uniqueId,
+                    'lifetime' => $config->lifetime,
+                ];
+
+                /** @var \Phalcon\Session\AdapterInterface $session */
+                $session = new $adapter(array_merge($driver->toArray(), $defaults));
+                $session->start();
+
+                return $session;
             }
         );
     }

@@ -23,6 +23,7 @@ return [
     Phosphorum\Providers\ViewCache\ServiceProvider::class,
     Phosphorum\Providers\Logger\ServiceProvider::class,
     Phosphorum\Providers\Security\ServiceProvider::class,
+    Phosphorum\Providers\Session\ServiceProvider::class,
 
     // Third Party Providers
     // ...

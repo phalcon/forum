@@ -73,10 +73,6 @@ return [
         'forceCompile' => env('APP_DEBUG'),
     ],
 
-    'session' => [
-        'adapter' => env('SESSION_DRIVER'),
-    ],
-
     'mandrillapp' => [
         'secret' => env('MANDRILL_SECRET'),
     ],

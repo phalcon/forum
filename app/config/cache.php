@@ -17,6 +17,7 @@
 
 return [
     'default' => env('CACHE_DRIVER', 'file'),
+
     'views'   => env('VIEW_CACHE_DRIVER', 'views'),
 
     'drivers' => [

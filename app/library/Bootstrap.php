@@ -69,7 +69,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'session',
         'view',
         'database',
         'queue',
@@ -166,27 +165,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the Session Service.
-     *
-     * Start the session the first time some component request the session service.
-     */
-    protected function initSession()
-    {
-        $this->di->setShared('session', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-
-            $adapter = '\Phalcon\Session\Adapter\\' . $config->get('session')->adapter;
-
-            /** @var \Phalcon\Session\AdapterInterface $session */
-            $session = new $adapter;
-            $session->start();
-
-            return $session;
-        });
     }
 
     /**
