@@ -30,7 +30,8 @@ use Ciconia\Renderer\RendererAwareInterface;
 /**
  * Phosphorum\Providers\Markdown\Plugins\TableExtension
  *
- * @author Kazuyuki Hayashi <hayashi@valnur.net>
+ * @author  Kazuyuki Hayashi <hayashi@valnur.net>
+ * @package Phosphorum\Providers\Markdown\Plugins
  */
 class TableExtension implements ExtensionInterface, RendererAwareInterface
 {

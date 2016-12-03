@@ -33,7 +33,8 @@ use Ciconia\Renderer\RendererAwareInterface;
  * Copyright (c) 2004 John Gruber
  * <http://daringfireball.net/projects/markdown/>
  *
- * @author Kazuyuki Hayashi <hayashi@valnur.net>
+ * @author  Kazuyuki Hayashi <hayashi@valnur.net>
+ * @package Phosphorum\Providers\Markdown\Plugins
  */
 class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
 {

@@ -15,17 +15,18 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Notifications;
+namespace Phosphorum\Providers\Notification;
 
 use Phosphorum\Models\ActivityNotifications;
-use Phalcon\Di\Injectable;
 
 /**
- * Checker
+ * Phosphorum\Providers\Notification\Checker
  *
  * Checks if the user has unread notifications or not
+ *
+ * @package Phosphorum\Providers\Notification
  */
-class Checker extends Injectable
+class Checker
 {
     /**
      * Check whether there are unread notifications or not
@@ -34,7 +35,7 @@ class Checker extends Injectable
      */
     public function has()
     {
-        $usersId = $this->session->get('identity');
+        $usersId = container('session')->get('identity');
         if (!$usersId) {
             return false;
         }
@@ -54,7 +55,7 @@ class Checker extends Injectable
      */
     public function getNumber()
     {
-        $usersId = $this->session->get('identity');
+        $usersId = container('session')->get('identity');
         if (!$usersId) {
             return 0;
         }

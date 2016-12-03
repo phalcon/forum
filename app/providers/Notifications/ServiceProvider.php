@@ -15,48 +15,32 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\Markdown\Plugins;
+namespace Phosphorum\Providers\Notification;
 
-use Ciconia\Markdown;
-use Ciconia\Common\Text;
-use Ciconia\Extension\ExtensionInterface;
+use Phosphorum\Providers\Abstrakt;
 
 /**
- * Phosphorum\Providers\Markdown\Plugins\MentionExtension
+ * Phosphorum\Providers\Notification\ServiceProvider
  *
- * @package Phosphorum\Providers\Markdown\Plugins
+ * @package Phosphorum\Providers\Notification
  */
-class MentionExtension implements ExtensionInterface
+class ServiceProvider extends Abstrakt
 {
     /**
-     * {@inheritdoc}
+     * The Service name.
+     * @var string
      */
-    public function register(Markdown $markdown)
-    {
-        $markdown->on('inline', [$this, 'processMentions']);
-    }
-
-    /**
-     * @param Text $text
-     */
-    public function processMentions(Text $text)
-    {
-        // Turn @username into [@username](http://example.com/user/username)
-        $text->replace(
-            '/(?:^|[^a-zA-Z0-9.])@([A-Za-z0-9]+)/',
-            function (Text $w, Text $username) {
-                $url = container('config')->site->url;
-
-                return ' [@' . $username . '](' . rtrim($url, '/') . '/user/0/' . $username . ')';
-            }
-        );
-    }
+    protected $serviceName = 'notifications';
 
     /**
      * {@inheritdoc}
+     *
+     * Initialize the real-time notifications checker.
+     *
+     * @return void
      */
-    public function getName()
+    public function register()
     {
-        return 'mention';
+        $this->di->setShared($this->serviceName, Checker::class);
     }
 }

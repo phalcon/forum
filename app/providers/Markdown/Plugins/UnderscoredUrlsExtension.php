@@ -26,7 +26,7 @@ use Ciconia\Extension\ExtensionInterface;
  *
  * Underscored URLs Extension
  *
- * @package Phosphorum\Markdown
+ * @package Phosphorum\Providers\Markdown\Plugins
  */
 class UnderscoredUrlsExtension implements ExtensionInterface
 {

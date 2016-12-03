@@ -26,7 +26,8 @@ use Ciconia\Extension\ExtensionInterface;
  *
  * Turn standard URL into markdown URL (http://example.com -> <http://example.com>)
  *
- * @author Kazuyuki Hayashi <hayashi@valnur.net>
+ * @author  Kazuyuki Hayashi <hayashi@valnur.net>
+ * @package Phosphorum\Providers\Markdown\Plugins
  */
 class UrlAutoLinkExtension implements ExtensionInterface
 {

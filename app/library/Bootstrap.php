@@ -33,7 +33,6 @@ use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Providers\ServiceProviderInterface;
-use Phosphorum\Notifications\Checker as NotificationsChecker;
 
 class Bootstrap
 {
@@ -53,7 +52,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'notifications',
         'flash',
         'elastic',
         'gravatar',
@@ -142,16 +140,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the real-time notifications checker.
-     */
-    protected function initNotifications()
-    {
-        $this->di->setShared('notifications', function () {
-            return new NotificationsChecker();
-        });
     }
 
     /**
