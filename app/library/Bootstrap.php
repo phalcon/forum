@@ -28,7 +28,6 @@ use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Error\Handler as ErrorHandler;
-use Elasticsearch\Client as ElasticClient;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Providers\ServiceProviderInterface;
 
@@ -50,7 +49,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'elastic',
         'gravatar',
         'timezones',
         'breadcrumbs',
@@ -153,28 +151,6 @@ class Bootstrap
             $breadcrumbs->setSeparator('');
 
             return $breadcrumbs;
-        });
-    }
-
-    /**
-     * Initialize the Elasticsearch Service.
-     */
-    protected function initElastic()
-    {
-        $this->di->setShared('elastic', function () {
-            /**
-             * @var DiInterface $this
-             * @var Config $config
-             */
-            $config = container('config')->get('elasticsearch', new Config);
-            $hosts  = $config->get('hosts', new Config)->toArray();
-
-            if (empty($hosts)) {
-                // Fallback
-                $hosts = ['127.0.0.1:9200'];
-            }
-
-            return new ElasticClient(['hosts' => $hosts]);
         });
     }
 

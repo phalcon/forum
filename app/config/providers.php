@@ -35,6 +35,7 @@ return [
     Phosphorum\Providers\Markdown\ServiceProvider::class,
     Phosphorum\Providers\Notifications\ServiceProvider::class,
     Phosphorum\Providers\Flash\ServiceProvider::class,
+    Phosphorum\Providers\SearchEngine\ServiceProvider::class,
 
     // Third Party Providers
     // ...

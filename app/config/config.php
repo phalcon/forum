@@ -85,15 +85,10 @@ return [
         'password' => env('MAIL_PASSWORD'),
     ],
 
-    'beanstalk' => [
-        'enabled' => env('BEANSTALK_ENABLED'),
-        'host'    => env('BEANSTALK_HOST'),
-    ],
-
     'elasticsearch' => [
         'index' => env('ELASTIC_INDEX'),
         'hosts' => [
-            env('ELASTIC_HOST') .':' . env('ELASTIC_PORT'),
+            env('ELASTIC_HOST', '127.0.0.1') .':' . env('ELASTIC_PORT', 9200),
         ],
     ],
 
