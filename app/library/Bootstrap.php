@@ -19,12 +19,10 @@ namespace Phosphorum;
 
 use Phalcon\Di;
 use Dotenv\Dotenv;
-use Phalcon\Config;
 use Phalcon\Di\Service;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
-use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Error\Handler as ErrorHandler;
@@ -49,7 +47,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'gravatar',
         'timezones',
         'breadcrumbs',
         'recaptcha',
@@ -151,19 +148,6 @@ class Bootstrap
             $breadcrumbs->setSeparator('');
 
             return $breadcrumbs;
-        });
-    }
-
-    /**
-     * Initialize the Gravatar Service.
-     */
-    protected function initGravatar()
-    {
-        $this->di->setShared('gravatar', function () {
-            /** @var  DiInterface $this $config */
-            $config = container('config');
-
-            return new Gravatar($config->get('gravatar', new Config));
         });
     }
 
