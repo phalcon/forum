@@ -21,13 +21,11 @@ use Phalcon\Di;
 use Dotenv\Dotenv;
 use Phalcon\Config;
 use Ciconia\Ciconia;
-use Phalcon\Mvc\View;
 use Phalcon\Di\Service;
 use Phalcon\Mvc\Router;
 use Phosphorum\Markdown;
 use Phalcon\Breadcrumbs;
 use Phalcon\DiInterface;
-use Phalcon\Events\Event;
 use Phosphorum\Providers;
 use Phosphorum\Utils\Slug;
 use Phalcon\Mvc\Dispatcher;
@@ -35,19 +33,15 @@ use Phalcon\Queue\Beanstalk;
 use Phalcon\Avatar\Gravatar;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Queue\DummyServer;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Error\Handler as ErrorHandler;
 use Elasticsearch\Client as ElasticClient;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Application as MvcApplication;
-use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\View\Exception as ViewException;
 use Phosphorum\Providers\ServiceProviderInterface;
 use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
-use Phalcon\Logger\AdapterInterface as LoggerInterface;
 use Phalcon\Queue\Beanstalk\Exception as BeanstalkException;
 use Phosphorum\Notifications\Checker as NotificationsChecker;
 
@@ -69,7 +63,6 @@ class Bootstrap
     private $di;
 
     private $loaders = [
-        'view',
         'database',
         'queue',
         'router',
@@ -165,89 +158,6 @@ class Bootstrap
         }
 
         return $this->app->handle();
-    }
-
-    /**
-     * Initialize the View.
-     *
-     * Setting up the view component.
-     */
-    protected function initView()
-    {
-        $this->di->set('view', function () {
-            /** @var DiInterface $this */
-            $config = container('config');
-            $em     = container('eventsManager');
-
-            $view  = new View;
-            $view->registerEngines([
-                // Setting up Volt Engine
-                '.volt' => function ($view, $di) {
-                    /** @var DiInterface $this */
-                    $config = container('config');
-                    $volt = new VoltEngine($view, $di);
-
-                    $options = [
-                        'compiledPath' => function ($templatePath) {
-                            /** @var DiInterface $this */
-                            $config = container('config')->get('volt')->toArray();
-
-                            $filename = str_replace(
-                                ['\\', '/'],
-                                $config['separator'],
-                                trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
-                            );
-
-                            $filename = basename($filename, '.volt') . $config['compiledExt'];
-                            $cacheDir = rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR;
-
-                            if (!is_dir($cacheDir)) {
-                                @mkdir($cacheDir, 0755, true);
-                            }
-
-                            return rtrim($config['cacheDir'], '\\/') . DIRECTORY_SEPARATOR . $filename;
-                        },
-                        'compileAlways' => boolval($config->get('volt')->forceCompile),
-                    ];
-
-                    $volt->setOptions($options);
-
-                    $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
-                        return 'number_format(' . $resolvedArgs . ')';
-                    })->addFunction('chr', function ($resolvedArgs) {
-                        return 'chr(' . $resolvedArgs . ')';
-                    });
-
-                    return $volt;
-                },
-                // Setting up Php Engine
-                '.phtml' => Php::class
-            ]);
-
-            $view->setViewsDir($config->get('application')->viewsDir);
-
-            $that = $this;
-            $em->attach('view', function ($event, $view) use ($that, $config) {
-                /**
-                 * @var LoggerInterface $logger
-                 * @var View $view
-                 * @var Event $event
-                 * @var DiInterface $that
-                 */
-                $logger = $that->get('logger');
-                $logger->debug(sprintf('Event %s. Path: %s', $event->getType(), $view->getActiveRenderPath()));
-
-                if ('notFoundView' == $event->getType()) {
-                    $message = sprintf('View not found: %s', $view->getActiveRenderPath());
-                    $logger->error($message);
-                    throw new ViewException($message);
-                }
-            });
-
-            $view->setEventsManager($em);
-
-            return $view;
-        });
     }
 
     /**
