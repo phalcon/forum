@@ -22,8 +22,4 @@ require __DIR__.'/../bootstrap/autoloader.php';
 
 $bootstrap = new Bootstrap();
 
-if (APPLICATION_ENV == ENV_TESTING) {
-    return $bootstrap->run();
-} else {
-    echo $bootstrap->run();
-}
+echo $bootstrap->run();

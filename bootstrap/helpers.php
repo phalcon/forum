@@ -151,3 +151,21 @@ if (!function_exists('hash_equals')) {
         return !$ret;
     }
 }
+
+
+if (!function_exists('environment')) {
+    /**
+     * Get or check the current application environment.
+     *
+     * @param  mixed
+     * @return string|bool
+     */
+    function environment()
+    {
+        if (func_num_args() > 0) {
+            return call_user_func_array([container(), 'getEnvironment'], func_get_args());
+        }
+
+        return container()->getEnvironment();
+    }
+}
