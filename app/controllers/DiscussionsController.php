@@ -20,6 +20,7 @@ namespace Phosphorum\Controllers;
 use Phalcon\Mvc\View;
 use Phalcon\Http\Response;
 use Phosphorum\Models\Karma;
+use Phalcon\Paginator\Pager;
 use Phosphorum\Models\Posts;
 use Phosphorum\Models\Users;
 use Phosphorum\Models\IrcLog;
@@ -35,8 +36,11 @@ use Phosphorum\Models\TopicTracking;
 use Phosphorum\Models\PostsPollVotes;
 use Phosphorum\Models\PostsPollOptions;
 use Phosphorum\Models\PostsSubscribers;
+use Phalcon\Paginator\Pager\Range\Sliding;
 use Phosphorum\Mvc\Controllers\TokenTrait;
 use Phosphorum\Models\ActivityNotifications;
+use Phalcon\Paginator\Pager\Layout\Bootstrap;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 
 /**
  * Class DiscussionsController
@@ -112,20 +116,46 @@ class DiscussionsController extends ControllerBase
         $itemBuilder->andWhere($notDeleteConditions);
         $totalBuilder->andWhere($notDeleteConditions);
 
+        $currentPage = abs($this->request->getQuery('page', 'int'));
+        if ($currentPage == 0) {
+            $currentPage = 1;
+        } else {
+            $offset = ($currentPage - 1) * self::POSTS_IN_PAGE;
+        }
+
         if ($offset > 0) {
-            $itemBuilder->offset((int)$offset);
+            $itemBuilder->offset((int) $offset);
         }
 
         $order = $order ?: 'new';
+
+        $pager = new Pager(
+            new Paginator([
+                'builder' => $totalBuilder,
+                'limit'   => self::POSTS_IN_PAGE,
+                'page'    => $currentPage,
+            ]),
+            [
+                'layoutClass' => Bootstrap::class,
+                'rangeClass'  => Sliding::class,
+                'rangeLength' => 10,
+                'urlMask'     => sprintf(
+                    '%s?page={%%page_number}',
+                    $this->url->get([
+                        'for'    => 'discussions-order',
+                        'order'  => $order,
+                    ])
+                 ),
+            ]
+        );
+
         $this->view->setVars([
             'logged'       => $userId,
             'readposts'    => $readposts,
             'posts'        => $itemBuilder->getQuery()->execute($params),
-            'totalPosts'   => $totalBuilder->getQuery()->setUniqueRow(true)->execute($params),
             'currentOrder' => $order,
-            'offset'       => $offset,
-            'paginatorUri' => "discussions/{$order}",
-            'canonical'    => ''
+            'canonical'    => '',
+            'pager'        => $pager,
         ]);
     }
 
