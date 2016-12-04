@@ -19,7 +19,6 @@ namespace Phosphorum;
 
 use Phalcon\Di;
 use Dotenv\Dotenv;
-use Phalcon\Di\Service;
 use Phalcon\DiInterface;
 use Phosphorum\Providers;
 use InvalidArgumentException;
@@ -204,8 +203,7 @@ class Bootstrap
     protected function initializeServices(array $services)
     {
         foreach ($services as $abstract => $concrete) {
-            $service = new Service($abstract, $concrete, true);
-            $this->di->setRaw($abstract, $service);
+            $this->di->setShared($abstract, $concrete);
         }
 
         return $this;
