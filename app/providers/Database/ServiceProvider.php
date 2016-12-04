@@ -17,11 +17,7 @@
 
 namespace Phosphorum\Providers\Database;
 
-use PDO;
-use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\DiInterface;
-use Phalcon\Events\Event;
-use Phalcon\Db\AdapterInterface;
+use Phosphorum\Listeners\Database;
 use Phosphorum\Providers\Abstrakt;
 
 /**
@@ -60,27 +56,7 @@ class ServiceProvider extends Abstrakt
                 /** @var \Phalcon\Db\Adapter\Pdo $connection */
                 $connection = new $adapter($config);
 
-                // Listen all the database events
-                $em->attach(
-                    'db',
-                    function ($event, $connection) {
-                        /**
-                         * @var Event $event
-                         * @var AdapterInterface $connection
-                         */
-                        if ($event->getType() == 'beforeQuery') {
-                            $variables = $connection->getSQLVariables();
-                            $string    = $connection->getSQLStatement();
-
-                            if ($variables) {
-                                $string .= ' [' . join(',', $variables) . ']';
-                            }
-
-                            // To disable logging change logLevel in config
-                            container()->get('logger', ['db'])->debug($string);
-                        }
-                    }
-                );
+                $em->attach('db', new Database());
 
                 $connection->setEventsManager($em);
 
