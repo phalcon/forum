@@ -7,4 +7,5 @@ $I = new Step\UserSteps($scenario);
 
 $I->wantTo('go to the not found page and see flash banner');
 $I->amOnPage('/abcdef-jaja');
-$I->see('Unfortunately, the page you are requesting can not be found!');
+$I->seeResponseCodeIs(404);
+$I->see("Sorry! We can't seem to find the page you're looking for.");

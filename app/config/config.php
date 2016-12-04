@@ -25,6 +25,7 @@ return [
         'software'    => 'Phosphorum',
         'repo'        => env('APP_REPO'),
         'docs'        => env('APP_DOCS'),
+        'support'     => env('APP_SUPPORT_EMAIL'),
     ],
 
     'theme' => [
@@ -103,7 +104,7 @@ return [
             'date'   => 'd-M-Y H:i:s',
         ],
         'controller' => 'error',
-        'action'     => 'index',
+        'action'     => 'route500',
     ],
 
     'reCaptcha' => [
