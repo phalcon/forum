@@ -155,7 +155,7 @@ Phosphorum is an open-sourced software licensed under the [New BSD License][14].
 [10]: http://kr.github.io/beanstalkd/
 [11]: http://codeception.com
 [13]: http://codeception.com/docs/reference/Commands
-[14]: https://github.com/phalcon/forum/blob/master/docs/LICENSE.md
+[14]: https://github.com/phalcon/forum/blob/master/LICENSE.txt
 [15]: https://forum.phalconphp.com/
 [16]: https://forum.zephir-lang.com/
 [17]: http://supervisord.org/
