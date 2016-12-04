@@ -1,6 +1,6 @@
 {
     "name": "phalcon/forum",
-    "description": "Phalcon Official Forum",
+    "description": "Open-sourced engine for building flexible, clear and fast forums.",
     "keywords": [
         "forum",
         "phalcon",
@@ -35,23 +35,23 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-phalcon": "~3.0",
-        "vlucas/phpdotenv": "~2.4",
+        "vlucas/phpdotenv": "^2.4",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
         "swiftmailer/swiftmailer": "^5.4",
-        "kzykhys/ciconia": "~1.0",
-        "phalcongelist/php-diff": "~2.0",
-        "elasticsearch/elasticsearch": "~1.0",
+        "kzykhys/ciconia": "^1.0",
+        "phalcongelist/php-diff": "^2.0",
+        "elasticsearch/elasticsearch": "^1.4",
         "phalcon/incubator": "~3.0",
         "phalcongelist/breadcrumbs": "dev-master@dev",
         "league/flysystem-dropbox" : "^1.0",
-        "google/recaptcha": "~1.1"
+        "google/recaptcha": "^1.1"
     },
     "require-dev": {
-        "phpdocumentor/reflection-docblock": "2.0.4",
+        "phpdocumentor/reflection-docblock": "^2.0",
         "phpunit/phpunit": "^4.8",
-        "fzaninotto/faker": "~1.6",
-        "codeception/codeception": "2.2.5",
+        "fzaninotto/faker": "^1.6",
+        "codeception/codeception": "^2.2",
         "codeception/verify": "~0.3",
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
@@ -59,12 +59,8 @@
         "phalcongelist/dd": "^1"
     },
     "suggest": {
-        "ext-yaml": "*"
-    },
-    "autoload": {
-        "files": [
-            "app/helpers.php"
-        ]
+        "ext-yaml": "*",
+        "ext-intl": "*"
     },
     "autoload-dev": {
         "psr-4": {

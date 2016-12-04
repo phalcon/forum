@@ -17,7 +17,6 @@
 
 use Phosphorum\Bootstrap;
 
-require_once realpath(dirname(dirname(__FILE__))) . '/app/config/env.php';
-require_once BASE_DIR . 'app/library/Bootstrap.php';
+require __DIR__ . '/../bootstrap/autoloader.php';
 
 $bootstrap = new Bootstrap();

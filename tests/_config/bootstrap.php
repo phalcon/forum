@@ -15,11 +15,12 @@
  +------------------------------------------------------------------------+
 */
 
-require_once __DIR__ . '/../../app/config/env.php';
-require_once __DIR__ . '/../../app/library/Bootstrap.php';
+use Phosphorum\Bootstrap;
+
+require_once __DIR__ . '/../../bootstrap/autoloader.php';
 
 // Create the Application
-$bootstrap = new Phosphorum\Bootstrap();
+$bootstrap = new Bootstrap();
 
 // Run the Application
 return $bootstrap->getApplication();

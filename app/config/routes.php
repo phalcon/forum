@@ -19,7 +19,6 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Http\Filter\Ajax;
 
 $router = new Router(false);
-$router->removeExtraSlashes(true);
 
 $router->add(
     '/help/stats',
