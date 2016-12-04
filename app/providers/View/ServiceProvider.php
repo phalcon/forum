@@ -18,12 +18,9 @@
 namespace Phosphorum\Providers\View;
 
 use Phalcon\Mvc\View;
-use Phalcon\DiInterface;
-use Phalcon\Events\Event;
 use Phalcon\Mvc\View\Engine\Php;
 use Phosphorum\Providers\Abstrakt;
-use Phalcon\Mvc\View\Exception as ViewException;
-use Phalcon\Logger\AdapterInterface as LoggerInterface;
+use Phosphorum\Listeners\ViewListener;
 
 /**
  * Phosphorum\Providers\View\ServiceProvider
@@ -60,23 +57,7 @@ class ServiceProvider extends Abstrakt
                 $view->setViewsDir($config->viewsDir);
 
                 $eventsManager = container('eventsManager');
-                $eventsManager->attach('view:notFoundView', function ($event, $view) {
-                    /**
-                     * @var LoggerInterface $logger
-                     * @var View $view
-                     * @var Event $event
-                     * @var DiInterface $that
-                     */
-                    $logger = container()->get('logger');
-                    $logger->debug(sprintf('Event %s. Path: %s', $event->getType(), $view->getActiveRenderPath()));
-
-                    if ('notFoundView' == $event->getType()) {
-                        $message = sprintf('View not found: %s', $view->getActiveRenderPath());
-                        $logger->error($message);
-
-                        throw new ViewException($message);
-                    }
-                });
+                $eventsManager->attach('view', new ViewListener());
 
                 $view->setEventsManager($eventsManager);
 

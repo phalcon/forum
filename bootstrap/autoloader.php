@@ -26,6 +26,7 @@ require 'constants.php';
         'Phosphorum\Controllers' => dirname(__DIR__) . '/app/controllers',
         'Phosphorum'             => dirname(__DIR__) . '/app/library',
         'Phosphorum\Providers'   => dirname(__DIR__) . '/app/providers',
+        'Phosphorum\Listeners'   => dirname(__DIR__) . '/app/listeners',
     ])
     ->registerFiles([
         __DIR__ . '/helpers.php',

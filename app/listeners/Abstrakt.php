@@ -15,38 +15,22 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Providers\EventsManager;
+namespace Phosphorum\Listeners;
 
-use Phalcon\Events\Manager;
-use Phosphorum\Providers\Abstrakt;
+use Phalcon\DiInterface;
+use Phalcon\Mvc\User\Component;
 
 /**
- * Phosphorum\Providers\EventsManager\ServiceProvider
- * @package Phosphorum\Providers\EventManager
+ * Phosphorum\Listeners\Abstrakt
+ *
+ * @package Phosphorum\Listeners
  */
-class ServiceProvider extends Abstrakt
+class Abstrakt extends Component
 {
-    /**
-     * The Service name.
-     * @var string
-     */
-    protected $serviceName = 'eventsManager';
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function register()
+    public function __construct(DiInterface $di = null)
     {
-        $this->di->setShared(
-            $this->serviceName,
-            function () {
-                $em = new Manager();
-                $em->enablePriorities(true);
+        $di = $di ?: container();
 
-                return $em;
-            }
-        );
+        $this->setDI($di);
     }
 }
