@@ -19,6 +19,7 @@ namespace Phosphorum\Providers\Dispatcher;
 
 use Phalcon\Mvc\Dispatcher;
 use Phosphorum\Providers\Abstrakt;
+use Phosphorum\Listeners\DispatcherListener;
 
 /**
  * Phosphorum\Providers\Dispatcher\ServiceProvider
@@ -45,8 +46,9 @@ class ServiceProvider extends Abstrakt
             function () {
                 $dispatcher = new Dispatcher();
 
-                $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
+                container('eventsManager')->attach('dispatch', new DispatcherListener(container()));
 
+                $dispatcher->setDefaultNamespace('Phosphorum\Controllers');
                 $dispatcher->setDI(container());
                 $dispatcher->setEventsManager(container('eventsManager'));
 
