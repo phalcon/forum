@@ -413,6 +413,18 @@ $router->add(
     ]
 );
 
+$router->addGet('/400', 'Error::route400')->setName('error-400');
+
+$router->addGet('/401', 'Error::route401')->setName('error-401');
+
+$router->addGet('/403', 'Error::route403')->setName('error-403');
+
+$router->addGet('/404', 'Error::route404')->setName('error-404');
+
+$router->addGet('/500', 'Error::route500')->setName('error-500');
+
+$router->addGet('/503', 'Error::route503')->setName('error-503');
+
 $router->add(
     '/',
     [

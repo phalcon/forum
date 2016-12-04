@@ -42,6 +42,12 @@ class GenerateRobotsFile extends Injectable
         $baseUrl = rtrim($config->get('site')->url, '/');
         $content=<<<EOL
 User-agent: *
+Disallow: /400
+Disallow: /401
+Disallow: /403
+Disallow: /404
+Disallow: /500
+Disallow: /503
 Allow: /
 Sitemap: $baseUrl/sitemap.xml
 EOL;
