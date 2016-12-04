@@ -34,25 +34,20 @@ class Factory
      * Create configuration object.
      *
      * @param  array  $providers
-     * @param  string $stage
      * @return Config
      */
-    public static function create(array $providers = [], $stage = null)
+    public static function create(array $providers = [])
     {
-        $stage = $stage ?: APPLICATION_ENV;
-        $config = self::load($providers, $stage);
-
-        return $config;
+        return self::load($providers);
     }
 
     /**
      * Load all configuration.
      *
      * @param  array $providers
-     * @param  $stage
      * @return Config
      */
-    protected static function load(array $providers, $stage)
+    protected static function load(array $providers)
     {
         $config = new Config();
         $merge  = self::merge();
@@ -60,7 +55,7 @@ class Factory
         $adapter    = new Local(app_path());
         $filesystem = new Filesystem($adapter);
 
-        if ($filesystem->has(self::CACHED_PATH) && $stage !== ENV_DEVELOPMENT) {
+        if ($filesystem->has(self::CACHED_PATH) && !environment('development')) {
             $merge($config, cache_path('config/cached.php'));
 
             return $config;
@@ -70,7 +65,7 @@ class Factory
             $merge($config, config_path("$provider.php"), $provider == 'config' ? null : $provider);
         }
 
-        if ($stage === ENV_PRODUCTION && !$filesystem->has(self::CACHED_PATH)) {
+        if (environment('production') && !$filesystem->has(self::CACHED_PATH)) {
             self::dump($filesystem, self::CACHED_PATH, $config->toArray());
         }
 
