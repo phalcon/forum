@@ -26,7 +26,7 @@
 
 <div itemprop="{{ answerType }}" itemscope itemtype="http://schema.org/Answer" class="{{ answerClass1 ~ answerClass2 ~ answerClass3}}">
     <div class="col-md-1 small" align="center">
-        {{ image(gravatar.getAvatar(reply.user.email), 'class': 'img-rounded') }}
+        {{ image(gravatar(reply.user.email), 'class': 'img-rounded') }}
         <br>
 
         <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -47,7 +47,7 @@
             {%- if reply.postReplyTo -%}
                 <div class="in-reply-to">
                     <a href="#C{{ reply.in_reply_to_id }}"><span class="glyphicon glyphicon-chevron-up"></span> in reply to
-                        {{ image(gravatar.getAvatar(reply.postReplyTo.user.email), 'width': 24, 'height': 24, 'class': 'img-rounded') }}
+                        {{ image(gravatar(reply.postReplyTo.user.email), 'width': 24, 'height': 24, 'class': 'img-rounded') }}
                         {{ reply.postReplyTo.user.name }}
                     </a>
                 </div>

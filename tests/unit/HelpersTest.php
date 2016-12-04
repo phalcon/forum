@@ -77,6 +77,22 @@ class HelpersTest extends Unit
         $this->assertEquals($_ENV['APP_URL'], env('APP_URL'));
     }
 
+    public function testEnvironmentFacade()
+    {
+        $this->assertFalse(environment('non-existent-environment-here'));
+        $this->assertFalse(environment(['non-existent-environment-here', 'non-existent-environment-here']));
+        $this->assertFalse(environment([]));
+        $this->assertFalse(environment(false));
+        $this->assertFalse(environment(null));
+        $this->assertFalse(environment('production'));
+        $this->assertFalse(environment('staging'));
+        $this->assertFalse(environment(['staging', 'production']));
+
+        $this->assertTrue(environment(['staging', 'production', 'development', 'testing']));
+        $this->assertTrue(environment([APPLICATION_ENV]));
+        $this->assertTrue(environment() === APPLICATION_ENV);
+    }
+
     /**
      * @dataProvider providerHashEquals
      * @param mixed $knownString

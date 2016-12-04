@@ -38,6 +38,8 @@ class VoltFunctions
             case 'number_format':
             case 'chr':
                 return $name . '(' . $arguments . ')';
+            case 'gravatar':
+                return 'container("gravatar")->getAvatar(' . $arguments . ')';
         }
 
         return null;

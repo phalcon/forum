@@ -22,7 +22,7 @@
 			{%- if activity.post and activity.post.deleted != 1 -%}
 			<tr>
 				<td class="small hidden-xs" valign="top">
-					{{ image(gravatar.getAvatar(activity.user.email), 'class': 'img-rounded') }}
+					{{ image(gravatar(activity.user.email), 'class': 'img-rounded') }}
 				</td>
 				<td>
 					<div class="activity">
