@@ -63,9 +63,10 @@ class Bootstrap
         Di::setDefault($this->di);
 
         /**
-         * This service should be registered first
+         * These services should be registered first
          */
         $this->initializeServiceProvider(new Providers\EventsManager\ServiceProvider($this->di));
+        $this->initializeServiceProvider(new Providers\Environment\ServiceProvider($this->di));
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');
