@@ -82,7 +82,7 @@ class DiscussionsController extends ControllerBase
         switch ($order) {
             case 'hot':
                 $this->tag->setTitle('Hot Discussions');
-                $itemBuilder->orderBy('p.modified_at DESC');
+                $itemBuilder->orderBy('p.sticked DESC, p.modified_at DESC');
                 break;
             case 'my':
                 $this->tag->setTitle('My Discussions');
@@ -95,7 +95,7 @@ class DiscussionsController extends ControllerBase
                 break;
             case 'unanswered':
                 $this->tag->setTitle('Unanswered Discussions');
-                $unansweredConditions = 'p.number_replies = 0 AND p.accepted_answer <> "Y"';
+                $unansweredConditions = 'p.number_replies = 0 AND p.accepted_answer <> "Y" AND p.sticked <> "Y"';
                 $itemBuilder->where($unansweredConditions);
                 $totalBuilder->where($unansweredConditions);
                 break;
