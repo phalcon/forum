@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-md-1 remove-image" align="right">
-            {{ image(gravatar.getAvatar(session.get('identity-email')), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
+            {{ image(gravatar(session.get('identity-email')), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
         </div>
         <div class="col-md-10">
             <form method="post" autocomplete="off" role="form">

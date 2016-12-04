@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-1 remove-image hidden-xs" align="right">
-            {{ image(gravatar.getAvatar(session.get('identity-email')), 'class': 'img-rounded') }}
+            {{ image(gravatar(session.get('identity-email')), 'class': 'img-rounded') }}
         </div>
         <div class="col-md-11">
 
