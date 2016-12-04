@@ -9,8 +9,8 @@
 
             <div class="col-md-12 text-center">
                 <p class="lead">
-                    Are you sure that this page should be here?
-                    If so, please let us know:
+                    Oops! It seems you have no enough rights to do so.
+                    In any case, please let us know:
                     <a href="{{ 'mailto:' ~ support }}">{{ support }}</a>
                 </p>
                 <p>
