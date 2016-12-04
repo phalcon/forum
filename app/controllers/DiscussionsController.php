@@ -141,11 +141,8 @@ class DiscussionsController extends ControllerBase
                 'rangeLength' => 10,
                 'urlMask'     => sprintf(
                     '%s?page={%%page_number}',
-                    $this->url->get([
-                        'for'    => 'discussions-order',
-                        'order'  => $order,
-                    ])
-                 ),
+                    $this->url->get(['for' => 'discussions-order', 'order' => $order])
+                ),
             ]
         );
 
