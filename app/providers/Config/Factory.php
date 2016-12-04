@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -18,6 +18,8 @@
 namespace Phosphorum\Providers\Config;
 
 use Phalcon\Config;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 
 /**
  * Phosphorum\Providers\Config\Factory
@@ -26,46 +28,104 @@ use Phalcon\Config;
  */
 class Factory
 {
-    public static function create(array $providers = [])
+    const CACHED_PATH = 'cache/config/cached.php';
+
+    /**
+     * Create configuration object.
+     *
+     * @param  array  $providers
+     * @param  string $stage
+     * @return Config
+     */
+    public static function create(array $providers = [], $stage = null)
     {
-        $default = new Config();
-        $merge = self::merge();
+        $stage = $stage ?: APPLICATION_ENV;
+        $config = self::load($providers, $stage);
+
+        return $config;
+    }
+
+    /**
+     * Load all configuration.
+     *
+     * @param  array $providers
+     * @param  $stage
+     * @return Config
+     */
+    protected static function load(array $providers, $stage)
+    {
+        $config = new Config();
+        $merge  = self::merge();
+
+        $adapter    = new Local(app_path());
+        $filesystem = new Filesystem($adapter);
+
+        if ($filesystem->has(self::CACHED_PATH) && $stage === ENV_PRODUCTION) {
+            $merge($config, cache_path('config/cached.php'));
+
+            return $config;
+        }
 
         foreach ($providers as $provider) {
-            $merge($default, config_path("$provider.php"), $provider == 'config' ? null : $provider);
+            $merge($config, config_path("$provider.php"), $provider == 'config' ? null : $provider);
         }
 
-        $overridePath = config_path(APPLICATION_ENV) . '.php';
-        if (APPLICATION_ENV !== ENV_PRODUCTION) {
-            $merge($default, $overridePath);
+        if ($stage === ENV_PRODUCTION && !$filesystem->has(self::CACHED_PATH)) {
+            self::dump($filesystem, self::CACHED_PATH, $config->toArray());
         }
 
-        return $default;
+        return $config;
     }
 
     protected static function merge()
     {
-        return function (Config &$config, $path, $name = null) {
-            if (file_exists($path)) {
-                /** @noinspection PhpIncludeInspection */
-                $toMerge = require $path;
+        return function (Config &$config, $path, $node = null) {
+            /** @noinspection PhpIncludeInspection */
+            $toMerge = include($path);
 
-                if (is_array($toMerge)) {
-                    $toMerge = new Config($toMerge);
-                }
-
-                if ($toMerge instanceof Config) {
-                    if ($name) {
-                        if (!$config->offsetExists($name) || !$config->{$name} instanceof Config) {
-                            $config->offsetSet($name, new Config());
-                        }
-
-                        $config->get($name)->merge($toMerge);
-                    } else {
-                        $config->merge($toMerge);
-                    }
-                }
+            if (is_array($toMerge)) {
+                $toMerge = new Config($toMerge);
             }
+
+            if ($toMerge instanceof Config) {
+                if (!$node) {
+                    return $config->merge($toMerge);
+                }
+
+                if (!$config->offsetExists($node) || !$config->{$node} instanceof Config) {
+                    $config->offsetSet($node, new Config());
+                }
+
+                return $config->get($node)->merge($toMerge);
+            }
+
+            return null;
         };
+    }
+
+    protected static function dump(Filesystem $filesystem, $path, array $data)
+    {
+        $header =<<<HEAD
+/*
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file LICENSE.txt.                             |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
+ | THIS FILE IS GENERATED AUTOMATICALLY. DO NOT EDIT THIS FILE MANUALLY   |
+ +------------------------------------------------------------------------+
+*/
+HEAD;
+        $contents = '<?php' . PHP_EOL . PHP_EOL . $header . PHP_EOL;
+        $contents .= 'return ' . var_export($data, true) . ';' . PHP_EOL;
+
+        $filesystem->put($path, $contents, $data);
     }
 }
