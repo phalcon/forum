@@ -42,43 +42,45 @@ class ServiceProvider extends Abstrakt
      */
     public function register()
     {
-        $this->di->setShared(
-            $this->serviceName,
-            function (ViewBaseInterface $view, DiInterface $di = null) {
-                $config = container('config')->volt;
+        $service = function (ViewBaseInterface $view, DiInterface $di = null) {
+            $config = container('config')->volt;
 
-                $volt = new Volt($view, $di ?: container());
+            $volt = new Volt($view, $di ?: container());
 
-                $volt->setOptions(
-                    [
-                        'compiledPath' => function ($templatePath) use ($config) {
-                            $filename = str_replace(
-                                ['\\', '/'],
-                                $config->separator,
-                                trim(substr($templatePath, strlen(BASE_DIR)), '\\/')
-                            );
+            $volt->setOptions(
+                [
+                    'compiledPath'  => self::compiledPath(),
+                    'compileAlways' => (bool) $config->forceCompile,
+                ]
+            );
 
-                            $filename = basename($filename, '.volt') . $config->compiledExt;
-                            $cacheDir = rtrim($config->cacheDir, '\\/') . DIRECTORY_SEPARATOR;
+            $volt->getCompiler()->addExtension(new VoltFunctions());
 
-                            if (!is_dir($cacheDir)) {
-                                @mkdir($cacheDir, 0755, true);
-                            }
+            return $volt;
+        };
 
-                            return rtrim($config->cacheDir, '\\/') . DIRECTORY_SEPARATOR . $filename;
-                        },
-                        'compileAlways' => (bool) $config->forceCompile,
-                    ]
-                );
+        $this->di->setShared($this->serviceName, $service);
+    }
 
-                $volt->getCompiler()->addFunction('number_format', function ($resolvedArgs) {
-                    return 'number_format(' . $resolvedArgs . ')';
-                })->addFunction('chr', function ($resolvedArgs) {
-                    return 'chr(' . $resolvedArgs . ')';
-                });
+    protected static function compiledPath()
+    {
+        return function ($path) {
+            $config = container('config')->volt;
 
-                return $volt;
+            $filename = str_replace(
+                ['\\', '/'],
+                $config->separator,
+                trim(substr($path, strlen(dirname(app_path()))), '\\/')
+            );
+
+            $filename = basename($filename, '.volt') . $config->compiledExt;
+            $cacheDir = cache_path('volt');
+
+            if (!is_dir($cacheDir)) {
+                @mkdir($cacheDir, 0755, true);
             }
-        );
+
+            return $cacheDir . DIRECTORY_SEPARATOR . $filename;
+        };
     }
 }
