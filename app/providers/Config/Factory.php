@@ -60,7 +60,7 @@ class Factory
         $adapter    = new Local(app_path());
         $filesystem = new Filesystem($adapter);
 
-        if ($filesystem->has(self::CACHED_PATH) && $stage === ENV_PRODUCTION) {
+        if ($filesystem->has(self::CACHED_PATH) && $stage !== ENV_DEVELOPMENT) {
             $merge($config, cache_path('config/cached.php'));
 
             return $config;
