@@ -89,8 +89,8 @@ class DiscussionsController extends ControllerBase
                 if ($userId) {
                     $params       = [$userId];
                     $myConditions = 'p.users_id = ?0';
-                    $itemBuilder->where($myConditions);
-                    $totalBuilder->where($myConditions);
+                    $itemBuilder->where($myConditions, [$userId]);
+                    $totalBuilder->where($myConditions, [$userId]);
                 }
                 break;
             case 'unanswered':
@@ -104,8 +104,8 @@ class DiscussionsController extends ControllerBase
                 if ($userId) {
                     $params            = [$userId];
                     $answersConditions = 'r.users_id = ?0';
-                    $itemBuilder->where($answersConditions);
-                    $totalBuilder->where($answersConditions);
+                    $itemBuilder->where($answersConditions, [$userId]);
+                    $totalBuilder->where($answersConditions, [$userId]);
                 }
                 break;
             default:
