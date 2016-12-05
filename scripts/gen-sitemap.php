@@ -23,7 +23,7 @@ require 'cli-bootstrap.php';
 use Phalcon\Di;
 use Phalcon\Config;
 use Phalcon\DI\Injectable;
-use Phosphorum\Models\Posts;
+use Phosphorum\Model\Posts;
 use League\Flysystem\Filesystem;
 use Phalcon\Logger\Adapter\Stream;
 use League\Flysystem\Adapter\Local;

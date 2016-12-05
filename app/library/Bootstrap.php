@@ -20,12 +20,12 @@ namespace Phosphorum;
 use Phalcon\Di;
 use Dotenv\Dotenv;
 use Phalcon\DiInterface;
-use Phosphorum\Providers;
+use Phosphorum\Provider;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Error\Handler as ErrorHandler;
 use Phalcon\Mvc\Application as MvcApplication;
-use Phosphorum\Providers\ServiceProviderInterface;
+use Phosphorum\Provider\ServiceProviderInterface;
 
 class Bootstrap
 {
@@ -65,8 +65,8 @@ class Bootstrap
         /**
          * These services should be registered first
          */
-        $this->initializeServiceProvider(new Providers\EventsManager\ServiceProvider($this->di));
-        $this->initializeServiceProvider(new Providers\Environment\ServiceProvider($this->di));
+        $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
+        $this->initializeServiceProvider(new Provider\Environment\ServiceProvider($this->di));
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');

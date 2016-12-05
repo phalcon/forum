@@ -17,9 +17,9 @@
 
 namespace Phosphorum\Badges\Badge;
 
-use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
-use Phosphorum\Models\Categories;
+use Phosphorum\Model\Users;
+use Phosphorum\Model\UsersBadges;
+use Phosphorum\Model\Categories;
 use Phosphorum\Badges\BadgeBase;
 
 /**
@@ -40,8 +40,8 @@ class Virtuoso extends BadgeBase
         if (!$this->query) {
             $this->query = $user->getModelsManager()->createBuilder()
                 ->columns(['p.categories_id', 'COUNT(*)'])
-                ->from(['r' => 'Phosphorum\Models\PostsReplies'])
-                ->join('Phosphorum\Models\Posts', null, 'p')
+                ->from(['r' => 'Phosphorum\Model\PostsReplies'])
+                ->join('Phosphorum\Model\Posts', null, 'p')
                 ->where('r.users_id = ?0 AND r.accepted = "Y"')
                 ->notInWhere('p.categories_id', $this->getNoBountyCategories())
                 ->groupBy('p.categories_id')

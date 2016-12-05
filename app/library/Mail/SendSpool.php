@@ -18,7 +18,7 @@
 namespace Phosphorum\Mail;
 
 use Phalcon\Tag;
-use Phosphorum\Models\Notifications;
+use Phosphorum\Model\Notifications;
 use Phalcon\Di\Injectable;
 
 /**

@@ -19,7 +19,7 @@ namespace Phosphorum\Search;
 
 use Phalcon\Config;
 use Phalcon\Di\Injectable;
-use Phosphorum\Models\Posts;
+use Phosphorum\Model\Posts;
 use Phalcon\Logger\AdapterInterface;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 

@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Badges;
 
-use Phosphorum\Models\Users;
+use Phosphorum\Model\Users;
 
 interface BadgeInterface
 {

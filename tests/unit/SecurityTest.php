@@ -3,7 +3,7 @@
 use Codeception\Specify;
 use Phalcon\Http\Request;
 use Codeception\Test\Unit;
-use Phosphorum\Providers\Security\Security;
+use Phosphorum\Provider\Security\Security;
 
 class SecurityTest extends Unit
 {
