@@ -193,7 +193,7 @@ class DiscussionsController extends ControllerBase
                     foreach ($pollOptions as $opt) {
                         $option = new PostsPollOptions([
                             'posts_id' => $post->id,
-                            'title'    => $this->escaper->escapeHtml($opt),
+                            'title'    => $opt,
                         ]);
 
                         $option->save();
