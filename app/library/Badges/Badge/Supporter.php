@@ -17,9 +17,9 @@
 
 namespace Phosphorum\Badges\Badge;
 
-use Phosphorum\Models\Users;
-use Phosphorum\Models\PostsVotes;
-use Phosphorum\Models\PostsRepliesVotes;
+use Phosphorum\Model\Users;
+use Phosphorum\Model\PostsVotes;
+use Phosphorum\Model\PostsRepliesVotes;
 use Phosphorum\Badges\BadgeBase;
 
 /**

@@ -22,11 +22,11 @@ require 'constants.php';
 
 (new Loader())
     ->registerNamespaces([
-        'Phosphorum\Models'      => dirname(__DIR__) . '/app/models',
-        'Phosphorum\Controllers' => dirname(__DIR__) . '/app/controllers',
-        'Phosphorum'             => dirname(__DIR__) . '/app/library',
-        'Phosphorum\Providers'   => dirname(__DIR__) . '/app/providers',
-        'Phosphorum\Listeners'   => dirname(__DIR__) . '/app/listeners',
+        'Phosphorum\Model'      => dirname(__DIR__) . '/app/model',
+        'Phosphorum\Controller' => dirname(__DIR__) . '/app/controller',
+        'Phosphorum'            => dirname(__DIR__) . '/app/library',
+        'Phosphorum\Provider'   => dirname(__DIR__) . '/app/provider',
+        'Phosphorum\Listener'   => dirname(__DIR__) . '/app/listener',
     ])
     ->registerFiles([
         __DIR__ . '/helpers.php',

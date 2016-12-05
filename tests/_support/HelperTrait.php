@@ -1,11 +1,11 @@
 <?php
 
 use Phalcon\Tag;
-use Phosphorum\Models\Posts;
-use Phosphorum\Models\Users;
-use Phosphorum\Models\Categories;
-use Phosphorum\Models\PostsReplies;
-use Phosphorum\Models\PostsHistory;
+use Phosphorum\Model\Posts;
+use Phosphorum\Model\Users;
+use Phosphorum\Model\Categories;
+use Phosphorum\Model\PostsReplies;
+use Phosphorum\Model\PostsHistory;
 
 /**
  * Helper Trait

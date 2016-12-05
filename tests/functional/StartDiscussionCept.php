@@ -13,7 +13,7 @@ $I->amOnPage('/');
 $I->see('Start a Discussion');
 $I->click('Start a Discussion');
 $I->see('Start a Discussion', 'h1');
-$I->seeRecord('Phosphorum\Models\Categories', ['name' => 'Testing']);
+$I->seeRecord('Phosphorum\Model\Categories', ['name' => 'Testing']);
 $I->fillField('#title', 'How can I write tests in Codeception');
 $I->fillField('#content', 'Is there any manual');
 $I->selectOption('#categoryId', 'Testing');

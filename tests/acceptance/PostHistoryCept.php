@@ -4,7 +4,7 @@
  */
 
 use Step\UserSteps;
-use Phosphorum\Models\Posts;
+use Phosphorum\Model\Posts;
 
 class PostHistoryCept
 {

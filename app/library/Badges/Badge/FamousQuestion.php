@@ -17,8 +17,8 @@
 
 namespace Phosphorum\Badges\Badge;
 
-use Phosphorum\Models\Users;
-use Phosphorum\Models\UsersBadges;
+use Phosphorum\Model\Users;
+use Phosphorum\Model\UsersBadges;
 use Phosphorum\Badges\BadgeBase;
 
 /**

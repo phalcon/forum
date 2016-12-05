@@ -42,8 +42,8 @@ return [
     ],
 
     'application' => [
-        'controllersDir' => app_path('controllers') . DIRECTORY_SEPARATOR,
-        'modelsDir'      => app_path('models') . DIRECTORY_SEPARATOR,
+        'controllersDir' => app_path('controller') . DIRECTORY_SEPARATOR,
+        'modelsDir'      => app_path('model') . DIRECTORY_SEPARATOR,
         'viewsDir'       => app_path('views') . DIRECTORY_SEPARATOR,
         'libraryDir'     => app_path('library') . DIRECTORY_SEPARATOR,
         'staticBaseUri'  => env('APP_STATIC_URL'),

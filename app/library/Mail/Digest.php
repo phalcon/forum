@@ -18,8 +18,8 @@
 namespace Phosphorum\Mail;
 
 use Phalcon\Di\Injectable;
-use Phosphorum\Models\Posts;
-use Phosphorum\Models\Users;
+use Phosphorum\Model\Posts;
+use Phosphorum\Model\Users;
 use Phalcon\Mvc\View\Simple as View;
 
 /**
