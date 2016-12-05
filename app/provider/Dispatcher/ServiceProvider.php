@@ -17,9 +17,11 @@
 
 namespace Phosphorum\Provider\Dispatcher;
 
-use Phalcon\Mvc\Dispatcher;
-use Phosphorum\Provider\AbstractServiceProvider;
+use InvalidArgumentException;
+use Phalcon\Mvc\Dispatcher as MvcDi;
+use Phalcon\Cli\Dispatcher as CliDi;
 use Phosphorum\Listener\DispatcherListener;
+use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
  * Phosphorum\Provider\Dispatcher\ServiceProvider
@@ -44,11 +46,35 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                $dispatcher = new Dispatcher();
+                $mode = container('mode');
 
-                container('eventsManager')->attach('dispatch', new DispatcherListener(container()));
+                switch ($mode) {
+                    case 'normal':
+                        $dispatcher = new MvcDi();
+                        $dispatcher->setDefaultNamespace('Phosphorum\Controller');
 
-                $dispatcher->setDefaultNamespace('Phosphorum\Controller');
+                        container('eventsManager')->attach('dispatch', new DispatcherListener(container()));
+
+                        break;
+                    case 'cli':
+                        $dispatcher = new CliDi();
+                        $dispatcher->setDefaultNamespace('Phosphorum\Task');
+
+                        break;
+                    case 'api':
+                        throw new InvalidArgumentException(
+                            'Not implemented yet.'
+                        );
+                    default:
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                'Invalid application mode. Expected either "normal" either "cli" or "api". Got "%s".',
+                                is_scalar($mode) ? $mode : var_export($mode, true)
+                            )
+                        );
+
+                }
+
                 $dispatcher->setDI(container());
                 $dispatcher->setEventsManager(container('eventsManager'));
 
