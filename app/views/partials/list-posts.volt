@@ -18,7 +18,7 @@
     </ul>
 </div>
 
-{%- if posts|length -%}
+{% if pager|length() > 0 %}
 <div class="col-md-12">
     <br/>
     <div align="center">
@@ -108,17 +108,7 @@
     </div>
 </div>
 
-<div class="col-md-12">
-    <ul class="pager">
-        {%- if offset > 0 -%}
-            <li class="previous">{{ link_to(paginatorUri ~ '/' ~ (offset - limitPost), 'Prev', 'rel': 'prev') }}</li>
-        {%- endif -%}
-
-        {%- if totalPosts.count > limitPost -%}
-            <li class="next">{{ link_to(paginatorUri ~ '/' ~ (offset + limitPost), 'Next', 'rel': 'next') }}</li>
-        {%- endif -%}
-    </ul>
-</div>
+{{- partial('partials/paginate', ['pager': pager]) -}}
 
 {%- else -%}
 <div class="col-md-12" align="center">
