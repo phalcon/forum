@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -19,7 +19,6 @@ use Phalcon\Mvc\Router;
 use Phosphorum\Http\Filter\Ajax;
 
 $router = new Router(false);
-$router->removeExtraSlashes(true);
 
 $router->add(
     '/help/stats',
@@ -390,36 +389,34 @@ $router->add(
     ]
 );
 
-$router->add(
-    '/discussions/{order:[a-z]+}',
-    [
-       'controller' => 'discussions',
-       'action'     => 'index'
-    ]
-);
+$router->add('/discussions/{order:[a-z]+}', 'Discussions::index')
+    ->setName('discussions-order');
 
-$router->add(
-    '/discussions/{order:[a-z]+}/{offset:[0-9]+}',
-    [
-       'controller' => 'discussions',
-       'action'     => 'index'
-    ]
-);
+$router->add('/discussions/{order:[a-z]+}/{offset:[0-9]+}', 'Discussions::index')
+    ->setName('discussions-order-offset');
 
-$router->add(
-    '/discussion/{id:[0-9]+}/{slug}',
-    [
-       'controller' => 'discussions',
-       'action'     => 'view'
-    ]
-);
+$router->add('/discussion/{id:[0-9]+}/{slug}', 'Discussions::view')
+    ->setName('discussions-view');
 
-$router->add(
-    '/',
-    [
-       'controller' => 'discussions',
-       'action'     => 'index'
-    ]
-);
+$router->addGet('/400', 'Error::route400')
+    ->setName('error-400');
+
+$router->addGet('/401', 'Error::route401')
+    ->setName('error-401');
+
+$router->addGet('/403', 'Error::route403')
+    ->setName('error-403');
+
+$router->addGet('/404', 'Error::route404')
+    ->setName('error-404');
+
+$router->addGet('/500', 'Error::route500')
+    ->setName('error-500');
+
+$router->addGet('/503', 'Error::route503')
+    ->setName('error-503');
+
+$router->add('/', 'Discussions::index')
+    ->setName('discussions-index');
 
 return $router;

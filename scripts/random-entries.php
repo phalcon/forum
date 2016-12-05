@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -17,11 +17,11 @@
 
 use Phalcon\Di;
 use Phalcon\Tag;
-use Phosphorum\Models\Users;
-use Phosphorum\Models\Posts;
-use Phosphorum\Models\PostsReplies;
-use Phosphorum\Models\PostsPollOptions;
-use Phosphorum\Models\Categories;
+use Phosphorum\Model\Users;
+use Phosphorum\Model\Posts;
+use Phosphorum\Model\PostsReplies;
+use Phosphorum\Model\PostsPollOptions;
+use Phosphorum\Model\Categories;
 use Phalcon\Logger\Adapter\Stream;
 use Faker\Factory as Faker;
 

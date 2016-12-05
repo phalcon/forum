@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -42,6 +42,12 @@ class GenerateRobotsFile extends Injectable
         $baseUrl = rtrim($config->get('site')->url, '/');
         $content=<<<EOL
 User-agent: *
+Disallow: /400
+Disallow: /401
+Disallow: /403
+Disallow: /404
+Disallow: /500
+Disallow: /503
 Allow: /
 Sitemap: $baseUrl/sitemap.xml
 EOL;

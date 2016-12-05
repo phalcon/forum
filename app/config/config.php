@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -15,16 +15,7 @@
  +------------------------------------------------------------------------+
 */
 
-use Phalcon\Config;
-use Phalcon\Logger;
-
-if (!defined('BASE_DIR')) {
-    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'env.php';
-}
-
-defined('HOSTNAME') || define('HOSTNAME', explode('.', gethostname())[0]);
-
-return new Config([
+return [
     'site' => [
         'name'        => env('APP_NAME'),
         'url'         => env('APP_URL'),
@@ -34,6 +25,7 @@ return new Config([
         'software'    => 'Phosphorum',
         'repo'        => env('APP_REPO'),
         'docs'        => env('APP_DOCS'),
+        'support'     => env('APP_SUPPORT_EMAIL'),
     ],
 
     'theme' => [
@@ -49,73 +41,20 @@ return new Config([
         'use_https'     => true,
     ],
 
-    'database' => [
-        'adapter'  => env('DB_ADAPTER'),
-        'host'     => env('DB_HOST'),
-        'username' => env('DB_USERNAME'),
-        'password' => env('DB_PASSWORD'),
-        'dbname'   => env('DB_DATABASE'),
-        'charset'  => env('DB_CHARSET')
-    ],
-
-    'metadata' => [
-        'adapter'     => env('METADATA_DRIVER'),
-        'metaDataDir' => BASE_DIR . 'app/cache/metaData/',
-    ],
-
     'application' => [
-        'controllersDir' => BASE_DIR . '/app/controllers/',
-        'modelsDir'      => BASE_DIR . '/app/models/',
-        'viewsDir'       => BASE_DIR . '/app/views/',
-        'pluginsDir'     => BASE_DIR . '/app/plugins/',
-        'libraryDir'     => BASE_DIR . '/app/library/',
-        'phalconDir'     => BASE_DIR . '/app/Phalcon/',
-        'development'    => [
-            'staticBaseUri' => env('APP_STATIC_URL'),
-            'baseUri'       => env('APP_BASE_URI'),
-        ],
-        'production' => [
-            'staticBaseUri' => env('APP_STATIC_URL'),
-            'baseUri'       => env('APP_BASE_URI'),
-        ],
-        'debug' => env('APP_DEBUG'),
+        'controllersDir' => app_path('controller') . DIRECTORY_SEPARATOR,
+        'modelsDir'      => app_path('model') . DIRECTORY_SEPARATOR,
+        'viewsDir'       => app_path('views') . DIRECTORY_SEPARATOR,
+        'libraryDir'     => app_path('library') . DIRECTORY_SEPARATOR,
+        'staticBaseUri'  => env('APP_STATIC_URL'),
+        'baseUri'        => env('APP_BASE_URI'),
+        'debug'          => env('APP_DEBUG'),
     ],
 
     'volt' => [
         'compiledExt'  => '.php',
         'separator'    => '_',
-        'cacheDir'     => BASE_DIR . 'app/cache/volt/',
-        'forceCompile' => env('APP_DEBUG'),
-    ],
-
-    'dataCache' => [
-        'backend'  => env('DATA_CACHE_DRIVER'),
-        'frontend' => env('DATA_CACHE_FRONTEND'),
-        'lifetime' => env('DATA_CACHE_LIFETIME'),
-        'prefix'   => env('DATA_CACHE_PREFIX'),
-        'cacheDir' => BASE_DIR . 'app/cache/data/',
-    ],
-
-    'modelsCache' => [
-        'backend'  => env('MODELS_CACHE_DRIVER'),
-        'frontend' => env('MODELS_CACHE_FRONTEND'),
-        'lifetime' => env('MODELS_CACHE_LIFETIME'),
-        'prefix'   => env('MODELS_CACHE_PREFIX'),
-        'host'     => env('MEMCACHED_HOST'),
-        'port'     => env('MEMCACHED_PORT'),
-        'weight'   => env('MEMCACHED_HOST'),
-        'cacheDir' => BASE_DIR . 'app/cache/models/',
-    ],
-
-    'viewCache' => [
-        'backend'  => env('VIEW_CACHE_DRIVER'),
-        'lifetime' => env('VIEW_CACHE_LIFETIME'),
-        'prefix'   => env('VIEW_CACHE_PREFIX'),
-        'cacheDir' => BASE_DIR . 'app/cache/views/',
-    ],
-
-    'session' => [
-        'adapter' => env('SESSION_DRIVER'),
+        'forceCompile' => env('APP_DEBUG', true),
     ],
 
     'mandrillapp' => [
@@ -146,15 +85,10 @@ return new Config([
         'password' => env('MAIL_PASSWORD'),
     ],
 
-    'beanstalk' => [
-        'enabled' => env('BEANSTALK_ENABLED'),
-        'host'    => env('BEANSTALK_HOST'),
-    ],
-
     'elasticsearch' => [
         'index' => env('ELASTIC_INDEX'),
         'hosts' => [
-            env('ELASTIC_HOST') .':' . env('ELASTIC_PORT'),
+            env('ELASTIC_HOST', '127.0.0.1') .':' . env('ELASTIC_PORT', 9200),
         ],
     ],
 
@@ -163,25 +97,18 @@ return new Config([
         'fromEmail' => env('MAIL_FROM_ADDRESS'),
     ],
 
-    'logger' => [
-        'path'     => BASE_DIR . '/app/logs/',
-        'format'   => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
-        'date'     => 'd-M-Y H:i:s',
-        'logLevel' => Logger::INFO,
-        'filename' => 'application.log',
-    ],
-
     'error' => [
-        'logger'    => BASE_DIR . 'app/logs/error.log',
+        'logger'    => app_path('logs/error.log'),
         'formatter' => [
-            'format' => '[%date%] ' . HOSTNAME . ' php: [%type%] %message%',
+            'format' => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
             'date'   => 'd-M-Y H:i:s',
         ],
         'controller' => 'error',
-        'action'     => 'index',
+        'action'     => 'route500',
     ],
+
     'reCaptcha' => [
         'siteKey' => env('RECAPTCHA_KEY'),
         'secret' => env('RECAPTCHA_SECRET'),
     ]
-]);
+];

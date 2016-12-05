@@ -1,7 +1,7 @@
 <div class="row">
     {%- if currentUser -%}
         <div class="col-md-1 small" align="center">
-            {{ image(gravatar.getAvatar(session.get('identity-email')), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
+            {{ image(gravatar(session.get('identity-email')), 'width': 48, 'height': 48, 'class': 'img-rounded') }}
             <div>
                 {{ link_to('user/' ~ session.get('identity') ~ '/me', 'You') }}
             </div>

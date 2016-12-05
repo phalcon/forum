@@ -17,13 +17,9 @@
 
 use Phosphorum\Bootstrap;
 
-include_once realpath(dirname(dirname(__FILE__))) . '/app/config/env.php';
-include_once BASE_DIR . 'app/library/Bootstrap.php';
+// Register the auto loader
+require __DIR__.'/../bootstrap/autoloader.php';
 
 $bootstrap = new Bootstrap();
 
-if (APPLICATION_ENV == ENV_TESTING) {
-    return $bootstrap->run();
-} else {
-    echo $bootstrap->run();
-}
+echo $bootstrap->run();

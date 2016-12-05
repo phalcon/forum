@@ -24,7 +24,6 @@
     {%-
         include 'partials/post/post-title' with [
             'post': post,
-            'gravatar': this.gravatar,
             'postAutorName': postAutorName,
             'postAutorUrl': postAutorUrl
         ]
@@ -33,7 +32,7 @@
     <div class="discussion">
         <div class="row reply-block">
             <div class="col-md-1 col-sm-1 hidden-xs text-center">
-                {{ image(gravatar.getAvatar(post.user.email), 'class': 'img-rounded avatar') }}<br>
+                {{ image(gravatar(post.user.email), 'class': 'img-rounded avatar') }}<br>
                 <span itemprop="author" itemscope itemtype="http://schema.org/Person" class="avatar-name">
                     {{- link_to(postAutorUrl, postAutorName, 'class': 'user-moderator-' ~ post.user.moderator) -}}
                 </span>
@@ -76,7 +75,6 @@
               partial('partials/post/reply', [
                   'post': post,
                   'reply': reply,
-                  'gravatar': this.gravatar,
                   'markdown': this.markdown,
                   'moderator': moderator,
                   'currentUser': currentUser
@@ -87,7 +85,6 @@
             {{-
                 partial('partials/post/comment-form', [
                   'post': post,
-                  'gravatar': this.gravatar,
                   'currentUser': currentUser,
                   'tokenKey': tokenKey,
                   'token': token

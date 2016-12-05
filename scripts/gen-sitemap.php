@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file docs/LICENSE.txt.                        |
+ | with this package in the file LICENSE.txt.                             |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -23,7 +23,7 @@ require 'cli-bootstrap.php';
 use Phalcon\Di;
 use Phalcon\Config;
 use Phalcon\DI\Injectable;
-use Phosphorum\Models\Posts;
+use Phosphorum\Model\Posts;
 use League\Flysystem\Filesystem;
 use Phalcon\Logger\Adapter\Stream;
 use League\Flysystem\Adapter\Local;
