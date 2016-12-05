@@ -1,5 +1,8 @@
 # Phosphorum 3
 
+[![Latest Version](https://img.shields.io/packagist/v/phalcon/forum.svg)][:packagist:]
+[![Software License](https://img.shields.io/badge/license-BSD--3-brightgreen.svg)][:license:]
+[![Total Downloads](https://img.shields.io/packagist/dt/phalcon/forum.svg)][:packagist:]
 [![Build Status](https://secure.travis-ci.org/phalcon/forum.svg?branch=master)][:ci:]
 
 Phosphorum is an engine for building flexible, clear and fast forums.
@@ -142,9 +145,10 @@ For more details about Console Commands see [here][:codccom:].
 
 ## License
 
-Phosphorum is an open-sourced software licensed under the [New BSD License][:license:].
+Phosphorum is an open-sourced software licensed under the [New BSD License][:license:].<br>
 © Phalcon Framework Team and contributors
 
+[:packagist:]: https://packagist.org/packages/phalcon/forum
 [:ci:]: http://travis-ci.org/phalcon/forum
 [:ext-curl:]: http://php.net/manual/en/book.curl.php
 [:ext-ssl:]: http://php.net/manual/en/book.openssl.php
