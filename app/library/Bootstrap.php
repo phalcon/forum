@@ -24,6 +24,7 @@ use Phosphorum\Provider;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Error\Handler as ErrorHandler;
+use Phosphorum\Console\Application as Console;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Provider\ServiceProviderInterface;
 
@@ -54,11 +55,14 @@ class Bootstrap
         $dotenv = new Dotenv(realpath(BASE_DIR));
         $dotenv->load();
 
-        $this->di = new FactoryDefault;
+        $this->di = new FactoryDefault();
         $this->app = $this->createInternalApplication($mode);
 
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
+        $this->di->setShared('mode', function () use ($mode) {
+            return $mode;
+        });
 
         Di::setDefault($this->di);
 
@@ -169,9 +173,7 @@ class Bootstrap
             case 'normal':
                 return new MvcApplication($this->di);
             case 'cli':
-                throw new InvalidArgumentException(
-                    'Not implemented yet.'
-                );
+                return new Console($this->di);
             case 'api':
                 throw new InvalidArgumentException(
                     'Not implemented yet.'
@@ -179,7 +181,7 @@ class Bootstrap
             default:
                 throw new InvalidArgumentException(
                     sprintf(
-                        'Invalid application mode. Expected either "normal" either "cli" or "api". Got %s',
+                        'Invalid application mode. Expected either "normal" either "cli" or "api". Got "%s".',
                         is_scalar($mode) ? $mode : var_export($mode, true)
                     )
                 );

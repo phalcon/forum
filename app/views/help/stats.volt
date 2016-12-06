@@ -51,14 +51,14 @@
             <section>
                 {% cache "activity" 3600 %}
                 <table class="table table-stripped" align="left" style="width:300px">
-                    {% for activity in activities %}
+                    {% for i, activity in activities %}
                         <tr>
                             <td>
                                 <a href="{{ url("user/" ~ activity.id ~ "/" ~ activity.login) }}" title="{{ activity.name }}">
                                     {{ activity.name }}
                                 </a>
                             </td>
-                            <td align="right">{{ activity.amount }}</td>
+                            <td align="right">{{ i + 1 }}</td>
                         </tr>
                     {% endfor %}
                 </table>
