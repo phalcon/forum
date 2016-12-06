@@ -18,7 +18,7 @@
     </ul>
 </div>
 
-{% if pager|length() > 0 %}
+{%- if posts|length -%}
 <div class="col-md-12">
     <br/>
     <div align="center">
@@ -108,7 +108,9 @@
     </div>
 </div>
 
-{{- partial('partials/paginate', ['pager': pager]) -}}
+    {%- if pager is defined -%}
+        {{- partial('partials/paginate', ['pager': pager]) -}}
+    {%- endif -%}
 
 {%- else -%}
 <div class="col-md-12" align="center">
