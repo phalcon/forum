@@ -51,7 +51,6 @@ class ServiceProvider extends AbstractServiceProvider
                 [
                     'compiledPath'  => self::compiledPath(),
                     'compileAlways' => (bool) $config->forceCompile,
-                    'stat'          => environment('production'),
                 ]
             );
 

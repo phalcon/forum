@@ -109,6 +109,6 @@ return [
 
     'reCaptcha' => [
         'siteKey' => env('RECAPTCHA_KEY'),
-        'secret' => env('RECAPTCHA_SECRET'),
+        'secret'  => env('RECAPTCHA_SECRET'),
     ]
 ];
