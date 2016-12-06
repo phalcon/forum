@@ -38,7 +38,7 @@ class ErrorController extends ControllerBase
         }
 
         $this->view->setVars([
-            'debug'   => !environment(['production']),
+            'debug'   => environment('production') !== true,
             'support' => container('config')->site->support
         ]);
     }

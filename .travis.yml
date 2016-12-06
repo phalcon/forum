@@ -62,7 +62,7 @@ before_script:
   - ulimit -c unlimited -S || true
 
 script:
-  - vendor/bin/phpcs --ignore=app/cache/*,app/config/*,vendor/ -s app/
+  - vendor/bin/phpcs
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 

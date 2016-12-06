@@ -23,6 +23,7 @@ require 'constants.php';
 (new Loader())
     ->registerNamespaces([
         'Phosphorum\Model'      => dirname(__DIR__) . '/app/model',
+        'Phosphorum\Task'       => dirname(__DIR__) . '/app/task',
         'Phosphorum\Controller' => dirname(__DIR__) . '/app/controller',
         'Phosphorum'            => dirname(__DIR__) . '/app/library',
         'Phosphorum\Provider'   => dirname(__DIR__) . '/app/provider',

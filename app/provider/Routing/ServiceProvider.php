@@ -18,6 +18,7 @@
 namespace Phosphorum\Provider\Routing;
 
 use Phalcon\Mvc\Router;
+use InvalidArgumentException;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
@@ -43,22 +44,45 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                $em     = container('eventsManager');
-                /** @noinspection PhpIncludeInspection */
-                $router = require config_path('routes.php');
+                $mode = container('mode');
 
-                if (!isset($_GET['_url'])) {
-                    $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
+                switch ($mode) {
+                    case 'normal':
+                        /** @noinspection PhpIncludeInspection */
+                        $router = require config_path('routes.php');
+
+                        if (!isset($_GET['_url'])) {
+                            $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
+                        }
+
+                        $router->removeExtraSlashes(true);
+                        $router->setEventsManager(container('eventsManager'));
+                        $router->setDefaultNamespace('Phosphorum\Controller');
+                        $router->notFound([
+                            'controller' => 'error',
+                            'action'     => 'route404',
+                        ]);
+
+                        break;
+                    case 'cli':
+                        /** @noinspection PhpIncludeInspection */
+                        $router = require config_path('cli-routes.php');
+
+                        break;
+                    case 'api':
+                        throw new InvalidArgumentException(
+                            'Not implemented yet.'
+                        );
+                    default:
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                'Invalid application mode. Expected either "normal" either "cli" or "api". Got "%s".',
+                                is_scalar($mode) ? $mode : var_export($mode, true)
+                            )
+                        );
                 }
 
-                $router->removeExtraSlashes(true);
-                $router->setEventsManager($em);
-
-                $router->setDefaultNamespace('\Phosphorum\Controller');
-                $router->notFound([
-                    'controller' => 'error',
-                    'action'     => 'route404',
-                ]);
+                $router->setDI(container());
 
                 return $router;
             }
