@@ -72,7 +72,6 @@ class ServiceProvider extends AbstractServiceProvider
                                 is_scalar($mode) ? $mode : var_export($mode, true)
                             )
                         );
-
                 }
 
                 $dispatcher->setDI(container());

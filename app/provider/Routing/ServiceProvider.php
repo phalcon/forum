@@ -80,7 +80,6 @@ class ServiceProvider extends AbstractServiceProvider
                                 is_scalar($mode) ? $mode : var_export($mode, true)
                             )
                         );
-
                 }
 
                 $router->setDI(container());
