@@ -40,8 +40,3 @@ define('APP_START_MEMORY', memory_get_usage());
  * @const DEV_IP Developer IP mask
  */
 define('DEV_IP', '192.168.');
-
-/**
- * @const VERSION Forum version
- */
-define('VERSION', '3.1.0');

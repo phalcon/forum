@@ -17,6 +17,8 @@
 
 namespace Phosphorum\Provider\VoltTemplate;
 
+use Phosphorum\Version;
+
 /**
  * Phosphorum\Provider\VoltTemplate\VoltFunctions
  *
@@ -40,6 +42,10 @@ class VoltFunctions
                 return $name . '(' . $arguments . ')';
             case 'gravatar':
                 return 'container("gravatar")->getAvatar(' . $arguments . ')';
+            case 'forum_version':
+                return Version::class . '::get()';
+            case 'forum_name':
+                return '"'. container('config')->site->name . '"';
         }
 
         return null;
