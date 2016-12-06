@@ -293,6 +293,14 @@ $router->add(
 );
 
 $router->add(
+    '/category/{id:[0-9]+}',
+    [
+        'controller' => 'categories',
+        'action'     => 'view'
+    ]
+);
+
+$router->add(
     '/reload-categories',
     [
         'controller' => 'categories',
