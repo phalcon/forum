@@ -43,14 +43,14 @@
 		{{- stylesheet_link("//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css", false) -}}
 		{{- stylesheet_link("//cdn.jsdelivr.net/prettify/0.1/prettify.css", false) -}}
 		{%- if theme == 'L' -%}
-		{{- stylesheet_link("css/theme-white.css?v=" ~ app_version, true) -}}
+		{{- stylesheet_link("css/theme-white.css?v=" ~ forum_version(), true) -}}
 		{%- else -%}
-		{{- stylesheet_link("css/theme.css?v=" ~ app_version, true) -}}
+		{{- stylesheet_link("css/theme.css?v=" ~ forum_version(), true) -}}
 		{%- endif -%}
-		{{- stylesheet_link("css/editor.css?v=" ~ app_version, true) -}}
-		{{- stylesheet_link("css/fonts.css?v=" ~ app_version, true) -}}
-		{{- stylesheet_link("css/diff.css?v=" ~ app_version, true) -}}
-		{{- stylesheet_link("css/style.css?v=" ~ app_version, true) -}}
+		{{- stylesheet_link("css/editor.css?v=" ~ forum_version(), true) -}}
+		{{- stylesheet_link("css/fonts.css?v=" ~ forum_version(), true) -}}
+		{{- stylesheet_link("css/diff.css?v=" ~ forum_version(), true) -}}
+		{{- stylesheet_link("css/style.css?v=" ~ forum_version(), true) -}}
 		{#- reCaptcha -#}
 		{%- if recaptcha.isEnabled() -%}
 			{{- recaptcha.getJs() -}}
@@ -59,9 +59,9 @@
 	<body class="with-top-navbar">
 		{{ content() }}
 		<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.2.4,bootstrap@3.3.6,prettify@0.1(prettify.js+lang-css.js+lang-sql.js+lang-yaml.js)"></script>
-		{{ javascript_include("js/editor.js?v=" ~ app_version) }}
-		{{ javascript_include("js/forum.js?v=" ~ app_version) }}
-		{{ javascript_include("js/gs.js?v=" ~ app_version) }}
+		{{ javascript_include("js/editor.js?v=" ~ forum_version()) }}
+		{{ javascript_include("js/forum.js?v=" ~ forum_version()) }}
+		{{ javascript_include("js/gs.js?v=" ~ forum_version()) }}
 		<script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 	</body>
 </html>
