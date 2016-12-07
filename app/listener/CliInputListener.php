@@ -18,7 +18,6 @@
 namespace Phosphorum\Listener;
 
 use Phalcon\Events\Event;
-use Phalcon\Cli\Dispatcher;
 use Phosphorum\Console\Application;
 use Phosphorum\Console\OptionParser;
 
@@ -29,25 +28,31 @@ use Phosphorum\Console\OptionParser;
  */
 class CliInputListener
 {
+    const SEPARATOR = ':';
+
     /**
-     * Parse input options.
+     * Parse and prepare the task definition from the input options.
      *
-     * @param Event       $event
-     * @param Application $application
-     * @param Dispatcher  $dispatcher
+     * @param  Event       $event
+     * @param  Application $application
+     * @return bool
      */
-    public function beforeHandleTask(Event $event, Application $application, Dispatcher $dispatcher)
+    public function boot(Event $event, Application $application)
     {
-        $parsedOptions = OptionParser::parse($application->getArguments());
-        $dispatcher->setParams($this->setUpTaskDefinition($parsedOptions));
+        $parsedOptions = OptionParser::parse($application->getRawArguments());
+        $definition    = $this->setUpTaskDefinition($parsedOptions);
+
+        $application->setArguments($definition);
 
         container()->get('logger')->debug(
             sprintf('[%s] Parsed options: %s', $event->getType(), json_encode($parsedOptions))
         );
 
         container()->get('logger')->debug(
-            sprintf('[%s] Dispatcher params: %s', $event->getType(), json_encode($dispatcher->getParams()))
+            sprintf('[%s] Task definition: %s', $event->getType(), json_encode($definition))
         );
+
+        return true;
     }
 
     /**
@@ -60,9 +65,9 @@ class CliInputListener
      * ];
      *
      * $inputListener->setUpTaskDefinition(OptionParser::parse($_SERVER['argv']));
-     * // 'activeTask'   => cache
-     * // 'activeAction' => clear
-     * // 'args'         => []
+     * // 'task'   => cache
+     * // 'action' => clear
+     * // 'params' => []
      *
      * $_SERVER['argv'] = [
      *     "./forum",
@@ -71,37 +76,36 @@ class CliInputListener
      * ];
      *
      * $inputListener->setUpTaskDefinition(OptionParser::parse($_SERVER['argv']));
-     * // 'activeTask'   => cache
-     * // 'activeAction' => false
-     * // 'args'         => ['clear' => true]
+     * // 'task'   => cache
+     * // 'action' => false
+     * // 'params' => ['clear' => true]
      * </code>
      *
      * @param  array $parsedOptions
-     *
      * @return array
      */
     protected function setUpTaskDefinition(array $parsedOptions)
     {
-        $activeTask = false;
-        $activeAction = false;
-        $args = [];
+        $task   = null;
+        $action = null;
+        $params = [];
 
         if (isset($parsedOptions[0])) {
-            $activeTask = $parsedOptions[0];
+            $task = $parsedOptions[0];
         }
 
         if (isset($parsedOptions[1])) {
-            $activeAction = $parsedOptions[1];
-        } elseif (strpos($activeTask, ':')) {
-            list($activeTask, $activeAction) = explode(':', $activeTask, 2);
+            $action = $parsedOptions[1];
+        } elseif (strpos($task, self::SEPARATOR)) {
+            list($task, $action) = explode(self::SEPARATOR, $task, 2);
         }
 
         if (count($parsedOptions) > 2) {
-            $args = array_slice($parsedOptions, 2);
-        } elseif (count($parsedOptions) > 1 && $activeAction === false) {
-            $args = array_slice($parsedOptions, 1);
+            $params = array_slice($parsedOptions, 2);
+        } elseif (count($parsedOptions) > 1 && $action === null) {
+            $params = array_slice($parsedOptions, 1);
         }
 
-        return compact('activeTask', 'activeAction', 'args');
+        return compact('task', 'action', 'params');
     }
 }
