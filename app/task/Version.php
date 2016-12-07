@@ -20,7 +20,7 @@ namespace Phosphorum\Task;
 use Phosphorum\Console\AbstractTask;
 
 /**
- * Phosphorum\Task\Help
+ * Phosphorum\Task\Version
  *
  * @package Phosphorum\Task
  */

@@ -72,7 +72,7 @@ class AbstractTask extends Injectable implements TaskInterface
      */
     protected function isShellCommandExist($cmd)
     {
-        $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+        $return = shell_exec(sprintf("command -v %s", escapeshellarg($cmd)));
 
         return !empty($return);
     }
