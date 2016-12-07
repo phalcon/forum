@@ -28,13 +28,9 @@ use Phalcon\Logger\AdapterInterface;
  *
  * @package Phosphorum\Console
  *
- * @method AdapterInterface critical(string $message, array $context = null)
- * @method AdapterInterface emergency(string $message, array $context = null)
  * @method AdapterInterface debug(string $message, array $context = null)
  * @method AdapterInterface error(string $message, array $context = null)
  * @method AdapterInterface info(string $message, array $context = null)
- * @method AdapterInterface warning(string $message, array $context = null)
- * @method AdapterInterface notice(string $message, array $context = null)
  * @method AdapterInterface alert(string $message, array $context = null)
  */
 class AbstractTask extends Injectable implements TaskInterface
@@ -88,12 +84,8 @@ class AbstractTask extends Injectable implements TaskInterface
         switch ($name) {
             case 'info':
             case 'alert':
-            case 'critical':
             case 'debug':
             case 'error':
-            case 'emergency':
-            case 'notice':
-            case 'warning':
                 return call_user_func_array(
                     [$this->output, $name],
                     $arguments
@@ -106,5 +98,4 @@ class AbstractTask extends Injectable implements TaskInterface
             sprintf('Call to undefined method %s:%s at %s:%s.', get_class($this), $name, $bt[0]['file'], $bt[0]['line'])
         );
     }
-
 }
