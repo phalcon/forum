@@ -19,6 +19,7 @@ namespace Phosphorum\Task;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Phalcon\Cache\BackendInterface;
 use Phosphorum\Console\AbstractTask;
 
 /**
@@ -48,6 +49,9 @@ class Cache extends AbstractTask
         $this->output('Clear models cache...');
         $this->clearModelsCache();
 
+        $this->output('Clear view cache...');
+        $this->clearViewsCache();
+
         $this->output('Done');
     }
 
@@ -69,11 +73,31 @@ class Cache extends AbstractTask
 
     protected function clearModelsCache()
     {
+        if (!container()->has('modelsCache')) {
+            return;
+        }
+
         $modelsCache = container('modelsCache');
 
-        // Memory adapter does not have `flush` method
-        if (method_exists($modelsCache, 'flush')) {
-            $modelsCache->flush();
+        if ($modelsCache instanceof BackendInterface) {
+            return;
         }
+
+        $modelsCache->flush();
+    }
+
+    protected function clearViewsCache()
+    {
+        if (!container()->has('viewCache')) {
+            return;
+        }
+
+        $viewCache = container('modelsCache');
+
+        if ($viewCache instanceof BackendInterface) {
+            return;
+        }
+
+        $viewCache->flush();
     }
 }

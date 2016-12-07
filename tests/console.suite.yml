@@ -8,5 +8,6 @@ modules:
     enabled:
         - Helper\Console
         - Filesystem
+        - Asserts
         - Phalcon
         - Cli
