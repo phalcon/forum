@@ -18,6 +18,8 @@
 namespace Phosphorum\Console;
 
 use Phalcon\Cli\Console;
+use Phalcon\DiInterface;
+use Phosphorum\Listener\CliInputListener;
 
 /**
  * Phosphorum\Console\Application
@@ -26,4 +28,41 @@ use Phalcon\Cli\Console;
  */
 class Application extends Console
 {
+    /**
+     * The command line argument list.
+     * @var array
+     */
+    protected $arguments = [];
+
+    /**
+     * Application constructor.
+     *
+     * @param DiInterface $di
+     */
+    public function __construct(DiInterface $di)
+    {
+        parent::__construct($di);
+
+        $this->arguments = $_SERVER["argv"];
+
+        $this->setUpListeners();
+    }
+
+    /**
+     * Gets the command line argument list.
+     *
+     * @return array
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * Setting up application listeners
+     */
+    protected function setUpListeners()
+    {
+        container('eventsManager')->attach('console', new CliInputListener());
+    }
 }
