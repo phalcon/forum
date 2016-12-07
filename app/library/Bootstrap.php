@@ -62,18 +62,11 @@ class Bootstrap
      */
     public function __construct($mode = 'normal')
     {
-        $dotenv = new Dotenv(dirname(dirname(dirname(__FILE__))));
-        $dotenv->load();
+        (new Dotenv(dirname(dirname(dirname(__FILE__)))))->load();
 
         $this->di = new FactoryDefault();
 
-        $this->createInternalApplication($mode);
-
-        $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
-        $this->di->setShared('mode', function () use ($mode) {
-            return $mode;
-        });
 
         Di::setDefault($this->di);
 
@@ -82,6 +75,7 @@ class Bootstrap
          */
         $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
 
+        $this->createInternalApplication($mode);
         $this->setupEnvironment();
 
         /** @noinspection PhpIncludeInspection */
@@ -146,6 +140,16 @@ class Bootstrap
     public function getEnvironment()
     {
         return $this->environment;
+    }
+
+    /**
+     * Gets current application mode: normal, cli, api.
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
     }
 
     /**
