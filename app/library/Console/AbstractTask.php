@@ -46,6 +46,12 @@ class AbstractTask extends Injectable implements TaskInterface
     protected $output;
 
     /**
+     * The base application path.
+     * @var string
+     */
+    protected $basePath;
+
+    /**
      * AbstractTask constructor.
      */
     final public function __construct()
@@ -64,6 +70,8 @@ class AbstractTask extends Injectable implements TaskInterface
     {
         $this->output = new Stream('php://stdout');
         $this->output->setFormatter(new Line('%message%'));
+
+        $this->basePath = container('bootstrap')->getBasePath();
     }
 
     /**

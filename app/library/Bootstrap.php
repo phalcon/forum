@@ -56,13 +56,21 @@ class Bootstrap
     private $environment;
 
     /**
+     * The base application path.
+     * @var string
+     */
+    private $basePath;
+
+    /**
      * Bootstrap constructor.
      *
      * @param string $mode The application mode: "normal", "cli", "api".
      */
     public function __construct($mode = 'normal')
     {
-        (new Dotenv(dirname(dirname(dirname(__FILE__)))))->load();
+        $this->basePath = dirname(app_path());
+
+        (new Dotenv($this->basePath))->load();
 
         $this->di = new FactoryDefault();
 
@@ -150,6 +158,16 @@ class Bootstrap
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * Gets the base application path.
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
     }
 
     /**
