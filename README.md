@@ -76,7 +76,7 @@ Changes to the database that you need to make if your Phosphorum version is...
 
 You can create fake entries on an empty Phosphorum installation by running:
 
-```bash
+```sh
 $ php scripts/random-entries.php
 ```
 
@@ -95,49 +95,59 @@ to be set up in the configuration (`app/config/config.php`).
 
 A PHP client to deliver e-mails must be enabled in background:
 
-```bash
+```sh
 $ php scripts/send-notifications-consumer.php &
 ```
 
 You can serve it with [Supervisor][:superv:] by using following config:
 
 ```ini
-; /etc/supervisor/conf.d/send-notifications-consumer.conf
-;
-; This is an example.
-; Please update the config according to your environment
+; ------------------------------------------------------- ;
+; /etc/supervisor/conf.d/send-notifications-consumer.conf ;
+;                                                         ;
+; This is an example.                                     ;
+; Please update the config according to your environment  ;
+; ------------------------------------------------------- ;
+[group:forum]
+programs=notifications_consumer
+priority=35
 
 [program:notifications_consumer]
 command=/usr/bin/php send-notifications-consumer.php
 directory=/var/www/forum/scripts/
+process_name=%(program_name)s
+startsecs = 0
 autostart=true
 autorestart=true
 user=www-data
 stderr_logfile=/var/www/forum/app/logs/notification_consumer.err.log
+stdout_logfile_maxbytes=0
 stdout_logfile=/var/www/forum/app/logs/notification_consumer.out.log
+stderr_logfile_maxbytes=0
 ```
 
 ## Tests
 
-Phosphorum uses [Codeception][:codc:] functional, acceptance and unit tests.
+Phosphorum uses [Codeception][:codc:] `functional`, `acceptance`, `console` and `unit` test suites.
 
 First you need to re-generate base classes for all suites:
 
-```bash
+```sh
 $ vendor/bin/codecept build
 ```
 
 Then, you will able to run all tests with `run` command:
 
-```bash
+```sh
 $ vendor/bin/codecept run
 # OR
-$ vendor/bin/codecept run --debug # Detailed output
+$ vendor/bin/codecept run -vvv # Detailed output
 ```
 
-Execute the `unit` test with the `run unit` command:
+To run concrete suite, for example `unit`, execute the command as follows:
 
-```bash
+```sh
+# functional, acceptance, console, unit
 $ vendor/bin/codecept run unit
 ```
 
