@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Last Thread</div>
+                <div class="panel-heading">Latest Threads</div>
                 <div class="panel-body">
                     {%- for last_thread in last_threads -%}
                         {{- link_to('discussion/' ~ last_thread.id_post ~ '/' ~ last_thread.slug_post, last_thread.title_post|e) -}}&nbsp; posted by {{ last_thread.name_user }} ({{ last_thread.name_category }})<br>

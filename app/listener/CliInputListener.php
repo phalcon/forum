@@ -106,6 +106,31 @@ class CliInputListener
             $params = array_slice($parsedOptions, 1);
         }
 
+        if ($task == null) {
+            $task = $this->findCommandFromOptions($parsedOptions);
+        }
+
         return compact('task', 'action', 'params');
+    }
+
+    protected function findCommandFromOptions(array $options)
+    {
+        if (empty($options)) {
+            return null;
+        }
+
+        switch (key($options)) {
+            case 'H':
+            case 'help':
+                return 'help';
+            case 'version':
+            case 'V':
+                return 'version';
+            case 'L':
+            case 'list':
+                return 'list';
+        }
+
+        return null;
     }
 }
