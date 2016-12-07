@@ -18,6 +18,7 @@
 namespace Phosphorum\Console;
 
 use Phalcon\Di\Injectable;
+use Phalcon\Cli\Console\Exception;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
 
@@ -61,6 +62,40 @@ class AbstractTask extends Injectable implements TaskInterface
     public function output($message, array $context = null)
     {
         $this->output->info($message, $context);
+    }
+
+    /**
+     * Check for the existence of a system command.
+     *
+     * @param  string $cmd
+     * @return bool
+     */
+    protected function isShellCommandExist($cmd)
+    {
+        $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+
+        return !empty($return);
+    }
+
+    /**
+     * Run shell command
+     *
+     * @param  string $cmd
+     * @param  bool   $failNonZero
+     * @return array
+     *
+     * @throws Exception
+     */
+    protected function runShellCommand($cmd, $failNonZero = true)
+    {
+        $data = [];
+        exec(sprintf('%s', escapeshellcmd($cmd)), $data, $resultCode);
+
+        if ($resultCode !== 0 && $failNonZero) {
+            throw new Exception("Result code was {$resultCode} for command {$cmd}.");
+        }
+
+        return $data;
     }
 
     /**
