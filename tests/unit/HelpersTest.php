@@ -89,8 +89,10 @@ class HelpersTest extends Unit
         $this->assertFalse(environment(['staging', 'production']));
 
         $this->assertTrue(environment(['staging', 'production', 'development', 'testing']));
-        $this->assertTrue(environment([APPLICATION_ENV]));
-        $this->assertTrue(environment() === APPLICATION_ENV);
+        $this->assertTrue(environment([env('APP_ENV')]));
+        $this->assertTrue(environment([$_ENV['APP_ENV']]));
+        $this->assertTrue(environment() === env('APP_ENV'));
+        $this->assertTrue(environment() === $_ENV['APP_ENV']);
     }
 
     /**
