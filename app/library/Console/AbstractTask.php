@@ -94,16 +94,16 @@ class AbstractTask extends Injectable implements TaskInterface
             case 'emergency':
             case 'notice':
             case 'warning':
-                return call_user_func_array([$this->output, $name], $arguments);
+                return call_user_func_array(
+                    [$this->output, $name],
+                    $arguments
+                );
         }
 
         $bt = debug_backtrace();
 
         throw new Exception(
-            sprintf(
-                'Call to undefined method %s:%s at %s:%s.',
-                get_class($this), $name, $bt[0]['file'], $bt[0]['line']
-            )
+            sprintf('Call to undefined method %s:%s at %s:%s.', get_class($this), $name, $bt[0]['file'], $bt[0]['line'])
         );
     }
 
