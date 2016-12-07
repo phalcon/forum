@@ -60,6 +60,9 @@ class ServiceProvider extends AbstractServiceProvider
                         $dispatcher = new CliDi();
                         $dispatcher->setDefaultNamespace('Phosphorum\Task');
 
+                        $dispatcher->setActionSuffix('');
+                        $dispatcher->setTaskSuffix('');
+
                         break;
                     case 'api':
                         throw new InvalidArgumentException(

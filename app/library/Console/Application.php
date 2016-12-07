@@ -29,10 +29,10 @@ use Phosphorum\Listener\CliInputListener;
 class Application extends Console
 {
     /**
-     * The command line argument list.
+     * The raw command line argument list.
      * @var array
      */
-    protected $arguments = [];
+    protected $rawArguments = [];
 
     /**
      * Application constructor.
@@ -43,19 +43,32 @@ class Application extends Console
     {
         parent::__construct($di);
 
-        $this->arguments = $_SERVER["argv"];
+        $this->rawArguments = $_SERVER["argv"];
 
         $this->setUpListeners();
     }
 
     /**
-     * Gets the command line argument list.
+     * Gets the raw command line argument list.
      *
      * @return array
      */
-    public function getArguments()
+    public function getRawArguments()
     {
-        return $this->arguments;
+        return $this->rawArguments;
+    }
+
+    /**
+     * Set the cleaned command line arguments.
+     *
+     * @param  array $arguments
+     * @return $this
+     */
+    public function setArguments(array $arguments)
+    {
+        $this->_arguments = $arguments;
+
+        return $this;
     }
 
     /**
