@@ -45,7 +45,7 @@ class VoltFunctions
             case 'forum_version':
                 return Version::class . '::get()';
             case 'forum_name':
-                return '"'. container('config')->site->name . '"';
+                return '"'. container('config')->site->software . '"';
         }
 
         return null;
