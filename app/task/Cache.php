@@ -41,9 +41,12 @@ class Cache extends AbstractTask
     public function clear()
     {
         $this->output('Start');
-        $this->output('Clear file cache...');
 
+        $this->output('Clear file cache...');
         $this->clearFileCache();
+
+        $this->output('Clear models cache...');
+        $this->clearModelsCache();
 
         $this->output('Done');
     }
@@ -61,6 +64,16 @@ class Cache extends AbstractTask
             }
 
             unlink($entry->getPathname());
+        }
+    }
+
+    protected function clearModelsCache()
+    {
+        $modelsCache = container('modelsCache');
+
+        // Memory adapter does not have `flush` method
+        if (method_exists($modelsCache, 'flush')) {
+            $modelsCache->flush();
         }
     }
 }

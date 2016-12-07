@@ -17,6 +17,7 @@ $I->runShellCommand('php forum cache:clear');
 $output=<<<OUT
 Start
 Clear file cache...
+Clear models cache...
 Done
 OUT;
 
