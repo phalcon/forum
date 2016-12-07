@@ -17,6 +17,7 @@
 
 namespace Phosphorum\Console;
 
+use Phosphorum\Version;
 use Phalcon\Cli\Console;
 use Phalcon\DiInterface;
 use Phosphorum\Listener\CliInputListener;
@@ -46,6 +47,26 @@ class Application extends Console
         $this->rawArguments = $_SERVER["argv"];
 
         $this->setUpListeners();
+    }
+
+    /**
+     * Get the application name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return container('config')->site->software;
+    }
+
+    /**
+     * Ghe application version.
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return Version::get();
     }
 
     /**
