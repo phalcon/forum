@@ -65,16 +65,49 @@ class AbstractTask extends Injectable implements TaskInterface
     }
 
     /**
-     * Check for the existence of a system command.
+     * Determines if a command exists on the current environment.
      *
-     * @param  string $cmd
+     * @param  string $command The command to check
      * @return bool
      */
-    protected function isShellCommandExist($cmd)
+    protected function isShellCommandExist($command)
     {
-        $return = shell_exec(sprintf("command -v %s", escapeshellarg($cmd)));
+        $where = sprintf("%s %s", (PHP_OS == 'WINNT') ? 'where' : 'command -v', escapeshellarg($command));
 
-        return !empty($return);
+        $process = proc_open(
+            $where,
+            [
+                ['pipe', 'r'], // STDIN
+                ['pipe', 'w'], // STDOUT
+                ['pipe', 'w'], // STDERR
+            ],
+            $pipes
+        );
+
+        if ($process !== false) {
+            $stdout = stream_get_contents($pipes[1]);
+            $stderr = stream_get_contents($pipes[2]);
+
+            if ($stderr) {
+                trigger_error($stderr, E_USER_WARNING);
+            }
+
+            if (is_resource($pipes[1])) {
+                fclose($pipes[1]);
+            }
+
+            if (is_resource($pipes[2])) {
+                fclose($pipes[2]);
+            }
+
+            if (is_resource($process)) {
+                proc_close($process);
+            }
+
+            return $stdout != '';
+        }
+
+        return false;
     }
 
     /**
