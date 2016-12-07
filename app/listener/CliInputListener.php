@@ -126,9 +126,8 @@ class CliInputListener
             case 'version':
             case 'V':
                 return 'version';
-            case 'L':
             case 'list':
-                return 'list';
+                return 'commands';
         }
 
         return null;

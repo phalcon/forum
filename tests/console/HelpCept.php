@@ -9,7 +9,7 @@ $I->wantToTest('getting help from command line');
 
 $output=<<<OUT
 Phosphorum 3.2.0
-Usage: php forum [command <arguments>] [--help] [--version] [--list]
+Usage: php forum [command <arguments>] [--help | -H] [--version | -V] [--list]
 OUT;
 
 $I->amInPath(dirname(app_path()));

@@ -32,6 +32,6 @@ class Help extends AbstractTask
     public function main()
     {
         $this->output(sprintf('%s %s', container('app')->getName(), container('app')->getVersion()));
-        $this->output('Usage: php forum [command <arguments>] [--help] [--version] [--list]');
+        $this->output('Usage: php forum [command <arguments>] [--help | -H] [--version | -V] [--list]');
     }
 }
