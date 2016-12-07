@@ -102,7 +102,7 @@ class CliInputListener
 
         if (count($parsedOptions) > 2) {
             $params = array_slice($parsedOptions, 2);
-        } elseif (count($parsedOptions) > 1 && $action === null) {
+        } elseif (count($parsedOptions) > 1) {
             $params = array_slice($parsedOptions, 1);
         }
 
