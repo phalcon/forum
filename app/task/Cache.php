@@ -40,12 +40,12 @@ class Cache extends AbstractTask
      */
     public function clear()
     {
-        $this->info('Start');
-        $this->info('Clear file cache...');
+        $this->output('Start');
+        $this->output('Clear file cache...');
 
         $this->clearFileCache();
 
-        $this->info('Done');
+        $this->output('Done');
     }
 
     protected function clearFileCache()
