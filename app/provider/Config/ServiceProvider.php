@@ -44,6 +44,7 @@ class ServiceProvider extends AbstractServiceProvider
         'database',
         'metadata',
         'queue',
+        'devtools',
         'config',
     ];
 

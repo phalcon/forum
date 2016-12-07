@@ -40,10 +40,20 @@ class Bootstrap
      * The application mode.
      * @var string
      */
-    protected $mode;
+    private $mode;
 
-    /** @var  DiInterface */
+    /**
+     * The Dependency Injection Container
+     * @var DiInterface
+     */
     private $di;
+
+    /**
+     * Current application environment:
+     * production, staging, development, testing
+     * @var string
+     */
+    private $environment;
 
     /**
      * Bootstrap constructor.
@@ -52,11 +62,12 @@ class Bootstrap
      */
     public function __construct($mode = 'normal')
     {
-        $dotenv = new Dotenv(realpath(BASE_DIR));
+        $dotenv = new Dotenv(dirname(dirname(dirname(__FILE__))));
         $dotenv->load();
 
         $this->di = new FactoryDefault();
-        $this->app = $this->createInternalApplication($mode);
+
+        $this->createInternalApplication($mode);
 
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
@@ -70,7 +81,8 @@ class Bootstrap
          * These services should be registered first
          */
         $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
-        $this->initializeServiceProvider(new Provider\Environment\ServiceProvider($this->di));
+
+        $this->setupEnvironment();
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');
@@ -95,7 +107,7 @@ class Bootstrap
     /**
      * Runs the Application
      *
-     * @return \Phalcon\Application|string
+     * @return mixed
      */
     public function run()
     {
@@ -124,6 +136,16 @@ class Bootstrap
         }
 
         return $this->app->handle();
+    }
+
+    /**
+     * Gets current application environment: production, staging, development, testing, etc.
+     *
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
     }
 
     /**
@@ -161,7 +183,6 @@ class Bootstrap
      * Create internal application to handle requests.
      *
      * @param  string $mode The application mode.
-     * @return MvcApplication|\Phalcon\Cli\Console
      *
      * @throws InvalidArgumentException
      */
@@ -171,9 +192,11 @@ class Bootstrap
 
         switch ($mode) {
             case 'normal':
-                return new MvcApplication($this->di);
+                $this->app = new MvcApplication($this->di);
+                break;
             case 'cli':
-                return new Console($this->di);
+                $this->app = new Console($this->di);
+                break;
             case 'api':
                 throw new InvalidArgumentException(
                     'Not implemented yet.'
@@ -186,6 +209,24 @@ class Bootstrap
                     )
                 );
         }
+    }
+
+    /**
+     * Setting up the application environment.
+     *
+     * This tries to get `APP_ENV` environment variable from $_ENV.
+     * If failed the `development` will be used.
+     *
+     * After getting `APP_ENV` variable we set the Bootstrap::$environment
+     * and the `APPLICATION_ENV` constant.
+     */
+    protected function setupEnvironment()
+    {
+        $this->environment = env('APP_ENV', 'development');
+
+        defined('APPLICATION_ENV') || define('APPLICATION_ENV', $this->environment);
+
+        $this->initializeServiceProvider(new Provider\Environment\ServiceProvider($this->di));
     }
 
     /**

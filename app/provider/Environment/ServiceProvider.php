@@ -42,11 +42,13 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->set(
             $this->serviceName,
             function ($value = null) {
+                $environment = container('bootstrap')->getEnvironment();
+
                 if (func_num_args() > 0) {
                     $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
 
                     foreach ($patterns as $pattern) {
-                        if ($pattern === APPLICATION_ENV) {
+                        if ($pattern === $environment) {
                             return true;
                         }
                     }
@@ -54,7 +56,7 @@ class ServiceProvider extends AbstractServiceProvider
                     return false;
                 }
 
-                return APPLICATION_ENV;
+                return $environment;
             }
         );
     }
