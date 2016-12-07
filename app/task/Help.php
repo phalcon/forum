@@ -17,50 +17,21 @@
 
 namespace Phosphorum\Task;
 
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use Phosphorum\Console\AbstractTask;
 
 /**
- * Phosphorum\Task\Cache
+ * Phosphorum\Task\Help
  *
  * @package Phosphorum\Task
  */
-class Cache extends AbstractTask
+class Help extends AbstractTask
 {
-    protected $excludeFileNames = [
-        '.',
-        '..',
-        '.gitkeep',
-        '.gitignore',
-    ];
-
     /**
-     * Clearing the Application Cache
+     * Getting the Application Help
      */
-    public function clear()
+    public function main()
     {
-        $this->output('Start');
-        $this->output('Clear file cache...');
-
-        $this->clearFileCache();
-
-        $this->output('Done');
-    }
-
-    protected function clearFileCache()
-    {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(cache_path()),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($iterator as $entry) {
-            if ($entry->isDir() || in_array($entry->getBasename(), $this->excludeFileNames)) {
-                continue;
-            }
-
-            unlink($entry->getPathname());
-        }
+        $this->output(sprintf('%s %s', container('app')->getName(), container('app')->getVersion()));
+        $this->output('Usage: php forum [command <arguments>] [--help] [--version] [--list]');
     }
 }

@@ -17,22 +17,14 @@
 
 namespace Phosphorum\Console;
 
-use ReflectionClass;
 use Phalcon\Di\Injectable;
-use Phalcon\Cli\Console\Exception;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Formatter\Line;
-use Phalcon\Logger\AdapterInterface;
 
 /**
  * Phosphorum\Console\AbstractTask
  *
  * @package Phosphorum\Console
- *
- * @method AdapterInterface debug(string $message, array $context = null)
- * @method AdapterInterface error(string $message, array $context = null)
- * @method AdapterInterface info(string $message, array $context = null)
- * @method AdapterInterface alert(string $message, array $context = null)
  */
 class AbstractTask extends Injectable implements TaskInterface
 {
@@ -61,6 +53,17 @@ class AbstractTask extends Injectable implements TaskInterface
     }
 
     /**
+     * Print output to the STDIN.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function output($message, array $context = null)
+    {
+        $this->output->info($message, $context);
+    }
+
+    /**
      * Setting up concrete task.
      */
     private function setUp()
@@ -69,46 +72,5 @@ class AbstractTask extends Injectable implements TaskInterface
         $this->output->setFormatter(new Line('%message%'));
 
         $this->basePath = container('bootstrap')->getBasePath();
-    }
-
-    /**
-     * Provides facade for internal methods.
-     *
-     * @param  string $name
-     * @param  mixed  $arguments
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    public function __call($name, $arguments)
-    {
-        switch ($name) {
-            case 'info':
-            case 'alert':
-            case 'debug':
-            case 'error':
-                return call_user_func_array(
-                    [$this->output, $name],
-                    $arguments
-                );
-        }
-
-        $bt = debug_backtrace();
-
-        if (isset($bt[0]['file']) && isset($bt[0]['line'])) {
-            $file = $bt[0]['file'];
-            $line = $bt[0]['line'];
-        } elseif (isset($bt[0]['class']) && $bt[0]['class'] === __CLASS__) {
-            $refl = new ReflectionClass($this);
-            $file = $refl->getFileName();
-            $line = null;
-        } else {
-            $file = isset($bt[0]['file']) ? $bt[0]['file'] : null;
-            $line = isset($bt[0]['line']) ? $bt[0]['line'] : null;
-        }
-
-        throw new Exception(
-            sprintf('Call to undefined method %s:%s at %s%s.', get_class($this), $name, $file, $line ? ":{$line}" : '')
-        );
     }
 }
