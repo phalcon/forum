@@ -46,7 +46,7 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                $mode = container('mode');
+                $mode = container('bootstrap')->getMode();
 
                 switch ($mode) {
                     case 'normal':

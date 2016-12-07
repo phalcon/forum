@@ -71,9 +71,6 @@ class Bootstrap
 
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
-        $this->di->setShared('mode', function () use ($mode) {
-            return $mode;
-        });
 
         Di::setDefault($this->di);
 
@@ -146,6 +143,16 @@ class Bootstrap
     public function getEnvironment()
     {
         return $this->environment;
+    }
+
+    /**
+     * Gets current application mode: normal, cli, api.
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
     }
 
     /**
