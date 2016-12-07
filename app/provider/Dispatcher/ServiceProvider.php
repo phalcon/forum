@@ -62,6 +62,7 @@ class ServiceProvider extends AbstractServiceProvider
 
                         $dispatcher->setActionSuffix('');
                         $dispatcher->setTaskSuffix('');
+                        $dispatcher->setDefaultTask('help');
 
                         break;
                     case 'api':

@@ -17,6 +17,7 @@
 
 namespace Phosphorum\Console;
 
+use ReflectionClass;
 use Phalcon\Di\Injectable;
 use Phalcon\Cli\Console\Exception;
 use Phalcon\Logger\Adapter\Stream;
@@ -94,8 +95,20 @@ class AbstractTask extends Injectable implements TaskInterface
 
         $bt = debug_backtrace();
 
+        if (isset($bt[0]['file']) && isset($bt[0]['line'])) {
+            $file = $bt[0]['file'];
+            $line = $bt[0]['line'];
+        } elseif (isset($bt[0]['class']) && $bt[0]['class'] === __CLASS__) {
+            $refl = new ReflectionClass($this);
+            $file = $refl->getFileName();
+            $line = null;
+        } else {
+            $file = isset($bt[0]['file']) ? $bt[0]['file'] : null;
+            $line = isset($bt[0]['line']) ? $bt[0]['line'] : null;
+        }
+
         throw new Exception(
-            sprintf('Call to undefined method %s:%s at %s:%s.', get_class($this), $name, $bt[0]['file'], $bt[0]['line'])
+            sprintf('Call to undefined method %s:%s at %s%s.', get_class($this), $name, $file, $line ? ":{$line}" : '')
         );
     }
 }
