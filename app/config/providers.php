@@ -40,6 +40,7 @@ return [
     Phosphorum\Provider\Timezones\ServiceProvider::class,
     Phosphorum\Provider\Breadcrumbs\ServiceProvider::class,
     Phosphorum\Provider\Captcha\ServiceProvider::class,
+    Phosphorum\Provider\Annotations\ServiceProvider::class,
 
     // Third Party Providers
     // ...
