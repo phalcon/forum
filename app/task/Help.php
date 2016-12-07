@@ -27,7 +27,7 @@ use Phosphorum\Console\AbstractTask;
 class Help extends AbstractTask
 {
     /**
-     * Clearing the Application Cache
+     * Getting the Application Help
      */
     public function main()
     {
