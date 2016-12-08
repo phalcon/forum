@@ -88,10 +88,6 @@ class AbstractTask extends Injectable implements TaskInterface
             $stdout = stream_get_contents($pipes[1]);
             $stderr = stream_get_contents($pipes[2]);
 
-            if ($stderr) {
-                trigger_error($stderr, E_USER_WARNING);
-            }
-
             if (is_resource($pipes[1])) {
                 fclose($pipes[1]);
             }
@@ -102,6 +98,10 @@ class AbstractTask extends Injectable implements TaskInterface
 
             if (is_resource($process)) {
                 proc_close($process);
+            }
+
+            if ($stderr) {
+                trigger_error($stderr, E_USER_WARNING);
             }
 
             return $stdout != '';
