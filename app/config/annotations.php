@@ -17,10 +17,6 @@ return [
         'memory' => [
             'adapter' => 'Memory',
         ],
-
-        'xcache' => [
-            'adapter' => 'Xcache',
-        ],
     ],
 
     'prefix' => env('ANNOTATIONS_PREFIX', 'forum_annotations_'),

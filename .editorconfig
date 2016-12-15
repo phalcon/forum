@@ -16,4 +16,3 @@ trim_trailing_whitespace = false
 
 [*.sh]
 indent_style = tab
-
