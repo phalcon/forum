@@ -37,7 +37,7 @@ class Cache extends AbstractTask
     ];
 
     /**
-     * Clearing the Application Cache
+     * @Doc("Clearing the application cache")
      */
     public function clear()
     {
@@ -47,10 +47,13 @@ class Cache extends AbstractTask
         $this->clearFileCache();
 
         $this->output('Clear models cache...');
-        $this->clearModelsCache();
+        $this->clearCache('modelsCache');
 
         $this->output('Clear view cache...');
-        $this->clearViewsCache();
+        $this->clearCache('viewCache');
+
+        $this->output('Clear annotations cache...');
+        $this->clearCache('annotations');
 
         $this->output('Done');
     }
@@ -71,33 +74,14 @@ class Cache extends AbstractTask
         }
     }
 
-    protected function clearModelsCache()
+    protected function clearCache($service)
     {
-        if (!container()->has('modelsCache')) {
+        if (!container()->has($service)) {
             return;
         }
 
-        $modelsCache = container('modelsCache');
+        $service = container($service);
 
-        if ($modelsCache instanceof BackendInterface) {
-            return;
-        }
-
-        $modelsCache->flush();
-    }
-
-    protected function clearViewsCache()
-    {
-        if (!container()->has('viewCache')) {
-            return;
-        }
-
-        $viewCache = container('modelsCache');
-
-        if ($viewCache instanceof BackendInterface) {
-            return;
-        }
-
-        $viewCache->flush();
+        $service->flush();
     }
 }

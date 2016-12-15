@@ -27,7 +27,7 @@ use Phosphorum\Console\AbstractTask;
 class Help extends AbstractTask
 {
     /**
-     * Getting the Application Help
+     * @Doc("Getting the application help")
      */
     public function main()
     {

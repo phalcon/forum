@@ -17,43 +17,39 @@
 
 namespace Phosphorum\Task;
 
+use Phosphorum\Console\TaskFinder;
 use Phosphorum\Console\AbstractTask;
 
 /**
- * Phosphorum\Task\Version
+ * Phosphorum\Task\Commands
  *
  * @package Phosphorum\Task
  */
-class Version extends AbstractTask
+class Commands extends AbstractTask
 {
     /**
-     * @Doc("Getting the application version")
+     * @Doc("Getting list of the console tasks")
      */
     public function main()
     {
-        $sha = $this->getCommitSha();
-        if (!empty($sha)) {
-            $sha = ', git commit ' . substr($sha, 0, 7);
+        $finder = new TaskFinder(app_path('task'));
+        $list   = $finder->scan();
+
+        $this->output('');
+        $this->output(sprintf('%s %s', container('app')->getName(), container('app')->getVersion()));
+        $this->output('');
+
+        foreach ($list as $commands) {
+            foreach ($commands as $command) {
+                $name = $command['command'];
+                if (!empty($command['name'])) {
+                    $name .= ":{$command['name']}";
+                }
+
+                $this->output(sprintf('% 20s             %s', $name, $command['description']));
+            }
         }
 
-        $this->output(
-            sprintf(
-                '%s version %s%s',
-                container('app')->getName(),
-                container('app')->getVersion(),
-                $sha
-            )
-        );
-    }
-
-    protected function getCommitSha()
-    {
-        $gitDir = $this->basePath . DIRECTORY_SEPARATOR . '.git';
-
-        if (!file_exists($gitDir) || !$this->isShellCommandExist('git')) {
-            return '';
-        }
-
-        return implode(' ', $this->runShellCommand('git rev-parse HEAD', false));
+        $this->output('');
     }
 }
