@@ -24,7 +24,6 @@ use Phalcon\Paginator\Pager;
 use Phosphorum\Model\Posts;
 use Phosphorum\Model\Users;
 use Phosphorum\Model\IrcLog;
-use Phosphorum\Search\Indexer;
 use Phosphorum\Model\PostsViews;
 use Phosphorum\Model\PostsVotes;
 use Phosphorum\Model\Categories;
@@ -977,39 +976,6 @@ class DiscussionsController extends ControllerBase
     }
 
     /**
-     * Perform the search of posts only searching in the title
-     */
-    public function searchAction()
-    {
-
-        $this->tag->setTitle('Search Results');
-
-        $q = $this->request->getQuery('q');
-
-        $indexer = new Indexer();
-
-        $posts = $indexer->search(['title' => $q, 'content' => $q], 50, true);
-        if (!count($posts)) {
-            $posts = $indexer->search(['title' => $q], 50, true);
-            if (!count($posts)) {
-                $this->flashSession->notice('There are no search results');
-                return $this->response->redirect();
-            }
-        }
-
-        $paginator = new \stdClass;
-        $paginator->count = 0;
-
-        $this->view->setVars([
-            'posts'        => $posts,
-            'totalPosts'   => $paginator,
-            'currentOrder' => null,
-            'offset'       => 0,
-            'paginatorUri' => 'search'
-        ]);
-    }
-
-    /**
      * Shows the latest notifications for the current user
      */
     public function notificationsAction($offset = 0)
@@ -1036,58 +1002,5 @@ class DiscussionsController extends ControllerBase
         ]);
 
         $this->tag->setTitle('Notifications');
-    }
-
-    /**
-     * Finds related posts
-     *
-     * @return ResponseInterface
-     */
-    public function findRelatedAction()
-    {
-        $response = new Response();
-        $indexer  = new Indexer();
-        $results  = [];
-
-        if ($this->request->has('title')) {
-            if ($title = $this->request->getPost('title', 'trim')) {
-                $results = $indexer->search(['title' => $title], 5);
-            }
-        }
-
-        $contentOk = [
-            'status'  => 'OK',
-            'results' => $results
-        ];
-
-        return $response->setJsonContent($contentOk);
-    }
-
-    /**
-     * Finds related posts
-     */
-    public function showRelatedAction()
-    {
-        $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-
-        $post = Posts::findFirstById($this->request->getPost('id'));
-        if ($post) {
-            $indexer = new Indexer();
-            $posts = $indexer->search(
-                [
-                    'title'    => $post->title,
-                    'category' => $post->categories_id
-                ],
-                5,
-                true
-            );
-
-            if (count($posts) == 0) {
-                $posts = $indexer->search(['title' => $post->title], 5, true);
-            }
-            $this->view->setVar('posts', $posts);
-        } else {
-            $this->view->setVar('posts', []);
-        }
     }
 }

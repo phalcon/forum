@@ -116,13 +116,14 @@ $router->add(
     ]
 );
 
-$router->add(
-    '/search',
-    [
-       'controller' => 'discussions',
-       'action'     => 'search'
-    ]
-);
+$router->addGet('/search', 'Search::index')
+       ->setName('search');
+
+$router->addPost('/find-related', 'Search::findRelated')
+       ->setName('find-related');
+
+$router->addPost('/show-related', 'Search::showRelated')
+       ->setName('show-related');
 
 $router->addPost(
     '/preview',
@@ -225,22 +226,6 @@ $router->add(
     [
        'controller' => 'session',
        'action'     => 'logout'
-    ]
-);
-
-$router->add(
-    '/find-related',
-    [
-       'controller' => 'discussions',
-       'action'     => 'findRelated'
-    ]
-);
-
-$router->add(
-    '/show-related',
-    [
-       'controller' => 'discussions',
-       'action'     => 'showRelated'
     ]
 );
 
