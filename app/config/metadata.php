@@ -46,10 +46,6 @@ return [
         'session' => [
             'adapter' => 'Session',
         ],
-
-        'xcache' => [
-            'adapter' => 'Xcache',
-        ],
     ],
 
     'prefix'   => env('METADATA_PREFIX', 'forum_metadata_'),
