@@ -18,10 +18,15 @@
 namespace Phosphorum\Model\Services\Service;
 
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phosphorum\Model\Services\AbstractService;
 use Phosphorum\Model\Activities as Entity;
 use Phosphorum\Model\Users as UsersEntity;
+use Phosphorum\Model\Services\AbstractService;
 
+/**
+ * Phosphorum\Model\Services\Service\Activities
+ *
+ * @package Phosphorum\Model\Services\Service
+ */
 class Activities extends AbstractService
 {
     /**
@@ -47,7 +52,7 @@ class Activities extends AbstractService
             ->leftJoin(UsersEntity::class, ' a.users_id = u.id', 'u')
             ->where('u.banned = :banned:', ['banned' => 'N'])
             ->groupBy(['a.users_id'])
-            ->orderBy(['COUNT(a.users_id) DESC'])
+            ->orderBy(['a.amount DESC'])
             ->limit($limit)
             ->getQuery()
             ->execute();
