@@ -1,7 +1,6 @@
 .DS_Store
 /vendor
 /.idea
-composer.lock
 .env
 /public/robots.txt
 /public/sitemap.xml
