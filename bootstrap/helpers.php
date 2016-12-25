@@ -121,6 +121,26 @@ if (!function_exists('container')) {
     }
 }
 
+if (!function_exists('singleton')) {
+    /**
+     * Calls the default Dependency Injection container.
+     *
+     * @param  mixed
+     * @return mixed|\Phalcon\DiInterface
+     */
+    function singleton()
+    {
+        $container = container();
+        $args = func_get_args();
+
+        if (empty($args)) {
+            return $container;
+        }
+
+        return call_user_func_array([$container, 'get'], $args);
+    }
+}
+
 
 if (!function_exists('hash_equals')) {
     /**

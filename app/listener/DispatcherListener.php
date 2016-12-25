@@ -58,13 +58,13 @@ class DispatcherListener extends AbstractListener
                     ]);
             }
 
-            container('logger')->error("Dispatching [$code]: " . $exception->getMessage());
+            singleton('logger')->error("Dispatching [$code]: " . $exception->getMessage());
 
             return false;
         }
 
         if (!environment('production') && $exception instanceof \Exception) {
-            container('logger')->error("Dispatching [{$exception->getCode()}]: " . $exception->getMessage());
+            singleton('logger')->error("Dispatching [{$exception->getCode()}]: " . $exception->getMessage());
 
             throw $exception;
         }
