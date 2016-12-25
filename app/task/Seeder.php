@@ -24,21 +24,16 @@ use Phosphorum\Model\Posts;
 use Phosphorum\Model\Categories;
 use Phalcon\Cli\Console\Exception;
 use Phosphorum\Model\PostsReplies;
-use Phalcon\Logger\Adapter\Stream;
 use Phosphorum\Console\AbstractTask;
 use Phosphorum\Model\PostsPollOptions;
 
+/**
+ * Phosphorum\Task\Seeder
+ *
+ * @package Phosphorum\Task
+ */
 class Seeder extends AbstractTask
 {
-    /**
-     * Setting up concrete task.
-     */
-    protected function setUp()
-    {
-        $this->output = new Stream('php://stdout');
-        $this->basePath = container('bootstrap')->getBasePath();
-    }
-
     /**
      * @Doc("Populate the database by generating random entries")
      */
