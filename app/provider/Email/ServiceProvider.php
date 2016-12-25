@@ -7,7 +7,7 @@
  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
+ | with this package in the file docs/LICENSE.txt.                        |
  |                                                                        |
  | If you did not receive a copy of the license and are unable to         |
  | obtain it through the world-wide-web, please send an email             |
@@ -15,15 +15,15 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Config;
+namespace Phosphorum\Provider\Email;
 
-use RuntimeException;
+use Phosphorum\Email\EmailComponent;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
- * Phosphorum\Provider\Config\ServiceProvider
+ * Phosphorum\Provider\Email\ServiceProvider
  *
- * @package Phosphorum\Provider\Config
+ * @package Phosphorum\Provider\Email
  */
 class ServiceProvider extends AbstractServiceProvider
 {
@@ -31,43 +31,7 @@ class ServiceProvider extends AbstractServiceProvider
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'config';
-
-    /**
-     * Config files.
-     * @var array
-     */
-    protected $configs = [
-        'logger',
-        'cache',
-        'session',
-        'database',
-        'metadata',
-        'queue',
-        'devtools',
-        'annotations',
-        'email',
-        'config',
-    ];
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = config_path('config.php');
-
-        if (!file_exists($configPath) || !is_file($configPath)) {
-            throw new RuntimeException(
-                sprintf(
-                    'The application config not found. Please make sure that the file "%s" is present',
-                    $configPath
-                )
-            );
-        }
-    }
+    protected $serviceName = 'email';
 
     /**
      * {@inheritdoc}
@@ -76,12 +40,10 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $configs = $this->configs;
-
-        $this->di->setShared(
+        $this->di->set(
             $this->serviceName,
-            function () use ($configs) {
-                return Factory::create($configs);
+            function ($email, $sanitize = true) {
+                return new EmailComponent($email, $sanitize);
             }
         );
     }
