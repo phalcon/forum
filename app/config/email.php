@@ -127,6 +127,7 @@ return [
 
     // Application email parts
     'appParts' => [
+        '@users.noreply.github.com',
         '@oauth.odnoklassniki.ru',
         '@auto.login',
         '@facebook.com',
