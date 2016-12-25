@@ -44,7 +44,7 @@ class Fake
      */
     public function put(array $job)
     {
-        container('logger')->debug('Putting job: ' . json_encode($job));
+        singleton('logger')->debug('Putting job: ' . json_encode($job));
 
         return true;
     }
