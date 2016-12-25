@@ -19,7 +19,6 @@ namespace Phosphorum\Provider\Config;
 
 use Phalcon\Config;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
 
 /**
  * Phosphorum\Provider\Config\Factory
@@ -52,8 +51,8 @@ class Factory
         $config = new Config();
         $merge  = self::merge();
 
-        $adapter    = new Local(app_path());
-        $filesystem = new Filesystem($adapter);
+        /** @var Filesystem $filesystem */
+        $filesystem = container('filesystem');
 
         if ($filesystem->has(self::CACHED_PATH) && !environment('development')) {
             $merge($config, cache_path('config/cached.php'));

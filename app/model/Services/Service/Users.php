@@ -19,6 +19,11 @@ namespace Phosphorum\Model\Services\Service;
 
 use Phosphorum\Model\Services\AbstractService;
 
+/**
+ * Phosphorum\Model\Services\Service\Users
+ *
+ * @package Phosphorum\Model\Services\Service
+ */
 class Users extends AbstractService
 {
 }

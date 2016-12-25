@@ -15,15 +15,16 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\EventsManager;
+namespace Phosphorum\Provider\FileSystem;
 
-use Phalcon\Events\Manager;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
- * Phosphorum\Provider\EventsManager\ServiceProvider
+ * Phosphorum\Provider\FileSystem\ServiceProvider
  *
- * @package Phosphorum\Provider\EventManager
+ * @package Phosphorum\Provider\FileSystem
  */
 class ServiceProvider extends AbstractServiceProvider
 {
@@ -31,7 +32,7 @@ class ServiceProvider extends AbstractServiceProvider
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'eventsManager';
+    protected $serviceName = 'filesystem';
 
     /**
      * {@inheritdoc}
@@ -40,13 +41,14 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->di->setShared(
+        $this->di->set(
             $this->serviceName,
-            function () {
-                $em = new Manager();
-                $em->enablePriorities(true);
+            function ($root = null) {
+                if ($root === null) {
+                    $root = dirname(app_path());
+                }
 
-                return $em;
+                return new Filesystem(new Local($root));
             }
         );
     }

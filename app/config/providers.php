@@ -41,6 +41,7 @@ return [
     Phosphorum\Provider\Breadcrumbs\ServiceProvider::class,
     Phosphorum\Provider\Captcha\ServiceProvider::class,
     Phosphorum\Provider\Annotations\ServiceProvider::class,
+    Phosphorum\Provider\FileSystem\ServiceProvider::class,
 
     // Third Party Providers
     // ...
