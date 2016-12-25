@@ -31,7 +31,6 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
  */
 class Notifications extends Model
 {
-
     public $id;
 
     public $users_id;
@@ -57,42 +56,19 @@ class Notifications extends Model
 
     public function initialize()
     {
-        $this->belongsTo(
-            'users_id',
-            'Phosphorum\Model\Users',
-            'id',
-            array(
-                'alias' => 'user'
-            )
-        );
-
-        $this->belongsTo(
-            'posts_id',
-            'Phosphorum\Model\Posts',
-            'id',
-            array(
-                'alias' => 'post'
-            )
-        );
-
-        $this->belongsTo(
-            'posts_replies_id',
-            'Phosphorum\Model\PostsReplies',
-            'id',
-            array(
-                'alias' => 'reply'
-            )
-        );
+        $this->belongsTo('users_id', Users::class, 'id', ['alias' => 'user']);
+        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post']);
+        $this->belongsTo('posts_replies_id', PostsReplies::class, 'id', ['alias' => 'reply']);
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
+            new Timestampable([
+                'beforeCreate' => [
                     'field' => 'created_at'
-                ),
-                'beforeUpdate' => array(
+                ],
+                'beforeUpdate' => [
                     'field' => 'modified_at'
-                )
-            ))
+                ]
+            ])
         );
     }
 }
