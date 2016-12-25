@@ -1,6 +1,11 @@
 <?php
 
+use Phosphorum\Model\Services\Service;
+
 return [
-    Phosphorum\Model\Services\Service\Users::class => Phosphorum\Model\Services\Service\Users::class,
-    Phosphorum\Model\Services\Service\Activities::class => Phosphorum\Model\Services\Service\Activities::class,
+    // abstract               => concrete
+    //
+    Service\Users::class      => Service\Users::class,
+    Service\Activities::class => Service\Activities::class,
+    Service\Posts::class      => Service\Posts::class,
 ];

@@ -76,7 +76,7 @@ class ServiceProvider extends AbstractServiceProvider
                     default:
                         throw new InvalidArgumentException(
                             sprintf(
-                                'Invalid application mode. Expected either "normal" either "cli" or "api". Got "%s".',
+                                'Invalid application mode. Expected either "normal" or "cli" or "api". Got "%s".',
                                 is_scalar($mode) ? $mode : var_export($mode, true)
                             )
                         );
