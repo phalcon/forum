@@ -21,16 +21,20 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
- * Class Notifications
+ * Phosphorum\Model\Notifications
  *
- * @property \Phosphorum\Model\Users        user
- * @property \Phosphorum\Model\Posts        post
- * @property \Phosphorum\Model\PostsReplies reply
+ * @property Users        user
+ * @property Posts        post
+ * @property PostsReplies reply
  *
  * @package Phosphorum\Model
  */
 class Notifications extends Model
 {
+    const STATUS_NOT_SENT = 'N';
+    const STATUS_SENT     = 'Y';
+    const STATUS_INVALID  = 'I';
+
     public $id;
 
     public $users_id;
@@ -51,7 +55,7 @@ class Notifications extends Model
 
     public function beforeValidationOnCreate()
     {
-        $this->sent = 'N';
+        $this->sent = self::STATUS_NOT_SENT;
     }
 
     public function initialize()

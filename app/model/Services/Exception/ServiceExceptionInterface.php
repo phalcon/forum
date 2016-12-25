@@ -15,6 +15,15 @@
  +------------------------------------------------------------------------+
 */
 
-return [
-    'dev_ip' => '192.168.',
-];
+namespace Phosphorum\Model\Services\Exception;
+
+/**
+ * Phosphorum\Model\Services\Exception\ServiceExceptionInterface
+ *
+ * Exceptions which thrown in Phosphorum\Model\Services\* classes will use this interface.
+ *
+ * @package Phosphorum\Model\Services\Exception
+ */
+interface ServiceExceptionInterface
+{
+}
