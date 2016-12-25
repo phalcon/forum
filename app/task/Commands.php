@@ -39,6 +39,8 @@ class Commands extends AbstractTask
         $this->output(sprintf('%s %s', container('app')->getName(), container('app')->getVersion()));
         $this->output('');
 
+        $system = [];
+
         foreach ($list as $commands) {
             foreach ($commands as $command) {
                 $name = $command['command'];
@@ -46,8 +48,23 @@ class Commands extends AbstractTask
                     $name .= ":{$command['name']}";
                 }
 
-                $this->output(sprintf('% 20s             %s', $name, $command['description']));
+                if (in_array($name, ['commands', 'help', 'version'])) {
+                    $system[] = [
+                        'name'        => $name,
+                        'description' => $command['description'],
+                    ];
+
+                    continue;
+                }
+
+                $this->output(sprintf('% 22s         %s', $name, $command['description']));
             }
+        }
+
+        $this->output('');
+
+        foreach ($system as $command) {
+            $this->output(sprintf('% 22s         %s', $command['name'], $command['description']));
         }
 
         $this->output('');

@@ -44,8 +44,9 @@
         "phalcongelist/php-diff": "^2.0",
         "elasticsearch/elasticsearch": "^1.4",
         "phalcon/incubator": "~3.0",
-        "phalcongelist/breadcrumbs": "dev-master@dev",
+        "phalcongelist/breadcrumbs": "^1.2",
         "league/flysystem-dropbox" : "^1.0",
+        "egulias/email-validator": "^2.1",
         "google/recaptcha": "^1.1"
     },
     "require-dev": {
