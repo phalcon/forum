@@ -134,7 +134,7 @@ class AbstractTask extends Injectable implements TaskInterface
     /**
      * Setting up concrete task.
      */
-    private function setUp()
+    protected function setUp()
     {
         $this->output = new Stream('php://stdout');
         $this->output->setFormatter(new Line('%message%'));
