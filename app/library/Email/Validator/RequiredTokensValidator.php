@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Email\Validator;
 
-
 use Egulias\EmailValidator\EmailLexer;
 use Egulias\EmailValidator\Warning\Warning;
 use Phosphorum\Email\Exception\RequiredTokens;

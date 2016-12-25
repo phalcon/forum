@@ -187,8 +187,7 @@ class EmailComponent extends Injectable
         $firstChar  = mb_substr($namePart, 0, 1);
 
         // Clean name
-        if (
-            preg_match('/^[а-я]/iu', $namePart) &&
+        if (preg_match('/^[а-я]/iu', $namePart) &&
             preg_match('/.[^а-я]/iu', $namePart) &&
             isset($this->config->offsetGet('incorrectFirstChar')[$firstChar])
         ) {
