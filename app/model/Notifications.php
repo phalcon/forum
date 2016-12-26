@@ -34,6 +34,7 @@ class Notifications extends Model
     const STATUS_NOT_SENT = 'N';
     const STATUS_SENT     = 'Y';
     const STATUS_INVALID  = 'I';
+    const STATUS_SKIPPED  = 'S';
 
     public $id;
 

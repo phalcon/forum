@@ -38,7 +38,7 @@ class Notifications extends AbstractService
      */
     public function isReadyToBeSent(Entity $notification)
     {
-        return $notification->sent != Entity::STATUS_SENT && $notification->sent != Entity::STATUS_INVALID;
+        return $notification->sent == Entity::STATUS_NOT_SENT;
     }
 
     /**
@@ -64,6 +64,21 @@ class Notifications extends AbstractService
     public function markAsInvalid(Entity $notification)
     {
         $notification->sent = Entity::STATUS_INVALID;
+
+        if (!$notification->save()) {
+            throw new EntityException($notification, Entity::class . ' could not be saved.');
+        }
+    }
+
+    /**
+     * Mark notification as skipped.
+     *
+     * @param  Entity $notification
+     * @throws EntityException
+     */
+    public function markAsSkipped(Entity $notification)
+    {
+        $notification->sent = Entity::STATUS_SKIPPED;
 
         if (!$notification->save()) {
             throw new EntityException($notification, Entity::class . ' could not be saved.');
