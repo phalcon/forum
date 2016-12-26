@@ -15,12 +15,12 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Timezones;
+namespace Phosphorum\Provider\Timezone;
 
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
- * Phosphorum\Provider\Timezones\ServiceProvider
+ * Phosphorum\Provider\Timezone\ServiceProvider
  *
  * @package Phosphorum\Provider\Timezones
  */

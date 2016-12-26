@@ -37,7 +37,7 @@ return [
     Phosphorum\Provider\Flash\ServiceProvider::class,
     Phosphorum\Provider\SearchEngine\ServiceProvider::class,
     Phosphorum\Provider\Avatar\ServiceProvider::class,
-    Phosphorum\Provider\Timezones\ServiceProvider::class,
+    Phosphorum\Provider\Timezone\ServiceProvider::class,
     Phosphorum\Provider\Breadcrumbs\ServiceProvider::class,
     Phosphorum\Provider\Captcha\ServiceProvider::class,
     Phosphorum\Provider\Annotations\ServiceProvider::class,
