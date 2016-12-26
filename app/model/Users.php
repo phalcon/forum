@@ -18,8 +18,8 @@
 namespace Phosphorum\Model;
 
 use Phalcon\Mvc\Model;
-use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
  * Class Users
@@ -79,37 +79,20 @@ class Users extends Model
 
     const SYSTEM_USER = 1;
 
+    // Never receive an e-mail notification
+    const NOTIFICATIONS_ALL = 'Y';
+
+    // Receive e-mail notifications from all new threads and comments
+    const NOTIFICATIONS_OFF = 'N';
+
+    // When someone replies to a discussion that I started or replied to
+    const NOTIFICATIONS_REP = 'P';
+
     public function initialize()
     {
-        $this->hasMany(
-            'id',
-            'Phosphorum\Model\UsersBadges',
-            'users_id',
-            [
-                'alias' => 'badges',
-                'reusable' => true
-            ]
-        );
-
-        $this->hasMany(
-            'id',
-            'Phosphorum\Model\Posts',
-            'users_id',
-            [
-                'alias' => 'posts',
-                'reusable' => true
-            ]
-        );
-
-        $this->hasMany(
-            'id',
-            'Phosphorum\Model\PostsReplies',
-            'users_id',
-            [
-                'alias' => 'replies',
-                'reusable' => true
-            ]
-        );
+        $this->hasMany('id', UsersBadges::class, 'users_id', ['alias' => 'badges', 'reusable' => true]);
+        $this->hasMany('id', Posts::class, 'users_id', ['alias' => 'posts', 'reusable' => true]);
+        $this->hasMany('id', PostsReplies::class, 'users_id', ['alias' => 'replies', 'reusable' => true]);
 
         $this->addBehavior(
             new Timestampable([
@@ -150,7 +133,7 @@ class Users extends Model
 
     public function beforeCreate()
     {
-        $this->notifications = 'P';
+        $this->notifications = self::NOTIFICATIONS_REP;
         $this->digest        = 'Y';
         $this->moderator     = 'N';
         $this->karma        += Karma::INITIAL_KARMA;
