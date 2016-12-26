@@ -20,6 +20,9 @@ namespace Phosphorum\Email;
 use Phalcon\Config;
 use Phalcon\Di\Injectable;
 use Egulias\EmailValidator\EmailValidator;
+use Phosphorum\Email\Validator\AppValidator;
+use Phosphorum\Email\Validator\RoleValidator;
+use Phosphorum\Email\Validator\CorpValidator;
 use Phosphorum\Email\Validator\LengthValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Phosphorum\Email\Validator\RequiredTokensValidator;
@@ -101,6 +104,9 @@ class EmailComponent extends Injectable
         $multipleValidations = new MultipleValidationWithAnd([
             new LengthValidator(),
             new RequiredTokensValidator(),
+            new AppValidator($this->config->appParts->toArray()),
+            new CorpValidator($this->config->corpParts->toArray()),
+            new RoleValidator($this->config->roleParts->toArray()),
             new RFCValidation(),
             new DNSCheckValidation(),
         ]);
@@ -109,56 +115,6 @@ class EmailComponent extends Injectable
         $result = $validator->isValid($this->email, $multipleValidations);
 
         return $result;
-    }
-
-    /**
-     * Full check email.
-     *
-     * @return bool
-     */
-    public function check()
-    {
-        return
-            $this->valid() &&
-            !$this->isCorp() &&
-            !$this->isApp() &&
-            !$this->isRole();
-    }
-
-    /**
-     * Check is email is corp
-     *
-     * @return bool
-     */
-    public function isCorp()
-    {
-        $corpParts = $this->config->corpParts->toArray();
-
-        return (bool)preg_match(sprintf('/^.*%s/iu', implode('|', $corpParts)), $this->email);
-    }
-
-    /**
-     * Check if email is application
-     *
-     * @return bool
-     */
-    public function isApp()
-    {
-        $appParts = $this->config->appParts->toArray();
-
-        return (bool)preg_match(sprintf('/^.*%s/iu', implode('|', $appParts)), $this->email);
-    }
-
-    /**
-     * Check if email is role
-     *
-     * @return bool
-     */
-    public function isRole()
-    {
-        $roleParts = $this->config->roleParts->toArray();
-
-        return (bool)preg_match(sprintf('/^(?:%s).*/iu', implode('|', $roleParts)), $this->email);
     }
 
     /**
