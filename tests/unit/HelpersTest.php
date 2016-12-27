@@ -94,44 +94,4 @@ class HelpersTest extends Unit
         $this->assertTrue(environment() === env('APP_ENV'));
         $this->assertTrue(environment() === $_ENV['APP_ENV']);
     }
-
-    /**
-     * @dataProvider providerHashEquals
-     * @param mixed $knownString
-     * @param mixed $userString
-     * @param bool $expected
-     */
-    public function testHasEquals($knownString, $userString, $expected)
-    {
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            $this->markTestSkipped("The hash_equals already provided by PHP v".PHP_VERSION);
-        }
-
-        $this->assertSame($expected, hash_equals($knownString, $userString));
-    }
-
-    public function providerHashEquals()
-    {
-        return [
-            ['Phalcon',    'Phalcony',    false],
-            ['Phalcony',   'Phalcon',     false],
-            ['Phalcon',    'Phalcon',     true],
-            ['kristoffer', 'ingemansson', false],
-            ['kris',       'ingemansson', false],
-            ['Phalcon',    'phalcon',     false],
-            [' phalcon',   'phalcon',     false],
-            ['phalcon',    'phalcon',     true],
-            ['1234567890', '1234567890',  true],
-            ['',           'phalcon',     false],
-            ['phalcon',    '',            false],
-            [null,          123,          false],
-            [123,           null,         false],
-            [123,           123,          false],
-            [123456,        123,          false],
-            [null,          'phalcon',    false],
-            ['phalcon',     null,         false],
-            [[],            false,        false],
-            [true,          [],           false],
-        ];
-    }
 }
