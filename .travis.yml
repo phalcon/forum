@@ -32,11 +32,9 @@ env:
     - ZEND_DONT_UNLOAD_MODULES=1
     - CC="ccache gcc"
     - PATH="$PATH:~/bin"
-    - DISPLAY=":99.0"
     - PHALCON_VERSION="v3.0.3"
 
 before_install:
-  - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
   - phpenv config-rm xdebug.ini || true
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
@@ -44,7 +42,7 @@ before_install:
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
   - travis_retry composer require --dev "phalcon/zephir:dev-master" --ignore-platform-reqs
   - ( bash tests/_ci/install_zephir.sh )
-  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+  - ( bash tests/_ci/install_prereqs.sh )
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
@@ -61,7 +59,7 @@ before_script:
   - cat schemas/forum.sql | mysql -u root phosphorum
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
-  - ulimit -c unlimited -S || true
+  - sudo ulimit -c unlimited -S || true
 
 script:
   - vendor/bin/phpcs
