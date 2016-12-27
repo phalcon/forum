@@ -73,10 +73,6 @@ return [
         'prefix'      => env('DROPBOX_PREFIX'),
     ],
 
-    'amazonSns' => [
-        'secret' => env('AMAZON_SNS_SECRET')
-    ],
-
     'smtp' => [
         'host'     => env('MAIL_HOST'),
         'port'     => env('MAIL_PORT'),
