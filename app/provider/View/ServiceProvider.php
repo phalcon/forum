@@ -18,9 +18,11 @@
 namespace Phosphorum\Provider\View;
 
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Simple;
+use InvalidArgumentException;
 use Phalcon\Mvc\View\Engine\Php;
-use Phosphorum\Provider\AbstractServiceProvider;
 use Phosphorum\Listener\ViewListener;
+use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
  * Phosphorum\Provider\View\ServiceProvider
@@ -46,8 +48,29 @@ class ServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 $config = container('config')->application;
+                $mode = container('bootstrap')->getMode();
 
-                $view = new View();
+                switch ($mode) {
+                    case 'normal':
+                        $view = new View();
+
+                        break;
+                    case 'cli':
+                        $view = new Simple();
+
+                        break;
+                    case 'api':
+                        throw new InvalidArgumentException(
+                            'Not implemented yet.'
+                        );
+                    default:
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                'Invalid application mode. Expected either "normal" or "cli" or "api". Got "%s".',
+                                is_scalar($mode) ? $mode : var_export($mode, true)
+                            )
+                        );
+                }
 
                 $view->registerEngines([
                     '.volt' => container('volt', [$view, $this]),
