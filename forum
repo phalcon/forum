@@ -26,6 +26,7 @@ $bootstrap = new Bootstrap('cli');
 try {
     $bootstrap->run();
 } catch (Exception $e) {
-    fwrite(STDERR, PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL);
+    fwrite(STDERR, PHP_EOL . $e->getMessage() . PHP_EOL);
+    fwrite(STDERR, PHP_EOL . $e->getTraceAsString() . PHP_EOL . PHP_EOL);
     exit(1);
 }
