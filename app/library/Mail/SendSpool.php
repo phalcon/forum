@@ -123,6 +123,7 @@ class SendSpool extends Injectable
             ->subject($params['title'])
             ->content($contents);
 
+        $message->getMessage()->addPart(strip_tags($contents), 'text/plain');
         $message->replyTo("reply-i{$post->id}-" . time() . '@phosphorum.com');
         $message->from($notificationService->getFromUser($notification));
 
