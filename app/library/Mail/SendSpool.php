@@ -17,9 +17,9 @@
 
 namespace Phosphorum\Mail;
 
-use Phalcon\Tag;
-use Phosphorum\Model\Notifications;
 use Phalcon\Di\Injectable;
+use Phosphorum\Model\Notifications;
+use Phosphorum\Model\Services\Service;
 
 /**
  * SendSpool
@@ -28,112 +28,17 @@ use Phalcon\Di\Injectable;
  */
 class SendSpool extends Injectable
 {
-    protected $transport;
-
-    protected $mailer;
-
-    public function send(Notifications $notification)
-    {
-        if ($notification->sent == 'Y') {
-            return;
-        }
-
-        $post = $notification->post;
-        $user = $notification->user;
-        if ($notification->type != 'P') {
-            $reply = $notification->reply;
-        } else {
-            $reply = true;
-        }
-
-        $from = $this->config->mail->fromEmail;
-        $url  = rtrim($this->config->site->url, '/');
-
-        if ($post && $user && $reply) {
-            $isGitHubEmail = strpos($user->email, '@users.noreply.github.com');
-            if ($user->email && $user->notifications != 'N' && false === $isGitHubEmail) {
-                try {
-                    $message = new \Swift_Message("[{$this->config->site->name} Forum] " . $post->title);
-                    $message->setTo([$user->email => $user->name]);
-                    $message->addReplyTo('reply-i' . $post->id . '-' . time() . '@phosphorum.com');
-
-                    $e = $this->escaper;
-
-                    if ($notification->type == 'P') {
-                        $originalContent = $post->content;
-                        $htmlContent = $this->markdown->render($e->escapeHtml($post->content));
-                        $message->setFrom([$from => $post->user->name]);
-                    } else {
-                        $reply = $notification->reply;
-                        $originalContent = $reply->content;
-                        $htmlContent = $this->markdown->render($e->escapeHtml($reply->content));
-                        $message->setFrom([$from => $reply->user->name]);
-                    }
-
-                    if (trim($originalContent)) {
-                        $textContent = strip_tags($originalContent);
-
-                        $htmlContent .= '<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">';
-                        $href = "{$url}/discussion/{$post->id}/{$post->slug}";
-                        $title = $this->config->site->name;
-                        $link = function ($href) use ($title) {
-                            return Tag::linkTo([$href, $title, "local" => false]);
-                        };
-
-                        if ($notification->type == 'P') {
-                            $link = $link($href);
-                        } else {
-                            $link = $link($href . '#C' . $reply->id);
-                        }
-
-                        $htmlContent .= '&mdash;<br>Reply to this email directly or view the complete thread on ' .
-                            PHP_EOL . $link .
-                            PHP_EOL . 'Change your e-mail preferences <a href="'. $url . '/settings">here</a></p>';
-
-                        $bodyMessage = new \Swift_MimePart($htmlContent, 'text/html');
-                        $bodyMessage->setCharset('UTF-8');
-                        $message->attach($bodyMessage);
-
-                        $bodyMessage = new \Swift_MimePart($textContent, 'text/plain');
-                        $bodyMessage->setCharset('UTF-8');
-                        $message->attach($bodyMessage);
-
-                        if (!$this->transport) {
-                            $this->transport = \Swift_SmtpTransport::newInstance(
-                                $this->config->smtp->host,
-                                $this->config->smtp->port,
-                                $this->config->smtp->security
-                            );
-                            $this->transport->setUsername($this->config->smtp->username);
-                            $this->transport->setPassword($this->config->smtp->password);
-                        }
-
-                        if (!$this->mailer) {
-                            $this->mailer = \Swift_Mailer::newInstance($this->transport);
-                        }
-
-                        $this->mailer->send($message);
-                    }
-                } catch (\Exception $e) {
-                    echo $e->getMessage(), PHP_EOL;
-                }
-            }
-        }
-
-        $notification->sent = 'Y';
-        if ($notification->save() == false) {
-            foreach ($notification->getMessages() as $message) {
-                echo $message->getMessage(), PHP_EOL;
-            }
-        }
-    }
-
     /**
      * Check notifications marked as not send on the databases and send them
      */
     public function sendRemaining()
     {
-        foreach (Notifications::find('sent = "N"') as $notification) {
+        $notifications = Notifications::find([
+            'conditions' => 'sent = ?1',
+            'bind'       => [1 => Notifications::STATUS_NOT_SENT],
+        ]);
+
+        foreach ($notifications as $notification) {
             $this->send($notification);
         }
     }
@@ -144,22 +49,15 @@ class SendSpool extends Injectable
     public function consumeQueue()
     {
         while (true) {
-            while ($this->queue->peekReady() !== false) {
-                $job = $this->queue->reserve();
+            while (container('queue')->peekReady() !== false) {
+                $job = container('queue')->queue->reserve();
 
                 $message = $job->getBody();
 
                 foreach ($message as $userId => $id) {
-                    $notification = Notifications::findFirstById($id);
-                    if ($notification) {
+                    if ($notification = Notifications::findFirstById($id)) {
                         $this->send($notification);
                     }
-                }
-
-                if (is_object($this->transport)) {
-                    $this->transport->stop();
-                    $this->transport = null;
-                    $this->mailer = null;
                 }
 
                 $job->delete();
@@ -167,5 +65,108 @@ class SendSpool extends Injectable
 
             sleep(5);
         }
+    }
+
+    protected function send(Notifications $notification)
+    {
+        /**
+         * @var Service\Notifications $notificationService
+         * @var Service\Users         $userService
+         */
+
+        $notificationService = container(Service\Notifications::class);
+        $userService = container(Service\Users::class);
+
+        if (!$notificationService->isReadyToBeSent($notification)) {
+            return;
+        }
+
+        if (!$notificationService->hasRequiredIntegrity($notification)) {
+            $notificationService->markAsInvalid($notification);
+            return;
+        }
+
+        $post = $notification->post;
+        $user = $notification->user;
+
+        /** @var \Phosphorum\Email\EmailComponent $email */
+        $email = singleton('email', [$user->email, false]);
+
+        if (!$email->valid()) {
+            $notificationService->markAsSkipped($notification);
+            return;
+        }
+
+        if (!$userService->doesExpectNotifications($user)) {
+            $notificationService->markAsSkipped($notification);
+            return;
+        }
+
+        if (!$params = $this->prepareContentParams($notification)) {
+            $notificationService->markAsInvalid($notification);
+            return;
+        }
+
+        /** @var \Phalcon\Mailer\Manager $mailer */
+        $mailer = container('mailer');
+        $config = container('config');
+
+        $params['title'] = "[{$config->site->name} Forum] {$post->title}";
+
+        if (!$contents = $this->prepareContent('mail/notification', $params)) {
+            $notificationService->markAsInvalid($notification);
+            return;
+        }
+
+        $message = $mailer->createMessage()
+            ->to($user->email, $user->name)
+            ->subject($params['title'])
+            ->content($contents);
+
+        $message->replyTo("reply-i{$post->id}-" . time() . '@phosphorum.com');
+        $message->from($notificationService->getFromUser($notification));
+
+        $message->send();
+
+        $notificationService->markAsCompleted($notification);
+    }
+
+    /**
+     * Prepare mail content.
+     *
+     * @param string     $viewPath
+     * @param array|null $params
+     *
+     * @return string
+     */
+    protected function prepareContent($viewPath, array $params = null)
+    {
+        $view = container('view');
+
+        ob_start();
+
+        $view->render($viewPath, $params);
+
+        ob_end_clean();
+
+        return (string) $view->getContent();
+    }
+
+    protected function prepareContentParams(Notifications $notification)
+    {
+        /** @var Service\Notifications $notificationService */
+        $notificationService = container(Service\Notifications::class);
+
+        $contents = $notificationService->getContentsForNotification($notification);
+
+        if (!trim($contents)) {
+            return null;
+        }
+
+        $html_content = container('markdown')->render(container('escaper')->escapeHtml($contents));
+        $post_url     = $notificationService->getRelatedPostUrl($notification);
+        $settings_url = container('config')->site->url . '/settings';
+
+        return compact('html_content', 'post_url', 'settings_url');
     }
 }

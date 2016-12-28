@@ -73,24 +73,11 @@ return [
         'prefix'      => env('DROPBOX_PREFIX'),
     ],
 
-    'smtp' => [
-        'host'     => env('MAIL_HOST'),
-        'port'     => env('MAIL_PORT'),
-        'security' => env('MAIL_ENCRYPTION'),
-        'username' => env('MAIL_USERNAME'),
-        'password' => env('MAIL_PASSWORD'),
-    ],
-
     'elasticsearch' => [
         'index' => env('ELASTIC_INDEX'),
         'hosts' => [
             env('ELASTIC_HOST', '127.0.0.1') .':' . env('ELASTIC_PORT', 9200),
         ],
-    ],
-
-    'mail' => [
-        'fromName'  => env('MAIL_FROM_NAME'),
-        'fromEmail' => env('MAIL_FROM_ADDRESS'),
     ],
 
     'error' => [

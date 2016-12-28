@@ -15,28 +15,33 @@
  +------------------------------------------------------------------------+
 */
 
-/**
- * This scripts generates random posts
- */
-require 'cli-bootstrap.php';
+namespace Phosphorum\Task;
 
 use Phosphorum\Mail\SendSpool;
+use Phosphorum\Console\AbstractTask;
 
-class SendSpoolTask extends Phalcon\DI\Injectable
+/**
+ * Phosphorum\Task\Notifications
+ *
+ * @package Phosphorum\Task
+ */
+class Notifications extends AbstractTask
 {
-
-    public function run()
+    /**
+     * @Doc("Check notifications marked as not send on the databases and send them")
+     */
+    public function send()
     {
         $spool = new SendSpool();
         $spool->sendRemaining();
     }
-}
 
-try {
-    $task = new SendSpoolTask($config);
-    $task->run();
-} catch (Exception $e) {
-    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
-    fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
-    exit(1);
+    /**
+     * @Doc("Check the queue and send the notifications scheduled there")
+     */
+    public function consume()
+    {
+        $spool = new SendSpool();
+        $spool->consumeQueue();
+    }
 }
