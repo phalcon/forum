@@ -39,7 +39,7 @@ class Notifications extends AbstractTask
     /**
      * @Doc("Check the queue and send the notifications scheduled there")
      */
-    public function consume()
+    public function queue()
     {
         $spool = new SendSpool();
         $spool->consumeQueue();
