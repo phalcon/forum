@@ -3,8 +3,6 @@
     <title>{{- title -}}</title>
 </head>
 <body>
-    {{- content() -}}
-
     {{- html_content -}}
 
     <p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">
