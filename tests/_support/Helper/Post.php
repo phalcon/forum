@@ -6,6 +6,7 @@ use Phalcon\Tag;
 use Codeception\Module;
 use Faker\Factory as Faker;
 use Phosphorum\Model\Posts;
+use Phosphorum\Model\PostsHistory;
 
 /**
  * Post Helper
@@ -42,7 +43,7 @@ class Post extends Module
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function havePost($attributes = null)
+    public function havePost(array $attributes = null)
     {
         $attributes = $attributes ?: [];
 
@@ -61,5 +62,24 @@ class Post extends Module
         }
 
         return $this->phalcon->haveRecord(Posts::class, array_merge($default, $attributes));
+    }
+
+    /**
+     * Creates a random post history and return its id
+     *
+     * @param array $attributes Model attributes [Optional]
+     * @return int
+     */
+    public function havePostHistory(array $attributes = null)
+    {
+        $attributes = $attributes ?: [];
+
+        $default = [
+            'posts_id' => $this->faker->numberBetween(),
+            'users_id' => $this->faker->numberBetween(),
+            'content'  => $this->faker->paragraph(),
+        ];
+
+        return $this->phalcon->haveRecord(PostsHistory::class, array_merge($default, $attributes));
     }
 }

@@ -3,7 +3,7 @@
  * @var Codeception\Scenario $scenario
  */
 
-$I = new Step\UserSteps($scenario);
+$I = new FunctionalTester($scenario);
 
 $I->wantTo('go to the not found page and see flash banner');
 $I->amOnPage('/abcdef-jaja');

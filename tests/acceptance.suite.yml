@@ -8,7 +8,13 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - Helper\Acceptance
+        - Helper\Category
+        - Helper\User
+        - Helper\Post
         - Filesystem
         - Phalcon:
             part: services
-        - PhpBrowser
+        - PhpBrowser:
+            url: "%APP_URL%"
+            curl:
+                CURLOPT_RETURNTRANSFER: true

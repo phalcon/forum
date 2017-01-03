@@ -42,7 +42,7 @@ class Category extends Module
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
-    public function haveCategory($attributes = null)
+    public function haveCategory(array $attributes = null)
     {
         $attributes = $attributes ?: [];
 
