@@ -1,12 +1,11 @@
 <?php
 
-namespace Step\Functional;
+namespace Step;
 
-use Step\FakerTrait;
 use Codeception\Scenario;
 use Faker\Factory as Faker;
 
-class UserSteps extends \FunctionalTester
+class ForumSteps extends \FunctionalTester
 {
     use FakerTrait;
 

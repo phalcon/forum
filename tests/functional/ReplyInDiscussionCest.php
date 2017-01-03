@@ -1,10 +1,10 @@
 <?php
 
-use Step\Functional\UserSteps as UserTester;
+use Step\ForumSteps;
 
 class ReplyInDiscussionCest
 {
-    public function _before(UserTester $I)
+    public function _before(ForumSteps $I)
     {
         $userId = $I->amRegularUser();
         $catId  = $I->haveCategory();
@@ -17,7 +17,7 @@ class ReplyInDiscussionCest
     }
 
     // tests
-    public function replyInADiscussion(UserTester $I)
+    public function replyInADiscussion(ForumSteps $I)
     {
         $I->wantTo('reply in a discussion');
 
