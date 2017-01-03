@@ -27,13 +27,13 @@ class SeeLatestPostCest
     {
         $I->wantTo('see latest post on front page at top of table');
 
-        $userId = $this->user->amRegularUser();
-        $catId  = $this->category->haveCategory();
+        $user  = $this->user->haveUser();
+        $catId = $this->category->haveCategory();
 
         $this->post->havePost([
             'title'         => 'Binding Parameters',
             'content'       => 'This may be a little bit of a noob question but here goes.',
-            'users_id'      => $userId,
+            'users_id'      => $user['id'],
             'categories_id' => $catId
         ]);
 

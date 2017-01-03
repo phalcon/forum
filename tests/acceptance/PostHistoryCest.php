@@ -26,13 +26,13 @@ class PostHistoryCest
     {
         $I->wantTo('check history for post which is not edited');
 
-        $userId = $this->user->amRegularUser();
-        $catId  = $this->category->haveCategory();
+        $user  = $this->user->haveUser();
+        $catId = $this->category->haveCategory();
 
         $postId = $this->post->havePost([
             'title'         => 'Some title',
             'content'       => 'Some content.',
-            'users_id'      => $userId,
+            'users_id'      => $user['id'],
             'categories_id' => $catId,
         ]);
 

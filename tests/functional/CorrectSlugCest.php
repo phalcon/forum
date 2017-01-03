@@ -27,11 +27,11 @@ class CorrectSlugCest
     {
         $I->wantTo('use illegal characters in title and get correct slug');
 
-        $userId = $this->user->amRegularUser();
+        $user   = $this->user->haveUser();
         $catId  = $this->category->haveCategory();
         $postId = $this->post->havePost([
             'title'         => 'model->save() return TRUE when no matching database column',
-            'users_id'      => $userId,
+            'users_id'      => $user['id'],
             'categories_id' => $catId,
             'slug'          => false // do not generate slug manually
         ]);

@@ -26,12 +26,12 @@ class CorrectConvertUriCest
     {
         $I->wantTo('use underscored character in content and see correct url');
 
-        $userId = $this->user->amRegularUser();
+        $user   = $this->user->haveUser();
         $catId  = $this->category->haveCategory();
         $postId = $this->post->havePost([
             'title'         => 'Is there a precompiled binary for 64 bit Centos out there',
             'content'       => '[this reddit topic](http://www.reddit.com/r/PHP/comments/2s7bbr/phalconphp_vs_php_disappointing_results/)',
-            'users_id'      => $userId,
+            'users_id'      => $user['id'],
             'slug'          => 'is-there-a-precompiled-binary',
             'categories_id' => $catId
         ]);

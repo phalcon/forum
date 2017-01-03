@@ -37,12 +37,29 @@ class User extends Module
     }
 
     /**
-     * Creates a random regular user and return its id
+     * Log In as regular user and return its id
      *
      * @param array $attributes Model attributes [Optional]
      * @return int
      */
     public function amRegularUser(array $attributes = null)
+    {
+        $attributes = $this->haveUser($attributes);
+
+        $this->phalcon->haveInSession('identity', $attributes['id']);
+        $this->phalcon->haveInSession('identity-name', $attributes['name']);
+        $this->phalcon->haveInSession('identity-karma', $attributes['karma']);
+
+        return $attributes['id'];
+    }
+
+    /**
+     * Creates a random regular user and return user's attributes
+     *
+     * @param array $attributes Model attributes [Optional]
+     * @return array
+     */
+    public function haveUser(array $attributes = null)
     {
         $attributes = $attributes ?: [];
 
@@ -55,14 +72,8 @@ class User extends Module
             'votes_points' => Karma::INITIAL_KARMA + Karma::LOGIN,
         ];
 
-        $attributes = array_merge($default, $attributes);
+        $attributes['id'] = $this->phalcon->haveRecord(Users::class, array_merge($default, $attributes));
 
-        $id = $this->phalcon->haveRecord(Users::class, $attributes);
-
-        $this->phalcon->haveInSession('identity', $id);
-        $this->phalcon->haveInSession('identity-name', $attributes['name']);
-        $this->phalcon->haveInSession('identity-karma', $attributes['karma']);
-
-        return $id;
+        return $attributes;
     }
 }
