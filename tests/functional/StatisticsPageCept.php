@@ -3,7 +3,7 @@
  * @var Codeception\Scenario $scenario
  */
 
-$I = new Step\UserSteps($scenario);
+$I = new FunctionalTester($scenario);
 
 $I->wantTo('get forum statistics');
 
