@@ -1,25 +1,40 @@
 <?php
 
-use Step\ForumSteps;
+use Helper\Post;
+use Helper\User;
+use Helper\Category;
 
 class ReplyInDiscussionCest
 {
-    public function _before(ForumSteps $I)
-    {
-        $userId = $I->amRegularUser();
-        $catId  = $I->haveCategory();
+    /** @var Category */
+    protected $category;
 
-        $I->havePost([
+    /** @var User */
+    protected $user;
+
+    /** @var Post */
+    protected $post;
+
+    protected function _inject(Category $category, User $user, Post $post)
+    {
+        $this->user     = $user;
+        $this->post     = $post;
+        $this->category = $category;
+    }
+
+    // tests
+    public function replyInADiscussion(FunctionalTester $I)
+    {
+        $I->wantTo('reply in a discussion');
+
+        $userId = $this->user->amRegularUser();
+        $catId  = $this->category->haveCategory();
+
+        $this->post->havePost([
             'title'         => 'Please help with testing',
             'users_id'      => $userId,
             'categories_id' => $catId
         ]);
-    }
-
-    // tests
-    public function replyInADiscussion(ForumSteps $I)
-    {
-        $I->wantTo('reply in a discussion');
 
         $I->amOnPage('/discussions');
         $I->seeLink('Please help with testing');

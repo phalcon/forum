@@ -10,6 +10,9 @@ class_name: FunctionalTester
 modules:
     enabled:
         - Helper\Functional
+        - Helper\Category
+        - Helper\User
+        - Helper\Post
         - Filesystem
         - Phalcon
         - Db

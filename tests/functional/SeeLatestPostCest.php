@@ -1,26 +1,41 @@
 <?php
 
-use Step\ForumSteps;
+use Helper\Post;
+use Helper\User;
+use Helper\Category;
 
 class SeeLatestPostCest
 {
-    public function _before(ForumSteps $I)
-    {
-        $userId = $I->amRegularUser();
-        $catId  = $I->haveCategory();
+    /** @var Category */
+    protected $category;
 
-        $I->havePost([
+    /** @var User */
+    protected $user;
+
+    /** @var Post */
+    protected $post;
+
+    protected function _inject(Category $category, User $user, Post $post)
+    {
+        $this->user     = $user;
+        $this->post     = $post;
+        $this->category = $category;
+    }
+
+    // tests
+    public function browseFrontPage(FunctionalTester $I)
+    {
+        $I->wantTo('see latest post on front page at top of table');
+
+        $userId = $this->user->amRegularUser();
+        $catId  = $this->category->haveCategory();
+
+        $this->post->havePost([
             'title'         => 'Binding Parameters',
             'content'       => 'This may be a little bit of a noob question but here goes.',
             'users_id'      => $userId,
             'categories_id' => $catId
         ]);
-    }
-
-    // tests
-    public function browseFrontPage(ForumSteps $I)
-    {
-        $I->wantTo('see latest post on front page at top of table');
 
         $I->amOnPage('/');
         $I->seeInTitle('Discussions - ');
