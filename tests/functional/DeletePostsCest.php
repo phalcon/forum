@@ -1,15 +1,33 @@
 <?php
 
-use Step\UserSteps;
+use Helper\Post;
+use Helper\User;
+use Helper\Category;
 
 class DeletePostsCest
 {
-    public function deleteADiscussion(FunctionalTester $I, UserSteps $userSteps)
-    {
-        $userId = $userSteps->amRegularUser();
-        $catId  = $userSteps->haveCategory();
+    /** @var Category */
+    protected $category;
 
-        $postId = $userSteps->havePost(
+    /** @var User */
+    protected $user;
+
+    /** @var Post */
+    protected $post;
+
+    protected function _inject(Category $category, User $user, Post $post)
+    {
+        $this->user     = $user;
+        $this->post     = $post;
+        $this->category = $category;
+    }
+
+    public function deleteADiscussion(FunctionalTester $I)
+    {
+        $userId = $this->user->amRegularUser();
+        $catId  = $this->category->haveCategory();
+
+        $postId = $this->post->havePost(
             [
                 'title'         => 'Is there a way to validate only some fields?',
                 'users_id'      => $userId,
