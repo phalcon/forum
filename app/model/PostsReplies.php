@@ -137,7 +137,7 @@ class PostsReplies extends Model
                     $notification->users_id         = $user->id;
                     $notification->posts_id         = $this->posts_id;
                     $notification->posts_replies_id = $this->id;
-                    $notification->type             = 'C';
+                    $notification->type             = Notifications::TYPE_COMMENT;
                     $notification->save();
 
                     $activity                       = new ActivityNotifications();
@@ -161,7 +161,7 @@ class PostsReplies extends Model
                     $notification->users_id         = $subscriber->users_id;
                     $notification->posts_id         = $this->posts_id;
                     $notification->posts_replies_id = $this->id;
-                    $notification->type             = 'C';
+                    $notification->type             = Notifications::TYPE_COMMENT;
                     $notification->save();
 
                     $activity                       = new ActivityNotifications();
@@ -209,7 +209,7 @@ class PostsReplies extends Model
                         $notification->users_id         = $postNotification->users_id;
                         $notification->posts_id         = $this->posts_id;
                         $notification->posts_replies_id = $this->id;
-                        $notification->type             = 'C';
+                        $notification->type             = Notifications::TYPE_COMMENT;
                         $notification->save();
 
                         $activity                       = new ActivityNotifications();
