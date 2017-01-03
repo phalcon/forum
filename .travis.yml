@@ -66,6 +66,9 @@ script:
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 
+after_script:
+  - kill -SIGTERM $(ps aux | grep "php -S" | grep -v grep) > /dev/null 2>&1
+
 notifications:
   email:
     recipients:
