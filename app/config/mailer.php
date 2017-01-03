@@ -15,28 +15,25 @@
  +------------------------------------------------------------------------+
 */
 
-/**
- * This scripts generates random posts
- */
-require 'cli-bootstrap.php';
+return [
 
-use Phosphorum\Mail\SendSpool;
+    // smtp, sendmail, mail
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
-class SendSpoolTask extends Phalcon\DI\Injectable
-{
+    'host' => env('MAIL_HOST'),
 
-    public function run()
-    {
-        $spool = new SendSpool();
-        $spool->sendRemaining();
-    }
-}
+    'port' => env('MAIL_PORT'),
 
-try {
-    $task = new SendSpoolTask($config);
-    $task->run();
-} catch (Exception $e) {
-    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
-    fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
-    exit(1);
-}
+    'security' => env('MAIL_ENCRYPTION'),
+
+    'username' => env('MAIL_USERNAME'),
+
+    'password' => env('MAIL_PASSWORD'),
+
+    'from' => [
+        'email' => env('MAIL_FROM_ADDRESS'),
+        'name'  => env('MAIL_FROM_NAME'),
+    ],
+
+    'sendmail' => '/usr/sbin/sendmail -bs',
+];

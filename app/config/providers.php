@@ -43,6 +43,7 @@ return [
     Phosphorum\Provider\Annotations\ServiceProvider::class,
     Phosphorum\Provider\FileSystem\ServiceProvider::class,
     Phosphorum\Provider\Email\ServiceProvider::class,
+    Phosphorum\Provider\Mailer\ServiceProvider::class,
 
     // Third Party Providers
     // ...

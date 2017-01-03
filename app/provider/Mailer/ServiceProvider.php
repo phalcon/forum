@@ -15,15 +15,16 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Config;
+namespace Phosphorum\Provider\Mailer;
 
-use RuntimeException;
+use Phalcon\Mailer\Manager;
+use InvalidArgumentException;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
- * Phosphorum\Provider\Config\ServiceProvider
+ * Phosphorum\Provider\Mail\ServiceProvider
  *
- * @package Phosphorum\Provider\Config
+ * @package Phosphorum\Provider\Mailer
  */
 class ServiceProvider extends AbstractServiceProvider
 {
@@ -31,44 +32,7 @@ class ServiceProvider extends AbstractServiceProvider
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'config';
-
-    /**
-     * Config files.
-     * @var array
-     */
-    protected $configs = [
-        'logger',
-        'cache',
-        'session',
-        'database',
-        'metadata',
-        'queue',
-        'devtools',
-        'annotations',
-        'email',
-        'mailer',
-        'config',
-    ];
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = config_path('config.php');
-
-        if (!file_exists($configPath) || !is_file($configPath)) {
-            throw new RuntimeException(
-                sprintf(
-                    'The application config not found. Please make sure that the file "%s" is present',
-                    $configPath
-                )
-            );
-        }
-    }
+    protected $serviceName = 'mailer';
 
     /**
      * {@inheritdoc}
@@ -77,12 +41,31 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $configs = $this->configs;
-
         $this->di->setShared(
             $this->serviceName,
-            function () use ($configs) {
-                return Factory::create($configs);
+            function () {
+                /** @var \Phalcon\Config $config */
+                $config = container('config')->mailer;
+                $driver = $config->get('driver');
+
+                switch ($driver) {
+                    case 'smtp':
+                    case 'mail':
+                    case 'sendmail':
+                        $mailerConfig = $config->toArray();
+
+                        $manager = new Manager($mailerConfig);
+                        $manager->setDI(container());
+
+                        return $manager;
+                }
+
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid mail driver. Expected either "smtp" or "mail" or "sendmail". Got "%s".',
+                        is_scalar($driver) ? $driver : var_export($driver, true)
+                    )
+                );
             }
         );
     }
