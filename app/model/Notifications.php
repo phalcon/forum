@@ -36,8 +36,8 @@ class Notifications extends Model
     const STATUS_INVALID  = 'I';
     const STATUS_SKIPPED  = 'S';
 
-    const TYPE_POST  = 'P';
-    const TYPE_REPLY = 'R';
+    const TYPE_COMMENT = 'C';
+    const TYPE_POST    = 'P';
 
     public $id;
 
