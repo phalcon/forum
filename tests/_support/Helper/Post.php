@@ -48,7 +48,7 @@ class Post extends Module
     {
         $attributes = $attributes ?: [];
 
-        $title   = $this->faker->title;
+        $title   = $this->faker->company;
         $default = [
             'title'         => $title,
             'slug'          => Tag::friendlyTitle($title),

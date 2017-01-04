@@ -74,6 +74,7 @@ class User extends Module
             'digest'        => 'N',
         ];
 
+        $attributes = array_merge($default, $attributes);
         $attributes['id'] = $this->phalcon->haveRecord(Users::class, array_merge($default, $attributes));
 
         return $attributes;
