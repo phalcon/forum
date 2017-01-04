@@ -65,7 +65,7 @@ class Notifications extends Model
     public function initialize()
     {
         $this->belongsTo('users_id', Users::class, 'id', ['alias' => 'user']);
-        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post']);
+        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post', 'reusable' => true]);
         $this->belongsTo('posts_replies_id', PostsReplies::class, 'id', ['alias' => 'reply']);
 
         $this->addBehavior(
