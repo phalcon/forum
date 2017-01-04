@@ -17,7 +17,9 @@
 
 namespace Phosphorum\Mail;
 
+use DOMDocument;
 use Phalcon\Di\Injectable;
+use Phalcon\Mailer\Message;
 use Phosphorum\Model\Notifications;
 use Phosphorum\Model\Services\Service;
 
@@ -111,7 +113,7 @@ class SendSpool extends Injectable
         $mailer = container('mailer');
         $config = container('config');
 
-        $params['title'] = "[{$config->site->name} Forum] {$post->title}";
+        $params['subject'] = "[{$config->site->name} Forum] {$post->title}";
 
         if (!$contents = $this->prepareContent('mail/notification', $params)) {
             $notificationService->markAsInvalid($notification);
@@ -120,12 +122,16 @@ class SendSpool extends Injectable
 
         $message = $mailer->createMessage()
             ->to($user->email, $user->name)
-            ->subject($params['title'])
-            ->content($contents);
+            ->subject($params['subject'])
+            ->content($contents, Message::CONTENT_TYPE_HTML, 'utf-8');
 
-        $message->getMessage()->addPart(strip_tags($contents), 'text/plain');
+        $plain = $this->preparePlainTextFromHtml($contents);
+
+        $message->getMessage()->addPart($plain, Message::CONTENT_TYPE_PLAIN, 'utf-8');
         $message->replyTo("reply-i{$post->id}-" . time() . '@phosphorum.com');
         $message->from($notificationService->getFromUser($notification));
+
+        $this->prepareMessageId($message, $notification);
 
         $message->send();
 
@@ -167,7 +173,138 @@ class SendSpool extends Injectable
         $html_content = container('markdown')->render(container('escaper')->escapeHtml($contents));
         $post_url     = $notificationService->getRelatedPostUrl($notification);
         $settings_url = container('config')->site->url . '/settings';
+        $title        = container('escaper')->escapeHtml($notification->post->title);
 
-        return compact('html_content', 'post_url', 'settings_url');
+        return compact('html_content', 'post_url', 'settings_url', 'title');
+    }
+
+    /**
+     * Sets mail Message-ID
+     *
+     * Return example:
+     * <code>
+     * 14564793977738.123.3345.2344@forum.phalconphp.com
+     * </code>
+     *
+     * @param  Message       $message
+     * @param  Notifications $notification
+     * @return string
+     */
+    protected function prepareMessageId(Message $message, Notifications $notification)
+    {
+        $msgId  = $message->getMessage()->getHeaders()->get('Message-ID');
+        $parsed = parse_url(container('config')->site->url);
+
+        $id = sprintf(
+            '%d.%d.%d.%d@%s',
+            str_replace('.', '', microtime(true)),
+            $notification->id,
+            $notification->posts_id,
+            $notification->users_id,
+            isset($parsed['host']) ? $parsed['host'] : 'phosphorum.com'
+        );
+
+        $msgId->setId($id);
+
+        return $id;
+    }
+
+    /**
+     * Prepares and returns plain text from HTML part.
+     *
+     * @param  string $html
+     * @return string
+     */
+    protected function preparePlainTextFromHtml($html)
+    {
+        if (!is_string($html) || empty($html)) {
+            return '1';
+        }
+
+        $dom = new DOMDocument();
+        if (!$dom->loadHTML($html)) {
+            return '2';
+        }
+
+        $body   = $dom->getElementsByTagName('body');
+        $cloned = $body->item(0)->cloneNode(true);
+
+        $newDoc = new DOMDocument();
+        $newDoc->appendChild($newDoc->importNode($cloned, true));
+        $html = $newDoc->saveHTML();
+
+        $m = preg_replace('#<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>#', '$2:' . "\n" . '$1', $html);
+        $m = trim($this->stripHtmlTags($m));
+        $m = str_replace('&nbsp;', ' ', $m);
+        $m = preg_replace('#\t+#', '', $m);
+        $m = preg_replace('# {2,}#', ' ', $m);
+        $m = preg_replace('#(\r\n|\r|\n){2,}#m', "\n\n", $m);
+
+        $m = explode("\n\n", $m);
+
+        $text  = [];
+        foreach ($m as $n => $line) {
+            $line = trim($line);
+            if (!empty($line)) {
+                $text[] = $line;
+            }
+        }
+
+        $m = implode("\n\n", $text);
+        $m = preg_replace('#^[ \t]+#m', '', $m);
+        $m = str_replace('&mdash;', '--', $m);
+
+        return $m;
+    }
+
+    /**
+     * Remove HTML tags, including invisible text such as style and
+     * script code, and embedded objects.  Add line breaks around
+     * block-level tags to prevent word joining after tag removal.
+     *
+     * @param  string $text
+     * @return string
+     */
+    protected function stripHtmlTags($text)
+    {
+        $text = preg_replace(
+            [
+                // Remove invisible content
+                /** @lang php */
+                '@<head[^>]*?>.*?</head>@siu',
+                /** @lang php */
+                '@<style[^>]*?>.*?</style>@siu',
+                /** @lang php */
+                '@<script[^>]*?.*?</script>@siu',
+                /** @lang php */
+                '@<object[^>]*?.*?</object>@siu',
+                /** @lang php */
+                '@<embed[^>]*?.*?</embed>@siu',
+                /** @lang php */
+                '@<applet[^>]*?.*?</applet>@siu',
+                /** @lang php */
+                '@<noframes[^>]*?.*?</noframes>@siu',
+                /** @lang php */
+                '@<noscript[^>]*?.*?</noscript>@siu',
+                /** @lang php */
+                '@<noembed[^>]*?.*?</noembed>@siu',
+                // Add line breaks before and after blocks
+                '@</?((address)|(blockquote)|(center)|(del))@iu',
+                '@</?((div)|(h[1-9])|(ins)|(isindex)|(p)|(pre))@iu',
+                '@</?((dir)|(dl)|(dt)|(dd)|(li)|(menu)|(ol)|(ul))@iu',
+                '@</?((table)|(th)|(td)|(caption))@iu',
+                '@</?((form)|(button)|(fieldset)|(legend)|(input))@iu',
+                '@</?((label)|(select)|(optgroup)|(option)|(textarea))@iu',
+                '@</?((frameset)|(frame)|(iframe))@iu',
+            ],
+            [
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0",
+                "\n\$0", "\n\$0",
+            ],
+            $text
+        );
+
+        return strip_tags($text);
     }
 }
