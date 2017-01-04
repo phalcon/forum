@@ -64,12 +64,13 @@ class User extends Module
         $attributes = $attributes ?: [];
 
         $default = [
-            'name'         => $this->faker->userName,
-            'login'        => $this->faker->userName,
-            'email'        => $this->faker->email,
-            'timezone'     => $this->faker->timezone,
-            'karma'        => Karma::INITIAL_KARMA + Karma::LOGIN,
-            'votes_points' => Karma::INITIAL_KARMA + Karma::LOGIN,
+            'name'          => $this->faker->userName,
+            'login'         => $this->faker->userName,
+            'email'         => $this->faker->email,
+            'timezone'      => $this->faker->timezone,
+            'karma'         => Karma::INITIAL_KARMA + Karma::LOGIN,
+            'votes_points'  => Karma::INITIAL_KARMA + Karma::LOGIN,
+            'notifications' => 'N',
         ];
 
         $attributes['id'] = $this->phalcon->haveRecord(Users::class, array_merge($default, $attributes));
