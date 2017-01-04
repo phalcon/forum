@@ -99,7 +99,7 @@ class RepliesController extends ControllerBase
             return $this->response->redirect();
         }
 
-        if (!$this->security->checkToken('post-' . $postReply->post->id)) {
+        if (!$this->checkTokenPost('post-' . $postReply->post->id)) {
             $this->flashSession->error('This post is outdated. Please try to update reply again.');
             return $this->response->redirect();
         }
