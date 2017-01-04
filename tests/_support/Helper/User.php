@@ -70,7 +70,8 @@ class User extends Module
             'timezone'      => $this->faker->timezone,
             'karma'         => Karma::INITIAL_KARMA + Karma::LOGIN,
             'votes_points'  => Karma::INITIAL_KARMA + Karma::LOGIN,
-            'notifications' => 'N',
+            'notifications' => Users::NOTIFICATIONS_OFF,
+            'digest'        => 'N',
         ];
 
         $attributes['id'] = $this->phalcon->haveRecord(Users::class, array_merge($default, $attributes));
