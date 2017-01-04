@@ -64,10 +64,11 @@ before_script:
 script:
   - vendor/bin/phpcs
   - vendor/bin/codecept build
-  - vendor/bin/codecept run
-
-after_script:
-  - kill -SIGTERM $(ps aux | grep "php -S" | grep -v grep) > /dev/null 2>&1
+  # Run tests
+  - vendor/bin/codecept run unit
+  - vendor/bin/codecept run functional
+  - vendor/bin/codecept run acceptance
+  - vendor/bin/codecept run console
 
 notifications:
   email:

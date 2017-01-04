@@ -7,6 +7,7 @@ use Codeception\Module;
 use Faker\Factory as Faker;
 use Phosphorum\Model\Posts;
 use Phosphorum\Model\PostsHistory;
+use Phosphorum\Model\PostsReplies;
 
 /**
  * Post Helper
@@ -47,7 +48,7 @@ class Post extends Module
     {
         $attributes = $attributes ?: [];
 
-        $title   = $this->faker->title;
+        $title   = $this->faker->company;
         $default = [
             'title'         => $title,
             'slug'          => Tag::friendlyTitle($title),
@@ -81,5 +82,25 @@ class Post extends Module
         ];
 
         return $this->phalcon->haveRecord(PostsHistory::class, array_merge($default, $attributes));
+    }
+
+    /**
+     * Creates a random post reply and return its id
+     *
+     * @param array $attributes Model attributes [Optional]
+     * @return int
+     */
+    public function havePostReply(array $attributes = null)
+    {
+        $attributes = $attributes ?: [];
+
+        $default = [
+            'posts_id' => $this->faker->numberBetween(),
+            'users_id' => $this->faker->numberBetween(),
+            'accepted' => $this->faker->randomElement(['Y', 'N']),
+            'content'  => $this->faker->paragraph(),
+        ];
+
+        return $this->phalcon->haveRecord(PostsReplies::class, array_merge($default, $attributes));
     }
 }

@@ -7,6 +7,10 @@ class_name: ConsoleTester
 modules:
     enabled:
         - Helper\Console
+        - Helper\Category
+        - Helper\Mail
+        - Helper\User
+        - Helper\Post
         - Filesystem
         - Asserts
         - Phalcon

@@ -133,8 +133,14 @@ class Users extends Model
 
     public function beforeCreate()
     {
-        $this->notifications = self::NOTIFICATIONS_REP;
-        $this->digest        = 'Y';
+        if (!$this->notifications) {
+            $this->notifications = self::NOTIFICATIONS_REP;
+        }
+
+        if (!$this->digest) {
+            $this->digest = 'Y';
+        }
+
         $this->moderator     = 'N';
         $this->karma        += Karma::INITIAL_KARMA;
         $this->votes_points += Karma::INITIAL_KARMA;

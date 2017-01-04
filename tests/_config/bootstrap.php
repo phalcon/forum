@@ -20,7 +20,7 @@ use Phosphorum\Bootstrap;
 require_once __DIR__ . '/../../bootstrap/autoloader.php';
 
 // Create the Application
-$bootstrap = new Bootstrap();
+$bootstrap = new Bootstrap(env('APP_MODE', 'normal'));
 
 // Run the Application
 return $bootstrap->getApplication();
