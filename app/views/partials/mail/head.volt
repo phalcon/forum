@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<title>{{- subject -}}</title>
+<title>{{ subject }}</title>
 <style type="text/css">
     body, #bodyTable, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;}
     table{border-collapse:collapse;}
