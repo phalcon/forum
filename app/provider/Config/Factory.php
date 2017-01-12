@@ -27,8 +27,6 @@ use League\Flysystem\Filesystem;
  */
 class Factory
 {
-    const CACHED_PATH = 'cache/config/cached.php';
-
     /**
      * Create configuration object.
      *
@@ -52,9 +50,9 @@ class Factory
         $merge  = self::merge();
 
         /** @var Filesystem $filesystem */
-        $filesystem = container('filesystem');
+        $filesystem = singleton('filesystem', [cache_path('config')]);
 
-        if ($filesystem->has(self::CACHED_PATH) && !environment('development')) {
+        if ($filesystem->has('cached.php') && !environment('development')) {
             $merge($config, cache_path('config/cached.php'));
 
             return $config;
@@ -64,8 +62,8 @@ class Factory
             $merge($config, config_path("$provider.php"), $provider == 'config' ? null : $provider);
         }
 
-        if (environment('production') && !$filesystem->has(self::CACHED_PATH)) {
-            self::dump($filesystem, self::CACHED_PATH, $config->toArray());
+        if (environment('production') && !$filesystem->has('cached.php')) {
+            self::dump($filesystem, 'cached.php', $config->toArray());
         }
 
         return $config;
