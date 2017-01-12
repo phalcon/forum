@@ -2,7 +2,6 @@
 
 namespace Helper;
 
-use HelperTrait;
 use Codeception\Module;
 
 /**
@@ -15,5 +14,4 @@ use Codeception\Module;
  */
 class Functional extends Module
 {
-    use HelperTrait;
 }

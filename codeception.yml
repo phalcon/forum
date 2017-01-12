@@ -47,9 +47,5 @@ modules:
             bootstrap: "tests/_config/bootstrap.php"
             cleanup: false
             savepoints: false
-        PhpBrowser:
-            url: "%APP_URL%"
-            curl:
-                CURLOPT_RETURNTRANSFER: true
 
 error_level: "E_ALL"

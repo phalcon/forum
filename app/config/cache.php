@@ -26,12 +26,6 @@ return [
             'adapter' => 'Apc',
         ],
 
-        'memcache' => [
-            'adapter' => 'Memcache',
-            'host'    => env('MEMCACHED_HOST', '127.0.0.1'),
-            'port'    => env('MEMCACHED_PORT', 11211),
-        ],
-
         'memcached' => [
             'adapter' => 'Libmemcached',
             'servers' => [

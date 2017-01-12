@@ -17,12 +17,20 @@
 
 use Phalcon\Loader;
 
-// Load constants
-require 'constants.php';
+/**
+ * @const APP_START_TIME The start time of the application, used for profiling
+ */
+define('APP_START_TIME', microtime(true));
+
+/**
+ * @const APP_START_MEMORY The memory usage at the start of the application, used for profiling
+ */
+define('APP_START_MEMORY', memory_get_usage());
 
 (new Loader())
     ->registerNamespaces([
         'Phosphorum\Model'      => dirname(__DIR__) . '/app/model',
+        'Phosphorum\Task'       => dirname(__DIR__) . '/app/task',
         'Phosphorum\Controller' => dirname(__DIR__) . '/app/controller',
         'Phosphorum'            => dirname(__DIR__) . '/app/library',
         'Phosphorum\Provider'   => dirname(__DIR__) . '/app/provider',
@@ -34,4 +42,4 @@ require 'constants.php';
     ->register();
 
 // Register The Composer Auto Loader
-require BASE_DIR . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';

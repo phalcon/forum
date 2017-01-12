@@ -121,37 +121,25 @@ if (!function_exists('container')) {
     }
 }
 
-
-if (!function_exists('hash_equals')) {
+if (!function_exists('singleton')) {
     /**
-     * Timing attack safe string comparison.
-     * Support for PHP 5.5
+     * Calls the default Dependency Injection container.
      *
-     * @param  string $knownString The string of known length to compare against
-     * @param  string $userString  The user-supplied string
-     * @return bool
+     * @param  mixed
+     * @return mixed|\Phalcon\DiInterface
      */
-    function hash_equals($knownString, $userString)
+    function singleton()
     {
-        if (!is_string($knownString) || !is_string($userString)) {
-            return false;
+        $container = container();
+        $args = func_get_args();
+
+        if (empty($args)) {
+            return $container;
         }
 
-        if (strlen($knownString) !== strlen($userString)) {
-            return false;
-        }
-
-        $res = $knownString ^ $userString;
-        $ret = 0;
-
-        for ($i = strlen($res) - 1; $i >= 0; $i--) {
-            $ret |= ord($res[$i]);
-        }
-
-        return !$ret;
+        return call_user_func_array([$container, 'get'], $args);
     }
 }
-
 
 if (!function_exists('environment')) {
     /**

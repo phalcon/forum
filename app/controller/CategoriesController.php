@@ -22,24 +22,23 @@ use Phosphorum\Model\Categories;
 use Phosphorum\Model\TopicTracking;
 
 /**
- * Class IndexController
+ * Phosphorum\Controller\IndexController
  *
  * @package Phosphorum\Controller
  */
 class CategoriesController extends ControllerBase
 {
     /**
-     * Shows latest posts by category
+     * Shows latest posts by category.
      *
-     * @param int $categoryId Category Id
-     * @param string $slug Category Slug
-     * @param int $offset Posts offset
+     * @param int    $categoryId The category id
+     * @param string $slug       The category slug [Optional]
+     * @param int    $offset     The posts offset [Optional]
      */
-    public function viewAction($categoryId, $slug, $offset = 0)
+    public function viewAction($categoryId, $slug = null, $offset = 0)
     {
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
-            $this->logger->error("The category doesn't exist");
             $this->response->redirect();
             return;
         }

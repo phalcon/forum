@@ -240,7 +240,7 @@ class Posts extends Model
                     $notification           = new Notifications();
                     $notification->users_id = $user->id;
                     $notification->posts_id = $this->id;
-                    $notification->type     = 'P';
+                    $notification->type     = Notifications::TYPE_POST;
                     $notification->save();
                     $toNotify[$user->id] = $notification->id;
                 }

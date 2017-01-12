@@ -27,7 +27,7 @@ class Fake
     protected $queue;
 
     /**
-     * Server constructor
+     * Server constructor.
      *
      * @param mixed $queue
      */
@@ -37,15 +37,25 @@ class Fake
     }
 
     /**
-     * Simulates putting a job in the queue
+     * Simulates putting a job in the queue.
      *
      * @param  array $job
      * @return bool
      */
     public function put(array $job)
     {
-        container('logger')->debug('Putting job: ' . json_encode($job));
+        singleton('logger')->debug('Putting job: ' . json_encode($job));
 
         return true;
+    }
+
+    /**
+     * Simulates retrieving messages.
+     *
+     * @return bool
+     */
+    public function peekReady()
+    {
+        return false;
     }
 }

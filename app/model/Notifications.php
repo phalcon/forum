@@ -21,16 +21,23 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
- * Class Notifications
+ * Phosphorum\Model\Notifications
  *
- * @property \Phosphorum\Model\Users        user
- * @property \Phosphorum\Model\Posts        post
- * @property \Phosphorum\Model\PostsReplies reply
+ * @property Users        user
+ * @property Posts        post
+ * @property PostsReplies reply
  *
  * @package Phosphorum\Model
  */
 class Notifications extends Model
 {
+    const STATUS_NOT_SENT = 'N';
+    const STATUS_SENT     = 'Y';
+    const STATUS_INVALID  = 'I';
+    const STATUS_SKIPPED  = 'S';
+
+    const TYPE_COMMENT = 'C';
+    const TYPE_POST    = 'P';
 
     public $id;
 
@@ -52,47 +59,24 @@ class Notifications extends Model
 
     public function beforeValidationOnCreate()
     {
-        $this->sent = 'N';
+        $this->sent = self::STATUS_NOT_SENT;
     }
 
     public function initialize()
     {
-        $this->belongsTo(
-            'users_id',
-            'Phosphorum\Model\Users',
-            'id',
-            array(
-                'alias' => 'user'
-            )
-        );
-
-        $this->belongsTo(
-            'posts_id',
-            'Phosphorum\Model\Posts',
-            'id',
-            array(
-                'alias' => 'post'
-            )
-        );
-
-        $this->belongsTo(
-            'posts_replies_id',
-            'Phosphorum\Model\PostsReplies',
-            'id',
-            array(
-                'alias' => 'reply'
-            )
-        );
+        $this->belongsTo('users_id', Users::class, 'id', ['alias' => 'user']);
+        $this->belongsTo('posts_id', Posts::class, 'id', ['alias' => 'post', 'reusable' => true]);
+        $this->belongsTo('posts_replies_id', PostsReplies::class, 'id', ['alias' => 'reply']);
 
         $this->addBehavior(
-            new Timestampable(array(
-                'beforeCreate' => array(
+            new Timestampable([
+                'beforeCreate' => [
                     'field' => 'created_at'
-                ),
-                'beforeUpdate' => array(
+                ],
+                'beforeUpdate' => [
                     'field' => 'modified_at'
-                )
-            ))
+                ]
+            ])
         );
     }
 }

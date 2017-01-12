@@ -22,6 +22,7 @@ use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
  * Phosphorum\Provider\EventsManager\ServiceProvider
+ *
  * @package Phosphorum\Provider\EventManager
  */
 class ServiceProvider extends AbstractServiceProvider

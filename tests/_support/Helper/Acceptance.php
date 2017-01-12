@@ -2,7 +2,6 @@
 
 namespace Helper;
 
-use HelperTrait;
 use Codeception\Module;
 
 /**
@@ -15,8 +14,6 @@ use Codeception\Module;
  */
 class Acceptance extends Module
 {
-    use HelperTrait;
-
     public function seeResponseRegexp($regexp, $content)
     {
         $this->assertRegExp($regexp, $content);

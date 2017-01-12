@@ -1,4 +1,4 @@
-{%- if debug -%}
+{%- if debug === true -%}
     <div class="col-md-12 error-debug">
         <p>
             Error [{{ error.type() }}]: {{ error.message() }} <br>

@@ -116,13 +116,14 @@ $router->add(
     ]
 );
 
-$router->add(
-    '/search',
-    [
-       'controller' => 'discussions',
-       'action'     => 'search'
-    ]
-);
+$router->addGet('/search', 'Search::index')
+       ->setName('search');
+
+$router->addPost('/find-related', 'Search::findRelated')
+       ->setName('find-related');
+
+$router->addPost('/show-related', 'Search::showRelated')
+       ->setName('show-related');
 
 $router->addPost(
     '/preview',
@@ -162,7 +163,7 @@ $router->add(
        'controller' => 'replies',
        'action'     => 'history'
     ]
-)->beforeMatch([new Ajax, 'check']);
+)->beforeMatch([new Ajax(), 'check']);
 
 $router->add(
     '/discussion/history/{id:[0-9]+}',
@@ -170,7 +171,7 @@ $router->add(
        'controller' => 'discussions',
        'action'     => 'history'
     ]
-)->beforeMatch([new Ajax, 'check']);
+)->beforeMatch([new Ajax(), 'check']);
 
 $router->add(
     '/discussion/vote-up/{id:[0-9]+}',
@@ -229,22 +230,6 @@ $router->add(
 );
 
 $router->add(
-    '/find-related',
-    [
-       'controller' => 'discussions',
-       'action'     => 'findRelated'
-    ]
-);
-
-$router->add(
-    '/show-related',
-    [
-       'controller' => 'discussions',
-       'action'     => 'showRelated'
-    ]
-);
-
-$router->add(
     '/notifications',
     [
        'controller' => 'discussions',
@@ -286,6 +271,14 @@ $router->add(
 
 $router->add(
     '/category/{id:[0-9]+}/{slug}',
+    [
+        'controller' => 'categories',
+        'action'     => 'view'
+    ]
+);
+
+$router->add(
+    '/category/{id:[0-9]+}',
     [
         'controller' => 'categories',
         'action'     => 'view'

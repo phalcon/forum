@@ -17,8 +17,24 @@
 
 namespace Phosphorum\Model\Services\Service;
 
+use Phosphorum\Model\Users as Entity;
 use Phosphorum\Model\Services\AbstractService;
 
+/**
+ * Phosphorum\Model\Services\Service\Users
+ *
+ * @package Phosphorum\Model\Services\Service
+ */
 class Users extends AbstractService
 {
+    /**
+     * Does the user expect notifications or not.
+     *
+     * @param  Entity $user
+     * @return bool
+     */
+    public function doesExpectNotifications(Entity $user)
+    {
+        return $user->notifications != Entity::NOTIFICATIONS_OFF;
+    }
 }
