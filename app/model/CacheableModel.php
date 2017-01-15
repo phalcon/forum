@@ -18,7 +18,6 @@
 namespace Phosphorum\Model;
 
 use Phalcon\Mvc\Model;
-use Phalcon\DI;
 
 /**
  * Class CacheableModel

@@ -19,7 +19,6 @@ namespace Phosphorum\Task;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
-use Phalcon\Cache\BackendInterface;
 use Phosphorum\Console\AbstractTask;
 
 /**
