@@ -69,6 +69,7 @@ class Bootstrap
     public function __construct($mode = 'normal')
     {
         $this->basePath = dirname(app_path());
+        $this->mode = $mode;
 
         (new Dotenv($this->basePath))->load();
 
@@ -83,7 +84,7 @@ class Bootstrap
          */
         $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
 
-        $this->createInternalApplication($mode);
+        $this->createInternalApplication();
         $this->setupEnvironment();
 
         /** @noinspection PhpIncludeInspection */
@@ -204,15 +205,11 @@ class Bootstrap
     /**
      * Create internal application to handle requests.
      *
-     * @param  string $mode The application mode.
-     *
      * @throws InvalidArgumentException
      */
-    protected function createInternalApplication($mode)
+    protected function createInternalApplication()
     {
-        $this->mode = $mode;
-
-        switch ($mode) {
+        switch ($this->mode) {
             case 'normal':
                 $this->app = new MvcApplication($this->di);
                 break;
@@ -227,7 +224,7 @@ class Bootstrap
                 throw new InvalidArgumentException(
                     sprintf(
                         'Invalid application mode. Expected either "normal" or "cli" or "api". Got "%s".',
-                        is_scalar($mode) ? $mode : var_export($mode, true)
+                        is_scalar($this->mode) ? $this->mode : var_export($this->mode, true)
                     )
                 );
         }
