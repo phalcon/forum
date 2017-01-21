@@ -64,6 +64,19 @@
         "ext-yaml": "*",
         "ext-intl": "*"
     },
+    "autoload": {
+        "psr-4": {
+            "Phosphorum\\": "app/library",
+            "Phosphorum\\Model\\": "app/model",
+            "Phosphorum\\Task\\": "app/task",
+            "Phosphorum\\Controller\\": "app/controller",
+            "Phosphorum\\Provider\\": "app/provider",
+            "Phosphorum\\Listener\\": "app/listener"
+        },
+        "files": [
+            "bootstrap/helpers.php"
+        ]
+    },
     "autoload-dev": {
         "psr-4": {
             "Phosphorum\\Test\\Unit\\": "tests/unit/"
