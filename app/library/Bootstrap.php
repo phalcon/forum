@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -23,7 +23,6 @@ use Phalcon\DiInterface;
 use Phosphorum\Provider;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Error\Handler as ErrorHandler;
 use Phosphorum\Console\Application as Console;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Provider\ServiceProviderInterface;
@@ -83,17 +82,16 @@ class Bootstrap
          * These services should be registered first
          */
         $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
+        $this->setupEnvironment();
+        $this->initializeServiceProvider(new Provider\ErrorHandler\ServiceProvider($this->di));
 
         $this->createInternalApplication();
-        $this->setupEnvironment();
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');
         if (is_array($providers)) {
             $this->initializeServiceProviders($providers);
         }
-
-        ErrorHandler::register();
 
         $this->app->setEventsManager(container('eventsManager'));
 

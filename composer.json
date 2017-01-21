@@ -47,7 +47,8 @@
         "phalcongelist/breadcrumbs": "^1.2",
         "league/flysystem-dropbox" : "^1.0",
         "egulias/email-validator": "^2.1",
-        "google/recaptcha": "^1.1"
+        "google/recaptcha": "^1.1",
+        "filp/whoops": "^2.1"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
