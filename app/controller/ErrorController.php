@@ -111,13 +111,11 @@ class ErrorController extends ControllerBase
 
         if (!is_object($error)) {
             $error = (object) [
-                'type'        => -1,
-                'message'     => $title,
-                'file'        => __FILE__,
-                'line'        => $line,
-                'exception'   => null,
-                'isException' => false,
-                'isError'     => true,
+                'type'    => -1,
+                'message' => $title,
+                'file'    => __FILE__,
+                'line'    => $line,
+                'trace'   => [],
             ];
         }
 

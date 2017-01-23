@@ -48,7 +48,7 @@ return [
         'libraryDir'     => app_path('library') . DIRECTORY_SEPARATOR,
         'staticBaseUri'  => env('APP_STATIC_URL'),
         'baseUri'        => env('APP_BASE_URI'),
-        'debug'          => env('APP_DEBUG'),
+        'debug'          => env('APP_DEBUG', false),
     ],
 
     'volt' => [

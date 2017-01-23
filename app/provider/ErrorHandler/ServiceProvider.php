@@ -71,7 +71,7 @@ class ServiceProvider extends AbstractServiceProvider
 
                 switch ($mode) {
                     case 'normal':
-                        if (environment('development')) {
+                        if (env('APP_DEBUG', false)) {
                             $run->pushHandler(singleton("{$service}.prettyPageHandler"));
                         } else {
                             $run->pushHandler(singleton("{$service}.errorPageHandler"));

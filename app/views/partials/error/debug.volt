@@ -5,8 +5,6 @@
             File: <code>{{ error.file }}</code><br>
             Line: <code>{{ error.line }}</code>
         </p>
-        {%- if error.isException -%}
-            <pre>{{ error.exception.getTraceAsString() }}</pre>
-        {%- endif -%}
+        <pre>{{ dump(error.trace) }}</pre>
     </div>
 {%- endif -%}
