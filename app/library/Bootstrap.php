@@ -18,7 +18,6 @@
 namespace Phosphorum;
 
 use Phalcon\Di;
-use Dotenv\Dotenv;
 use Phalcon\DiInterface;
 use Phosphorum\Provider;
 use InvalidArgumentException;
@@ -55,22 +54,13 @@ class Bootstrap
     private $environment;
 
     /**
-     * The base application path.
-     * @var string
-     */
-    private $basePath;
-
-    /**
      * Bootstrap constructor.
      *
      * @param string $mode The application mode: "normal", "cli", "api".
      */
     public function __construct($mode = 'normal')
     {
-        $this->basePath = dirname(app_path());
         $this->mode = $mode;
-
-        (new Dotenv($this->basePath))->load();
 
         $this->di = new FactoryDefault();
 
@@ -157,16 +147,6 @@ class Bootstrap
     public function getMode()
     {
         return $this->mode;
-    }
-
-    /**
-     * Gets the base application path.
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        return $this->basePath;
     }
 
     /**

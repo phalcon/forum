@@ -27,3 +27,10 @@ define('APP_START_MEMORY', memory_get_usage());
 
 // Register The Composer Auto Loader
 require dirname(__DIR__) . '/vendor/autoload.php';
+
+// Load environment
+try {
+    (new Dotenv\Dotenv(dirname(app_path())))->load();
+} catch (Dotenv\Exception\InvalidPathException $e) {
+    // Skip
+}
