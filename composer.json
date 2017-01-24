@@ -75,7 +75,8 @@
             "Phosphorum\\Listener\\": "app/listener"
         },
         "files": [
-            "bootstrap/helpers.php"
+            "bootstrap/helpers.php",
+            "bootstrap/error_polyfill.php"
         ]
     },
     "autoload-dev": {

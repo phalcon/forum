@@ -18,6 +18,7 @@
 namespace Phosphorum\Exception\Handler;
 
 use Whoops\Handler\Handler;
+use Whoops\Exception\Formatter;
 
 /**
  * Phosphorum\Exception\Handler\ErrorPageHandler
@@ -57,26 +58,19 @@ class ErrorPageHandler extends Handler
                 return Handler::DONE;
         }
 
-        $this->renderErrorPage($exception);
+        $this->renderErrorPage();
 
         return Handler::QUIT;
     }
 
-    private function renderErrorPage($exception)
+    private function renderErrorPage()
     {
         $config     = singleton('config')->error;
         $dispatcher = singleton('dispatcher');
         $view       = singleton('view');
         $response   = singleton('response');
 
-        $error = (object) [
-            'type'        => $exception->getCode(),
-            'message'     => $exception->getMessage(),
-            'file'        => $exception->getFile(),
-            'line'        => $exception->getLine(),
-            'isException' => true,
-            'exception'   => $exception,
-        ];
+        $error = (object) Formatter::formatExceptionAsDataArray($this->getInspector(), true);
 
         $dispatcher->setControllerName($config->controller);
         $dispatcher->setActionName($config->action);
