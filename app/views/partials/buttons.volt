@@ -3,7 +3,7 @@
     <div class="btn-group">
         <a class="btn btn-sm btn-default" href="https://www.patreon.com/bePatron?u={{ config.patreon.id }}" target="_blank">
             <span class="p-ico"></span>
-            Patron
+            Support Us
         </a>
     </div>
     {% endif %}
