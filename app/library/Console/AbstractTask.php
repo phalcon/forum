@@ -139,6 +139,6 @@ class AbstractTask extends Injectable implements TaskInterface
         $this->output = new Stream('php://stdout');
         $this->output->setFormatter(new Line('%message%'));
 
-        $this->basePath = container('bootstrap')->getBasePath();
+        $this->basePath = dirname(app_path());
     }
 }
