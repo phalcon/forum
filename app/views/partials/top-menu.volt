@@ -68,21 +68,8 @@
                     <li>{{ link_to('logout', '<span class="octicon octicon-sign-out"></span>', 'title': 'Logout') }}</li>
                 {%- endif -%}
             </ul>
-            {%- if session.get('identity') -%}
-                {{- link_to(
-                    'post/discussion',
-                    '<span class="octicon octicon-megaphone"></span> Start a Discussion',
-                    'class': 'btn btn-sm btn-default navbar-btn navbar-right',
-                    'rel': 'nofollow'
-                ) -}}
-            {%- else -%}
-                {{- link_to(
-                    'login/oauth/authorize',
-                    '<span class="octicon octicon-octoface"></span> Log In with Github',
-                    'class': 'btn btn-sm btn-default navbar-btn navbar-right',
-                    'rel': 'nofollow'
-                ) -}}
-            {%- endif -%}
+
+            {{ partial("partials/buttons", ["config": this.config]) }}
         </div>
     </div>
 </nav>
