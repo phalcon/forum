@@ -17,8 +17,6 @@
 
 namespace Phosphorum\Controller;
 
-use Phalcon\Error\Error;
-
 /**
  * Phosphorum\Controller\Controller
  *
@@ -27,7 +25,7 @@ use Phalcon\Error\Error;
 class ErrorController extends ControllerBase
 {
     /**
-     * @var \Phalcon\Error\Error
+     * @var \stdClass
      */
     protected $error;
 
@@ -111,16 +109,14 @@ class ErrorController extends ControllerBase
     {
         $error = $this->error;
 
-        if (!$error instanceof Error) {
-            $error = new Error([
-                'type'        => -1,
-                'message'     => $title,
-                'file'        => __FILE__,
-                'line'        => $line,
-                'exception'   => null,
-                'isException' => false,
-                'isError'     => true,
-            ]);
+        if (!is_object($error)) {
+            $error = (object) [
+                'type'    => -1,
+                'message' => $title,
+                'file'    => __FILE__,
+                'line'    => $line,
+                'trace'   => [],
+            ];
         }
 
         $this->tag->setTitle($title);

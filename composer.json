@@ -47,7 +47,8 @@
         "phalcongelist/breadcrumbs": "^1.2",
         "league/flysystem-dropbox" : "^1.0",
         "egulias/email-validator": "^2.1",
-        "google/recaptcha": "^1.1"
+        "google/recaptcha": "^1.1",
+        "filp/whoops": "^2.1"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
@@ -63,6 +64,20 @@
     "suggest": {
         "ext-yaml": "*",
         "ext-intl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phosphorum\\": "app/library",
+            "Phosphorum\\Model\\": "app/model",
+            "Phosphorum\\Task\\": "app/task",
+            "Phosphorum\\Controller\\": "app/controller",
+            "Phosphorum\\Provider\\": "app/provider",
+            "Phosphorum\\Listener\\": "app/listener"
+        },
+        "files": [
+            "bootstrap/helpers.php",
+            "bootstrap/error_polyfill.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

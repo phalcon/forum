@@ -149,9 +149,6 @@ class Sitemap extends AbstractTask
      */
     protected function createSitemapDocument()
     {
-        $expireDate = new DateTime('now', new DateTimeZone('UTC'));
-        $expireDate->modify('+1 day');
-
         $sitemap = new DOMDocument('1.0', 'UTF-8');
         $sitemap->formatOutput = true;
 

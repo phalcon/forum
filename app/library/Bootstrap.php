@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -18,12 +18,10 @@
 namespace Phosphorum;
 
 use Phalcon\Di;
-use Dotenv\Dotenv;
 use Phalcon\DiInterface;
 use Phosphorum\Provider;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Error\Handler as ErrorHandler;
 use Phosphorum\Console\Application as Console;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phosphorum\Provider\ServiceProviderInterface;
@@ -56,21 +54,13 @@ class Bootstrap
     private $environment;
 
     /**
-     * The base application path.
-     * @var string
-     */
-    private $basePath;
-
-    /**
      * Bootstrap constructor.
      *
      * @param string $mode The application mode: "normal", "cli", "api".
      */
     public function __construct($mode = 'normal')
     {
-        $this->basePath = dirname(app_path());
-
-        (new Dotenv($this->basePath))->load();
+        $this->mode = $mode;
 
         $this->di = new FactoryDefault();
 
@@ -82,17 +72,16 @@ class Bootstrap
          * These services should be registered first
          */
         $this->initializeServiceProvider(new Provider\EventsManager\ServiceProvider($this->di));
-
-        $this->createInternalApplication($mode);
         $this->setupEnvironment();
+        $this->initializeServiceProvider(new Provider\ErrorHandler\ServiceProvider($this->di));
+
+        $this->createInternalApplication();
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');
         if (is_array($providers)) {
             $this->initializeServiceProviders($providers);
         }
-
-        ErrorHandler::register();
 
         $this->app->setEventsManager(container('eventsManager'));
 
@@ -161,16 +150,6 @@ class Bootstrap
     }
 
     /**
-     * Gets the base application path.
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        return $this->basePath;
-    }
-
-    /**
      * Initialize the Service Providers.
      *
      * @param  string[] $providers
@@ -204,15 +183,11 @@ class Bootstrap
     /**
      * Create internal application to handle requests.
      *
-     * @param  string $mode The application mode.
-     *
      * @throws InvalidArgumentException
      */
-    protected function createInternalApplication($mode)
+    protected function createInternalApplication()
     {
-        $this->mode = $mode;
-
-        switch ($mode) {
+        switch ($this->mode) {
             case 'normal':
                 $this->app = new MvcApplication($this->di);
                 break;
@@ -227,7 +202,7 @@ class Bootstrap
                 throw new InvalidArgumentException(
                     sprintf(
                         'Invalid application mode. Expected either "normal" or "cli" or "api". Got "%s".',
-                        is_scalar($mode) ? $mode : var_export($mode, true)
+                        is_scalar($this->mode) ? $this->mode : var_export($this->mode, true)
                     )
                 );
         }

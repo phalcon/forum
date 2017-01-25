@@ -20,7 +20,6 @@ namespace Phosphorum\Provider;
 use LogicException;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\User\Component;
-use Phosphorum\Provider\ServiceProviderInterface;
 
 /**
  * Phosphorum\Provider\AbstractServiceProvider
