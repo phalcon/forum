@@ -8,7 +8,7 @@ $I = new ConsoleTester($scenario);
 $I->wantToTest('getting help from command line');
 
 $output=<<<OUT
-Phosphorum 3.2.0
+Phosphorum 3.2.1
 Usage: php forum [command <arguments>] [--help | -H] [--version | -V] [--list]
 OUT;
 
