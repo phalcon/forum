@@ -24,19 +24,9 @@ namespace Phosphorum\Controller;
  */
 class ErrorController extends ControllerBase
 {
-    /**
-     * @var \stdClass
-     */
-    protected $error;
-
     public function initialize()
     {
-        if ($this->dispatcher->hasParam('error')) {
-            $this->error = $this->dispatcher->getParam('error');
-        }
-
         $this->view->setVars([
-            'debug'   => container('config')->application->debug,
             'support' => container('config')->site->support,
         ]);
     }
@@ -107,24 +97,11 @@ class ErrorController extends ControllerBase
 
     protected function createError($title, $code, $message, $line)
     {
-        $error = $this->error;
-
-        if (!is_object($error)) {
-            $error = (object) [
-                'type'    => -1,
-                'message' => $title,
-                'file'    => __FILE__,
-                'line'    => $line,
-                'trace'   => [],
-            ];
-        }
-
         $this->tag->setTitle($title);
         $this->response->setStatusCode($code);
 
         $this->view->setVars([
             'code'    => $code,
-            'error'   => $error,
             'message' => $message,
         ]);
     }

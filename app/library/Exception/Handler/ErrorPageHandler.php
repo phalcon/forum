@@ -18,7 +18,6 @@
 namespace Phosphorum\Exception\Handler;
 
 use Whoops\Handler\Handler;
-use Whoops\Exception\Formatter;
 
 /**
  * Phosphorum\Exception\Handler\ErrorPageHandler
@@ -70,11 +69,8 @@ class ErrorPageHandler extends Handler
         $view       = singleton('view');
         $response   = singleton('response');
 
-        $error = (object) Formatter::formatExceptionAsDataArray($this->getInspector(), true);
-
         $dispatcher->setControllerName($config->controller);
         $dispatcher->setActionName($config->action);
-        $dispatcher->setParams(['error' => $error]);
 
         $view->start();
         $dispatcher->dispatch();
