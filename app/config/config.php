@@ -51,12 +51,6 @@ return [
         'debug'          => env('APP_DEBUG', false),
     ],
 
-    'volt' => [
-        'compiledExt'  => '.php',
-        'separator'    => '_',
-        'forceCompile' => env('APP_DEBUG', true),
-    ],
-
     'mandrillapp' => [
         'secret' => env('MANDRILL_SECRET'),
     ],
