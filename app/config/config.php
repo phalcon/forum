@@ -87,5 +87,7 @@ return [
     'reCaptcha' => [
         'siteKey' => env('RECAPTCHA_KEY'),
         'secret'  => env('RECAPTCHA_SECRET'),
-    ]
+    ],
+
+    'analytics' => env('GOOGLE_ANALYTICS'),
 ];
