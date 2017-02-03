@@ -396,6 +396,7 @@ CREATE TABLE `users` (
   `digest` char(1) DEFAULT 'Y',
   `timezone` varchar(48) DEFAULT NULL,
   `moderator` char(1) DEFAULT 'N',
+  `admin` char(1) DEFAULT 'N',  
   `karma` int(11) DEFAULT NULL,
   `votes` int(10) unsigned DEFAULT NULL,
   `votes_points` int(11) DEFAULT NULL,
