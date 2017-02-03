@@ -20,6 +20,7 @@ namespace Phosphorum\Controller;
 use Phalcon\Mvc\View;
 use Phosphorum\Model\Categories;
 use Phosphorum\Model\TopicTracking;
+use Phosphorum\Mvc\Controller\TokenTrait;
 
 /**
  * Phosphorum\Controller\IndexController
@@ -28,6 +29,9 @@ use Phosphorum\Model\TopicTracking;
  */
 class CategoriesController extends ControllerBase
 {
+
+    use TokenTrait;
+
     /**
      * Shows latest posts by category.
      *
@@ -86,6 +90,45 @@ class CategoriesController extends ControllerBase
             'paginatorUri' => "category/{$category->id}/{$category->slug}",
             'logged'       => $userId
         ]);
+    }
+
+    /**
+     * Add new category
+     */
+    public function createAction()
+    {
+        if ($this->session->get('identity-admin') !== 'Y') {
+            $this->flashSession->error('You must have adminisrator rights');
+            $this->response->redirect();
+            return;
+        }
+
+        if ($this->request->isPost()) {
+            if (!$this->checkTokenPost('create-category')) {
+                $this->response->redirect();
+                return;
+            }
+
+            $name = $this->request->getPost('name', 'trim');
+
+            $category = new Categories([
+                'name' => $name,
+                'slug' => $this->slug->generate($name),
+                'description' => $this->request->getPost('description'),
+                'no_bounty' => $this->request->getPost('no_bounty', 'string', 'N'),
+                'no_digest' => $this->request->getPost('no_digest', 'string', 'N'),
+            ]);
+
+            if ($category->save()) {
+
+                $this->response->redirect("discussion/{$category->id}/{$category->slug}");
+                return;
+            }
+            
+            $this->flashSession->error(join('<br>', $category->getMessages()));
+        }
+
+        $this->tag->setTitle('Creation of Category');
     }
 
     /**

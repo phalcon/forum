@@ -286,6 +286,14 @@ $router->add(
 );
 
 $router->add(
+    '/add-new-category',
+    [
+        'controller' => 'categories',
+        'action'     => 'create'
+    ]
+);
+
+$router->add(
     '/reload-categories',
     [
         'controller' => 'categories',

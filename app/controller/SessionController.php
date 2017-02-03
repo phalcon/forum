@@ -159,6 +159,7 @@ class SessionController extends ControllerBase
             $this->session->set('identity-timezone', $user->timezone);
             $this->session->set('identity-theme', $user->theme);
             $this->session->set('identity-moderator', $user->moderator);
+            $this->session->set('identity-admin', $user->admin);
             $this->session->set('identity-karma', $user->karma);
 
             if ($user->getOperationMade() == Model::OP_CREATE) {
@@ -247,6 +248,7 @@ class SessionController extends ControllerBase
         $this->session->remove('identity');
         $this->session->remove('identity-name');
         $this->session->remove('identity-moderator');
+        $this->session->remove('identity-admin');
         $this->session->remove('identity-gravatar');
         $this->session->remove('identity-email');
         $this->session->remove('identity-theme');
