@@ -60,6 +60,15 @@
                             {%- endfor -%}
                         {%- endif -%}
                         {%- endcache -%}
+                        {%- if session.get('identity-admin') == 'Y' -%}
+                               <li>
+                                    {{-
+                                    link_to('add-new-category',
+                                    '<span class="label label-default pull-right"><i class="octicon octicon-plus"></i></span> add new category' )
+                                    -}}
+                                </li>
+                        {% endif %}
+                        
                     </ul>
                 </li>
                 <li>{{ link_to('help', '<span class="octicon octicon-info"></span>', 'title': 'Help') }}</li>
