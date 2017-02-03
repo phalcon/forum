@@ -141,5 +141,4 @@ class CategoriesController extends ControllerBase
         $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
         $this->view->getCache()->delete('sidebar');
     }
-
 }
