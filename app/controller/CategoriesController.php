@@ -97,8 +97,11 @@ class CategoriesController extends ControllerBase
      */
     public function createAction()
     {
-        if ($this->session->get('identity-admin') !== 'Y') {           
-            $this->response->redirect('/404');
+        if ($this->session->get('identity-admin') !== 'Y') {
+            $this->dispatcher->forward([
+                'controller' => 'error',
+                'action' => 'route404'
+            ]);
             return;
         }
 
@@ -122,7 +125,7 @@ class CategoriesController extends ControllerBase
                 $this->response->redirect("discussion/{$category->id}/{$category->slug}");
                 return;
             }
-            
+
             $this->flashSession->error(join('<br>', $category->getMessages()));
         }
 
@@ -138,4 +141,5 @@ class CategoriesController extends ControllerBase
         $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
         $this->view->getCache()->delete('sidebar');
     }
+
 }
