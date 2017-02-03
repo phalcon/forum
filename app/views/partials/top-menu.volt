@@ -36,12 +36,12 @@
                 </li>
                 <li>{{ link_to('activity', '<span class="octicon octicon-eye"></span>', 'title': 'Activity') }}</li>
                 {%- if session.get('identity') -%}
-                    <li class="notification-container">
-                        {{- link_to('notifications', '<span class="octicon octicon-globe"></span>', 'title': 'Notifications') -}}
-                        {%- if notifications.has() -%}
-                            <span class="notification-counter">{{ notifications.getNumber() }}</span>
-                        {%- endif -%}
-                    </li>
+                <li class="notification-container">
+                    {{- link_to('notifications', '<span class="octicon octicon-globe"></span>', 'title': 'Notifications') -}}
+                    {%- if notifications.has() -%}
+                    <span class="notification-counter">{{ notifications.getNumber() }}</span>
+                    {%- endif -%}
+                </li>
                 {%- endif -%}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle categories-link" data-toggle="dropdown" id="dropdownCategories" role="button" aria-haspopup="true" aria-expanded="false" title="Categories">
@@ -50,25 +50,33 @@
                     <ul class="dropdown-menu categories-dropdown" aria-labelledby="dropdownCategories">
                         {%- cache "sidebar" -%}
                         {%- if categories is defined -%}
-                            {%- for category in categories -%}
-                                <li>
-                                    {{-
-                                    link_to('category/' ~ category.id ~ '/' ~ category.slug,
+                        {%- for category in categories -%}
+                        <li>
+                            {{- 
+                                link_to('category/' ~ category.id ~ '/' ~ category.slug,
                                     '<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ category.name)
-                                    -}}
-                                </li>
-                            {%- endfor -%}
-                        {%- endif -%}
+                            -}}
+                        </li>
+                        {%- endfor -%}
+                        {%- endif -%}                          
                         {%- endcache -%}
+                        {%- if session.get('identity-admin') == 'Y' -%}
+                        <li>
+                            {{-
+                                link_to('category/add',
+                                    '<span class="label label-default pull-right"><i class="octicon octicon-plus"></i></span> add new category' )
+                            -}}
+                        </li>
+                        {% endif %}
+
                     </ul>
                 </li>
                 <li>{{ link_to('help', '<span class="octicon octicon-info"></span>', 'title': 'Help') }}</li>
                 {%- if session.get('identity') -%}
-                    <li>{{ link_to('settings', '<span class="octicon octicon-tools"></span>', 'title': 'Settings') }}</li>
-                    <li>{{ link_to('logout', '<span class="octicon octicon-sign-out"></span>', 'title': 'Logout') }}</li>
+                <li>{{ link_to('settings', '<span class="octicon octicon-tools"></span>', 'title': 'Settings') }}</li>
+                <li>{{ link_to('logout', '<span class="octicon octicon-sign-out"></span>', 'title': 'Logout') }}</li>
                 {%- endif -%}
             </ul>
-
             {{ partial("partials/buttons", ["config": this.config]) }}
         </div>
     </div>

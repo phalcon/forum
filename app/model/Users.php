@@ -66,6 +66,8 @@ class Users extends Model
     public $timezone;
 
     public $moderator;
+    
+    public $admin;
 
     public $karma;
 
