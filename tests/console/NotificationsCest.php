@@ -116,7 +116,7 @@ class NotificationsCest
 
         $this->mail->seeHtmlBodyForReply($message['body'], $expected);
 
-        $I->assertEquals("[{$config->mailer->from->name} Forum] some-title-here", $message['subject']);
+        $I->assertEquals("[{$config->site->name}] some-title-here", $message['subject']);
         $I->assertEquals([$config->mailer->from->email => $guest['name']], $message['from']);
         $I->assertEquals([$author['email'] => $author['name']], $message['to']);
     }

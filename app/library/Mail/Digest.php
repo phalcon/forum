@@ -136,7 +136,7 @@ class Digest extends Injectable
 
         foreach ($users as $email => $name) {
             try {
-                $message = new \Swift_Message("[{$this->config->site->name} Forum] " . $subject);
+                $message = new \Swift_Message("[{$this->config->site->name}] " . $subject);
                 $message->setTo([$email => $name]);
                 $message->setFrom([$fromEmail => $fromName]);
 
