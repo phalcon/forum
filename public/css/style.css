@@ -1,9 +1,10 @@
+@charset "UTF-8";
 
 /*
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -13,7 +14,6 @@
   | to license@phalconphp.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
 */
-
 
 html {
     font-size: 16px;
