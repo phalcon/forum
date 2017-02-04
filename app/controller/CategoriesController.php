@@ -20,6 +20,7 @@ namespace Phosphorum\Controller;
 use Phalcon\Mvc\View;
 use Phosphorum\Model\Categories;
 use Phosphorum\Model\TopicTracking;
+use Phosphorum\Exception\HttpException;
 use Phosphorum\Mvc\Controller\TokenTrait;
 
 /**
@@ -100,12 +101,7 @@ class CategoriesController extends ControllerBase
     public function createAction()
     {
         if ($this->session->get('identity-admin') !== 'Y') {
-            $this->dispatcher->forward([
-                'controller' => 'error',
-                'action'     => 'route404',
-            ]);
-
-            return;
+            throw new HttpException("Only administrators can create categories", 404);
         }
 
         if ($this->request->isPost()) {
