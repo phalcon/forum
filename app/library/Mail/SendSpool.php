@@ -113,7 +113,7 @@ class SendSpool extends Injectable
         $mailer = container('mailer');
         $config = container('config');
 
-        $params['subject'] = "[{$config->site->name} Forum] {$post->title}";
+        $params['subject'] = "[{$config->site->name}] {$post->title}";
 
         if (!$contents = $this->prepareContent('mail/notification', $params)) {
             $notificationService->markAsInvalid($notification);

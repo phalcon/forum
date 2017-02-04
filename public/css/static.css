@@ -1,4 +1,4 @@
-<?php
+@charset "UTF-8";
 
 /*
   +------------------------------------------------------------------------+
@@ -15,14 +15,39 @@
   +------------------------------------------------------------------------+
 */
 
-$uri = urldecode(
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
-);
-
-if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
-    return false;
+body {
+    text-align: center; padding: 20px;
 }
 
-$_GET['_url'] = $_SERVER['REQUEST_URI'];
 
-require_once __DIR__ . '/public/index.php';
+h1 {
+    font-size: 50px;
+}
+
+body {
+    font: 20px Helvetica, sans-serif;
+    color: #333;
+}
+
+article {
+    display: block;
+    text-align: left;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+a {
+    color: #dc8100;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    body {
+        padding-top: 150px;
+    }
+}
