@@ -38,6 +38,8 @@ class VoltFunctions
     {
         switch ($name) {
             case 'number_format':
+            case 'join':
+                return 'implode(' . $arguments . ')';
             case 'chr':
                 return $name . '(' . $arguments . ')';
             case 'gravatar':
