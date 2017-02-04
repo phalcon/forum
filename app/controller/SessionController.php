@@ -52,9 +52,9 @@ class SessionController extends ControllerBase
         if ($path) {
             $this->router->handle($path);
             return $this->router->wasMatched() ? $this->response->redirect($path, true) : $this->indexRedirect();
-        } else {
-            return $this->indexRedirect();
         }
+
+        return $this->indexRedirect();
     }
 
     /**
