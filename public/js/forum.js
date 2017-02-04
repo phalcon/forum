@@ -727,7 +727,8 @@ var Forum = {
 			$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
 		});
 
-		if ($('textarea').length) {
+		var textarea = $('textarea');
+		if (textarea.length && !textarea.hasClass('no-editor')) {
 			var editor = new Editor();
 			editor.render();
 		}

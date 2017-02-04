@@ -37,8 +37,10 @@ class VoltFunctions
     public function compileFunction($name, $arguments)
     {
         switch ($name) {
-            case 'number_format':
+            case 'join':
+                return 'implode(' . $arguments . ')';
             case 'chr':
+            case 'number_format':
                 return $name . '(' . $arguments . ')';
             case 'gravatar':
                 return 'container("gravatar")->getAvatar(' . $arguments . ')';
