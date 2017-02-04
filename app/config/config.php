@@ -28,6 +28,10 @@ return [
         'support'     => env('APP_SUPPORT_EMAIL'),
     ],
 
+    'social' => [
+        'twitter_name' => env('SOCIAL_TWITTER_NAME'),
+    ],
+
     'theme' => [
         'use_topics_icon'     => env('THEME_TOPICS_ICON'),
         'inactive_topic_icon' => '/icon/new_none.png',

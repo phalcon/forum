@@ -28,8 +28,10 @@
     <meta property="og:image" content="{{ config.site.url ~ '/img/logo.png' }}">
     <meta name="twitter:image" content="{{ config.site.url ~ '/img/logo.png' }}">
     <meta name="twitter:image:alt" content="{{ config.site.name }}">
-    {#- @todo: introduce Twitter profile here -#}
-    <meta name="twitter:site" content="@phalconphp">
+    {%- if config.social is defined and not(config.social.twitter_name is empty) -%}
+        <meta name="twitter:site" content="@{{ config.social.twitter_name }}">
+        <meta name="twitter:creator" content="@{{ config.social.twitter_name }}">
+    {%- endif -%}
 {%- endif -%}
 
 <meta property="og:title" content="{{ get_title(false) ~ ' - ' ~ config.site.name }}">
