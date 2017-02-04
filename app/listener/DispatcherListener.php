@@ -20,6 +20,7 @@ namespace Phosphorum\Listener;
 use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Dispatcher\Exception;
+use Phosphorum\Exception\PhosphorumException;
 
 /**
  * Phosphorum\Listener\DispatcherListener
@@ -47,6 +48,29 @@ class DispatcherListener extends AbstractListener
                     $dispatcher->forward([
                         'controller' => 'error',
                         'action'     => 'route400',
+                    ]);
+
+                    break;
+                default:
+                    $code = 404;
+                    $dispatcher->forward([
+                        'controller' => 'error',
+                        'action'     => 'route404',
+                    ]);
+            }
+
+            singleton('logger')->error("Dispatching [$code]: " . $exception->getMessage());
+
+            return false;
+        }
+
+        if ($exception instanceof PhosphorumException) {
+            switch ($exception->getCode()) {
+                case 404:
+                    $code = 404;
+                    $dispatcher->forward([
+                        'controller' => 'error',
+                        'action'     => 'route404',
                     ]);
 
                     break;
