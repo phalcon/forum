@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            {{ link_to('', config.site.name, 'class': 'navbar-brand', 'title': 'Go to main page') }}
+            {{ link_to('', config.site.project, 'class': 'navbar-brand', 'title': 'Go to main page') }}
         </div>
 
         <div class="collapse navbar-collapse" id="forum-navbar-collapse">
