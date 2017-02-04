@@ -285,6 +285,9 @@ $router->add(
     ]
 );
 
+$router->add('/category/add', 'Categories::create', ['GET', 'POST'])
+    ->setName('category-create');
+
 $router->add(
     '/category/add',
     [
