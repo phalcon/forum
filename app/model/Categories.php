@@ -65,14 +65,6 @@ class Categories extends CacheableModel
 
     public function initialize()
     {
-        $this->hasMany(
-            'id',
-            'Phosphorum\Model\Posts',
-            'categories_id',
-            [
-                'alias'    => 'posts',
-                'reusable' => true
-            ]
-        );
+        $this->hasMany('id', Posts::class, 'categories_id', ['alias' => 'posts', 'reusable' => true]);
     }
 }
