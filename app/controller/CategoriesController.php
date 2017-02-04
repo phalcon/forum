@@ -44,6 +44,7 @@ class CategoriesController extends ControllerBase
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
             $this->response->redirect();
+
             return;
         }
 
@@ -66,13 +67,14 @@ class CategoriesController extends ControllerBase
         $posts = $itemBuilder
             ->where('p.categories_id = ?0 AND p.deleted = 0')
             ->orderBy('p.created_at DESC')
-            ->offset((int) $offset)
+            ->offset((int)$offset)
             ->getQuery()
             ->execute([$categoryId]);
 
         if (!count($posts)) {
             $this->flashSession->notice('There are no posts in category: ' . $category->name);
             $this->response->redirect();
+
             return;
         }
 
@@ -86,9 +88,9 @@ class CategoriesController extends ControllerBase
             'posts'        => $posts,
             'totalPosts'   => $totalPosts,
             'currentOrder' => null,
-            'offset'       => (int) $offset,
+            'offset'       => (int)$offset,
             'paginatorUri' => "category/{$category->id}/{$category->slug}",
-            'logged'       => $userId
+            'logged'       => $userId,
         ]);
     }
 
@@ -100,36 +102,39 @@ class CategoriesController extends ControllerBase
         if ($this->session->get('identity-admin') !== 'Y') {
             $this->dispatcher->forward([
                 'controller' => 'error',
-                'action' => 'route404'
+                'action'     => 'route404',
             ]);
+
             return;
         }
 
         if ($this->request->isPost()) {
             if (!$this->checkTokenPost('create-category')) {
                 $this->response->redirect();
+
                 return;
             }
 
             $name = $this->request->getPost('name', 'trim');
 
             $category = new Categories([
-                'name' => $name,
-                'slug' => $this->slug->generate($name),
+                'name'        => $name,
+                'slug'        => $this->slug->generate($name),
                 'description' => $this->request->getPost('description'),
-                'no_bounty' => $this->request->getPost('no_bounty', 'string', 'N'),
-                'no_digest' => $this->request->getPost('no_digest', 'string', 'N'),
+                'no_bounty'   => $this->request->getPost('no_bounty', 'string', 'N'),
+                'no_digest'   => $this->request->getPost('no_digest', 'string', 'N'),
             ]);
 
             if ($category->save()) {
                 $this->response->redirect("discussion/{$category->id}/{$category->slug}");
+
                 return;
             }
 
             $this->flashSession->error(join('<br>', $category->getMessages()));
         }
 
-        $this->tag->setTitle('Creation of Category');
+        $this->tag->setTitle('New Category');
     }
 
     /**
