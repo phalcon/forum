@@ -122,12 +122,20 @@ class CategoriesController extends ControllerBase
             ]);
 
             if ($category->save()) {
-                $this->response->redirect("discussion/{$category->id}/{$category->slug}");
+                $this->response->redirect("category/{$category->id}/{$category->slug}");
 
                 return;
             }
 
-            $this->flashSession->error(join('<br>', $category->getMessages()));
+            $messages = $category->getMessages();
+            if (count($messages)) {
+                $errors = [];
+                array_map(function ($message) use (&$errors) {
+                    $errors[$message->getField()][] = $message->getMessage();
+                }, $messages);
+
+                $this->view->setVar('errors', $errors);
+            }
         }
 
         $this->tag->setTitle('New Category');
