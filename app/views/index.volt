@@ -8,6 +8,7 @@
     {%- set url = url(), theme = session.get('identity-theme') -%}
 
     {%- include "include/meta.volt" -%}
+    {%- include "include/icons.volt" -%}
 
     {%- if (not(config.analytics is empty)) -%}
         {%- include "include/analytics.volt" -%}
