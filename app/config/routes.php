@@ -289,14 +289,6 @@ $router->add('/category/add', 'Categories::create', ['GET', 'POST'])
     ->setName('category-create');
 
 $router->add(
-    '/category/add',
-    [
-        'controller' => 'categories',
-        'action'     => 'create'
-    ]
-);
-
-$router->add(
     '/reload-categories',
     [
         'controller' => 'categories',
