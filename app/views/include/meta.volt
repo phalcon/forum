@@ -5,6 +5,9 @@
 <meta name=generator content="{{ config.site.name }}">
 <meta name="description" content="{{ config.site.description }}">
 <meta name="keyword" content="{{ config.site.keywords }}">
+<meta name="application-name" content="{{ config.site.name }}">
+
+<meta http-equiv="x-dns-prefetch-control" content="off">
 
 {%- if actionName is not "index" and post is defined and not(post is empty) -%}
     <meta name="author" content="{{ post.user.name }}">
