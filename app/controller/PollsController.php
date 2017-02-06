@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -17,13 +17,13 @@
 
 namespace Phosphorum\Controller;
 
+use Phalcon\Http\Response;
 use Phosphorum\Model\Posts;
-use Phosphorum\Model\PostsPollOptions;
-use Phosphorum\Model\PostsPollVotes;
 use Phosphorum\Model\Users;
 use Phosphorum\Model\Karma;
-use Phosphorum\Mvc\Controller\TokenTrait;
-use Phalcon\Http\Response;
+use Phosphorum\Model\PostsPollVotes;
+use Phosphorum\Mvc\Traits\TokenTrait;
+use Phosphorum\Model\PostsPollOptions;
 
 /**
  * Polls Controller
