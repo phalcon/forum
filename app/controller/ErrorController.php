@@ -28,6 +28,7 @@ class ErrorController extends ControllerBase
     {
         $this->view->setVars([
             'support' => container('config')->site->support,
+            'noindex' => true,
         ]);
     }
 
