@@ -7,7 +7,12 @@
 <head>
     {%- set url = url(), theme = session.get('identity-theme') -%}
 
-    {%- include "include/meta.volt" -%}
+    {%- if noindex is defined and noindex is true -%}
+        {%- include "include/noindex-meta.volt" -%}
+    {%- else -%}
+        {%- include "include/meta.volt" -%}
+    {%- endif -%}
+
     {%- include "include/icons.volt" -%}
 
     {%- if (not(config.analytics is empty)) -%}
