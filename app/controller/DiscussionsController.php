@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -33,10 +33,10 @@ use Phalcon\Http\ResponseInterface;
 use Phosphorum\Model\PostsBounties;
 use Phosphorum\Model\TopicTracking;
 use Phosphorum\Model\PostsPollVotes;
+use Phosphorum\Mvc\Traits\TokenTrait;
 use Phosphorum\Model\PostsPollOptions;
 use Phosphorum\Model\PostsSubscribers;
 use Phalcon\Paginator\Pager\Range\Sliding;
-use Phosphorum\Mvc\Controller\TokenTrait;
 use Phosphorum\Model\ActivityNotifications;
 use Phalcon\Paginator\Pager\Layout\Bootstrap;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
