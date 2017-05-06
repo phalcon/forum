@@ -48,7 +48,6 @@ class ServiceProvider extends AbstractServiceProvider
         'annotations',
         'email',
         'mailer',
-        'patreon',
         'config',
     ];
 
