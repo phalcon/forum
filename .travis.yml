@@ -26,7 +26,6 @@ cache:
 before_install:
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
-  # - ( bash tests/_ci/install_prereqs.sh )
   - if [ ! -f "$HOME/cphalcon/tests/_ci/phalcon.ini" ]; then git clone -q --depth=1 https://github.com/phalcon/cphalcon.git $HOME/cphalcon >/dev/null 2>&1; fi;
 
 install:
