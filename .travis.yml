@@ -1,11 +1,12 @@
 language: php
 
-sudo: required
+sudo: false
 dist: trusty
 
 php:
   - 5.6
   - 7.0
+  - 7.1
 
 services:
   - memcached
@@ -20,24 +21,19 @@ cache:
   directories:
     - vendor
     - $HOME/.composer/cache
-
-env:
-  global:
-    - PATH="$PATH:~/bin"
-    - PHALCON_VERSION="v3.1.1"
+    - $HOME/cphalcon
 
 before_install:
   - phpenv config-rm xdebug.ini || true
-  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
-  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
-  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - ( bash tests/_ci/install_prereqs.sh )
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
+  # - ( bash tests/_ci/install_prereqs.sh )
+  - if [ ! -f "$HOME/cphalcon/tests/_ci/phalcon.ini" ]; then git clone -q --depth=1 https://github.com/phalcon/cphalcon.git $HOME/cphalcon >/dev/null 2>&1; fi;
 
 install:
-  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION} >/dev/null 2>&1
-  - (cd cphalcon/build; bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config))
-  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+  - (cd $HOME/cphalcon/build; bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config))
+  - phpenv config-add $HOME/cphalcon/tests/_ci/phalcon.ini
+  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/memcached.ini
+  - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
   # Create database and user
@@ -47,7 +43,6 @@ before_script:
   - cat schemas/forum.sql | mysql -u root phosphorum
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
-  - sudo ulimit -c unlimited -S || true
 
 script:
   - vendor/bin/phpcs
@@ -68,7 +63,6 @@ notifications:
 addons:
   apt:
     packages:
-      - re2c
       - beanstalkd
       - mysql-server-5.6
       - mysql-client-core-5.6
