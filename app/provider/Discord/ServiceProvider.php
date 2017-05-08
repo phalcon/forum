@@ -15,52 +15,36 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Queue;
+namespace Phosphorum\Provider\Discord;
+
+use Phosphorum\Discord\DiscordComponent;
+use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
- * Phosphorum\Provider\Queue\Fake
- *
- * @package Phosphorum\Provider\Queue
+ * Class ServiceProvider
+ * @package Phosphorum\Provider\Discord
  */
-class Fake
+class ServiceProvider extends AbstractServiceProvider
 {
-    protected $queue;
+    /**
+     * @var string
+     */
+    protected $serviceName = 'discord';
 
     /**
-     * Server constructor.
+     * {@inheritdoc}
      *
-     * @param mixed $queue
+     * @return void
      */
-    public function __construct($queue)
+    public function register()
     {
-        $this->queue = $queue;
-    }
+        $this->di->set(
+            $this->serviceName,
+            function () {
+                $config = container('config')->discord;
 
-    /**
-     * Simulates putting a job in the queue.
-     *
-     * @param  array $job
-     * @return bool
-     */
-    public function put(array $job)
-    {
-        singleton('logger')->debug('Putting job: ' . json_encode($job));
-
-        return true;
-    }
-
-    /**
-     * Simulates retrieving messages.
-     *
-     * @return bool
-     */
-    public function peekReady()
-    {
-        return false;
-    }
-
-    public function choose($tube)
-    {
-        singleton('logger')->debug('Chosen tube: $tube');
+                return new DiscordComponent($config);
+            }
+        );
     }
 }

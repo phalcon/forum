@@ -35,7 +35,7 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "ext-phalcon": "~3.0",
+        "ext-phalcon": "~3.2",
         "vlucas/phpdotenv": "^2.4",
         "aws/aws-sdk-php": "^2.5",
         "guzzlehttp/guzzle": ">=4.1.4 <7.0",
@@ -48,7 +48,8 @@
         "league/flysystem-dropbox" : "^1.0",
         "egulias/email-validator": "^2.1",
         "google/recaptcha": "^1.1",
-        "filp/whoops": "^2.1"
+        "filp/whoops": "^2.1",
+        "team-reflex/discord-php": "^4.0"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
