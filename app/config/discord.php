@@ -15,52 +15,13 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Queue;
-
-/**
- * Phosphorum\Provider\Queue\Fake
- *
- * @package Phosphorum\Provider\Queue
- */
-class Fake
-{
-    protected $queue;
-
-    /**
-     * Server constructor.
-     *
-     * @param mixed $queue
-     */
-    public function __construct($queue)
-    {
-        $this->queue = $queue;
-    }
-
-    /**
-     * Simulates putting a job in the queue.
-     *
-     * @param  array $job
-     * @return bool
-     */
-    public function put(array $job)
-    {
-        singleton('logger')->debug('Putting job: ' . json_encode($job));
-
-        return true;
-    }
-
-    /**
-     * Simulates retrieving messages.
-     *
-     * @return bool
-     */
-    public function peekReady()
-    {
-        return false;
-    }
-
-    public function choose($tube)
-    {
-        singleton('logger')->debug('Chosen tube: $tube');
-    }
-}
+return [
+    'token_bot'  => env('DISCORD_BOT_TOKEN', null),
+    'message'    => [
+        'new_discussions'    => env('DISCORD_MESSAGE_ABOUT_NEW_DISCUSSIONS', false),
+        'new_replies'        => env('DISCORD_MESSAGE_ABOUT_REPLIES', false),
+        'solved_discussions' => env('DISCORD_MESSAGE_ABOUT_SOLVED_DISCUSSIONS', false),
+    ],
+    'channel_id' => env('DISCORD_CHANNEL_ID', null),
+    'guild_id'   => env('DISCORD_GUILD_ID', null),
+];

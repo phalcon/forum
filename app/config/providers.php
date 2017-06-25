@@ -45,6 +45,7 @@ return [
     Phosphorum\Provider\Email\ServiceProvider::class,
     Phosphorum\Provider\Mailer\ServiceProvider::class,
     Phosphorum\Provider\Assets\ServiceProvider::class,
+    Phosphorum\Provider\Discord\ServiceProvider::class,
 
     // Third Party Providers
     // ...

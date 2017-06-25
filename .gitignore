@@ -9,3 +9,4 @@
 .env
 /public/robots.txt
 /public/sitemap.xml
+!.env.example

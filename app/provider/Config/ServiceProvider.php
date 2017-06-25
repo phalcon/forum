@@ -49,6 +49,7 @@ class ServiceProvider extends AbstractServiceProvider
         'email',
         'mailer',
         'config',
+        'discord'
     ];
 
     /**
