@@ -129,7 +129,7 @@ class DiscordComponent extends Injectable
 
             $href = $postService->getPostUrl($reply->post);
             $message = sprintf(
-                "\":newspaper2: **`%s` has commented in discussion `%s`.  Check it out on %s#C%s.**",
+                "\":newspaper2: **`%s` has commented in discussion `%s`. Check it out on %s#C%s.**",
                 $reply->user->name,
                 $reply->post->title,
                 $href,
@@ -167,7 +167,7 @@ class DiscordComponent extends Injectable
 
             $href = $postService->getPostUrl($reply->post);
             $message = sprintf(
-                ":newspaper2: **Discussion `%s`  was marked as solved. Check out accepted answer on %s#C%s.**",
+                ":newspaper2: **Discussion `%s` was marked as solved. Check out accepted answer on %s#C%s.**",
                 $reply->post->title,
                 $href,
                 $reply->id
