@@ -260,10 +260,10 @@ class Posts extends Model
              * Queue notifications to be sent
              */
             /** @var Beanstalk $queue */
-            $queue = $this->getDI()->getShared('queue');
+            $queue = container('queue');
             $queue->choose('notifications');
             /** @var DiscordComponent $discord */
-            $discord = $this->getDI()->getShared('discord');
+            $discord = container('discord');
             $queue->put($toNotify);
             $discord->addMessageAboutDiscussion($this);
         }
