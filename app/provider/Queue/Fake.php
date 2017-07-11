@@ -61,6 +61,6 @@ class Fake
 
     public function choose($tube)
     {
-        singleton('logger')->debug('Chosen tube: $tube');
+        singleton('logger')->debug("Chosen tube: {$tube}");
     }
 }
