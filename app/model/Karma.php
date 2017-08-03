@@ -32,7 +32,7 @@ abstract class Karma
 
     const SOMEONE_REPLIED_TO_MY_POST = 5;
 
-    const REPLY_ON_SOMEONE_ELSE_POST = 10;
+    const REPLY_ON_SOMEONE_ELSE_POST = 15;
 
     const SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST = 5;
 

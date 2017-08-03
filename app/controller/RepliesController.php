@@ -174,11 +174,6 @@ class RepliesController extends ControllerBase
 
             if ($postReply->delete()) {
                 if ($usersId != $postReply->post->users_id) {
-                    $user = $postReply->post->user;
-                    if ($user) {
-                        $user->decreaseKarma(Karma::SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST);
-                        $user->save();
-                    }
                     $postReply->post->number_replies--;
                     $postReply->post->save();
                 }
@@ -428,9 +423,6 @@ class RepliesController extends ControllerBase
         }
 
         if ($postReply->save()) {
-            if ($postReply->users_id != $user->id) {
-                $user->decreaseKarma(Karma::VOTE_DOWN_ON_SOMEONE_ELSE_REPLY);
-            }
             $user->votes--;
 
             if (!$user->save()) {
@@ -544,7 +536,8 @@ class RepliesController extends ControllerBase
             $postReply->post->user->karma += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
             $postReply->post->user->votes_points += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
 
-            $points = (30 + intval(abs($user->karma - $postReply->user->karma) / 1000));
+            $points = (Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY +
+                intval(abs($user->karma - $postReply->user->karma) / 1000));
 
             $parametersBounty = [
                 'users_id = ?0 AND posts_replies_id = ?1',
