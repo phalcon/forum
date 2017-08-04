@@ -453,11 +453,11 @@ class DiscussionsController extends ControllerBase
                         $user->save();
                     }
                 }
-
-                $user = $post->user;
-                $user->decreaseKarma(Karma::DELETE_POST);
-                $user->save();
             }
+
+            $user = $post->user;
+            $user->decreaseKarma(Karma::DELETE_POST);
+            $user->save();
 
             $this->flashSession->success('Discussion was successfully deleted');
             return $this->response->redirect();
