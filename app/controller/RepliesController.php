@@ -423,11 +423,6 @@ class RepliesController extends ControllerBase
         }
 
         if ($postReply->save()) {
-            if ($postReply->users_id != $user->id) {
-                $user->decreaseKarma(Karma::VOTE_DOWN_ON_SOMEONE_ELSE_REPLY);
-            }
-            $user->votes--;
-
             if (!$user->save()) {
                 foreach ($user->getMessages() as $message) {
                     $contentError = [
