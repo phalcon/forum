@@ -544,7 +544,8 @@ class RepliesController extends ControllerBase
             $postReply->post->user->karma += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
             $postReply->post->user->votes_points += Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
 
-            $points = (30 + intval(abs($user->karma - $postReply->user->karma) / 1000));
+            $points = (Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY
+                + intval(abs($user->karma - $postReply->user->karma) / 1000));
 
             $parametersBounty = [
                 'users_id = ?0 AND posts_replies_id = ?1',
