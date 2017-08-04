@@ -174,11 +174,6 @@ class RepliesController extends ControllerBase
 
             if ($postReply->delete()) {
                 if ($usersId != $postReply->post->users_id) {
-                    $user = $postReply->post->user;
-                    if ($user) {
-                        $user->decreaseKarma(Karma::SOMEONE_DELETED_HIS_OR_HER_REPLY_ON_MY_POST);
-                        $user->save();
-                    }
                     $postReply->post->number_replies--;
                     $postReply->post->save();
                 }
