@@ -46,10 +46,10 @@ class OAuth extends Injectable
      */
     public function __construct(Config $config)
     {
-        $this->redirectUriAuthorize = $config->get('redirectUri');
+        $this->logger               = $this->getDI()->get('logger', ['auth']);
+        $this->redirectUriAuthorize = $this->getRedirectGitPath($config->get('redirectUri'));
         $this->clientId             = $config->get('clientId');
         $this->clientSecret         = $config->get('clientSecret');
-        $this->logger               = $this->getDI()->get('logger', ['auth']);
     }
 
     public function authorize()
@@ -131,5 +131,27 @@ class OAuth extends Injectable
             $this->logger->error($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function getRedirectGitPath($url)
+    {
+        if (empty($url)) {
+            $this->logger->error("Parameter GITHUB_REDIRECT_URI in .env file doesn't exist");
+        }
+
+        $redirectUrl = rtrim($url, '/');
+        if (stristr($redirectUrl, '://')) {
+            $redirectUrl = stristr($redirectUrl, '://');
+            $redirectUrl = $_SERVER['REQUEST_SCHEME'] . $redirectUrl . '/';
+        } else {
+            $redirectUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $redirectUrl . '/';
+        }
+
+        return $redirectUrl;
     }
 }
