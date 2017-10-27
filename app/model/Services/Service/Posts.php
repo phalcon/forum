@@ -55,7 +55,7 @@ class Posts extends AbstractService
             ->from(['p' => Entity::class])
             ->columns(['p.id', 'p.slug', 'p.modified_at AS modified', "{$karmaSql} AS karma"])
             ->where('p.deleted != :deleted:', ['deleted' => 1])
-            ->orderBy(["p.karma DESC"])
+            ->orderBy('karma DESC')
             ->getQuery()
             ->execute();
     }

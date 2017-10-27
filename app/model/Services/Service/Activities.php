@@ -52,7 +52,7 @@ class Activities extends AbstractService
             ->leftJoin(UsersEntity::class, ' a.users_id = u.id', 'u')
             ->where('u.banned = :banned:', ['banned' => 'N'])
             ->groupBy(['a.users_id'])
-            ->orderBy(['a.amount DESC'])
+            ->orderBy('amount DESC')
             ->limit($limit)
             ->getQuery()
             ->execute();
