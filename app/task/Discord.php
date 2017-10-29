@@ -17,14 +17,24 @@
 
 namespace Phosphorum\Task;
 
+use Phalcon\Queue\Beanstalk;
 use Phosphorum\Console\AbstractTask;
 use Phosphorum\Discord\DiscordComponent;
 
 class Discord extends AbstractTask
 {
+    /**
+     * @Doc("Send notifications to the Discord")
+     */
     public function send()
     {
         $queue = container('queue');
+        if (!$queue instanceof Beanstalk) {
+            $this->output('This task does not works with Fake queue adapter.');
+            $this->output('Exit...');
+            return;
+        }
+
         $queue->watch('discord');
 
         /** @var DiscordComponent $discordService */
@@ -40,9 +50,24 @@ class Discord extends AbstractTask
             5,
             function () use ($queue, $discord, $discordService) {
                 $guild = $discord->guilds->get('id', $discordService->getGuildId());
+
+                if (!is_object($guild)) {
+                    throw new \RuntimeException("Looks like you didn't add bot to your guild.");
+                }
+
                 $channel = $guild->channels->get('id', $discordService->getChannelId());
+
                 while ($queue->statsTube('discord')["current-jobs-ready"] > 0 && ($job = $queue->reserve())) {
                     $body = $job->getBody();
+
+                    if (empty($body['message']) || empty($body['embed'])) {
+                        container('logger', ['discord'])->error('Looks like response is broken. Message: {message}', [
+                            'message' => json_encode($body)
+                        ]);
+                        $job->delete();
+                        continue;
+                    }
+
                     $channel->sendMessage($body['message'], false, $body['embed']);
                     $job->delete();
                 }
