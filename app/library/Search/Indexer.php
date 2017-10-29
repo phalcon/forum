@@ -123,7 +123,15 @@ class Indexer extends Injectable
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
+            $this->logger->error(
+                'Indexer: ({exception}) {message} in {file}:{line}',
+                [
+                    'exception' => get_class($e),
+                    'message'   => $e->getMessage(),
+                    'file'      => $e->getFile(),
+                    'line'      => $e->getLine(),
+                ]
+            );
         }
 
         krsort($results);
@@ -155,7 +163,15 @@ class Indexer extends Injectable
         } catch (Missing404Exception $e) {
             $this->logger->info('The index does not exist yet. Skip deleting...');
         } catch (\Exception $e) {
-            $this->logger->error("Indexer: {$e->getMessage()}. {$e->getFile()}:{$e->getLine()}");
+            $this->logger->error(
+                'Indexer: ({exception}) {message} in {file}:{line}',
+                [
+                    'exception' => get_class($e),
+                    'message'   => $e->getMessage(),
+                    'file'      => $e->getFile(),
+                    'line'      => $e->getLine(),
+                ]
+            );
         }
 
         foreach (Posts::find('deleted != ' . Posts::IS_DELETED) as $post) {
