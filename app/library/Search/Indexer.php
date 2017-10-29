@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Search;
 
-use Phalcon\Config;
 use Phalcon\Di\Injectable;
 use Phosphorum\Model\Posts;
 use Phalcon\Logger\AdapterInterface;
@@ -43,19 +42,12 @@ class Indexer extends Injectable
     protected $client;
 
     /**
-     * Indexer config
-     * @var Config
+     * Indexer constructor.
      */
-    protected $config;
-
     public function __construct()
     {
         $this->logger = $this->getDI()->get('logger', ['indexer']);
-
-        $config = $this->getDI()->getShared('config');
-        $this->config = $config->get('elasticsearch', new Config);
-
-        $this->client = $this->getDI()->getShared('elastic');
+        $this->client = container('elastic');
     }
 
     /**
@@ -71,7 +63,7 @@ class Indexer extends Injectable
         $results = [];
 
         $searchParams = [
-            'index' => $this->config->get('index', 'phosphorum'),
+            'index' => container('config')->path('elasticsearch.index', 'phosphorum'),
             'type'  => 'post',
             'body'  => [
                 'fields' => ['id', 'karma'],
@@ -86,6 +78,7 @@ class Indexer extends Injectable
         } else {
             $terms = [];
             foreach ($fields as $field => $value) {
+                // TODO: Log each $value into database in order to analyze popular queries
                 $terms[] = ['term' => [$field => $value]];
             }
 
@@ -95,6 +88,7 @@ class Indexer extends Injectable
         }
 
         try {
+            $this->logger->error(json_encode($searchParams, JSON_PRETTY_PRINT));
             $queryResponse = $this->client->search($searchParams);
             $queryResponse = $this->parseElasticResponse($queryResponse);
 
@@ -122,46 +116,13 @@ class Indexer extends Injectable
                     $d += 0.05;
                 }
             }
-        } catch (\Exception $e) {
-            $this->logger->error(
-                'Indexer: ({exception}) {message} in {file}:{line}',
-                [
-                    'exception' => get_class($e),
-                    'message'   => $e->getMessage(),
-                    'file'      => $e->getFile(),
-                    'line'      => $e->getLine(),
-                ]
-            );
-        }
 
-        krsort($results);
+            krsort($results);
 
-        return array_values($results);
-    }
-
-    /**
-     * Puts a post in the search server
-     *
-     * @param Posts $post
-     */
-    public function index(Posts $post)
-    {
-        $this->doIndex($post);
-    }
-
-    /**
-     * Indexes all posts in the forum in ES
-     */
-    public function indexAll()
-    {
-        $deleteParams = [
-            'index' => $this->config->get('index', 'phosphorum'),
-        ];
-
-        try {
-            $this->client->indices()->delete($deleteParams);
+            return array_values($results);
         } catch (Missing404Exception $e) {
-            $this->logger->info('The index does not exist yet. Skip deleting...');
+            $this->logger->info('The index does not exist yet or got corrupted');
+            return [];
         } catch (\Exception $e) {
             $this->logger->error(
                 'Indexer: ({exception}) {message} in {file}:{line}',
@@ -172,36 +133,7 @@ class Indexer extends Injectable
                     'line'      => $e->getLine(),
                 ]
             );
-        }
-
-        foreach (Posts::find('deleted != ' . Posts::IS_DELETED) as $post) {
-            $this->doIndex($post);
-        }
-    }
-
-    /**
-     * Index a single document
-     *
-     * @param Posts $post
-     */
-    protected function doIndex(Posts $post)
-    {
-        $params = [];
-        $karma  = $post->number_views + (($post->votes_up - $post->votes_down) * 10) + $post->number_replies;
-
-        if ($karma > 0) {
-            $params['body']  = [
-                'id'       => $post->id,
-                'title'    => $post->title,
-                'category' => $post->categories_id,
-                'content'  => $post->content,
-                'karma'    => $karma
-            ];
-            $params['index'] = $this->config->get('index', 'phosphorum');
-            $params['type']  = 'post';
-            $params['id']    = 'post-' . $post->id;
-
-            $this->client->index($params);
+            return [];
         }
     }
 
