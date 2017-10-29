@@ -88,7 +88,6 @@ class Indexer extends Injectable
         }
 
         try {
-            $this->logger->error(json_encode($searchParams, JSON_PRETTY_PRINT));
             $queryResponse = $this->client->search($searchParams);
             $queryResponse = $this->parseElasticResponse($queryResponse);
 
