@@ -55,7 +55,7 @@ class Discord extends AbstractTask
 
                 while ($queue->statsTube('discord')["current-jobs-ready"] > 0 && ($job = $queue->reserve())) {
                     if (empty($body['message']) || empty($body['embed'])) {
-                        container('logger')->error('Looks like response is broken. Message: {message}', [
+                        container('logger', ['discord'])->error('Looks like response is broken. Message: {message}', [
                             'message' => json_encode($body)
                         ]);
                         $job->delete();
