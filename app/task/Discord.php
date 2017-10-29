@@ -58,6 +58,8 @@ class Discord extends AbstractTask
                 $channel = $guild->channels->get('id', $discordService->getChannelId());
 
                 while ($queue->statsTube('discord')["current-jobs-ready"] > 0 && ($job = $queue->reserve())) {
+                    $body = $job->getBody();
+
                     if (empty($body['message']) || empty($body['embed'])) {
                         container('logger', ['discord'])->error('Looks like response is broken. Message: {message}', [
                             'message' => json_encode($body)
@@ -66,7 +68,6 @@ class Discord extends AbstractTask
                         continue;
                     }
 
-                    $body = $job->getBody();
                     $channel->sendMessage($body['message'], false, $body['embed']);
                     $job->delete();
                 }
