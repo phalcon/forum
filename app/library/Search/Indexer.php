@@ -121,7 +121,7 @@ class Indexer extends Injectable
 
             return array_values($results);
         } catch (Missing404Exception $e) {
-            $this->logger->info('The index does not exist yet or get corrupted');
+            $this->logger->info('The index does not exist yet or got corrupted');
             return [];
         } catch (\Exception $e) {
             $this->logger->error(

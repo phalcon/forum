@@ -58,7 +58,7 @@ class Searchengine extends AbstractTask
         $index = container('config')->path('elasticsearch.index', 'phosphorum');
 
         if (!$this->client->indices()->exists(['index' => $index])) {
-            // The index does not exist yet or get corrupted
+            // The index does not exist yet or got corrupted
             return;
         }
 
