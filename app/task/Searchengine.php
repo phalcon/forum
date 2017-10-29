@@ -35,7 +35,8 @@ class Searchengine extends AbstractTask
     protected $client;
 
     /**
-     * @Doc("Index all existing documents to elastic search")
+     *
+     * @Doc("Index all existing posts in the Forum to elastic search")
      */
     public function index()
     {
