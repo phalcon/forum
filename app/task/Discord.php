@@ -49,8 +49,12 @@ class Discord extends AbstractTask
         $discord->loop->addPeriodicTimer(
             5,
             function () use ($queue, $discord, $discordService) {
-
                 $guild = $discord->guilds->get('id', $discordService->getGuildId());
+
+                if (!is_object($guild)) {
+                    throw new \RuntimeException("Looks like you didn't add bot to your guild.");
+                }
+
                 $channel = $guild->channels->get('id', $discordService->getChannelId());
 
                 while ($queue->statsTube('discord')["current-jobs-ready"] > 0 && ($job = $queue->reserve())) {
