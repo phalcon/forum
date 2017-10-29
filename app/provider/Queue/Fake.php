@@ -58,4 +58,9 @@ class Fake
     {
         return false;
     }
+
+    public function choose($tube)
+    {
+        singleton('logger')->debug("Chosen tube: {$tube}");
+    }
 }

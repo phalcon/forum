@@ -43,14 +43,22 @@ class ServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $service = function (ViewBaseInterface $view, DiInterface $di = null) {
-            $config = container('config')->volt;
-
             $volt = new Volt($view, $di ?: container());
 
             $volt->setOptions(
                 [
-                    'compiledPath'  => self::compiledPath(),
-                    'compileAlways' => (bool) $config->forceCompile,
+                    'compiledPath'  => function ($path) {
+                        $path     = trim(substr($path, strlen(dirname(app_path()))), '\\/');
+                        $filename = basename(str_replace(['\\', '/'], '_', $path), '.volt') . '.php';
+                        $cacheDir = cache_path('volt');
+
+                        if (!is_dir($cacheDir)) {
+                            @mkdir($cacheDir, 0755, true);
+                        }
+
+                        return $cacheDir . DIRECTORY_SEPARATOR . $filename;
+                    },
+                    'compileAlways' => environment('development') || env('APP_DEBUG', false),
                 ]
             );
 
@@ -60,27 +68,5 @@ class ServiceProvider extends AbstractServiceProvider
         };
 
         $this->di->setShared($this->serviceName, $service);
-    }
-
-    protected static function compiledPath()
-    {
-        return function ($path) {
-            $config = container('config')->volt;
-
-            $filename = str_replace(
-                ['\\', '/'],
-                $config->separator,
-                trim(substr($path, strlen(dirname(app_path()))), '\\/')
-            );
-
-            $filename = basename($filename, '.volt') . $config->compiledExt;
-            $cacheDir = cache_path('volt');
-
-            if (!is_dir($cacheDir)) {
-                @mkdir($cacheDir, 0755, true);
-            }
-
-            return $cacheDir . DIRECTORY_SEPARATOR . $filename;
-        };
     }
 }

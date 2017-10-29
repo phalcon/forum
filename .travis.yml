@@ -1,18 +1,12 @@
 language: php
 
-sudo: required
+sudo: false
 dist: trusty
 
 php:
   - 5.6
-
-matrix:
-  include:
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3"
-
-services:
-  - memcached
+  - 7.0
+  - 7.1
 
 git:
   depth: 1
@@ -22,49 +16,37 @@ cache:
   ccache: true
   timeout: 691200
   directories:
-    - .temp
     - vendor
-    - $HOME/.ccache
     - $HOME/.composer/cache
-
-env:
-  global:
-    - ZEND_DONT_UNLOAD_MODULES=1
-    - CC="ccache gcc"
-    - PATH="$PATH:~/bin"
-    - PHALCON_VERSION="v3.0.3"
+    - $HOME/cphalcon
+    - $HOME/ext
 
 before_install:
+  - export PHP_VERSION=$(php-config --version)
+  - export PHP_EXTENSION_DIR=$(php-config --extension-dir)
   - phpenv config-rm xdebug.ini || true
-  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
-  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
-  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - travis_retry composer require --dev "phalcon/zephir:dev-master" --ignore-platform-reqs
-  - ( bash tests/_ci/install_zephir.sh )
-  - ( bash tests/_ci/install_prereqs.sh )
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
+  - if [ ! -f "$HOME/cphalcon/tests/_ci/phalcon.ini" ]; then git clone -q --depth=1 https://github.com/phalcon/cphalcon.git $HOME/cphalcon >/dev/null 2>&1; fi;
 
 install:
-  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - ln -s ${TRAVIS_BUILD_DIR}/.temp ${TRAVIS_BUILD_DIR}/cphalcon/.temp
-  - ( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )
-  - ( cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; /usr/bin/phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j3 &> /dev/null && make --silent install )
-  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+  - if [ ! -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cd $HOME/cphalcon/build && bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config) && mkdir -p $HOME/ext/$PHP_VERSION && cp $PHP_EXTENSION_DIR/phalcon.so $HOME/ext/$PHP_VERSION/phalcon.so; fi;
+  - if [ -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cp $HOME/ext/$PHP_VERSION/phalcon.so $PHP_EXTENSION_DIR/phalcon.so; fi;
+  - phpenv config-add $HOME/cphalcon/tests/_ci/phalcon.ini
+  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/memcached.ini
+  - cd $TRAVIS_BUILD_DIR
+  - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
-  # Create database and user
   - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
   - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
   - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
   - cat schemas/forum.sql | mysql -u root phosphorum
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
-  - sudo ulimit -c unlimited -S || true
 
 script:
   - vendor/bin/phpcs
   - vendor/bin/codecept build
-  # Run tests
   - vendor/bin/codecept run unit
   - vendor/bin/codecept run functional
   - vendor/bin/codecept run acceptance
@@ -80,8 +62,6 @@ notifications:
 addons:
   apt:
     packages:
-      - gdb
-      - re2c
       - beanstalkd
       - mysql-server-5.6
       - mysql-client-core-5.6

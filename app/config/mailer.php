@@ -32,7 +32,7 @@ return [
 
     'from' => [
         'email' => env('MAIL_FROM_ADDRESS'),
-        'name'  => env('MAIL_FROM_NAME'),
+        'name'  => env('APP_NAME'),
     ],
 
     'sendmail' => '/usr/sbin/sendmail -bs',

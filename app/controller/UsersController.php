@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -19,9 +19,9 @@ namespace Phosphorum\Controller;
 
 use Phosphorum\Model\Users;
 use Phosphorum\Model\Posts;
-use Phosphorum\Model\PostsReplies;
 use Phosphorum\Model\Activities;
-use Phosphorum\Mvc\Controller\TokenTrait;
+use Phosphorum\Model\PostsReplies;
+use Phosphorum\Mvc\Traits\TokenTrait;
 
 /**
  * Class UsersController

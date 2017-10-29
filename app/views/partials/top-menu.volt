@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            {{ link_to('', config.site.name, 'class': 'navbar-brand', 'title': 'Go to main page') }}
+            {{ link_to('', config.site.project, 'class': 'navbar-brand', 'title': 'Go to main page') }}
         </div>
 
         <div class="collapse navbar-collapse" id="forum-navbar-collapse">
@@ -49,17 +49,26 @@
                     </a>
                     <ul class="dropdown-menu categories-dropdown" aria-labelledby="dropdownCategories">
                         {%- cache "sidebar" -%}
-                        {%- if categories is defined -%}
-                            {%- for category in categories -%}
+                            {%- if categories is defined -%}
+                                {%- for category in categories -%}
                                 <li>
                                     {{-
-                                    link_to('category/' ~ category.id ~ '/' ~ category.slug,
-                                    '<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ category.name)
+                                        link_to('category/' ~ category.id ~ '/' ~ category.slug,
+                                            '<span class="label label-default pull-right">' ~ category.number_posts ~ '</span>' ~ category.name)
                                     -}}
                                 </li>
-                            {%- endfor -%}
-                        {%- endif -%}
+                                {%- endfor -%}
+                            {%- endif -%}
                         {%- endcache -%}
+                        {%- if session.get('identity-admin') == 'Y' -%}
+                        <li>
+                            {{-
+                                link_to('category/add',
+                                    '<span class="label label-default pull-right"><i class="octicon octicon-plus"></i></span> add new category' )
+                            -}}
+                        </li>
+                        {% endif %}
+
                     </ul>
                 </li>
                 <li>{{ link_to('help', '<span class="octicon octicon-info"></span>', 'title': 'Help') }}</li>
@@ -68,7 +77,6 @@
                     <li>{{ link_to('logout', '<span class="octicon octicon-sign-out"></span>', 'title': 'Logout') }}</li>
                 {%- endif -%}
             </ul>
-
             {{ partial("partials/buttons", ["config": this.config]) }}
         </div>
     </div>

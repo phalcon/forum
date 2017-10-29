@@ -50,7 +50,7 @@ class UnderscoredUrlsExtension implements ExtensionInterface
         $pattern = '#(?:(?<=[href|src]=\"|\')(?:[a-z0-9]+:\/\/)?|(?:[a-z0-9]+:\/\/))([^\'">\s]+_+[^\'">\s]*)+#i';
         $text->replace($pattern, function (Text $w) {
 
-            $w->replaceString('_', '%5');
+            $w->replaceString('_', '%5F');
 
             return $w;
         });

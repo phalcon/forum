@@ -50,10 +50,10 @@ class SendSpool extends Injectable
      */
     public function consumeQueue()
     {
+        $queue = container('queue');
+        $queue->watch('notifications');
         while (true) {
-            while (container('queue')->peekReady() !== false) {
-                $job = container('queue')->queue->reserve();
-
+            while ($job = $queue->reserve() !== false) {
                 $message = $job->getBody();
 
                 foreach ($message as $userId => $id) {
@@ -113,7 +113,7 @@ class SendSpool extends Injectable
         $mailer = container('mailer');
         $config = container('config');
 
-        $params['subject'] = "[{$config->site->name} Forum] {$post->title}";
+        $params['subject'] = "[{$config->site->name}] {$post->title}";
 
         if (!$contents = $this->prepareContent('mail/notification', $params)) {
             $notificationService->markAsInvalid($notification);

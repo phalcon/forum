@@ -25,6 +25,8 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Queue\Beanstalk;
+use Phosphorum\Discord\DiscordComponent;
 
 /**
  * Class Posts
@@ -162,6 +164,8 @@ class Posts extends Model
             ]
         );
 
+        $this->keepSnapshots(true);
+
         $this->addBehavior(
             new SoftDelete(
                 [
@@ -255,7 +259,13 @@ class Posts extends Model
             /**
              * Queue notifications to be sent
              */
-            $this->getDI()->getShared('queue')->put($toNotify);
+            /** @var Beanstalk $queue */
+            $queue = container('queue');
+            $queue->choose('notifications');
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $queue->put($toNotify);
+            $discord->addMessageAboutDiscussion($this);
         }
     }
 

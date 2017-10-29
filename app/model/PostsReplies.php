@@ -17,10 +17,14 @@
 
 namespace Phosphorum\Model;
 
+use DateTime;
+use DateTimeZone;
 use Phalcon\Diff;
 use Phalcon\Mvc\Model;
 use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Queue\Beanstalk;
+use Phosphorum\Discord\DiscordComponent;
 
 /**
  * Class PostsReplies
@@ -91,6 +95,8 @@ class PostsReplies extends Model
                 'reusable' => true
             ]
         );
+
+        $this->keepSnapshots(true);
 
         $this->addBehavior(
             new Timestampable([
@@ -228,7 +234,13 @@ class PostsReplies extends Model
             /**
              * Queue notifications to be sent
              */
-            $this->getDI()->getShared('queue')->put($toNotify);
+            /** @var Beanstalk $queue */
+            $queue = container('queue');
+            $queue->choose('notifications');
+            $queue->put($toNotify);
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $discord->addMessageAboutReply($this);
         }
     }
 
@@ -243,6 +255,11 @@ class PostsReplies extends Model
         $history->content          = $this->content;
 
         $history->save();
+        if ($this->hasUpdated('accepted') && $this->accepted == 'Y') {
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $discord->addMessageAboutSolvedDiscussion($this);
+        }
     }
 
     public function afterDelete()
@@ -325,5 +342,17 @@ class PostsReplies extends Model
         $difference = $diff->render(new SideBySide);
 
         return $difference;
+    }
+
+    /**
+     * Returns a W3C date to be used in the sitemap.
+     *
+     * @return string
+     */
+    public function getUTCCreatedAt()
+    {
+        $modifiedAt = new DateTime('@' . $this->created_at, new DateTimeZone('UTC'));
+
+        return $modifiedAt->format('Y-m-d\TH:i:s\Z');
     }
 }

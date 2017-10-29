@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Controller;
@@ -20,6 +20,8 @@ namespace Phosphorum\Controller;
 use Phalcon\Mvc\View;
 use Phosphorum\Model\Categories;
 use Phosphorum\Model\TopicTracking;
+use Phosphorum\Mvc\Traits\TokenTrait;
+use Phosphorum\Exception\HttpException;
 
 /**
  * Phosphorum\Controller\IndexController
@@ -28,6 +30,9 @@ use Phosphorum\Model\TopicTracking;
  */
 class CategoriesController extends ControllerBase
 {
+
+    use TokenTrait;
+
     /**
      * Shows latest posts by category.
      *
@@ -40,6 +45,7 @@ class CategoriesController extends ControllerBase
         if (!$category = Categories::findFirstById($categoryId)) {
             $this->flashSession->notice("The category doesn't exist");
             $this->response->redirect();
+
             return;
         }
 
@@ -62,13 +68,14 @@ class CategoriesController extends ControllerBase
         $posts = $itemBuilder
             ->where('p.categories_id = ?0 AND p.deleted = 0')
             ->orderBy('p.created_at DESC')
-            ->offset((int) $offset)
+            ->offset((int)$offset)
             ->getQuery()
             ->execute([$categoryId]);
 
         if (!count($posts)) {
             $this->flashSession->notice('There are no posts in category: ' . $category->name);
             $this->response->redirect();
+
             return;
         }
 
@@ -82,10 +89,56 @@ class CategoriesController extends ControllerBase
             'posts'        => $posts,
             'totalPosts'   => $totalPosts,
             'currentOrder' => null,
-            'offset'       => (int) $offset,
+            'offset'       => (int)$offset,
             'paginatorUri' => "category/{$category->id}/{$category->slug}",
-            'logged'       => $userId
+            'logged'       => $userId,
         ]);
+    }
+
+    /**
+     * Add new category
+     */
+    public function createAction()
+    {
+        if ($this->session->get('identity-admin') !== 'Y') {
+            throw new HttpException("Only administrators can create categories", 404);
+        }
+
+        if ($this->request->isPost()) {
+            if (!$this->checkTokenPost('create-category')) {
+                $this->response->redirect();
+
+                return;
+            }
+
+            $name = $this->request->getPost('name', 'trim');
+
+            $category = new Categories([
+                'name'        => $name,
+                'slug'        => $this->slug->generate($name),
+                'description' => $this->request->getPost('description'),
+                'no_bounty'   => $this->request->getPost('no_bounty', 'string', 'N'),
+                'no_digest'   => $this->request->getPost('no_digest', 'string', 'N'),
+            ]);
+
+            if ($category->save()) {
+                $this->response->redirect("category/{$category->id}/{$category->slug}");
+
+                return;
+            }
+
+            $messages = $category->getMessages();
+            if (count($messages)) {
+                $errors = [];
+                array_map(function ($message) use (&$errors) {
+                    $errors[$message->getField()][] = $message->getMessage();
+                }, $messages);
+
+                $this->view->setVar('errors', $errors);
+            }
+        }
+
+        $this->tag->setTitle('New Category');
     }
 
     /**
@@ -94,7 +147,6 @@ class CategoriesController extends ControllerBase
     public function reloadCategoriesAction()
     {
         $this->view->setVar('categories', Categories::find(['order' => 'number_posts DESC, name']));
-
         $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
         $this->view->getCache()->delete('sidebar');
     }

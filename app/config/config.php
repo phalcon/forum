@@ -28,6 +28,10 @@ return [
         'support'     => env('APP_SUPPORT_EMAIL'),
     ],
 
+    'social' => [
+        'twitter_name' => env('SOCIAL_TWITTER_NAME'),
+    ],
+
     'theme' => [
         'use_topics_icon'     => env('THEME_TOPICS_ICON'),
         'inactive_topic_icon' => '/icon/new_none.png',
@@ -49,12 +53,6 @@ return [
         'staticBaseUri'  => env('APP_STATIC_URL'),
         'baseUri'        => env('APP_BASE_URI'),
         'debug'          => env('APP_DEBUG', false),
-    ],
-
-    'volt' => [
-        'compiledExt'  => '.php',
-        'separator'    => '_',
-        'forceCompile' => env('APP_DEBUG', true),
     ],
 
     'mandrillapp' => [
@@ -93,5 +91,7 @@ return [
     'reCaptcha' => [
         'siteKey' => env('RECAPTCHA_KEY'),
         'secret'  => env('RECAPTCHA_SECRET'),
-    ]
+    ],
+
+    'analytics' => env('GOOGLE_ANALYTICS'),
 ];

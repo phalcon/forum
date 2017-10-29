@@ -65,8 +65,6 @@ class ServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () use ($service) {
                 $run  = new Run();
-                $run->pushHandler(container("{$service}.loggerHandler"));
-
                 $mode = container('bootstrap')->getMode();
 
                 switch ($mode) {
@@ -94,6 +92,8 @@ class ServiceProvider extends AbstractServiceProvider
                             )
                         );
                 }
+
+                $run->pushHandler(container("{$service}.loggerHandler"));
 
                 return $run;
             }
