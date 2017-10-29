@@ -126,7 +126,7 @@ class DiscordComponent extends Injectable
 
             $href = $postService->getPostUrl($reply->post);
             $message = sprintf(
-                "\":newspaper2: **`%s` has commented in discussion `%s`. Check it out on %s#C%s.**",
+                ":newspaper2: **`%s` has commented in discussion `%s`. Check it out on %s#C%s.**",
                 $reply->user->name,
                 $reply->post->title,
                 $href,
