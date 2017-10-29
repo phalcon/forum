@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "023460a1cd2414d5342073cbed0d85b3",
+    "content-hash": "8295b7cdf9984f072fe9325392ee6e27",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -565,35 +565,35 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v1.4.1",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "3a5573cf3223d5646a76a5f8ce938048ca340680"
+                "reference": "50e5b1c63db68839b8acc1f4766769570a27a448"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/3a5573cf3223d5646a76a5f8ce938048ca340680",
-                "reference": "3a5573cf3223d5646a76a5f8ce938048ca340680",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/50e5b1c63db68839b8acc1f4766769570a27a448",
+                "reference": "50e5b1c63db68839b8acc1f4766769570a27a448",
                 "shasum": ""
             },
             "require": {
-                "ext-curl": "*",
-                "guzzle/guzzle": "~3.0",
-                "monolog/monolog": "~1.11",
-                "php": ">=5.3.9",
-                "pimple/pimple": "~3.0",
+                "guzzlehttp/ringphp": "~1.0",
+                "php": "^5.6|^7.0",
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "athletic/athletic": "~0.1",
                 "cpliakas/git-wrapper": "~1.0",
-                "mikey179/vfsstream": "~1.2",
+                "doctrine/inflector": "^1.1",
                 "mockery/mockery": "0.9.4",
-                "phpunit/phpunit": "3.7.*",
-                "satooshi/php-coveralls": "dev-master",
-                "symfony/yaml": "2.4.3 as 2.4.2",
-                "twig/twig": "1.*"
+                "phpunit/phpunit": "^4.7|^5.4",
+                "sami/sami": "~3.2",
+                "symfony/finder": "^2.8",
+                "symfony/yaml": "^2.8"
+            },
+            "suggest": {
+                "ext-curl": "*",
+                "monolog/monolog": "Allows for client-level logging and tracing"
             },
             "type": "library",
             "autoload": {
@@ -603,7 +603,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache 2"
+                "Apache-2.0"
             ],
             "authors": [
                 {
@@ -616,7 +616,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2015-09-17T22:01:44+00:00"
+            "time": "2017-07-19T18:44:30+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -1046,6 +1046,107 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "guzzlehttp/ringphp",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/RingPHP.git",
+                "reference": "dbbb91d7f6c191e5e405e900e3102ac7f261bc0b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/dbbb91d7f6c191e5e405e900e3102ac7f261bc0b",
+                "reference": "dbbb91d7f6c191e5e405e900e3102ac7f261bc0b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/streams": "~3.0",
+                "php": ">=5.4.0",
+                "react/promise": "~2.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Guzzle will use specific adapters if cURL is present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Ring\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "time": "2015-05-20T03:37:09+00:00"
+        },
+        {
+            "name": "guzzlehttp/streams",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/streams.git",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/streams/zipball/47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Stream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple abstraction over streams of data",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "stream"
+            ],
+            "time": "2014-10-12T19:18:40+00:00"
         },
         {
             "name": "illuminate/contracts",
@@ -1687,56 +1788,6 @@
             "time": "2016-09-20T18:34:41+00:00"
         },
         {
-            "name": "pimple/pimple",
-            "version": "v3.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "279b56046fb368deacf77e2f8f3bdcea45cc367a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/279b56046fb368deacf77e2f8f3bdcea45cc367a",
-                "reference": "279b56046fb368deacf77e2f8f3bdcea45cc367a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "psr/container": "^1.0"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "^3.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Pimple": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Pimple, a simple Dependency Injection Container",
-            "homepage": "http://pimple.sensiolabs.org",
-            "keywords": [
-                "container",
-                "dependency injection"
-            ],
-            "time": "2017-07-03T14:06:46+00:00"
-        },
-        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -1781,55 +1832,6 @@
                 "psr-6"
             ],
             "time": "2016-08-06T20:24:11+00:00"
-        },
-        {
-            "name": "psr/container",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/container.git",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Container\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common Container Interface (PHP FIG PSR-11)",
-            "homepage": "https://github.com/php-fig/container",
-            "keywords": [
-                "PSR-11",
-                "container",
-                "container-interface",
-                "container-interop",
-                "psr"
-            ],
-            "time": "2017-02-14T16:28:37+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2682,16 +2684,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.24",
+            "version": "v2.8.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d"
+                "reference": "7fe089232554357efb8d4af65ce209fc6e5a2186"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/1377400fd641d7d1935981546aaef780ecd5bf6d",
-                "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/7fe089232554357efb8d4af65ce209fc6e5a2186",
+                "reference": "7fe089232554357efb8d4af65ce209fc6e5a2186",
                 "shasum": ""
             },
             "require": {
@@ -2738,7 +2740,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-02T07:47:27+00:00"
+            "time": "2017-10-01T21:00:16+00:00"
         },
         {
             "name": "symfony/options-resolver",
