@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Provider\SearchEngine;
 
-use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
@@ -49,12 +49,16 @@ class ServiceProvider extends AbstractServiceProvider
                 $config = container('config')->elasticsearch;
                 $hosts  = $config->hosts->toArray();
 
-                if (empty($hosts)) {
+                if (empty($hosts) || !is_array($hosts)) {
                     // Fallback
-                    $hosts = ['127.0.0.1:9200'];
+                    $hosts = [
+                        ServiceProvider::DEFAULT_HOST . ':' . ServiceProvider::DEFAULT_PORT
+                    ];
                 }
 
-                return new Client(['hosts' => $hosts]);
+                return ClientBuilder::create()
+                    ->setHosts($hosts)
+                    ->build();
             }
         );
     }
