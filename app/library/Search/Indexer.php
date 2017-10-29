@@ -122,6 +122,13 @@ class Indexer extends Injectable
                     $d += 0.05;
                 }
             }
+
+            krsort($results);
+
+            return array_values($results);
+        } catch (Missing404Exception $e) {
+            $this->logger->info('The index does not exist yet or get corrupted');
+            return [];
         } catch (\Exception $e) {
             $this->logger->error(
                 'Indexer: ({exception}) {message} in {file}:{line}',
@@ -132,11 +139,8 @@ class Indexer extends Injectable
                     'line'      => $e->getLine(),
                 ]
             );
+            return [];
         }
-
-        krsort($results);
-
-        return array_values($results);
     }
 
     /**
