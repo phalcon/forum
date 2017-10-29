@@ -2,16 +2,13 @@
 
 namespace Phosphorum\Discord;
 
-use Exception;
 use Phalcon\Di\Injectable;
-use Phalcon\Http\Client\Provider\Curl;
-use Phalcon\Http\Client\Request;
 use Phosphorum\Model\Posts;
 use Phosphorum\Model\PostsReplies;
 use Phosphorum\Model\Services\Service\Posts as PostsService;
 
 /**
- * Class DiscordComponent
+ * Phosphorum\Discord\DiscordComponent
  *
  * @property \Phalcon\Queue\Beanstalk $queue
  * @package Phosphorum\Discord
