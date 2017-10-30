@@ -124,6 +124,14 @@ class Notifications extends AbstractService
             return $notification->post->content;
         }
 
+        if (!$reply = $notification->getRelated('reply')) {
+            container('logger')->debug('The notification #{id} does not have reply', [
+                'id' => $notification->id
+            ]);
+
+            return '';
+        }
+
         return $notification->reply->content;
     }
 
