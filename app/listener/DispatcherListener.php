@@ -59,7 +59,7 @@ class DispatcherListener extends AbstractListener
                     ]);
             }
 
-            singleton('logger')->error("Dispatching [$code]: " . $exception->getMessage());
+            container('logger')->error("Dispatching [$code]: " . $exception->getMessage());
 
             return false;
         }
@@ -82,13 +82,13 @@ class DispatcherListener extends AbstractListener
                     ]);
             }
 
-            singleton('logger')->error("Dispatching [$code]: " . $exception->getMessage());
+            container('logger')->error("Dispatching [$code]: " . $exception->getMessage());
 
             return false;
         }
 
         if (!environment('production') && $exception instanceof \Exception) {
-            singleton('logger')->error("Dispatching [{$exception->getCode()}]: " . $exception->getMessage());
+            container('logger')->error("Dispatching [{$exception->getCode()}]: " . $exception->getMessage());
 
             throw $exception;
         }

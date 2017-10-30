@@ -33,7 +33,7 @@ class Robots extends AbstractTask
     public function generate()
     {
         /** @var \League\Flysystem\Filesystem $filesystem */
-        $filesystem = singleton('filesystem', [$this->basePath . DIRECTORY_SEPARATOR . 'public']);
+        $filesystem = container('filesystem', [$this->basePath . DIRECTORY_SEPARATOR . 'public']);
 
         /** @var \Phalcon\Config $config */
         $config  = container('config');

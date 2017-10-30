@@ -50,7 +50,7 @@ class Factory
         $merge  = self::merge();
 
         /** @var Filesystem $filesystem */
-        $filesystem = singleton('filesystem', [cache_path('config')]);
+        $filesystem = container('filesystem', [cache_path('config')]);
 
         if ($filesystem->has('cached.php') && !environment('development')) {
             $merge($config, cache_path('config/cached.php'));
