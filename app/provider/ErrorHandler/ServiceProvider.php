@@ -70,16 +70,16 @@ class ServiceProvider extends AbstractServiceProvider
                 switch ($mode) {
                     case 'normal':
                         if (env('APP_DEBUG', false)) {
-                            $run->pushHandler(singleton("{$service}.prettyPageHandler"));
+                            $run->pushHandler(container("{$service}.prettyPageHandler"));
                         } else {
-                            $run->pushHandler(singleton("{$service}.errorPageHandler"));
+                            $run->pushHandler(container("{$service}.errorPageHandler"));
                         }
                         break;
                     case 'cli':
                         // @todo
                         break;
                     case 'api':
-                        $run->pushHandler(singleton("{$service}.jsonResponseHandler"));
+                        $run->pushHandler(container("{$service}.jsonResponseHandler"));
                         throw new InvalidArgumentException(
                             'Not implemented yet.'
                         );

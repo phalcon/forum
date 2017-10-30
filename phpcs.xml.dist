@@ -9,10 +9,7 @@
         developers who may change this file in the future.
     -->
 
-    <description>Phosphorum Coding Standards</description>
-
-    <!-- Show colors in console -->
-    <arg value="-colors"/>
+    <description>Phalcon Coding Standards</description>
 
     <!-- Show sniff codes in all reports -->
     <arg value="s"/>

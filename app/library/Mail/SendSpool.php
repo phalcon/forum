@@ -92,7 +92,7 @@ class SendSpool extends Injectable
         $user = $notification->user;
 
         /** @var \Phosphorum\Email\EmailComponent $email */
-        $email = singleton('email', [$user->email, false]);
+        $email = container('email', [$user->email, false]);
 
         if (!$email->valid()) {
             $notificationService->markAsSkipped($notification);
