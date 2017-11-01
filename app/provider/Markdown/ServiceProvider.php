@@ -52,6 +52,7 @@ class ServiceProvider extends AbstractServiceProvider
                 $ciconia->addExtension(new Plugins\BlockQuoteExtension());
                 $ciconia->addExtension(new Plugins\UrlAutoLinkExtension());
                 $ciconia->addExtension(new FencedCodeBlockExtension());
+                $ciconia->addExtension(new Plugins\SpecSymbolExtension());
 
                 return $ciconia;
             }
