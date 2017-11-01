@@ -44,7 +44,7 @@ class Fake
      */
     public function put(array $job)
     {
-        singleton('logger')->debug('Putting job: ' . json_encode($job));
+        container('logger')->debug('Putting job: ' . json_encode($job));
 
         return true;
     }
@@ -61,6 +61,6 @@ class Fake
 
     public function choose($tube)
     {
-        singleton('logger')->debug("Chosen tube: {$tube}");
+        container('logger')->debug("Chosen tube: {$tube}");
     }
 }

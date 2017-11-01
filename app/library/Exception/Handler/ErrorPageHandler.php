@@ -64,10 +64,10 @@ class ErrorPageHandler extends Handler
 
     private function renderErrorPage()
     {
-        $config     = singleton('config')->error;
-        $dispatcher = singleton('dispatcher');
-        $view       = singleton('view');
-        $response   = singleton('response');
+        $config     = container('config')->error;
+        $dispatcher = container('dispatcher');
+        $view       = container('view');
+        $response   = container('response');
 
         $dispatcher->setControllerName($config->controller);
         $dispatcher->setActionName($config->action);

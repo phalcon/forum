@@ -117,27 +117,7 @@ if (!function_exists('container')) {
             trigger_error('Unable to resolve Dependency Injection container.', E_USER_ERROR);
         }
 
-        return call_user_func_array([$default, 'getShared'], $args);
-    }
-}
-
-if (!function_exists('singleton')) {
-    /**
-     * Calls the default Dependency Injection container.
-     *
-     * @param  mixed
-     * @return mixed|\Phalcon\DiInterface
-     */
-    function singleton()
-    {
-        $container = container();
-        $args = func_get_args();
-
-        if (empty($args)) {
-            return $container;
-        }
-
-        return call_user_func_array([$container, 'get'], $args);
+        return call_user_func_array([$default, 'get'], $args);
     }
 }
 
