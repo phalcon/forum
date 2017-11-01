@@ -43,7 +43,7 @@
                 <div class="post-content">
                     {%- cache "post-body-" ~ post.id -%}
                         <div>
-                            {{- markdown.render(post.content|e) -}}
+                            {{- markdown.render(post.content) -}}
                         </div>
                     {%- endcache -%}
 
