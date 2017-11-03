@@ -66,7 +66,7 @@
         <div class="post-content">
             {%- cache "reply-body-" ~ reply.id -%}
             <div itemprop="text">
-                {{- markdown.render(reply.content|e) -}}
+                {{- markdown.render(reply.content) -}}
             </div>
             {%- endcache -%}
         </div>
