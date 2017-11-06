@@ -69,7 +69,7 @@ class UtilsController extends Controller
         if ($this->request->isPost()) {
             if ($this->session->get('identity')) {
                 $content = $this->request->getPost('content');
-                $response->setContent($this->markdown->render($this->escaper->escapeHtml($content)));
+                $response->setContent($this->markdown->render($content));
             }
         }
         return $response;
