@@ -416,7 +416,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   overflow: auto;
   -webkit-transition: left 0.2s ease;
   -moz-transition: left 0.2s ease;
-  -ms-transition: left 0.2s ease;
+  -o-transition: left 0.2s ease;
   transition: left 0.2s ease;
 }
 .editor-preview-active {
