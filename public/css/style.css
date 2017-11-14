@@ -997,3 +997,11 @@ div#sticky-progress {
     padding: .3rem 0;
     color: rgba(51, 51, 51, 0.8);
 }
+
+ins {
+    text-decoration: underline;
+}
+
+del {
+    text-decoration: line-through;
+}

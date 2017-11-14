@@ -33,14 +33,17 @@ class SpecSymbolExtension implements ExtensionInterface
     public function escapeText(Text $text)
     {
         $replaceArray = [];
+        $arrTags = ['code', 'ins', 'del'];
 
-        $text->replace('{<code>.*?</code>}m', function (Text $w) use (&$replaceArray) {
-            $count = count($replaceArray) + 1;
-            $replaceArray[$count] = $w->getString();
-            $w->replaceString($w->getString(), "%%replaced" . $count . "%%");
+        foreach ($arrTags as $tag) {
+            $text->replace("{<{$tag}>.*?</{$tag}>}m", function (Text $w) use (&$replaceArray) {
+                $count = count($replaceArray) + 1;
+                $replaceArray[$count] = $w->getString();
+                $w->replaceString($w->getString(), "%%replaced" . $count . "%%");
 
-            return $w;
-        });
+                return $w;
+            });
+        }
 
         $str = htmlspecialchars($text->getString());
         foreach ($replaceArray as $key => $value) {
