@@ -65,7 +65,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
             '{
             (?:
             (?:
-              ^[ \t]*&gt;[ \t]? # > at the start of a line
+              ^[ \t]*>[ \t]? # > at the start of a line
                 .+\n            # rest of the first line
               (?:.+\n)*         # subsequent consecutive lines
               \n*               # blanks
@@ -73,7 +73,7 @@ class BlockQuoteExtension implements ExtensionInterface, RendererAwareInterface
             )
             }mx',
             function (Text $bq) {
-                $bq->replace('/^[ \t]*&gt;[ \t]?/m', '');
+                $bq->replace('/^[ \t]*>[ \t]?/m', '');
                 $bq->replace('/^[ \t]+$/m', '');
 
                 $this->markdown->emit('block', [$bq]);
