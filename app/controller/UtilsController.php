@@ -26,7 +26,7 @@ use Phalcon\Http\Response;
 /**
  * Class UtilsController
  *
- * @property \Ciconia\Ciconia markdown
+ * @property \Phosphorum\Markdown\Markdown markdown
  * @package Phosphorum\Controller
  */
 class UtilsController extends Controller

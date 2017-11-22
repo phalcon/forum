@@ -57,7 +57,7 @@ class PostLinkTestCest
 
         $I->amOnPage("/discussion/{$postId}/test_correct_link");
         $I->seeInSource('Test link');
-        $I->seeInSource("href=\"http://imgs.xkcd.com/comics/exploits%5Fof%5Fa%5Fmom.png\"");
+        $I->seeInSource("href=\"http://imgs.xkcd.com/comics/exploits_of_a_mom.png\"");
     }
 
     public function shouldFollowTheLinkSecondOption(AcceptanceTester $I)
@@ -77,7 +77,7 @@ class PostLinkTestCest
 
         $I->amOnPage("/discussion/{$postId}/test_correct_link_second");
         $I->seeInSource('Test link second');
-        $I->seeInSource("href=\"https://imgs.xkcd.com/comics/exploits%5Fof%5Fa%5Fmom.png\"");
+        $I->seeInSource("href=\"https://imgs.xkcd.com/comics/exploits_of_a_mom.png\"");
 
     }
 }
