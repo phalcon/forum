@@ -61,7 +61,7 @@ class BlockQuoteTestCest
         $I->seeInSource('Test blockquote in post text');
 
         $I->seeInSource("Code &lt; &gt; ' !");
-        $I->seeInSource("<h1>Code content &lt; </h1>");
+        $I->seeInSource("&lt;h1&gt;Code content &lt; &lt;/h1&gt;");
         $I->seeInSource("&lt;h2&gt;Code content2 &gt; ' &lt;/h2&gt;");
         $I->seeInSource("nbsp; blockquote text test &nbsp; text after blockquote");
     }
@@ -96,7 +96,7 @@ class BlockQuoteTestCest
 
         $I->amOnPage("/discussion/{$postId}/test_reply_blockquote#{$replyId}");
         $I->seeInSource("Code &lt; &gt; ' !");
-        $I->seeInSource("<h1>Code content &lt; </h1>");
+        $I->seeInSource("&lt;h1&gt;Code content &lt; &lt;/h1&gt;");
         $I->seeInSource("&lt;h2&gt;Code content2 &gt; ' &lt;/h2&gt;");
         $I->seeInSource("nbsp; blockquote text test &nbsp; text after blockquote");
     }
