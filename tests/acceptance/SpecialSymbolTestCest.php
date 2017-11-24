@@ -89,10 +89,10 @@ class SpecialSymbolTestCest
 
         $I->seeInSource("{ partial('partials/listings') }");
         $I->seeInSource("Should have &lt;'");
-        $I->seeInSource("<ins>test ins1 tag</ins>");
+        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
         $I->seeInSource("right <code>test code2</code>");
-        $I->seeInSource("<ins>test ins2 tag</ins>");
-        $I->seeInSource("<del>test del tag</del>");
+        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
     }
 
     public function shouldHaveDelInsSpecialSymbolsInContent(AcceptanceTester $I)
@@ -117,8 +117,8 @@ class SpecialSymbolTestCest
         $I->seeInSource('Test del and ins tags in post text');
 
         $I->seeInSource("Should have &lt;'");
-        $I->seeInSource("<ins>test ins1 tag</ins>");
-        $I->seeInSource("<ins>test ins2 tag</ins>");
-        $I->seeInSource("<del>test del tag</del>");
+        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
     }
 }

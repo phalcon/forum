@@ -59,7 +59,7 @@ class PostAndReplyTestCest
         $I->seeInSource('Test special symbols in post text');
 
         $I->seeInSource("Code &lt; &gt; ' !");
-        $I->seeInSource("<h1>Code content &lt; </h1>");
+        $I->seeInSource("&lt;h1&gt;Code content &lt; &lt;/h1&gt;");
         $I->seeInSource("&lt;h2&gt;Code content2 &gt; ' &lt;/h2&gt;");
     }
 
@@ -90,7 +90,7 @@ class PostAndReplyTestCest
 
         $I->amOnPage("/discussion/{$postId}/test_spec_reply#{$replyId}");
         $I->seeInSource("Code &lt; &gt; ' !");
-        $I->seeInSource("<h1>Code content &lt; </h1>");
+        $I->seeInSource("&lt;h1&gt;Code content &lt; &lt;/h1&gt;");
         $I->seeInSource("&lt;h2&gt;Code content &gt; ' &lt;/h2&gt;");
     }
 }
