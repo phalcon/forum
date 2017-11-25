@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,9 +17,8 @@
 
 namespace Phosphorum\Provider\Markdown;
 
-use Ciconia\Ciconia;
 use Phosphorum\Provider\AbstractServiceProvider;
-use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
+use Phosphorum\Markdown\Markdown;
 
 /**
  * Phosphorum\Provider\Markdown\ServiceProvider
@@ -44,17 +43,7 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                $ciconia = new Ciconia();
-
-                $ciconia->addExtension(new Plugins\UnderscoredUrlsExtension());
-                $ciconia->addExtension(new Plugins\TableExtension());
-                $ciconia->addExtension(new Plugins\MentionExtension());
-                $ciconia->addExtension(new Plugins\BlockQuoteExtension());
-                $ciconia->addExtension(new Plugins\UrlAutoLinkExtension());
-                $ciconia->addExtension(new FencedCodeBlockExtension());
-                $ciconia->addExtension(new Plugins\SpecSymbolExtension());
-
-                return $ciconia;
+                return new Markdown();
             }
         );
     }

@@ -40,7 +40,7 @@ class SpecialSymbolTestCest
         $this->category = $category;
     }
 
-    public function shouldFollowTheLink(AcceptanceTester $I)
+    public function shouldHaveCodeSpecialSymbolInContent(AcceptanceTester $I)
     {
         $I->wantTo("Check special symbols in post's code tags");
 
@@ -64,5 +64,61 @@ class SpecialSymbolTestCest
         $I->seeInSource("{ partial('partials/listings') }");
         $I->seeInSource("Should have &lt;'");
         $I->seeInSource("Code again &lt;'");
+    }
+
+    public function shouldHaveAllSpecialSymbolsInContent(AcceptanceTester $I)
+    {
+        $I->wantTo("Check all special symbols in post's code tags");
+
+        $user  = $this->user->haveUser();
+        $catId = $this->category->haveCategory();
+
+        $content = "Should have <' `<h1>Code content < </h1> {{ partial('partials/listings') }}` is the content that's in the db";
+        $content .= "<ins>test ins1 tag</ins> right `test code2` <ins>test ins2 tag</ins> text <del>test del tag</del>";
+
+        $postId = $this->post->havePost([
+            'title'         => 'Test all special symbols in post text',
+            'content'       => $content,
+            'slug'          => 'test_all_special_sumbol',
+            'users_id'      => $user['id'],
+            'categories_id' => $catId,
+        ]);
+
+        $I->amOnPage("/discussion/{$postId}/test_all_special_sumbol");
+        $I->seeInSource('Test all special symbols in post text');
+
+        $I->seeInSource("{ partial('partials/listings') }");
+        $I->seeInSource("Should have &lt;'");
+        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
+        $I->seeInSource("right <code>test code2</code>");
+        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
+    }
+
+    public function shouldHaveDelInsSpecialSymbolsInContent(AcceptanceTester $I)
+    {
+        $I->wantTo("Check del and ins tags in post's content");
+
+        $user  = $this->user->haveUser();
+        $catId = $this->category->haveCategory();
+
+        $content = "Should have <' <ins>test ins1 tag</ins> right ";
+        $content .= "<ins>test ins2 tag</ins> text <del>test del tag</del>";
+
+        $postId = $this->post->havePost([
+            'title'         => 'Test del and ins tags in post text',
+            'content'       => $content,
+            'slug'          => 'test_del_ins_tags',
+            'users_id'      => $user['id'],
+            'categories_id' => $catId,
+        ]);
+
+        $I->amOnPage("/discussion/{$postId}/test_all_special_sumbol");
+        $I->seeInSource('Test del and ins tags in post text');
+
+        $I->seeInSource("Should have &lt;'");
+        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
+        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
     }
 }
