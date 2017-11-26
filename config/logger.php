@@ -16,7 +16,7 @@
 */
 
 return [
-    'path'     => app_path('logs'),
+    'path'     => dirname(__DIR__) . '/storage/logs',
 
     'format'   => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
 

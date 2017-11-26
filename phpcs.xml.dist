@@ -31,6 +31,6 @@
         custom standard so you don't have to specify the
         patterns on the command line.
     -->
-    <exclude-pattern>app/config/*</exclude-pattern>
-    <exclude-pattern>app/cache/*</exclude-pattern>
+    <exclude-pattern>config/*</exclude-pattern>
+    <exclude-pattern>cache/*</exclude-pattern>
 </ruleset>

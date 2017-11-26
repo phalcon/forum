@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team and contributors               |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file  LICENSE.txt.                            |
@@ -26,7 +26,7 @@ if (!function_exists('app_path')) {
      */
     function app_path($path = '')
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return dirname(__DIR__) . '/app' . ($path ? "/{$path}" : '');
     }
 }
 
@@ -39,7 +39,7 @@ if (!function_exists('cache_path')) {
      */
     function cache_path($path = '')
     {
-        return app_path('cache') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return dirname(__DIR__) . '/storage/cache' . ($path ? "/{$path}" : '');
     }
 }
 
@@ -52,7 +52,7 @@ if (!function_exists('config_path')) {
      */
     function config_path($path = '')
     {
-        return app_path('config') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return dirname(__DIR__) . '/config' . ($path ? "/{$path}" : '');
     }
 }
 
