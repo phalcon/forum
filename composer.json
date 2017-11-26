@@ -49,8 +49,8 @@
         "filp/whoops": "^2.1",
         "team-reflex/discord-php": "^4.0",
         "elasticsearch/elasticsearch": "^5.3",
-        "erusev/parsedown-extra": "0.7.1",
-        "erusev/parsedown": "1.6.4"
+        "erusev/parsedown-extra": "^0.7",
+        "erusev/parsedown": "^1.6"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
@@ -77,8 +77,7 @@
             "Phosphorum\\Listener\\": "app/listener"
         },
         "files": [
-            "bootstrap/helpers.php",
-            "bootstrap/error_polyfill.php"
+            "bootstrap/helpers.php"
         ]
     },
     "autoload-dev": {
