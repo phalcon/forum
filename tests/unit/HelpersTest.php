@@ -23,7 +23,7 @@ class HelpersTest extends Unit
 
         $this->appPath = dirname(dirname(__DIR__)) . '/app';
         $this->cachePath = dirname(dirname(__DIR__)) . '/storage/cache';
-        $this->configPath = dirname(dirname(__DIR__)) . '/storage/config';
+        $this->configPath = dirname(dirname(__DIR__)) . '/config';
     }
 
     public function testAppPath()
@@ -43,7 +43,7 @@ class HelpersTest extends Unit
         $this->assertEquals($this->cachePath . '/bar/', cache_path('bar/'));
 
         $this->tester->amInPath(dirname(app_path()));
-        $this->tester->seeFileFound('cache');
+        $this->tester->seeFileFound('storage/cache');
     }
 
     public function testConfigPath()
