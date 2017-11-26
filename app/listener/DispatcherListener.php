@@ -37,7 +37,7 @@ class DispatcherListener extends AbstractListener
      * @param  \Exception $exception
      * @return bool
      *
-     * @throws \Exception
+     * @throws \Exception|\Throwable
      */
     public function beforeException(Event $event, Dispatcher $dispatcher, $exception)
     {
@@ -87,10 +87,12 @@ class DispatcherListener extends AbstractListener
             return false;
         }
 
-        if (!environment('production') && $exception instanceof \Exception) {
+        if ($exception instanceof \Exception || $exception instanceof \Throwable) {
             container('logger')->error("Dispatching [{$exception->getCode()}]: " . $exception->getMessage());
 
-            throw $exception;
+            if (!environment('production')) {
+                throw $exception;
+            }
         }
 
         $dispatcher->forward([
