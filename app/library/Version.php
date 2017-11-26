@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -34,7 +34,7 @@ class Version extends PhVersion
      */
     protected static function _getVersion()
     {
-        return [3, 3, 2, 0, 0];
+        // @codingStandardsIgnoreEnd
+        return [3, 4, 0, 0, 0];
     }
-    // @codingStandardsIgnoreEnd
 }
