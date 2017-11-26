@@ -361,29 +361,14 @@ $router->add(
     ]
 );
 
-$router->add(
-    '/reply/{id:[0-9]+}',
-    [
-       'controller' => 'replies',
-       'action'     => 'get'
-    ]
-);
+$router->add('/reply/{id:[0-9]+}', 'Replies::get')
+    ->setName('replies-get');
 
-$router->add(
-    '/reply/update',
-    [
-       'controller' => 'replies',
-       'action'     => 'update'
-    ]
-);
+$router->add('/reply/update', 'Replies::update')
+    ->setName('replies-update');
 
-$router->add(
-    '/reply/delete/{id:[0-9]+}',
-    [
-       'controller' => 'replies',
-       'action'     => 'delete'
-    ]
-);
+$router->add('/reply/delete/{id:[0-9]+}', 'Replies::delete')
+    ->setName('replies-delete');
 
 $router->add('/discussions/{order:[a-z]+}', 'Discussions::index')
     ->setName('discussions-order');
