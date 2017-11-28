@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team and contributors               |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -32,6 +32,34 @@ class Markdown extends ParsedownExtra
 
         $this->InlineTypes['@'][]= 'UrlMentions';
         $this->inlineMarkerList .= '@';
+
+        $this->InlineTypes['~'][]= 'InsTags';
+        $this->inlineMarkerList .= '~';
+    }
+
+    /**
+     * Extension Added <del> tag to HTML tree
+     *
+     * Using in editor:
+     * Foo ~Some code~ Bar
+     *
+     * Result in HTML tree:
+     * Foo <del>Some code</del> Bar
+     *
+     * @param array $excerpt
+     * @return array
+     */
+    protected function inlineStrikethrough($Excerpt)
+    {
+        if (preg_match('/^~{1}([^~].*?)~{1}/', $Excerpt['text'], $matches)) {
+            return [
+                'extent' => strlen($matches[0]),
+                'element' => [
+                    'name' => 'del',
+                    'text' => $matches[1],
+                ],
+            ];
+        }
     }
 
     /**
@@ -63,6 +91,32 @@ class Markdown extends ParsedownExtra
                     'attributes' => [
                         'href' => container('config')->site->url . '/user/0/' . $matches[1][0],
                     ],
+                ],
+            ];
+        }
+    }
+
+    /**
+     * Extension Added <ins> tag to HTML tree
+     *
+     * Using in editor:
+     * Foo ~~Some code~~ Bar
+     *
+     * Result in HTML tree:
+     * Foo <ins>Some code</ins> Bar
+     *
+     * @param array $excerpt
+     * @return array
+     */
+    protected function inlineInsTags($excerpt)
+    {
+        if (preg_match('/^~{2}(.*?)~{2}/', $excerpt['text'], $matches)) {
+            //var_dump($excerpt);
+            return [
+                'extent' => strlen($matches[0]),
+                'element' => [
+                    'name' => 'ins',
+                    'text' => $matches[1],
                 ],
             ];
         }
