@@ -34,6 +34,7 @@
     {{- stylesheet_link("css/octicons.css?v=" ~ forum_version(), true) -}}
     {{- stylesheet_link("css/diff.css?v=" ~ forum_version(), true) -}}
     {{- stylesheet_link("css/style.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/prism.css?v=" ~ forum_version(), true) -}}
 
     {#- reCaptcha -#}
     {%- if recaptcha.isEnabled() -%}
@@ -47,6 +48,7 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery@2.2.4,bootstrap@3.3.7,prettify@0.1(prettify.js+lang-css.js+lang-sql.js+lang-yaml.js)"></script>
     {{ javascript_include("js/editor.js?v=" ~ forum_version()) }}
     {{ javascript_include("js/forum.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/prism.js?v=" ~ forum_version()) }}
 
     <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 </body>
