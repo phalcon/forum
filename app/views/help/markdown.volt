@@ -211,6 +211,9 @@ This [link][id2] has title attribute.
     </p>
 <p>
 <pre>
+My favorite color is ~blue~ ~~red~~!
+</pre>
+<pre>
 My favorite color is <del>blue</del> <ins>red</ins>!
 </pre>
 </p>
@@ -220,6 +223,9 @@ My favorite color is <del>blue</del> <ins>red</ins>!
         The <code>del</code> tag defines text that has been deleted from a document.
     </p>
 <p>
+<pre>
+My favorite color is ~blue~ ~~red~~!
+</pre>
 <pre>
 My favorite color is <del>blue</del> <ins>red</ins>!
 </pre>
