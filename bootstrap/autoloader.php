@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team and contributors               |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -25,7 +25,7 @@ define('APP_START_TIME', microtime(true));
  */
 define('APP_START_MEMORY', memory_get_usage());
 
-// Register The Composer Auto Loader
+// Then register the Composer autoloader
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 // Load environment

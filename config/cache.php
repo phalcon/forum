@@ -39,12 +39,12 @@ return [
 
         'file' => [
             'adapter'  => 'File',
-            'cacheDir' => cache_path('data') . DIRECTORY_SEPARATOR
+            'cacheDir' => cache_path('data') . '/'
         ],
 
         'views' => [
             'adapter'  => 'File',
-            'cacheDir' => cache_path('views') . DIRECTORY_SEPARATOR
+            'cacheDir' => cache_path('views') . '/'
         ],
 
         'redis' => [

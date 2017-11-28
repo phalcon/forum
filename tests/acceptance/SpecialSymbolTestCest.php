@@ -2,9 +2,9 @@
 
 /*
    +------------------------------------------------------------------------+
-   | Phalcon forum                                                          |
+   | Phosphorum                                                             |
    +------------------------------------------------------------------------+
-   | Copyright (c) 2011-2017 Phalcon Team (https://www.phalconphp.com)      |
+   | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
    +------------------------------------------------------------------------+
    | This source file is subject to the New BSD License that is bundled     |
    | with this package in the file LICENSE.txt.                             |
@@ -74,7 +74,7 @@ class SpecialSymbolTestCest
         $catId = $this->category->haveCategory();
 
         $content = "Should have <' `<h1>Code content < </h1> {{ partial('partials/listings') }}` is the content that's in the db";
-        $content .= "<ins>test ins1 tag</ins> right `test code2` <ins>test ins2 tag</ins> text <del>test del tag</del>";
+        $content .= "~~test ins1 tag~~ right `test code2` ~~test ins2 tag~~ text ~test del tag~";
 
         $postId = $this->post->havePost([
             'title'         => 'Test all special symbols in post text',
@@ -89,10 +89,10 @@ class SpecialSymbolTestCest
 
         $I->seeInSource("{ partial('partials/listings') }");
         $I->seeInSource("Should have &lt;'");
-        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
+        $I->seeInSource("<ins>test ins1 tag</ins>");
         $I->seeInSource("right <code>test code2</code>");
-        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
-        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
+        $I->seeInSource("<ins>test ins2 tag</ins>");
+        $I->seeInSource("<del>test del tag</del>");
     }
 
     public function shouldHaveDelInsSpecialSymbolsInContent(AcceptanceTester $I)
@@ -102,8 +102,8 @@ class SpecialSymbolTestCest
         $user  = $this->user->haveUser();
         $catId = $this->category->haveCategory();
 
-        $content = "Should have <' <ins>test ins1 tag</ins> right ";
-        $content .= "<ins>test ins2 tag</ins> text <del>test del tag</del>";
+        $content = "Should have <' ~~test ins1 tag~~ right ";
+        $content .= "~~test ins2 tag~~ text ~test del tag~";
 
         $postId = $this->post->havePost([
             'title'         => 'Test del and ins tags in post text',
@@ -117,8 +117,8 @@ class SpecialSymbolTestCest
         $I->seeInSource('Test del and ins tags in post text');
 
         $I->seeInSource("Should have &lt;'");
-        $I->seeInSource("&lt;ins&gt;test ins1 tag&lt;/ins&gt;");
-        $I->seeInSource("&lt;ins&gt;test ins2 tag&lt;/ins&gt;");
-        $I->seeInSource("&lt;del&gt;test del tag&lt;/del&gt;");
+        $I->seeInSource("<ins>test ins1 tag</ins>");
+        $I->seeInSource("<ins>test ins2 tag</ins>");
+        $I->seeInSource("<del>test del tag</del>");
     }
 }

@@ -21,38 +21,38 @@ class HelpersTest extends Unit
     {
         parent::_before();
 
-        $this->appPath = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app';
-        $this->cachePath = $this->appPath . DIRECTORY_SEPARATOR . 'cache';
-        $this->configPath = $this->appPath . DIRECTORY_SEPARATOR . 'config';
+        $this->appPath = dirname(dirname(__DIR__)) . '/app';
+        $this->cachePath = dirname(dirname(__DIR__)) . '/storage/cache';
+        $this->configPath = dirname(dirname(__DIR__)) . '/config';
     }
 
     public function testAppPath()
     {
         $this->assertEquals($this->appPath, app_path());
-        $this->assertEquals($this->appPath . DIRECTORY_SEPARATOR . 'foo', app_path('foo'));
-        $this->assertEquals($this->appPath . DIRECTORY_SEPARATOR . 'bar/', app_path('bar/'));
+        $this->assertEquals($this->appPath . '/foo', app_path('foo'));
+        $this->assertEquals($this->appPath . '/bar/', app_path('bar/'));
 
-        $this->tester->amInPath(app_path());
+        $this->tester->amInPath(dirname(app_path()));
         $this->tester->seeFileFound('config.php', 'config');
     }
 
     public function testCachePath()
     {
         $this->assertEquals($this->cachePath, cache_path());
-        $this->assertEquals($this->cachePath . DIRECTORY_SEPARATOR . 'foo', cache_path('foo'));
-        $this->assertEquals($this->cachePath . DIRECTORY_SEPARATOR . 'bar/', cache_path('bar/'));
+        $this->assertEquals($this->cachePath . '/foo', cache_path('foo'));
+        $this->assertEquals($this->cachePath . '/bar/', cache_path('bar/'));
 
-        $this->tester->amInPath(app_path());
-        $this->tester->seeFileFound('cache');
+        $this->tester->amInPath(dirname(app_path()));
+        $this->tester->seeFileFound('storage/cache');
     }
 
     public function testConfigPath()
     {
         $this->assertEquals($this->configPath, config_path());
-        $this->assertEquals($this->configPath . DIRECTORY_SEPARATOR . 'foo', config_path('foo'));
-        $this->assertEquals($this->configPath . DIRECTORY_SEPARATOR . 'bar/', config_path('bar/'));
+        $this->assertEquals($this->configPath . '/foo', config_path('foo'));
+        $this->assertEquals($this->configPath . '/bar/', config_path('bar/'));
 
-        $this->tester->amInPath(app_path());
+        $this->tester->amInPath(dirname(app_path()));
         $this->tester->seeFileFound('config');
     }
 
