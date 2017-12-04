@@ -37,7 +37,7 @@ class Notifications extends AbstractTask
         try {
             $spool->sendRemaining();
         } catch (\Exception $t) {
-            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
             container('logger')->error($message, [
                 'class'   => get_class($t),
                 'message' => $t->getMessage(),
@@ -45,7 +45,7 @@ class Notifications extends AbstractTask
                 'line'    => $t->getLine(),
             ]);
         } catch (\Throwable $e) {
-            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
             container('logger')->error($message, [
                 'class'   => get_class($e),
                 'message' => $e->getMessage(),
@@ -65,7 +65,7 @@ class Notifications extends AbstractTask
         try {
             $spool->consumeQueue();
         } catch (\Exception $t) {
-            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
             container('logger')->error($message, [
                 'class'   => get_class($t),
                 'message' => $t->getMessage(),
@@ -73,7 +73,7 @@ class Notifications extends AbstractTask
                 'line'    => $t->getLine(),
             ]);
         } catch (\Throwable $e) {
-            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
             container('logger')->error($message, [
                 'class'   => get_class($e),
                 'message' => $e->getMessage(),
