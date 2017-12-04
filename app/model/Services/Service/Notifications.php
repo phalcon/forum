@@ -112,21 +112,30 @@ class Notifications extends AbstractService
         try {
             $result = $notification->save();
         } catch (\PDOException $e) {
-            $state = $e->getMessage();
-            $code  = $e->getCode();
+            $message = $e->getMessage();
+            $code    = $e->getCode();
 
-            if (!strstr($state, 'SQLSTATE[')) {
-                $state = $e->getCode();
+            if (!strstr($message, 'SQLSTATE[')) {
+                $message = $e->getCode();
             }
 
-            if (strstr($state, 'SQLSTATE[')) {
-                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $state, $matches);
-                $code = ($matches[1] == 'HT000' ? $matches[2] : $matches[1]);
-                $message = $matches[3];
+            if (strstr($message, 'SQLSTATE[')) {
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $message, $matches);
+                if (isset($matches[1])) {
+                    if ($matches[1] == 'HT000' && isset($matches[2])) {
+                        $code = $matches[2];
+                    } else {
+                        $code = $matches[1];
+                    }
+                }
+
+                if (isset($matches[3])) {
+                    $message = $matches[3];
+                }
             }
 
-            $message = '[{class}] ({code}): {alert} for {email}: {message} on {file}:{line}';
-            container('logger')->error($message, [
+            $logMessage = '[{class}] ({code}): {alert} for {email}: {message} on {file}:{line}';
+            container('logger')->error($logMessage, [
                 'class'   => get_class($e),
                 'code'    => $code,
                 'alert'   => 'Failed to mark notification as completed',
