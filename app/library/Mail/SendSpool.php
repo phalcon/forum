@@ -126,8 +126,10 @@ class SendSpool extends Injectable
             ->content($contents, Message::CONTENT_TYPE_HTML, 'utf-8');
 
         $plain = $this->preparePlainTextFromHtml($contents);
+        if ($plain !== null) {
+            $message->getMessage()->addPart($plain, Message::CONTENT_TYPE_PLAIN, 'utf-8');
+        }
 
-        $message->getMessage()->addPart($plain, Message::CONTENT_TYPE_PLAIN, 'utf-8');
         $message->replyTo("reply-i{$post->id}-" . time() . '@phosphorum.com');
         $message->from($notificationService->getFromUser($notification));
 
@@ -213,17 +215,35 @@ class SendSpool extends Injectable
      * Prepares and returns plain text from HTML part.
      *
      * @param  string $html
-     * @return string
+     * @return null|string
      */
     protected function preparePlainTextFromHtml($html)
     {
         if (!is_string($html) || empty($html)) {
-            return '1';
+            container('logger')->error('Unable prepare plain text from html to send notification. Got: {html}', [
+                'html' => is_string($html) ? 'an empty string' : gettype($html)
+            ]);
+            return null;
         }
 
         $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+
         if (!$dom->loadHTML($html)) {
-            return '2';
+            $message = 'Unable prepare plain text from html to send notification: {message} on {file}:{line}';
+
+            foreach (libxml_get_errors() as $error) {
+                container('logger')->error($message, [
+                    'message' => $error->message,
+                    'file'    => $error->file,
+                    'line'    => $error->line,
+                ]);
+            }
+
+            libxml_clear_errors();
+            libxml_use_internal_errors(false);
+
+            return null;
         }
 
         $body   = $dom->getElementsByTagName('body');
@@ -253,6 +273,8 @@ class SendSpool extends Injectable
         $m = implode("\n\n", $text);
         $m = preg_replace('#^[ \t]+#m', '', $m);
         $m = str_replace('&mdash;', '--', $m);
+
+        libxml_use_internal_errors(false);
 
         return $m;
     }
