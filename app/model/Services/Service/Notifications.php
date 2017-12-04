@@ -107,7 +107,45 @@ class Notifications extends AbstractService
     {
         $notification->sent = Entity::STATUS_SENT;
 
-        if (!$notification->save()) {
+        $result = false;
+
+        try {
+            $result = $notification->save();
+        } catch (\Exception $e) {
+            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
+
+            // FIXME: Do this better
+            if (mb_strpos($e->getMessage(), 'Deadlock found when trying to get lock') !== false) {
+                // wait for 0.5 second
+                usleep(500000);
+                $result = $notification->save();
+            }
+        } catch (\Throwable $t) {
+            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($t),
+                'message' => $t->getMessage(),
+                'file'    => $t->getFile(),
+                'line'    => $t->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
+
+            // FIXME: Do this better
+            if (mb_strpos($t->getMessage(), 'Deadlock found when trying to get lock') !== false) {
+                // wait for 0.5 second
+                usleep(500000);
+                $result = $notification->save();
+            }
+        }
+
+        if ($result == false) {
             throw new EntityException($notification, Entity::class . ' could not be saved.');
         }
     }
