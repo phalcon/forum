@@ -227,7 +227,7 @@ class SendSpool extends Injectable
     protected function preparePlainTextFromHtml($html)
     {
         if (!is_string($html) || empty($html)) {
-            container('logger')->error('Unable prepare plain text from html to send notification. Got: {html}', [
+            container('logger')->error('Unable prepare a plain text from html to send notification. Got: {html}', [
                 'html' => is_string($html) ? 'an empty string' : gettype($html)
             ]);
             return null;
@@ -237,7 +237,7 @@ class SendSpool extends Injectable
         libxml_use_internal_errors(true);
 
         if (!$dom->loadHTML($html)) {
-            $message = 'Unable prepare plain text from html to send notification: {message} on {file}:{line}';
+            $message = 'Unable prepare a plain text from html to send notification: {message} on {file}:{line}';
 
             foreach (libxml_get_errors() as $error) {
                 container('logger')->error($message, [
