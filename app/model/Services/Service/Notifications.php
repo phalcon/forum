@@ -111,11 +111,26 @@ class Notifications extends AbstractService
 
         try {
             $result = $notification->save();
-        } catch (\Exception $e) {
-            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+        } catch (\PDOException $e) {
+            $state = $e->getMessage();
+            $code  = $e->getCode();
+
+            if (!strstr($state, 'SQLSTATE[')) {
+                $state = $e->getCode();
+            }
+
+            if (strstr($state, 'SQLSTATE[')) {
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $state, $matches);
+                $code = ($matches[1] == 'HT000' ? $matches[2] : $matches[1]);
+                $message = $matches[3];
+            }
+
+            $message = '[{class}] ({code}): {alert} for {email}: {message} on {file}:{line}';
             container('logger')->error($message, [
                 'class'   => get_class($e),
-                'message' => $e->getMessage(),
+                'code'    => $code,
+                'alert'   => 'Failed to mark notification as completed',
+                'message' => $message,
                 'file'    => $e->getFile(),
                 'line'    => $e->getLine(),
                 'email'   => $notification->user ? $notification->user->email : 'unknown email'
@@ -127,6 +142,15 @@ class Notifications extends AbstractService
                 usleep(500000);
                 $result = $notification->save();
             }
+        } catch (\Exception $e) {
+            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
         } catch (\Throwable $t) {
             $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
             container('logger')->error($message, [
@@ -136,13 +160,6 @@ class Notifications extends AbstractService
                 'line'    => $t->getLine(),
                 'email'   => $notification->user ? $notification->user->email : 'unknown email'
             ]);
-
-            // FIXME: Do this better
-            if (mb_strpos($t->getMessage(), 'Deadlock found when trying to get lock') !== false) {
-                // wait for 0.5 second
-                usleep(500000);
-                $result = $notification->save();
-            }
         }
 
         if ($result == false) {
