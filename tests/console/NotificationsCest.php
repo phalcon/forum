@@ -112,6 +112,11 @@ class NotificationsCest
             'slug'     => 'some-slug-here',
         ];
 
+        if (!isset($this->messages[0]) || empty($this->messages)) {
+            $I->fail("Failed to test notifications.\n" . print_r($this->messages, true));
+            return;
+        }
+
         $message = $this->messages[0];
 
         $this->mail->seeHtmlBodyForReply($message['body'], $expected);
