@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -33,7 +33,26 @@ class Notifications extends AbstractTask
     public function send()
     {
         $spool = new SendSpool();
-        $spool->sendRemaining();
+
+        try {
+            $spool->sendRemaining();
+        } catch (\Exception $t) {
+            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($t),
+                'message' => $t->getMessage(),
+                'file'    => $t->getFile(),
+                'line'    => $t->getLine(),
+            ]);
+        } catch (\Throwable $e) {
+            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
+        }
     }
 
     /**
@@ -42,6 +61,25 @@ class Notifications extends AbstractTask
     public function queue()
     {
         $spool = new SendSpool();
-        $spool->consumeQueue();
+
+        try {
+            $spool->consumeQueue();
+        } catch (\Exception $t) {
+            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($t),
+                'message' => $t->getMessage(),
+                'file'    => $t->getFile(),
+                'line'    => $t->getLine(),
+            ]);
+        } catch (\Throwable $e) {
+            $message = '[{class}]: Failed to send totification: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
+        }
     }
 }
