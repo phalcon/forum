@@ -52,13 +52,20 @@ class SendSpool extends Injectable
     {
         $queue = container('queue');
         $queue->watch('notifications');
+
         while (true) {
             while ($job = $queue->reserve() !== false) {
                 $message = $job->getBody();
 
                 foreach ($message as $userId => $id) {
                     if ($notification = Notifications::findFirstById($id)) {
-                        $this->send($notification);
+                        try {
+                            $this->send($notification);
+                        } catch (\Exception $e) {
+                            // Do nothing
+                        } catch (\Throwable $t) {
+                            // Do nothing
+                        }
                     }
                 }
 
