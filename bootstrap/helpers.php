@@ -30,6 +30,19 @@ if (!function_exists('app_path')) {
     }
 }
 
+if (!function_exists('storage_path')) {
+    /**
+     * Get the storage  path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function storage_path($path = '')
+    {
+        return dirname(__DIR__) . '/storage' . ($path ? "/{$path}" : '');
+    }
+}
+
 if (!function_exists('cache_path')) {
     /**
      * Get the cache path.
@@ -39,7 +52,7 @@ if (!function_exists('cache_path')) {
      */
     function cache_path($path = '')
     {
-        return dirname(__DIR__) . '/storage/cache' . ($path ? "/{$path}" : '');
+        return storage_path('cache') . ($path ? "/{$path}" : '');
     }
 }
 

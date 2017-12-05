@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -107,7 +107,71 @@ class Notifications extends AbstractService
     {
         $notification->sent = Entity::STATUS_SENT;
 
-        if (!$notification->save()) {
+        $result = false;
+
+        try {
+            $result = $notification->save();
+        } catch (\PDOException $e) {
+            $message = $e->getMessage();
+            $code    = $e->getCode();
+
+            if (!strstr($message, 'SQLSTATE[')) {
+                $message = $e->getCode();
+            }
+
+            if (strstr($message, 'SQLSTATE[')) {
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $message, $matches);
+                if (isset($matches[1])) {
+                    if ($matches[1] == 'HT000' && isset($matches[2])) {
+                        $code = $matches[2];
+                    } else {
+                        $code = $matches[1];
+                    }
+                }
+
+                if (isset($matches[3])) {
+                    $message = $matches[3];
+                }
+            }
+
+            $logMessage = '[{class}] ({code}): {alert} for {email}: {message} on {file}:{line}';
+            container('logger')->error($logMessage, [
+                'class'   => get_class($e),
+                'code'    => $code,
+                'alert'   => 'Failed to mark notification as completed',
+                'message' => $message,
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
+
+            // FIXME: Do this better
+            if (mb_strpos($e->getMessage(), 'Deadlock found when trying to get lock') !== false) {
+                // wait for 0.5 second
+                usleep(500000);
+                $result = $notification->save();
+            }
+        } catch (\Exception $e) {
+            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
+        } catch (\Throwable $t) {
+            $message = '[{class}]: Failed to mark notification as completed for {email}: {message} on {file}:{line}';
+            container('logger')->error($message, [
+                'class'   => get_class($t),
+                'message' => $t->getMessage(),
+                'file'    => $t->getFile(),
+                'line'    => $t->getLine(),
+                'email'   => $notification->user ? $notification->user->email : 'unknown email'
+            ]);
+        }
+
+        if ($result == false) {
             throw new EntityException($notification, Entity::class . ' could not be saved.');
         }
     }
