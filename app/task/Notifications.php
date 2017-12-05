@@ -32,26 +32,45 @@ class Notifications extends AbstractTask
      */
     public function send()
     {
-        $spool = new SendSpool();
+        // Exit to avoid  race condition
+        $filehandle = fopen(storage_path('pids/notifications-send.lock'), 'c+');
 
-        try {
-            $spool->sendRemaining();
-        } catch (\Exception $t) {
-            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-            container('logger')->error($message, [
-                'class'   => get_class($t),
-                'message' => $t->getMessage(),
-                'file'    => $t->getFile(),
-                'line'    => $t->getLine(),
+        if (flock($filehandle, LOCK_EX | LOCK_NB)) {
+            try {
+                $spool = new SendSpool();
+                $spool->sendRemaining();
+            } catch (\Exception $t) {
+                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
+                container('logger')->error($message, [
+                    'class'   => get_class($t),
+                    'message' => $t->getMessage(),
+                    'file'    => $t->getFile(),
+                    'line'    => $t->getLine(),
+                ]);
+            } catch (\Throwable $e) {
+                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
+                container('logger')->error($message, [
+                    'class'   => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file'    => $e->getFile(),
+                    'line'    => $e->getLine(),
+                ]);
+            }
+
+            // don't forget to release the lock
+            flock($filehandle, LOCK_UN);
+        } else {
+            container('logger')->warning('The {task} already running. Exit...', [
+                'task'    => __METHOD__,
             ]);
-        } catch (\Throwable $e) {
-            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-            container('logger')->error($message, [
-                'class'   => get_class($e),
-                'message' => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
-            ]);
+        }
+
+        if (is_resource($filehandle)) {
+            fclose($filehandle);
+        }
+
+        if (file_exists(storage_path('pids/notifications-queue.lock'))) {
+            @unlink(storage_path('pids/notifications-queue.lock'));
         }
     }
 
@@ -60,26 +79,45 @@ class Notifications extends AbstractTask
      */
     public function queue()
     {
-        $spool = new SendSpool();
+        // Exit to avoid  race condition
+        $filehandle = fopen(storage_path('pids/notifications-queue.lock'), 'c+');
 
-        try {
-            $spool->consumeQueue();
-        } catch (\Exception $t) {
-            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-            container('logger')->error($message, [
-                'class'   => get_class($t),
-                'message' => $t->getMessage(),
-                'file'    => $t->getFile(),
-                'line'    => $t->getLine(),
+        if (flock($filehandle, LOCK_EX | LOCK_NB)) {
+            try {
+                $spool = new SendSpool();
+                $spool->consumeQueue();
+            } catch (\Exception $t) {
+                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
+                container('logger')->error($message, [
+                    'class'   => get_class($t),
+                    'message' => $t->getMessage(),
+                    'file'    => $t->getFile(),
+                    'line'    => $t->getLine(),
+                ]);
+            } catch (\Throwable $e) {
+                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
+                container('logger')->error($message, [
+                    'class'   => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file'    => $e->getFile(),
+                    'line'    => $e->getLine(),
+                ]);
+            }
+
+            // don't forget to release the lock
+            flock($filehandle, LOCK_UN);
+        } else {
+            container('logger')->warning('The {task} already running. Exit...', [
+                'task'    => __METHOD__,
             ]);
-        } catch (\Throwable $e) {
-            $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-            container('logger')->error($message, [
-                'class'   => get_class($e),
-                'message' => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
-            ]);
+        }
+
+        if (is_resource($filehandle)) {
+            fclose($filehandle);
+        }
+
+        if (file_exists(storage_path('pids/notifications-queue.lock'))) {
+            @unlink(storage_path('pids/notifications-queue.lock'));
         }
     }
 }
