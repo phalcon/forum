@@ -69,8 +69,8 @@ class Notifications extends AbstractTask
             fclose($filehandle);
         }
 
-        if (file_exists(storage_path('pids/notifications-queue.lock'))) {
-            @unlink(storage_path('pids/notifications-queue.lock'));
+        if (file_exists(storage_path('pids/notifications-send.lock'))) {
+            @unlink(storage_path('pids/notifications-send.lock'));
         }
     }
 
