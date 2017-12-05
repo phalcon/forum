@@ -36,8 +36,14 @@ class SendSpool extends Injectable
     public function sendRemaining()
     {
         $notifications = Notifications::find([
-            'conditions' => 'sent = ?1',
-            'bind'       => [1 => Notifications::STATUS_NOT_SENT],
+            'conditions' => 'sent = ?1 AND created_at < ?2',
+            'order'      => 'created_at DESC',
+            'limit'      => 1000,
+            'bind'       => [
+                1 => Notifications::STATUS_NOT_SENT,
+                // Max 7 days
+                2 => time() - 7 * 24 * 60 * 60,
+            ],
         ]);
 
         foreach ($notifications as $notification) {
@@ -52,13 +58,20 @@ class SendSpool extends Injectable
     {
         $queue = container('queue');
         $queue->watch('notifications');
+
         while (true) {
             while ($job = $queue->reserve() !== false) {
                 $message = $job->getBody();
 
                 foreach ($message as $userId => $id) {
                     if ($notification = Notifications::findFirstById($id)) {
-                        $this->send($notification);
+                        try {
+                            $this->send($notification);
+                        } catch (\Exception $e) {
+                            // Do nothing
+                        } catch (\Throwable $t) {
+                            // Do nothing
+                        }
                     }
                 }
 
@@ -126,8 +139,10 @@ class SendSpool extends Injectable
             ->content($contents, Message::CONTENT_TYPE_HTML, 'utf-8');
 
         $plain = $this->preparePlainTextFromHtml($contents);
+        if ($plain !== null) {
+            $message->getMessage()->addPart($plain, Message::CONTENT_TYPE_PLAIN, 'utf-8');
+        }
 
-        $message->getMessage()->addPart($plain, Message::CONTENT_TYPE_PLAIN, 'utf-8');
         $message->replyTo("reply-i{$post->id}-" . time() . '@phosphorum.com');
         $message->from($notificationService->getFromUser($notification));
 
@@ -213,17 +228,35 @@ class SendSpool extends Injectable
      * Prepares and returns plain text from HTML part.
      *
      * @param  string $html
-     * @return string
+     * @return null|string
      */
     protected function preparePlainTextFromHtml($html)
     {
         if (!is_string($html) || empty($html)) {
-            return '1';
+            container('logger')->error('Unable prepare a plain text from html to send notification. Got: {html}', [
+                'html' => is_string($html) ? 'an empty string' : gettype($html)
+            ]);
+            return null;
         }
 
         $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+
         if (!$dom->loadHTML($html)) {
-            return '2';
+            $message = 'Unable prepare a plain text from html to send notification: {message} on {file}:{line}';
+
+            foreach (libxml_get_errors() as $error) {
+                container('logger')->error($message, [
+                    'message' => $error->message,
+                    'file'    => $error->file,
+                    'line'    => $error->line,
+                ]);
+            }
+
+            libxml_clear_errors();
+            libxml_use_internal_errors(false);
+
+            return null;
         }
 
         $body   = $dom->getElementsByTagName('body');
@@ -253,6 +286,8 @@ class SendSpool extends Injectable
         $m = implode("\n\n", $text);
         $m = preg_replace('#^[ \t]+#m', '', $m);
         $m = str_replace('&mdash;', '--', $m);
+
+        libxml_use_internal_errors(false);
 
         return $m;
     }
