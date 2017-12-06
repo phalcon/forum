@@ -711,8 +711,8 @@ class DiscussionsController extends ControllerBase
             }
         }
 
-        // Set the post name as title - escaping it first
-        $this->tag->setTitle($this->escaper->escapeHtml($post->title) . ' - Discussion');
+        // Set the post name as title
+        $this->tag->setTitle($post->title . ' - Discussion');
 
         $this->view->setVars([
             'post'   => $post,
