@@ -14,6 +14,10 @@ return [
                     'weight' => env('MEMCACHED_WEIGHT', 100),
                 ]
             ],
+            // Client options must be instance of array
+            'client' => [
+
+            ],
         ],
 
         'redis' => [

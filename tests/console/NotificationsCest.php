@@ -113,10 +113,7 @@ class NotificationsCest
         ];
 
         if (!isset($this->messages[0]) || empty($this->messages)) {
-            // FIXME:
-            throw new PHPUnit_Framework_SkippedTestError(
-                "Failed to test notifications.\n" . var_export($this->messages, true)
-            );
+            $I->fail("Failed to test notifications.\n" . print_r($this->messages, true));
         }
 
         $message = $this->messages[0];

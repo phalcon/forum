@@ -36,13 +36,12 @@ class SendSpool extends Injectable
     public function sendRemaining()
     {
         $notifications = Notifications::find([
-            'conditions' => 'sent = ?1 AND created_at < ?2',
+            'conditions' => 'sent = ?1 AND UNIX_TIMESTAMP() - created_at <= ?2',
             'order'      => 'created_at DESC',
             'limit'      => 1000,
             'bind'       => [
-                1 => Notifications::STATUS_NOT_SENT,
-                // Max 7 days
-                2 => time() - 7 * 24 * 60 * 60,
+                1 => Notifications::STATUS_NOT_SENT, // Only unsent messages
+                2 => 7 * 24 * 60 * 60,               // For last 7 days
             ],
         ]);
 

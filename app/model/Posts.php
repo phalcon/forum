@@ -273,29 +273,34 @@ class Posts extends Model
     {
         $this->clearCache();
 
+        if (!container()->has('session')) {
+            return;
+        }
+
+        if (!container('session')->isStarted()) {
+            return;
+        }
+
         // In case of updating post through creating PostsViews
-        if (!$this->getDI()->getShared('session')->has('identity')) {
+        if (!container('session')->has('identity')) {
             return;
         }
 
         $history = new PostsHistory([
             'posts_id' => $this->id,
-            'users_id' => $this->getDI()->getShared('session')->get('identity'),
+            'users_id' => container('session')->get('identity'),
             'content'  => $this->content,
         ]);
 
         if (!$history->save()) {
-            /** @var \Phalcon\Logger\AdapterInterface $logger */
-            $logger   = $this->getDI()->get('logger');
-            $messages = $history->getMessages();
             $reason   = [];
 
-            foreach ($messages as $message) {
+            foreach ($history->getMessages() as $message) {
                 /** @var \Phalcon\Mvc\Model\MessageInterface $message */
                 $reason[] = $message->getMessage();
             }
 
-            $logger->error('Unable to store post history. Post id: {id}. Reason: {reason}', [
+            container('logger')->error('Unable to store post history. Post id: {id}. Reason: {reason}', [
                 'id'     => $this->id,
                 'reason' => implode('. ', $reason)
             ]);
