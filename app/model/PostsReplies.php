@@ -248,10 +248,14 @@ class PostsReplies extends Model
     {
         $this->clearCache();
 
+        $usersId = $this->users_id;
+        if (container()->has('session') && container('session')->isStarted() && container('session')->has('identity')) {
+            $usersId = container('session')->get('identity');
+        }
+
         $history                   = new PostsRepliesHistory();
         $history->posts_replies_id = $this->id;
-        $usersId                   = $this->getDI()->getSession()->get('identity');
-        $history->users_id         = $usersId ? $usersId : $this->users_id;
+        $history->users_id         = $usersId;
         $history->content          = $this->content;
 
         $history->save();
