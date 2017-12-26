@@ -33,7 +33,7 @@ class LinkToMentionCest
         $this->post->havePost([
             'title'         => 'Router Phalcon',
             'content'       => 'I have a question I could not find anywhere, and I ask @123456789, ' .
-                               '@12er45t and @iregular help. Let me test: @%, @&abcd and xxx@xxx',
+                               '@12er45t and @iregular help. Let me test: @%, @&abcd and xxx@xxx @foo-bar @bar_foo',
             'users_id'      => $user['id'],
             'categories_id' => $catId
         ]);
@@ -44,6 +44,8 @@ class LinkToMentionCest
         $I->seeLink('@123456789', '/user/0/123456789');
         $I->seeLink('@12er45t', '/user/0/12er45t');
         $I->seeLink('@iregular', '/user/0/iregular');
+        $I->seeLink('@foo-bar', '/user/0/foo-bar');
+        $I->seeLink('@bar_foo', '/user/0/bar_foo');
         $I->dontSeeLink('@%', '/user/0/%');
         $I->dontSeeLink('@&abcd', '/user/0/&abcd');
         $I->dontSeeLink('xxx@xxx', '/user/0/xxxxxx');
