@@ -574,7 +574,7 @@ var Forum = {
 					data: {'content': content }
 				}).done(function(parent, response){
 					$('#preview-box', parent).html(response);
-					prettyPrint();
+
                     $('#preview-box').find('code').each(function(index, element) {
                         Prism.highlightElement($(element)[0]);
                     });
