@@ -66,7 +66,7 @@ script:
     - vendor/bin/codecept run acceptance
 
 after_failure:
-    - for file in `ls $TRAVIS_BUILD_DIR/tests/_output`; do [ -f $file ] && cat $file; done;
+    - for file in `ls ./tests/_output`; do [ -f ./tests/_output/$file ] && cat ./tests/_output/$file; done;
 
 notifications:
     email:
