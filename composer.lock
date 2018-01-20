@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2416c657ed26239a3ac3ba3368e9b04",
+    "content-hash": "3cdd35594788f518b8b6c023bf7afb74",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -1649,27 +1649,27 @@
         },
         {
             "name": "phalcon/breadcrumbs",
-            "version": "v1.3.3",
+            "version": "v1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/breadcrumbs.git",
-                "reference": "fadf6277d4773573baccd4357f6fc60ca8f2e18d"
+                "reference": "4488c7635279503ece8ea82b1fdbf6d9583b88bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/breadcrumbs/zipball/fadf6277d4773573baccd4357f6fc60ca8f2e18d",
-                "reference": "fadf6277d4773573baccd4357f6fc60ca8f2e18d",
+                "url": "https://api.github.com/repos/phalcon/breadcrumbs/zipball/4488c7635279503ece8ea82b1fdbf6d9583b88bc",
+                "reference": "4488c7635279503ece8ea82b1fdbf6d9583b88bc",
                 "shasum": ""
             },
             "require": {
                 "ext-phalcon": ">=2.0 <4.0",
-                "php": ">= 5.5 <7.2"
+                "php": ">= 5.5 <8.0"
             },
             "require-dev": {
                 "codeception/codeception": "^2.3",
                 "codeception/specify": "^0.4",
                 "codeception/verify": "^0.3",
-                "myclabs/deep-copy": "1.6.1",
+                "myclabs/deep-copy": "1.6.*",
                 "phpdocumentor/reflection-docblock": "^2.0",
                 "phpunit/phpunit": "^4.8",
                 "squizlabs/php_codesniffer": "^2.8"
@@ -1702,7 +1702,7 @@
                 "crumbs",
                 "phalcon"
             ],
-            "time": "2017-10-21T19:44:15+00:00"
+            "time": "2018-01-20T21:21:23+00:00"
         },
         {
             "name": "phalcon/incubator",
