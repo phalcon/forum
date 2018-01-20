@@ -31,7 +31,7 @@ class AssetsManagerCest
 
         $postId = $this->post->havePost([
             'title'         => 'Test assets manager',
-            'content'       => 'Testing css and js collection',
+            'content'       => 'Testing css and js collections',
             'slug'          => 'test_assets',
             'users_id'      => $user['id'],
             'categories_id' => $catId,
@@ -42,6 +42,6 @@ class AssetsManagerCest
         $I->seeInSource('/assets/global');
         $I->dontSeeInSource('/css/bootstrap.min.css');
         $I->seeFileFound('global.js','public/assets');
-        $I->seeFileFound('global.css','public/assets');
+        $I->seeFileFound('global-default.css','public/assets');
     }
 }
