@@ -47,7 +47,7 @@
         "egulias/email-validator": "^2.1",
         "google/recaptcha": "^1.1",
         "filp/whoops": "^2.1",
-        "team-reflex/discord-php": "^4.0",
+        "team-reflex/discord-php": "4.0.*",
         "elasticsearch/elasticsearch": "^5.3",
         "erusev/parsedown-extra": "^0.7",
         "erusev/parsedown": "^1.6"
@@ -61,7 +61,18 @@
         "codeception/specify": "~0.4",
         "codeception/mockery-module": "^0.2",
         "squizlabs/php_codesniffer": "~2.7",
-        "phalcon/dd": "^1.1"
+        "phalcon/dd": "^1.1",
+        "doctrine/inflector": "1.1.*",
+        "illuminate/support": "5.4.*",
+        "symfony/browser-kit": "3.4.*",
+        "symfony/console": "3.4.*",
+        "symfony/debug": "3.4.*",
+        "symfony/css-selector": "3.4.*",
+        "symfony/dom-crawler": "3.4.*",
+        "symfony/finder": "3.4.*",
+        "symfony/process": "3.4.*",
+        "symfony/yaml": "3.4.*",
+        "doctrine/instantiator": "1.0.*"
     },
     "suggest": {
         "ext-yaml": "*",
