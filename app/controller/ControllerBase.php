@@ -87,7 +87,6 @@ class ControllerBase extends Controller
             $collectionName = 'globalWhiteCss';
             $fileName = 'global-white.css';
             $themeFile = 'theme-white.css';
-
         } else {
             $collectionName = 'globalCss';
             $fileName = 'global-default.css';

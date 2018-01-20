@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class TitleTestCest
+class TitleCest
 {
     /** @var Category */
     protected $category;

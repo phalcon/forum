@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class InsTagTestCest
+class InsTagCest
 {
     /** @var Category */
     protected $category;

@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class PostAndReplyTestCest
+class PostAndReplyCest
 {
     /** @var Category */
     protected $category;

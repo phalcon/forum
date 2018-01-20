@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class InjectionTestCest
+class InjectionCest
 {
     /** @var Category */
     protected $category;

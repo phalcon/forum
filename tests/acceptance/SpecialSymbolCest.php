@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class SpecialSymbolTestCest
+class SpecialSymbolCest
 {
     /** @var Category */
     protected $category;

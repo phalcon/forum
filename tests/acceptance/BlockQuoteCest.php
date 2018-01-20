@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class BlockQuoteTestCest
+class BlockQuoteCest
 {
     /** @var Category */
     protected $category;

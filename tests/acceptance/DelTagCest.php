@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class DelTagTestCest
+class DelTagCest
 {
     /** @var Category */
     protected $category;

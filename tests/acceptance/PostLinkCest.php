@@ -2,9 +2,9 @@
 
 /*
    +------------------------------------------------------------------------+
-   | Phosphorum                                                             |
+   | Phalcon forum                                                          |
    +------------------------------------------------------------------------+
-   | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+   | Copyright (c) 2011-2017 Phalcon Team (https://www.phalconphp.com)      |
    +------------------------------------------------------------------------+
    | This source file is subject to the New BSD License that is bundled     |
    | with this package in the file LICENSE.txt.                             |
@@ -21,7 +21,7 @@ use Helper\Post;
 use Helper\User;
 use Helper\Category;
 
-class AssetsManagerTestCest
+class PostLinkCest
 {
     /** @var Category */
     protected $category;
@@ -32,6 +32,7 @@ class AssetsManagerTestCest
     /** @var Post */
     protected $post;
 
+
     protected function _inject(Category $category, User $user, Post $post)
     {
         $this->user     = $user;
@@ -39,27 +40,44 @@ class AssetsManagerTestCest
         $this->category = $category;
     }
 
-    public function shouldCreateCssJsCollections(AcceptanceTester $I)
+    public function shouldFollowTheLink(AcceptanceTester $I)
     {
-        $I->wantTo("Check created js and css collection");
+        $I->wantTo('Follow the correct link');
 
         $user  = $this->user->haveUser();
         $catId = $this->category->haveCategory();
 
         $postId = $this->post->havePost([
-            'title'         => 'Test assets manager',
-            'content'       => 'Testing css and js collection',
-            'slug'          => 'test_assets',
+            'title'         => 'Test link',
+            'content'       => 'Content begin. http://imgs.xkcd.com/comics/exploits_of_a_mom.png Content end',
+            'slug'          => 'test_correct_link',
             'users_id'      => $user['id'],
             'categories_id' => $catId,
         ]);
 
-        $I->amOnPage("/discussion/{$postId}/test_assets");
-        $I->seeInSource('Testing css and js collection');
-        $I->seeInSource('/assets/globalCss');
-        $I->seeInSource('/assets/globalJs');
-        $I->dontSeeInSource('/css/bootstrap.min.css');
-        $I->seeFileFound('globalJs.js','public/assets');
-        $I->seeFileFound('globalCss.css','public/assets');
+        $I->amOnPage("/discussion/{$postId}/test_correct_link");
+        $I->seeInSource('Test link');
+        $I->seeInSource("href=\"http://imgs.xkcd.com/comics/exploits_of_a_mom.png\"");
+    }
+
+    public function shouldFollowTheLinkSecondOption(AcceptanceTester $I)
+    {
+        $I->wantTo('Follow the correct link');
+
+        $user  = $this->user->haveUser();
+        $catId = $this->category->haveCategory();
+
+        $postId = $this->post->havePost([
+            'title'         => 'Test link second',
+            'content'       => 'Test content. [test-content](https://imgs.xkcd.com/comics/exploits_of_a_mom.png)',
+            'slug'          => 'test_correct_link_second',
+            'users_id'      => $user['id'],
+            'categories_id' => $catId,
+        ]);
+
+        $I->amOnPage("/discussion/{$postId}/test_correct_link_second");
+        $I->seeInSource('Test link second');
+        $I->seeInSource("href=\"https://imgs.xkcd.com/comics/exploits_of_a_mom.png\"");
+
     }
 }
