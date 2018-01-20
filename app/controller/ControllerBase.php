@@ -73,47 +73,40 @@ class ControllerBase extends Controller
 
         $this->assets
             ->collection('globalJs')
-            ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalJs.js')
-            ->setTargetUri('assets/globalJs.js')
+            ->setTargetPath($registry->offsetGet('public_path') . 'assets/global.js')
+            ->setTargetUri('assets/global.js')
             ->addJs($registry->offsetGet('public_path') . 'js/jquery-3.2.1.min.js', true, false)
             ->addJs($registry->offsetGet('public_path') . 'js/bootstrap.min.js', true, false)
             ->addJs($registry->offsetGet('public_path') . 'js/editor.min.js', true, false)
             ->addJs($registry->offsetGet('public_path') . 'js/forum.js', true)
             ->addJs($registry->offsetGet('public_path') . 'js/prism.js', true)
             ->join(true)
-            ->addFilter(new Jsmin);
+            ->addFilter(new Jsmin());
 
-        if ($this->session->get('identity-theme') == 'L') {
-            $this->assets
-                ->collection('globalWhiteCss')
-                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalWhiteCss.css')
-                ->setTargetUri('assets/globalWhiteCss.css')
-                ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
-                ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/theme-white.css', true)
-                ->join(true)
-                ->addFilter(new Cssmin);
+        if (container()->has('session') && container('session')->get('identity-theme') === 'L') {
+            $collectionName = 'globalWhiteCss';
+            $fileName = 'global-white.css';
+            $themeFile = 'theme-white.css';
         } else {
-            $this->assets
-                ->collection('globalCss')
-                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalCss.css')
-                ->setTargetUri('assets/globalCss.css')
-                ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
-                ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/theme.css', true)
-                ->join(true)
-                ->addFilter(new Cssmin);
+            $collectionName = 'globalCss';
+            $fileName = 'global-default.css';
+            $themeFile = 'theme.css';
         }
+
+        $this->assets
+            ->collection($collectionName)
+            ->setTargetPath($registry->offsetGet('public_path') . "assets/{$fileName}")
+            ->setTargetUri("assets/{$fileName}")
+            ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
+            ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
+            ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
+            ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
+            ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
+            ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
+            ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
+            ->addCss($registry->offsetGet('public_path') . "css/{$themeFile}", true)
+            ->join(true)
+            ->addFilter(new Cssmin());
     }
 
     /**

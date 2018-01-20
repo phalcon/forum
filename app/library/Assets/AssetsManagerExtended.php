@@ -17,13 +17,15 @@
 
 namespace Phosphorum\Assets;
 
-use Phalcon\Assets\Manager;
-use Phalcon\Tag;
-use Phosphorum\AssetsHash\HashManager\AssetsHashVersion as AssetsHash;
 use Phalcon\Di;
+use Phalcon\Tag;
+use Phalcon\Assets\Manager;
+use Phosphorum\AssetsHash\HashManager\AssetsHashVersion;
 
 /**
- * Add Assets caching
+ * Phosphorum\Assets\AssetsManagerExtended
+ *
+ * @package Phosphorum\Assets
  */
 class AssetsManagerExtended extends Manager
 {
@@ -36,7 +38,7 @@ class AssetsManagerExtended extends Manager
     public function cachedOutputJs($collectionName = null)
     {
         $collection = $this->collection($collectionName);
-        $hashManager = new AssetsHash($collection);
+        $hashManager = new AssetsHashVersion($collection);
         $hashManager->setLogger(Di::getDefault()->get('logger'));
 
         $name = $hashManager->getHashedFileName();
@@ -57,7 +59,7 @@ class AssetsManagerExtended extends Manager
     public function cachedOutputCss($collectionName = null)
     {
         $collection = $this->collection($collectionName);
-        $hashManager = new AssetsHash($collection);
+        $hashManager = new AssetsHashVersion($collection);
         $hashManager->setLogger(Di::getDefault()->get('logger'));
 
         $name = $hashManager->getHashedFileName();

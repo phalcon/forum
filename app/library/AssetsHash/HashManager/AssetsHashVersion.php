@@ -26,24 +26,29 @@ use Phosphorum\Version;
  * Class uses version in title of file
  *
  * <code>
- * Application won't check changing time resources and collection that was created
+ * // Application won't check changing time resources and collection that was created.
  * $hashTime = new AssetsHashTime($collection);
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.341.js
  *
- * Application won't check changing time resources and collection that was created. Using hash as get param
+ * // collection.341.js
+ * echo $name.
+ *
+ * // Application won't check changing time resources and collection that was created.
+ * // Using hash as get param
  * $hashTime = new AssetsHashTime($collection, true);
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.js?341
  *
- * Application will check changing time resources and collection that was created. Set folder where resource files are
+ * // collection.js?341
+ * echo $name;
+ *
+ * // Application will check changing time resources and collection that was created.
+ * // Set folder where resource files are
  * $hashTime = new AssetsHashTime($collection, false, true);
  * $hashTime->setResourceFolder('../public/js');
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.341.js
+ *
+ * // collection.341.js
+ * echo $name;
  * </code>
  *
  * @package Phosphorum\AssetsHash\HashManager
@@ -53,7 +58,7 @@ class AssetsHashVersion extends AssetsHashAware
     /**
      * Get hash string from forum version
      *
-     * @param string $fileName
+     * @param string $filename
      * @return string
      */
     protected function getHash($filename)

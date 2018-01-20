@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Provider\Assets;
 
-use Phosphorum\Assets\AssetsManagerExtended as Manager;
+use Phosphorum\Assets\AssetsManagerExtended;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
@@ -40,6 +40,13 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->di->setShared($this->serviceName, Manager::class);
+        $this->di->setShared(
+            $this->serviceName,
+            function () {
+                $manager = new AssetsManagerExtended();
+
+                return $manager;
+            }
+        );
     }
 }
