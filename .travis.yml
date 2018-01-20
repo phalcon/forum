@@ -40,7 +40,7 @@ before_install:
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
 
 install:
-    - bash $TRAVIS_BUILD_DIR/ci/install_phalcon.sh
+    - bash $TRAVIS_BUILD_DIR/tests/ci/install_phalcon.sh
     - echo 'extension=memcached.so' > $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/50-memcached.ini
     - travis_retry composer install --prefer-dist --no-interaction
     - ls -al `$(phpenv which php-config) --extension-dir`
