@@ -15,6 +15,7 @@ git:
 
 env:
     global:
+        - CC="ccache gcc"
         - PHALCON_VERSION=v3.3.1
 
 matrix:
@@ -42,7 +43,7 @@ before_install:
 install:
     - bash $TRAVIS_BUILD_DIR/tests/ci/install_phalcon.sh
     - echo 'extension=memcached.so' > $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/50-memcached.ini
-    - travis_retry composer install --prefer-dist --no-interaction
+    - travis_retry composer install --prefer-dist --no-interaction --no-suggest --optimize-autoloader
     - ls -al `$(phpenv which php-config) --extension-dir`
     - $(phpenv which php) -v
     - $(phpenv which php) -m
@@ -65,7 +66,7 @@ script:
     - vendor/bin/codecept run acceptance
 
 after_failure:
-    - for file in `ls -a $TRAVIS_BUILD_DIR/tests/_output`; do [ -f $file ] && cat $file; done;
+    - for file in `ls $TRAVIS_BUILD_DIR/tests/_output`; do [ -f $file ] && cat $file; done;
 
 notifications:
     email:
