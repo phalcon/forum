@@ -19,7 +19,6 @@ namespace Phosphorum\AssetsHash;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Logger\Adapter\File;
-use Phalcon\Di;
 use Phalcon\Logger\AdapterInterface;
 
 /**
@@ -48,8 +47,8 @@ abstract class AssetsHashAware implements AssetsHashInterface
     /**
      * Using collection with hash param in the end of file
      *
-     * If $useGetParam = false, then file name `/assets/globalJs.1513781110.js`
-     * If $useGetParam = true, then file name `/assets/globalJs.js?1513781110`
+     * If $useGetParam = false, then file name `/assets/global.1513781110.js`
+     * If $useGetParam = true, then file name `/assets/global.js?1513781110`
      *
      * @var bool $useGetParam
      */
@@ -77,8 +76,8 @@ abstract class AssetsHashAware implements AssetsHashInterface
     public function __construct(Collection $collection, $useGetParam = false, $checkBaseFiles = false)
     {
         $this->collection = $collection;
-        $this->checkBaseFiles = $checkBaseFiles;
-        $this->useGetParam = $useGetParam;
+        $this->checkBaseFiles = (bool) $checkBaseFiles;
+        $this->useGetParam = (bool) $useGetParam;
     }
 
     /**
@@ -106,9 +105,9 @@ abstract class AssetsHashAware implements AssetsHashInterface
      *
      * @param bool $checkBaseFiles
      */
-    public function setCheckBaseFiles(bool $checkBaseFiles)
+    public function setCheckBaseFiles($checkBaseFiles)
     {
-        $this->checkBaseFiles = $checkBaseFiles;
+        $this->checkBaseFiles = (bool) $checkBaseFiles;
     }
 
     /**
@@ -116,9 +115,9 @@ abstract class AssetsHashAware implements AssetsHashInterface
      *
      * @param bool $useGetParam
      */
-    public function setUseGetParam(bool $useGetParam)
+    public function setUseGetParam($useGetParam)
     {
-        $this->useGetParam = $useGetParam;
+        $this->useGetParam = (bool) $useGetParam;
     }
 
     /**
@@ -130,7 +129,7 @@ abstract class AssetsHashAware implements AssetsHashInterface
      *
      * @param string $path
      */
-    public function setResourceFolder(string $path)
+    public function setResourceFolder($path)
     {
         $path = realpath($path);
 
@@ -141,9 +140,7 @@ abstract class AssetsHashAware implements AssetsHashInterface
         }
 
         if ($this->logger instanceof AdapterInterface) {
-            $this->logger->notice(
-                "Path to resource folder isn't correct. Please check it."
-            );
+            $this->logger->notice('Invalid path to the resource folder.');
         }
     }
 
@@ -204,7 +201,7 @@ abstract class AssetsHashAware implements AssetsHashInterface
         }
 
         $resources = $this->collection->getResources();
-        if (empty($resources)) {
+        if (empty($resources) || !is_array($resources)) {
             return false;
         }
 

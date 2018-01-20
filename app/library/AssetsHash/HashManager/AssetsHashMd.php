@@ -25,24 +25,29 @@ use Phosphorum\AssetsHash\AssetsHashAware;
  * Class uses MD5 hash in title of file
  *
  * <code>
- * Application won't check changing time resources and collection that was created
+ * // Application won't check changing time resources and collection that was created.
  * $hashTime = new AssetsHashTime($collection);
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.d5a7a190e15c3419db0321c19bc238b4.js
  *
- * Application won't check changing time resources and collection that was created. Using hash as get param
+ * // collection.d5a7a190e15c3419db0321c19bc238b4.js
+ * echo $name;
+ *
+ * // Application won't check changing time resources and collection that was created.
+ * // Using hash as get param
  * $hashTime = new AssetsHashTime($collection, true);
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.js?d5a7a190e15c3419db0321c19bc238b4
  *
- * Application will check changing time resources and collection that was created. Set folder where resource files are
+ * // collection.js?d5a7a190e15c3419db0321c19bc238b4
+ * echo $name;
+ *
+ * // Application will check changing time resources and collection that was created.
+ * // Set folder where resource files are
  * $hashTime = new AssetsHashTime($collection, false, true);
  * $hashTime->setResourceFolder('../public/js');
  * $name = $hashTime->getHashedFileName();
- * echo $name.
- * result - collection.d5a7a190e15c3419db0321c19bc238b4.js
+ *
+ * // collection.d5a7a190e15c3419db0321c19bc238b4.js
+ * echo $name;
  * </code>
  *
  * @package Phosphorum\AssetsHash\HashManager
@@ -52,7 +57,7 @@ class AssetsHashMd extends AssetsHashAware
     /**
      * Get hash string from MD5 file hash
      *
-     * @param string $fileName
+     * @param string $filename
      * @return string
      */
     protected function getHash($filename)
