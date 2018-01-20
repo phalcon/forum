@@ -56,6 +56,9 @@ class PostListener
     /**
      * Create a posts-views logging the ipaddress where the post was created
      * This avoids that the same session counts as post view
+     *
+     * @param Event $event
+     * @param Posts $model
      */
     public function beforeCreate(Event $event, Posts $model)
     {
@@ -64,66 +67,97 @@ class PostListener
         ]);
     }
 
+    /**
+     * TODO: Split this
+     *
+     * - Register a new activity
+     * - Notify users that always want notifications
+     * - Notify users that always want notifications
+     * - Update the total of posts related to a category
+     * - Queue notifications to be sent
+     * - Send notification to the Discord
+     * - Add new record to post_history table after create new post
+     *
+     * @param Event $event
+     * @param Posts $model
+     */
     public function afterCreate(Event $event, Posts $model)
     {
+        if ($model->id <= 0) {
+            return;
+        }
+
         /**
-         * Register a new activity
+         * Register the activity
          */
-        if ($model->id > 0) {
-            /**
-             * Register the activity
-             */
-            $activity           = new Activities();
-            $activity->users_id = $model->users_id;
-            $activity->posts_id = $model->id;
-            $activity->type     = Activities::NEW_POST;
-            $activity->save();
+        $activity           = new Activities();
+        $activity->users_id = $model->users_id;
+        $activity->posts_id = $model->id;
+        $activity->type     = Activities::NEW_POST;
+        $activity->save();
 
-            /**
-             * Notify users that always want notifications
-             */
-            $notification           = new PostsNotifications();
-            $notification->users_id = $model->users_id;
-            $notification->posts_id = $model->id;
-            $notification->save();
+        /**
+         * Notify users that always want notifications
+         */
+        $notification           = new PostsNotifications();
+        $notification->users_id = $model->users_id;
+        $notification->posts_id = $model->id;
+        $notification->save();
 
-            /**
-             * Notify users that always want notifications
-             */
-            $toNotify = [];
-            foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
-                if ($model->users_id != $user->id) {
-                    $notification           = new Notifications();
-                    $notification->users_id = $user->id;
-                    $notification->posts_id = $model->id;
-                    $notification->type     = Notifications::TYPE_POST;
-                    $notification->save();
-                    $toNotify[$user->id] = $notification->id;
-                }
+        /**
+         * Notify users that always want notifications
+         */
+        $toNotify = [];
+        foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
+            if ($model->users_id == $user->id) {
+                continue;
             }
 
-            /**
-             * Update the total of posts related to a category
-             */
-            $model->category->number_posts++;
-            $model->category->save();
+            $notification           = new Notifications();
+            $notification->users_id = $user->id;
+            $notification->posts_id = $model->id;
+            $notification->type     = Notifications::TYPE_POST;
+            $notification->save();
 
-            /**
-             * Queue notifications to be sent
-             */
-            /** @var Beanstalk $queue */
+            $toNotify[$user->id] = $notification->id;
+        }
+
+        /**
+         * Update the total of posts related to a category
+         */
+        $model->category->number_posts++;
+        $model->category->save();
+
+        /**
+         * Queue notifications to be sent.
+         *
+         * @var Beanstalk $queue
+         */
+        try {
             $queue = container('queue');
             $queue->choose('notifications');
-            /** @var DiscordComponent $discord */
-            $discord = container('discord');
             $queue->put($toNotify);
-            $discord->addMessageAboutDiscussion($model);
-
-            /**
-             * Add new record to post_history table after create new post
-             */
-            $this->addPostHistory($model);
+        } catch (\Exception $e) {
+            // Do nothing
+        } catch (\Throwable $e) {
+            // Do nothing
         }
+
+
+        /** @var DiscordComponent $discord */
+        try {
+            $discord = container('discord');
+            $discord->addMessageAboutDiscussion($model);
+        } catch (\Exception $e) {
+            // Do nothing
+        } catch (\Throwable $e) {
+            // Do nothing
+        }
+
+        /**
+         * Add new record to post_history table after create new post
+         */
+        $this->addPostHistory($model);
     }
 
     /**
