@@ -695,6 +695,10 @@ class DiscussionsController extends ControllerBase
 
                 $this->flash->error(join('<br>', $postReply->getMessages()));
             }
+
+            $this->flashSession->error("Reply message can't be empty");
+            $this->response->redirect("discussion/{$post->id}/{$post->slug}");
+            return;
         }
 
         $voting = [];
