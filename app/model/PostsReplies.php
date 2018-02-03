@@ -232,15 +232,29 @@ class PostsReplies extends Model
             }
 
             /**
-             * Queue notifications to be sent
+             * Queue notifications to be sent.
+             *
+             * @var Beanstalk $queue
              */
-            /** @var Beanstalk $queue */
-            $queue = container('queue');
-            $queue->choose('notifications');
-            $queue->put($toNotify);
+            try {
+                $queue = container('queue');
+                $queue->choose('notifications');
+                $queue->put($toNotify);
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $e) {
+                // Do nothing
+            }
+
             /** @var DiscordComponent $discord */
-            $discord = container('discord');
-            $discord->addMessageAboutReply($this);
+            try {
+                $discord = container('discord');//var_dump($discord);die;
+                $discord->addMessageAboutReply($this);
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $e) {
+                // Do nothing
+            }
         }
     }
 
