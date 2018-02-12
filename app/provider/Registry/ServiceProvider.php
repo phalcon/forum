@@ -38,7 +38,9 @@ class ServiceProvider extends AbstractServiceProvider
      * @var array $path
      */
     protected $path = [
-        'public_path' => BASE_PATH . '/public/'
+        'public_path' => BASE_PATH . '/public/',
+        'tests_data' => BASE_PATH . '/tests/_data/',
+        'tests_fixtures' => BASE_PATH . '/tests/_fixtures/',
     ];
 
     /**

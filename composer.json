@@ -50,7 +50,8 @@
         "team-reflex/discord-php": "4.0.*",
         "elasticsearch/elasticsearch": "^5.3",
         "erusev/parsedown-extra": "^0.7",
-        "erusev/parsedown": "^1.6"
+        "erusev/parsedown": "^1.6",
+        "phalcon-ext/mailer": "~2.0"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
