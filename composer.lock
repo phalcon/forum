@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cdd35594788f518b8b6c023bf7afb74",
+    "content-hash": "43c597d6d9b71a1ab32153e19ba6effc",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -1646,6 +1646,50 @@
                 "random"
             ],
             "time": "2017-09-27T21:40:39+00:00"
+        },
+        {
+            "name": "phalcon-ext/mailer",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon-ext/mailer.git",
+                "reference": "bfd398f5d06bae2858f1733c402ea2f63dcab167"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon-ext/mailer/zipball/bfd398f5d06bae2858f1733c402ea2f63dcab167",
+                "reference": "bfd398f5d06bae2858f1733c402ea2f63dcab167",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "swiftmailer/swiftmailer": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Ext\\Mailer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Kiryukhin",
+                    "email": "korsar.zn@gmail.com",
+                    "role": "Founder and project lead"
+                }
+            ],
+            "description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
+            "keywords": [
+                "mailer",
+                "phalcon",
+                "phalcon-ext",
+                "phalcon-mailer"
+            ],
+            "time": "2017-09-30T12:18:44+00:00"
         },
         {
             "name": "phalcon/breadcrumbs",
