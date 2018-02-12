@@ -19,6 +19,9 @@ $I->assertSame('some-model-content', container('modelsCache')->get('some-model-k
 $I->assertSame('some-view-content', container('viewCache')->get('some-view-key'));
 $I->copyDir($basePath . '/tests/_data/assets/', $basePath. '/public/assets/');
 
+$I->seeFileFound($basePath. '/public/assets/script.js');
+$I->seeFileFound($basePath. '/public/assets/style.css');
+
 $I->amInPath($basePath);
 $I->runShellCommand('php forum cache:clear');
 
