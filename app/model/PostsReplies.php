@@ -126,7 +126,7 @@ class PostsReplies extends Model
             return date('M \'y', $this->created_at);
         }
 
-        $this->getDiffTime($diff);
+        return $this->getDiffTime($diff);
     }
 
     /**
@@ -139,7 +139,7 @@ class PostsReplies extends Model
             return date('M \'y', $this->edited_at);
         }
 
-        $this->getDiffTime($diff);
+        return $this->getDiffTime($diff);
     }
 
     public function clearCache()
