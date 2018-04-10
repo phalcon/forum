@@ -406,7 +406,6 @@ CREATE TABLE `users` (
   KEY `login` (`login`),
   KEY `email` (`email`),
   KEY `karma` (`karma`),
-  KEY `login_2` (`login`),
   KEY `notifications` (`notifications`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

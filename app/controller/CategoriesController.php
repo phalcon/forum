@@ -18,10 +18,14 @@
 namespace Phosphorum\Controller;
 
 use Phalcon\Mvc\View;
+use Phalcon\Paginator\Pager;
 use Phosphorum\Model\Categories;
 use Phosphorum\Model\TopicTracking;
 use Phosphorum\Mvc\Traits\TokenTrait;
 use Phosphorum\Exception\HttpException;
+use Phalcon\Paginator\Pager\Range\Sliding;
+use Phalcon\Paginator\Pager\Layout\Bootstrap;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 
 /**
  * Phosphorum\Controller\IndexController
@@ -63,14 +67,23 @@ class CategoriesController extends ControllerBase
          */
         list($itemBuilder, $totalBuilder) = $this->prepareQueries();
 
-        $totalBuilder->where('p.categories_id = ?0 AND p.deleted = 0');
+        if (($currentPage = abs($this->request->getQuery('page', 'int'))) == 0) {
+            $currentPage = 1;
+        }
 
         $posts = $itemBuilder
-            ->where('p.categories_id = ?0 AND p.deleted = 0')
+            ->where('p.categories_id = :cat_id: AND p.deleted = 0', ['cat_id' => $categoryId])
             ->orderBy('p.created_at DESC')
-            ->offset((int)$offset)
+            ->offset((int)($currentPage - 1) * self::POSTS_IN_PAGE)
+            ->leftJoin('Phosphorum\Model\PostsReplies', 'p.id = rp.posts_id', 'rp')
+            ->groupBy('p.id')
+            ->columns([
+                'p.*',
+                'COUNT(rp.posts_id) AS count_replies',
+                'IFNULL(MAX(rp.modified_at), MAX(rp.created_at)) AS reply_time'
+            ])
             ->getQuery()
-            ->execute([$categoryId]);
+            ->execute();
 
         if (!count($posts)) {
             $this->flashSession->notice('There are no posts in category: ' . $category->name);
@@ -79,19 +92,34 @@ class CategoriesController extends ControllerBase
             return;
         }
 
+        $totalBuilder->where("p.categories_id = :cat_id: AND p.deleted = 0", ['cat_id' => $categoryId]);
+        $pager = new Pager(
+            new Paginator([
+                'builder' => $totalBuilder,
+                'limit'   => self::POSTS_IN_PAGE,
+                'page'    => $currentPage,
+            ]),
+            [
+                'layoutClass' => Bootstrap::class,
+                'rangeClass'  => Sliding::class,
+                'rangeLength' => 10,
+                'urlMask'     => sprintf('%s?page={%%page_number}', ""),
+            ]
+        );
+
         $totalPosts = $totalBuilder
             ->getQuery()
             ->setUniqueRow(true)
-            ->execute([$categoryId]);
+            ->execute();
+
 
         $this->view->setVars([
             'readposts'    => $readposts,
             'posts'        => $posts,
             'totalPosts'   => $totalPosts,
             'currentOrder' => null,
-            'offset'       => (int)$offset,
-            'paginatorUri' => "category/{$category->id}/{$category->slug}",
             'logged'       => $userId,
+            'pager'        => $pager,
         ]);
     }
 

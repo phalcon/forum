@@ -1,72 +1,82 @@
-language: php
-
 sudo: false
 dist: trusty
 
-# TODO: Add 7.2 after Phalcon 3.3.0 release
+language: php
+
 php:
-  - 5.6
-  - 7.0
-  - 7.1.11
+    - 5.6
+    - 7.0
+    - 7.1
+    - 7.2
+    - nightly
 
 git:
-  depth: 1
+    depth: 1
+
+env:
+    global:
+        - CC="ccache gcc"
+        - PHALCON_VERSION=v3.3.2
+
+matrix:
+    fast_finish: true
+    allow_failures:
+        - php: nightly
 
 cache:
-  apt: true
-  ccache: true
-  timeout: 691200
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-    - $HOME/cphalcon
-    - $HOME/ext
+    # See: https://github.com/travis-ci/travis-ci/issues/8714
+    edge: true
+    apt: true
+    ccache: true
+    timeout: 604800
+    directories:
+        - $HOME/.ccache
+        - $HOME/.composer/cache
+        - $HOME/pear
+        - $HOME/.local/lib
 
 before_install:
-  - export PHP_VERSION=$(php-config --version)
-  - export PHP_EXTENSION_DIR=$(php-config --extension-dir)
-  - phpenv config-rm xdebug.ini || true
-  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
-  - if [ ! -f "$HOME/cphalcon/tests/_ci/phalcon.ini" ]; then git clone -q --depth=1 https://github.com/phalcon/cphalcon.git $HOME/cphalcon >/dev/null 2>&1; fi;
+    - ulimit -c unlimited -S || true
+    - phpenv config-rm xdebug.ini || true
+    - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
 
 install:
-  - if [ ! -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cd $HOME/cphalcon/build && bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config) && mkdir -p $HOME/ext/$PHP_VERSION && cp $PHP_EXTENSION_DIR/phalcon.so $HOME/ext/$PHP_VERSION/phalcon.so; fi;
-  - if [ -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cp $HOME/ext/$PHP_VERSION/phalcon.so $PHP_EXTENSION_DIR/phalcon.so; fi;
-  - phpenv config-add $HOME/cphalcon/tests/_ci/phalcon.ini
-  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/memcached.ini
-  - cd $TRAVIS_BUILD_DIR
-  - travis_retry composer install --prefer-dist --no-interaction
+    - bash $TRAVIS_BUILD_DIR/tests/ci/install_phalcon.sh
+    - echo 'extension=memcached.so' > $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/50-memcached.ini
+    - travis_retry composer install --prefer-dist --no-interaction --no-suggest --optimize-autoloader
+    - ls -al `$(phpenv which php-config) --extension-dir`
+    - $(phpenv which php) -v
+    - $(phpenv which php) -m
+    - echo 'SHOW VARIABLES LIKE "%version%"' | mysql -u root
 
 before_script:
-  - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-  - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
-  - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
-  - cat schemas/forum.sql | mysql -u root phosphorum
-  - cp ./tests/.env.travis .env
-  - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+    - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
+    - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
+    - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
+    - cat schemas/forum.sql | mysql -u root phosphorum
+    - cp ./tests/.env.travis .env
+    - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
 
 script:
-  - vendor/bin/phpcs
-  - vendor/bin/codecept build
-  - vendor/bin/codecept run unit
-  - vendor/bin/codecept run functional
-  - vendor/bin/codecept run acceptance
-  - vendor/bin/codecept run console
+    - vendor/bin/phpcs
+    - vendor/bin/codecept build
+    - vendor/bin/codecept run unit
+    - vendor/bin/codecept run console
+    - vendor/bin/codecept run functional
+    - vendor/bin/codecept run acceptance
+
+after_failure:
+    - for file in `ls ./tests/_output`; do [ -f ./tests/_output/$file ] && cat ./tests/_output/$file; done;
 
 notifications:
-  email:
-    recipients:
-      - build@phalconphp.com
-    on_success: change
-    on_failure: always
+    email:
+        on_success: never
+        on_failure: never
 
 addons:
-  apt:
-    packages:
-      - beanstalkd
-      - mysql-server-5.6
-      - mysql-client-core-5.6
-      - mysql-client-5.6
-  hosts:
-    - db
-    - pforum.loc
+    apt:
+        packages:
+            - beanstalkd
+    hosts:
+        - db
+        - pforum.loc

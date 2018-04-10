@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -18,11 +18,14 @@
 namespace Phosphorum\Model;
 
 use Phalcon\Mvc\Model;
+use Phosphorum\Listener\UsersListener;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
  * Class Users
+ * Phosphorum\Model\Users
  *
  * @property Simple badges
  * @property Simple posts
@@ -66,7 +69,7 @@ class Users extends Model
     public $timezone;
 
     public $moderator;
-    
+
     public $admin;
 
     public $karma;
@@ -102,6 +105,10 @@ class Users extends Model
                 'beforeUpdate' => ['field' => 'modified_at']
             ])
         );
+
+        $eventsManager = new EventsManager();
+        $eventsManager->attach('model', new UsersListener());
+        $this->setEventsManager($eventsManager);
     }
 
     /**
@@ -120,54 +127,6 @@ class Users extends Model
     {
         $this->karma -= $karma;
         $this->votes_points -= $karma;
-    }
-
-    public function beforeSave()
-    {
-        if (!trim($this->name)) {
-            if ($this->login) {
-                $this->name = $this->login;
-            } else {
-                $this->name = 'No Name';
-            }
-        }
-    }
-
-    public function beforeCreate()
-    {
-        if (!$this->notifications) {
-            $this->notifications = self::NOTIFICATIONS_REP;
-        }
-
-        if (!$this->digest) {
-            $this->digest = 'Y';
-        }
-
-        $this->moderator     = 'N';
-        $this->karma        += Karma::INITIAL_KARMA;
-        $this->votes_points += Karma::INITIAL_KARMA;
-        $this->votes         = 0;
-        $this->timezone      = 'Europe/London';
-        $this->theme         = 'D';
-        $this->banned        = 'N';
-    }
-
-    public function afterValidation()
-    {
-        if ($this->votes_points >= 50) {
-            $this->votes++;
-            $this->votes_points = 0;
-        }
-    }
-
-    public function afterCreate()
-    {
-        if ($this->id > 0) {
-            $activity           = new Activities();
-            $activity->users_id = $this->id;
-            $activity->type     = 'U';
-            $activity->save();
-        }
     }
 
     /**

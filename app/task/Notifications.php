@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Task;
 
-use Phosphorum\Mail\SendSpool;
+use Phosphorum\Mail\SendNotifications;
 use Phosphorum\Console\AbstractTask;
 
 /**
@@ -37,7 +37,7 @@ class Notifications extends AbstractTask
 
         if (flock($filehandle, LOCK_EX | LOCK_NB)) {
             try {
-                $spool = new SendSpool();
+                $spool = new SendNotifications();
                 $spool->sendRemaining();
             } catch (\Exception $t) {
                 $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
@@ -84,7 +84,7 @@ class Notifications extends AbstractTask
 
         if (flock($filehandle, LOCK_EX | LOCK_NB)) {
             try {
-                $spool = new SendSpool();
+                $spool = new SendNotifications();
                 $spool->consumeQueue();
             } catch (\Exception $t) {
                 $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';

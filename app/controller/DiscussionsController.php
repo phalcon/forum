@@ -111,6 +111,15 @@ class DiscussionsController extends ControllerBase
                 $this->tag->setTitle('Discussions');
         }
 
+        $itemBuilder
+            ->leftJoin('Phosphorum\Model\PostsReplies', 'p.id = rp.posts_id', 'rp')
+            ->groupBy('p.id')
+            ->columns([
+                'p.*',
+                'COUNT(rp.posts_id) AS count_replies',
+                'IFNULL(MAX(rp.modified_at), MAX(rp.created_at)) AS reply_time'
+            ]);
+
         $notDeleteConditions = 'p.deleted = 0';
         $itemBuilder->andWhere($notDeleteConditions);
         $totalBuilder->andWhere($notDeleteConditions);
@@ -592,16 +601,14 @@ class DiscussionsController extends ControllerBase
             ];
 
             // A view is stored by ip address
-            if (!$viewed = PostsViews::count($parameters)) {
+            if (PostsViews::count($parameters) == 0 && $post->users_id != $usersId) {
                 // Increase the number of views in the post
                 $post->number_views++;
-                if ($post->users_id != $usersId) {
-                    $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
+                $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
-                    if ($user = Users::findFirstById($usersId)) {
-                        $user->increaseKarma($user->moderator == 'Y' ? Karma::MODERATE_VISIT_POST : Karma::VISIT_POST);
-                        $user->save();
-                    }
+                if ($user = Users::findFirstById($usersId)) {
+                    $user->increaseKarma($user->moderator == 'Y' ? Karma::MODERATE_VISIT_POST : Karma::VISIT_POST);
+                    $user->save();
                 }
 
                 $postView            = new PostsViews();
@@ -621,6 +628,21 @@ class DiscussionsController extends ControllerBase
                     return;
                 }
             }
+
+            $postReply = PostsReplies::query()
+                ->where("posts_id = :posts_id:")
+                ->columns([
+                    'COUNT(posts_id) AS count_replies',
+                    'IFNULL(MAX(modified_at), MAX(created_at)) AS reply_time',
+                ])
+                ->bind(["posts_id" => $post->id])
+                ->limit(1)
+                ->orderBy('reply_time')
+                ->execute()
+                ->getFirst();
+
+            $post->number_replies = $postReply->count_replies;
+            $post->modified_at = $postReply->reply_time;
 
             // Generate canonical meta
             $this->view->setVars([
@@ -697,6 +719,10 @@ class DiscussionsController extends ControllerBase
 
                 $this->flash->error(join('<br>', $postReply->getMessages()));
             }
+
+            $this->flashSession->error("Reply message can't be empty");
+            $this->response->redirect("discussion/{$post->id}/{$post->slug}");
+            return;
         }
 
         $voting = [];
