@@ -111,6 +111,15 @@ class DiscussionsController extends ControllerBase
                 $this->tag->setTitle('Discussions');
         }
 
+        $itemBuilder
+            ->leftJoin('Phosphorum\Model\PostsReplies', 'p.id = rp.posts_id', 'rp')
+            ->groupBy('p.id')
+            ->columns([
+                'p.*',
+                'COUNT(rp.posts_id) AS count_replies',
+                'IFNULL(MAX(rp.modified_at), MAX(rp.created_at)) AS reply_time'
+            ]);
+
         $notDeleteConditions = 'p.deleted = 0';
         $itemBuilder->andWhere($notDeleteConditions);
         $totalBuilder->andWhere($notDeleteConditions);
@@ -619,6 +628,21 @@ class DiscussionsController extends ControllerBase
                     return;
                 }
             }
+
+            $postReply = PostsReplies::query()
+                ->where("posts_id = :posts_id:")
+                ->columns([
+                    'COUNT(posts_id) AS count_replies',
+                    'IFNULL(MAX(modified_at), MAX(created_at)) AS reply_time',
+                ])
+                ->bind(["posts_id" => $post->id])
+                ->limit(1)
+                ->orderBy('reply_time')
+                ->execute()
+                ->getFirst();
+
+            $post->number_replies = $postReply->count_replies;
+            $post->modified_at = $postReply->reply_time;
 
             // Generate canonical meta
             $this->view->setVars([
