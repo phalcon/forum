@@ -75,6 +75,13 @@ class CategoriesController extends ControllerBase
             ->where('p.categories_id = :cat_id: AND p.deleted = 0', ['cat_id' => $categoryId])
             ->orderBy('p.created_at DESC')
             ->offset((int)($currentPage - 1) * self::POSTS_IN_PAGE)
+            ->leftJoin('Phosphorum\Model\PostsReplies', 'p.id = rp.posts_id', 'rp')
+            ->groupBy('p.id')
+            ->columns([
+                'p.*',
+                'COUNT(rp.posts_id) AS count_replies',
+                'IFNULL(MAX(rp.modified_at), MAX(rp.created_at)) AS reply_time'
+            ])
             ->getQuery()
             ->execute();
 
