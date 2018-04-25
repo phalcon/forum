@@ -21,6 +21,7 @@ use Phalcon\Text;
 use Phalcon\Config;
 use Phalcon\Di\Injectable;
 use Guzzle\Http\Client as HttpClient;
+use Phosphorum\Exception\UrlException;
 
 /**
  * Class OAuth
@@ -46,10 +47,12 @@ class OAuth extends Injectable
      */
     public function __construct(Config $config)
     {
+        $this->logger               = $this->getDI()->get('logger', ['auth']);
+        $this->checkRedirectGitPath($config->get('redirectUri'));
+
         $this->redirectUriAuthorize = $config->get('redirectUri');
         $this->clientId             = $config->get('clientId');
         $this->clientSecret         = $config->get('clientSecret');
-        $this->logger               = $this->getDI()->get('logger', ['auth']);
     }
 
     public function authorize()
@@ -130,6 +133,33 @@ class OAuth extends Injectable
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * @param string $url
+     *
+     */
+    protected function checkRedirectGitPath($url)
+    {
+        $validationFlags = FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_PATH_REQUIRED;
+
+        if (!filter_var($url, $validationFlags)) {
+            throw new UrlException("current URL '{$url}' isn't valid.");
+        }
+
+        if (stristr($url, '://', true) != $this->request->getScheme()) {
+            $errorMessage = 'The same protocol should be used for the authorization callback URL and forum settings. ';
+            $errorMessage .= 'Please, check setting in your config file and on Github.';
+
+            $this->logger->error($errorMessage);
+        }
+
+        if (substr($url, -1) != '/') {
+            $errorMessage = 'Authorization callback URL should contain slash in the end. ';
+            $errorMessage .= 'Please, check setting in your config file and on Github.';
+
+            $this->logger->error($errorMessage);
         }
     }
 }
