@@ -54,6 +54,9 @@ class Cache extends AbstractTask
         $this->output('Clear annotations cache...');
         $this->clearCache('annotations');
 
+        $this->output('Clear assets collections files...');
+        $this->clearFileAssetsCollection();
+
         $this->output('Done');
     }
 
@@ -82,5 +85,26 @@ class Cache extends AbstractTask
         $service = container($service);
 
         $service->flush();
+    }
+
+    /**
+     * Delete all assets collections files
+     */
+    protected function clearFileAssetsCollection()
+    {
+        $pathToCollection = container()->get('registry')->offsetGet('public_path') . 'assets';
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($pathToCollection),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($iterator as $entry) {
+            if ($entry->isDir() || in_array($entry->getBasename(), $this->excludeFileNames)) {
+                continue;
+            }
+
+            unlink($entry->getPathname());
+        }
     }
 }

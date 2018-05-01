@@ -13,6 +13,10 @@ return [
             'username' => env('DB_USERNAME', 'phosphorum'),
             'password' => env('DB_PASSWORD', 'secret'),
             'charset'  => env('DB_CHARSET', 'utf8'),
+            'options'  => [
+                PDO::ATTR_EMULATE_PREPARES   => false,
+                PDO::ATTR_STRINGIFY_FETCHES  => false,
+            ]
         ],
 
         'sqlite' => [

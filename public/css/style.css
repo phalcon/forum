@@ -163,28 +163,19 @@ ul.categories-dropdown > li > a {
     }
 }
 
-@media only screen
-and (min-device-width: 768px)
-and (max-device-width : 1025px)
-and (orientation : landscape) {
+@media only screen and (min-device-width: 768px) and (max-device-width : 1025px) and (orientation : landscape) {
     .page-wrapper {
         margin-top: 0.5rem;
     }
 }
 
-@media only screen
-and (min-device-width: 768px)
-and (max-device-width: 991px)
-and (orientation : landscape) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 991px) and (orientation : landscape) {
     .page-wrapper {
         margin-top: 4rem;
     }
 }
 
-@media only screen
-and (min-device-width: 768px)
-and (max-device-width : 1024px)
-and (orientation : portrait) {
+@media only screen and (min-device-width: 768px) and (max-device-width : 1024px) and (orientation : portrait) {
     .page-wrapper {
         margin-top: 4rem;
     }

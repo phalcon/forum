@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team and contributors               |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -574,7 +574,14 @@ var Forum = {
 					data: {'content': content }
 				}).done(function(parent, response){
 					$('#preview-box', parent).html(response);
-					prettyPrint();
+
+                    $('#preview-box').find('code').each(function(index, element) {
+                        Prism.highlightElement($(element)[0]);
+                    });
+
+                    $('.preview-box').find('code').each(function(index, element) {
+                        Prism.highlightElement($(element)[0]);
+                    });
 				}.bind(this, parent));
 			} else {
 				$('#preview-box', parent).html('Nothing to preview');
@@ -764,7 +771,6 @@ var Forum = {
 	{
 		Forum._uri = uri;
 		Forum.addCallbacks();
-		prettyPrint();
 	}
 
 };
