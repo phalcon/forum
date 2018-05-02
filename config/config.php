@@ -79,7 +79,7 @@ return [
     ],
 
     'error' => [
-        'logger'    => app_path('logs/error.log'),
+        'logger'    => storage_path('logs/application.log'),
         'formatter' => [
             'format' => env('LOGGER_FORMAT', '[%date%][%type%] %message%'),
             'date'   => 'd-M-Y H:i:s',
