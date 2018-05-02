@@ -30,7 +30,7 @@
         "forum": "https://forum.phalconphp.com/"
     },
     "require": {
-        "php": ">= 5.6",
+        "php": ">= 7.0",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
@@ -51,7 +51,9 @@
         "elasticsearch/elasticsearch": "^5.3",
         "erusev/parsedown-extra": "^0.7",
         "erusev/parsedown": "^1.6",
-        "phalcon-ext/mailer": "~2.0"
+        "phalcon-ext/mailer": "~2.0",
+        "symfony/var-dumper": "~3.4",
+        "phalcon/devtools": "~3.2"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
@@ -86,7 +88,8 @@
             "Phosphorum\\Task\\": "app/task",
             "Phosphorum\\Controller\\": "app/controller",
             "Phosphorum\\Provider\\": "app/provider",
-            "Phosphorum\\Listener\\": "app/listener"
+            "Phosphorum\\Listener\\": "app/listener",
+            "Phosphorum\\Services\\": "app/services"
         },
         "files": [
             "bootstrap/helpers.php"

@@ -774,3 +774,15 @@ var Forum = {
 	}
 
 };
+
+function showExtraParam() {
+    $('.extra-params-fields').show();
+    $('.hide-extra-param').show();
+    $('.show-extra-param').hide();
+}
+
+function hideExtraParam() {
+    $('.extra-params-fields').hide();
+    $('.hide-extra-param').hide();
+    $('.show-extra-param').show();
+}

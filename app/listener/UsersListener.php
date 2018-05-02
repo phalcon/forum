@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -21,6 +21,8 @@ use Phalcon\Events\Event;
 use Phosphorum\Model\Users;
 use Phosphorum\Model\Karma;
 use Phosphorum\Model\Activities;
+use Phosphorum\Model\UsersSetting;
+use Phosphorum\Services\UsersSettingService;
 
 /**
  * Phosphorum\Listener\UsersListener
@@ -78,5 +80,11 @@ class UsersListener
         $activity->users_id = $users->id;
         $activity->type     = 'U';
         $activity->save();
+
+        (new UsersSetting())->create([
+            'userId' => $users->id,
+            'jsonData' => (new UsersSettingService)->getDefaultUserExtraData(),
+            'createdAt' => time(),
+        ]);
     }
 }
