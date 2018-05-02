@@ -4,7 +4,6 @@ dist: trusty
 language: php
 
 php:
-    - 5.6
     - 7.0
     - 7.1
     - 7.2
@@ -50,10 +49,7 @@ install:
     - echo 'SHOW VARIABLES LIKE "%version%"' | mysql -u root
 
 before_script:
-    - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-    - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
-    - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
-    - cat schemas/forum.sql | mysql -u root phosphorum
+    - bash tests/ci/setup_db.sh
     - cp ./tests/.env.travis .env
     - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
 

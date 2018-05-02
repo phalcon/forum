@@ -996,3 +996,15 @@ ins {
 del {
     text-decoration: line-through;
 }
+
+.extra-params-fields {
+    margin-top: 15px;
+}
+
+.extra-param-label {
+    margin-top: 10px;
+}
+
+.extra-param-legend {
+    margin-bottom: 5px;
+}

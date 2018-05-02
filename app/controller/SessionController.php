@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,13 +17,14 @@
 
 namespace Phosphorum\Controller;
 
-use Phosphorum\Github\OAuth;
-use Phosphorum\Github\Users as GithubUsers;
-use Phosphorum\Model\Users as ForumUsers;
-use Phosphorum\Model\Karma;
-use Phosphorum\Model\NotificationsBounces;
-use Phalcon\Mvc\Model;
 use Phalcon\Config;
+use Phalcon\Mvc\Model;
+use Phosphorum\Model\Karma;
+use Phosphorum\Github\OAuth;
+use Phosphorum\Model\Users as ForumUsers;
+use Phosphorum\Model\NotificationsBounces;
+use Phosphorum\Github\Users as GithubUsers;
+use Phosphorum\Services\UsersSettingService;
 
 /**
  * Class SessionController
@@ -161,7 +162,8 @@ class SessionController extends ControllerBase
             $this->session->set('identity-moderator', $user->moderator);
             $this->session->set('identity-admin', $user->admin);
             $this->session->set('identity-karma', $user->karma);
-
+            $this->session->set('user-data', (new UsersSettingService())->getDataOrDefault($user->id));
+            
             if ($user->getOperationMade() == Model::OP_CREATE) {
                 $this->flashSession->success('Welcome ' . $user->name);
             } else {

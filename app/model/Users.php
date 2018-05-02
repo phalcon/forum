@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -98,6 +98,16 @@ class Users extends Model
         $this->hasMany('id', UsersBadges::class, 'users_id', ['alias' => 'badges', 'reusable' => true]);
         $this->hasMany('id', Posts::class, 'users_id', ['alias' => 'posts', 'reusable' => true]);
         $this->hasMany('id', PostsReplies::class, 'users_id', ['alias' => 'replies', 'reusable' => true]);
+
+        $this->belongsTo(
+            'id',
+            UsersSetting::class,
+            'user_id',
+            [
+                'alias'    => 'setting',
+                'reusable' => true
+            ]
+        );
 
         $this->addBehavior(
             new Timestampable([

@@ -25,6 +25,7 @@
         on the command line will ignore all file tags.
     -->
     <file>app</file>
+    <exclude-pattern>app/migrations/*</exclude-pattern>
 
     <!--
         You can hard-code ignore patterns directly into your

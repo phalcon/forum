@@ -103,6 +103,15 @@
                         <div class="form-group">
                             <a href="https://en.gravatar.com/">Change your avatar at Gravatar</a>
                         </div>
+
+                        {%- if extraParams is not empty -%}
+                            {%-
+                                include 'partials/users/extra-parameters' with [
+                                    'extraParams': extraParams
+                                ]
+                            -%}
+                        {%- endif -%}
+
                         <div class="form-group">
                             <input type="submit" class="btn btn-success" value="Save">
                         </div>
