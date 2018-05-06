@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Fixed log path for errors in config.php [#473](https://github.com/phalcon/forum/issues/473)
 
-## [3.5.x](CHANGELOG-3.5.md)
 ## [3.x](CHANGELOG-3.md)
 ## [2.x](CHANGELOG-2.md)
 
