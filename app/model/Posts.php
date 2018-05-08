@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -21,13 +21,12 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Diff;
 use Phalcon\Mvc\Model;
+use Phosphorum\Listener\PostListener;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
-use Phalcon\Mvc\Model\Behavior\Timestampable;
-use Phalcon\Queue\Beanstalk;
 use Phalcon\Events\Manager as EventsManager;
-use Phosphorum\Listener\PostListener;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
  * Class Posts
