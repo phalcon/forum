@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,9 +17,11 @@
 
 namespace Phosphorum\Listener;
 
+use Phalcon\Di;
 use Phalcon\Events\Event;
+use Aws\AwsClientInterface;
 use Phosphorum\Model\Users;
-use Phalcon\Queue\Beanstalk;
+use Aws\Exception\AwsException;
 use Phosphorum\Model\Activities;
 use Phosphorum\Model\PostsReplies;
 use Phosphorum\Model\Notifications;
@@ -71,7 +73,7 @@ class PostRepliesListener
             if ($model->users_id == $user->id) {
                 continue;
             }
-            
+
             $notification                   = new Notifications();
             $notification->users_id         = $user->id;
             $notification->posts_id         = $model->posts_id;
@@ -97,7 +99,7 @@ class PostRepliesListener
             if (isset($toNotify[$subscriber->users_id])) {
                 continue;
             }
-            
+
             $notification                   = new Notifications();
             $notification->users_id         = $subscriber->users_id;
             $notification->posts_id         = $model->posts_id;
@@ -164,16 +166,29 @@ class PostRepliesListener
         /**
          * Queue notifications to be sent.
          *
-         * @var Beanstalk $queue
+         * @var AwsClientInterface; $queue
          */
-        try {
-            $queue = container('queue');
-            $queue->choose('notifications');
-            $queue->put($toNotify);
-        } catch (\Exception $e) {
-            // Do nothing
-        } catch (\Throwable $e) {
-            // Do nothing
+        if (!empty($toNotify)) {
+            try {
+                $queue = Di::getDefault()->get('queue');
+                $queue->sendMessage([
+                    'DelaySeconds' => 1,
+                    'MessageAttributes' => [
+                        "Title" => [
+                            'DataType' => "String",
+                            'StringValue' => "Post replies notifications"
+                        ],
+                    ],
+                    'MessageBody' => json_encode($toNotify),
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                ]);
+            } catch (AwsException $e) {
+                Di::getDefault()->get('logger')->error($e->getMessage());
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $e) {
+                // Do nothing
+            }
         }
 
         /** @var DiscordComponent $discord */
