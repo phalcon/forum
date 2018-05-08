@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,19 +17,21 @@
 
 namespace Phosphorum\Listener;
 
+use Phalcon\Di;
 use Phalcon\Events\Event;
 use Phalcon\Db\Adapter\Pdo;
 use Phosphorum\Model\Posts;
-use Phosphorum\Model\PostsHistory;
-use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Mvc\Model\ResultsetInterface;
+use Phosphorum\Model\Users;
+use Aws\AwsClientInterface;
+use Aws\Exception\AwsException;
 use Phosphorum\Model\Activities;
 use Phosphorum\Model\PostsViews;
-use Phosphorum\Model\PostsNotifications;
-use Phosphorum\Model\Users;
+use Phosphorum\Model\PostsHistory;
 use Phosphorum\Model\Notifications;
-use Phalcon\Queue\Beanstalk;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phosphorum\Model\PostsNotifications;
 use Phosphorum\Discord\DiscordComponent;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Phosphorum\Listener\PostListener
@@ -130,19 +132,30 @@ class PostListener
 
         /**
          * Queue notifications to be sent.
-         *
-         * @var Beanstalk $queue
+         * @var AwsClientInterface; $queue
          */
-        try {
-            $queue = container('queue');
-            $queue->choose('notifications');
-            $queue->put($toNotify);
-        } catch (\Exception $e) {
-            // Do nothing
-        } catch (\Throwable $e) {
-            // Do nothing
+        if (!empty($toNotify)) {
+            try {
+                $queue = Di::getDefault()->get('queue');
+                $queue->sendMessage([
+                    'DelaySeconds' => 1,
+                    'MessageAttributes' => [
+                        "Title" => [
+                            'DataType' => "String",
+                            'StringValue' => "Post notifications"
+                        ],
+                    ],
+                    'MessageBody' => json_encode($toNotify),
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                ]);
+            } catch (AwsException $e) {
+                Di::getDefault()->get('logger')->error($e->getMessage());
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $e) {
+                // Do nothing
+            }
         }
-
 
         /** @var DiscordComponent $discord */
         try {

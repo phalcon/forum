@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-present Phalcon Team and contributors               |
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -17,12 +17,23 @@
 
 namespace Phosphorum\Mail;
 
-use Phosphorum\Model\Notifications;
-use Phosphorum\Model\Services\Service;
+use Phalcon\Di;
+use Aws\Sqs\SqsClient;
+use Phalcon\Di\Injectable;
+use Aws\AwsClientInterface;
 use Phalcon\Ext\Mailer\Manager;
 use Phalcon\Ext\Mailer\Message;
+use Aws\Exception\AwsException;
+use Phosphorum\Model\Notifications;
+use Phosphorum\Model\Services\Service;
 
-class SendNotifications
+/**
+ * Phosphorum\Mail\SendNotifications
+ *
+ * @property AwsClientInterface $queue
+ * @package Phosphorum\Mail
+ */
+class SendNotifications extends Injectable
 {
     /**
      * @var Notifications $notification
@@ -63,38 +74,85 @@ class SendNotifications
     }
 
     /**
-     * Check the queue from Beanstalk and send the notifications scheduled there
+     * Check the queue from Amazon SQS and send the notifications scheduled there
+     * @return void
      */
     public function consumeQueue()
     {
-        $queue = container('queue');
-        $queue->watch('notifications');
+        try {
+            $queue = Di::getDefault()->get('queue');
 
-        while (true) {
-            while ($job = $queue->reserve() !== false) {
-                $message = $job->getBody();
+            /** @var \Aws\Result $messages*/
+            $messages = $this->getMessagesFromQueue($queue);
 
-                foreach ($message as $userId => $id) {
-                    if ($notification = Notifications::findFirstById($id)) {
-                        try {
-                            $this->send($notification);
-                        } catch (\Exception $e) {
-                            // Do nothing
-                        } catch (\Throwable $t) {
-                            // Do nothing
-                        }
-                    }
+            if (count($messages->get('Messages')) == 0) {
+                return;
+            }
+            foreach ($messages->get('Messages') as $message) {
+                $idList = json_decode($message['Body'], true);
+
+                if (!empty($idList)) {
+                    $this->trySendNotificationsFromMessage($idList);
                 }
 
-                $job->delete();
+                $queue->deleteMessage([
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                    'ReceiptHandle' => $message['ReceiptHandle'],
+                ]);
+            }
+        } catch (AwsException $e) {
+            Di::getDefault()->get('logger')->error($e->getMessage());
+        } catch (\Exception $e) {
+            // Do nothing
+        } catch (\Throwable $e) {
+            // Do nothing
+        }
+
+        sleep(5);
+        $this->consumeQueue();
+    }
+
+    /**
+     * Get messages from queue, max amount 10
+     * @param SqsClient $queue
+     * @return \Aws\Result
+     */
+    protected function getMessagesFromQueue($queue)
+    {
+        return $queue->receiveMessage([
+            'AttributeNames' => ['SentTimestamp'],
+            'MaxNumberOfMessages' => 10,
+            'MessageAttributeNames' => ['All'],
+            'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+        ]);
+    }
+
+    /**
+     * Try to send to users from queue's message
+     * @param array $idList
+     * @return void
+     * @throws \Exception|\Throwable
+     */
+    protected function trySendNotificationsFromMessage(array $idList)
+    {
+        foreach ($idList as $userId => $id) {
+            if (!$notification = Notifications::findFirstById($id)) {
+                return;
             }
 
-            sleep(5);
+            try {
+                $this->send($notification);
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $t) {
+                // Do nothing
+            }
         }
     }
 
     /**
      * Check notifications marked as not send on the databases and send them
+     * @return void
      */
     public function sendRemaining()
     {
@@ -115,6 +173,7 @@ class SendNotifications
 
     /**
      * @param Notifications $notification
+     * @return void
      */
     protected function send(Notifications $notification)
     {
@@ -130,8 +189,8 @@ class SendNotifications
 
     /**
      * Set params for notification
-     *
      * @param Notifications $notification
+     * @return void
      */
     protected function setNotificationParam(Notifications $notification)
     {
@@ -141,7 +200,6 @@ class SendNotifications
 
     /**
      * Checking different params that allow sending email
-     *
      * @return bool
      */
     protected function checkMailCanBeSent()
@@ -167,7 +225,6 @@ class SendNotifications
 
     /**
      * Set option to object Message for sending email
-     *
      * @return Message
      */
     protected function getLetter()
@@ -248,7 +305,6 @@ class SendNotifications
 
     /**
      * prepare and return param for email
-     *
      * @return $array
      */
     protected function prepareAndGetMailParams()
