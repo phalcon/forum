@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -21,16 +21,14 @@ namespace Phosphorum\Model;
 use Phalcon\Mvc\Model;
 
 /**
- * Class TopicTracking
+ * Class PostsHistory
  *
  * @property \Phosphorum\Model\Posts post
- *
  * @method static TopicTracking[] find($parameters=null)
  * @method static TopicTracking findFirst($parameters=null)
  *
  * @package Phosphorum\Model
  */
-
 class TopicTracking extends Model
 {
     public $id;

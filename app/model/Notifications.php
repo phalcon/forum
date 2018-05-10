@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -26,7 +26,6 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
  * @property Users        user
  * @property Posts        post
  * @property PostsReplies reply
- * @method static Notifications findFirstById(int $id)
  *
  * @package Phosphorum\Model
  */

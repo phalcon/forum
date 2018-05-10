@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -21,12 +21,12 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Diff;
 use Phalcon\Mvc\Model;
-use Phosphorum\Listener\PostListener;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Diff\Renderer\Html\SideBySide;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
-use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Queue\Beanstalk;
+use Phosphorum\Discord\DiscordComponent;
 
 /**
  * Class Posts
@@ -184,10 +184,132 @@ class Posts extends Model
                 ]
             )
         );
-        
-        $eventsManager = new EventsManager();
-        $eventsManager->attach('model', new PostListener());
-        $this->setEventsManager($eventsManager);
+    }
+
+    public function beforeValidationOnCreate()
+    {
+        $this->deleted         = 0;
+        $this->number_views    = 0;
+        $this->number_replies  = 0;
+        $this->sticked         = self::IS_UNSTICKED;
+        $this->accepted_answer = 'N';
+        $this->locked          = 'N';
+        $this->status          = 'A';
+
+        if ($this->title && !$this->slug) {
+            $this->slug = $this->getDI()->getShared('slug')->generate($this->title);
+        }
+    }
+
+    /**
+     * Create a posts-views logging the ipaddress where the post was created
+     * This avoids that the same session counts as post view
+     */
+    public function beforeCreate()
+    {
+        $this->views = new PostsViews([
+            'ipaddress' => $this->getDI()->getShared('request')->getClientAddress(),
+        ]);
+    }
+
+    public function afterCreate()
+    {
+        /**
+         * Register a new activity
+         */
+        if ($this->id > 0) {
+            /**
+             * Register the activity
+             */
+            $activity           = new Activities();
+            $activity->users_id = $this->users_id;
+            $activity->posts_id = $this->id;
+            $activity->type     = Activities::NEW_POST;
+            $activity->save();
+
+            /**
+             * Notify users that always want notifications
+             */
+            $notification           = new PostsNotifications();
+            $notification->users_id = $this->users_id;
+            $notification->posts_id = $this->id;
+            $notification->save();
+
+            /**
+             * Notify users that always want notifications
+             */
+            $toNotify = [];
+            foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
+                if ($this->users_id != $user->id) {
+                    $notification           = new Notifications();
+                    $notification->users_id = $user->id;
+                    $notification->posts_id = $this->id;
+                    $notification->type     = Notifications::TYPE_POST;
+                    $notification->save();
+                    $toNotify[$user->id] = $notification->id;
+                }
+            }
+
+            /**
+             * Update the total of posts related to a category
+             */
+            $this->category->number_posts++;
+            $this->category->save();
+
+            /**
+             * Queue notifications to be sent
+             */
+            /** @var Beanstalk $queue */
+            $queue = container('queue');
+            $queue->choose('notifications');
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $queue->put($toNotify);
+            $discord->addMessageAboutDiscussion($this);
+        }
+    }
+
+    public function afterSave()
+    {
+        $this->clearCache();
+
+        if (!container()->has('session')) {
+            return;
+        }
+
+        if (!container('session')->isStarted()) {
+            return;
+        }
+
+        // In case of updating post through creating PostsViews
+        if (!container('session')->has('identity')) {
+            return;
+        }
+
+        $history = new PostsHistory([
+            'posts_id' => $this->id,
+            'users_id' => container('session')->get('identity'),
+            'content'  => $this->content,
+        ]);
+
+        if (!$history->save()) {
+            $reason   = [];
+
+            foreach ($history->getMessages() as $message) {
+                /** @var \Phalcon\Mvc\Model\MessageInterface $message */
+                $reason[] = $message->getMessage();
+            }
+
+            container('logger')->error('Unable to store post history. Post id: {id}. Reason: {reason}', [
+                'id'     => $this->id,
+                'reason' => implode('. ', $reason)
+            ]);
+        }
+    }
+
+    public function afterDelete()
+    {
+        $this->clearCache();
     }
 
     /**
@@ -429,10 +551,6 @@ class Posts extends Model
         }
     }
 
-    /**
-     * Show difference between post in table post_history and content that has been received
-     * @todo when `title` will be added to post_history, title should be added to show difference
-     */
     public function getDifference()
     {
         $history = PostsHistory::findLast($this);

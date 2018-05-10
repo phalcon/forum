@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,7 +17,6 @@
 
 namespace Phosphorum\Provider\Queue;
 
-use Aws\Sdk;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
@@ -46,14 +45,16 @@ class ServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 $config = container('config')->queue;
+
                 $driver  = $config->drivers->{$config->default};
 
-                if ($config->default === 'fake') {
-                    return new Fake(null);
+                if ($config->default !== 'fake') {
+                    $adapter = '\Phalcon\Queue\\' . $driver->adapter;
+
+                    return new $adapter($driver->toArray());
                 }
 
-                $sdk = new Sdk($driver->toArray());
-                return $sdk->createClient($config->default);
+                return new Fake(null);
             }
         );
     }

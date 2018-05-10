@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -22,9 +22,9 @@ use DateTimeZone;
 use Phalcon\Diff;
 use Phalcon\Mvc\Model;
 use Phalcon\Diff\Renderer\Html\SideBySide;
-use Phalcon\Events\Manager as EventsManager;
-use Phosphorum\Listener\PostRepliesListener;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Queue\Beanstalk;
+use Phosphorum\Discord\DiscordComponent;
 
 /**
  * Class PostsReplies
@@ -108,10 +108,167 @@ class PostsReplies extends Model
                 ]
             ])
         );
+    }
 
-        $eventsManager = new EventsManager();
-        $eventsManager->attach('model', new PostRepliesListener());
-        $this->setEventsManager($eventsManager);
+    public function beforeCreate()
+    {
+        if ($this->in_reply_to_id > 0) {
+            $postReplyTo = self::findFirst(['id = ?0', 'bind' => [$this->in_reply_to_id]]);
+            if (!$postReplyTo) {
+                $this->in_reply_to_id = 0;
+            } elseif ($postReplyTo->posts_id != $this->posts_id) {
+                $this->in_reply_to_id = 0;
+            }
+        }
+        $this->accepted = 'N';
+    }
+
+    public function afterCreate()
+    {
+        if ($this->id > 0) {
+            $activity           = new Activities();
+            $activity->users_id = $this->users_id;
+            $activity->posts_id = $this->posts_id;
+            $activity->type     = Activities::NEW_REPLY;
+            $activity->save();
+
+            $toNotify = [];
+
+            /**
+             * Notify users that always want notifications
+             */
+            foreach (Users::find(['notifications = "Y"', 'columns' => 'id']) as $user) {
+                if ($this->users_id != $user->id) {
+                    $notification                   = new Notifications();
+                    $notification->users_id         = $user->id;
+                    $notification->posts_id         = $this->posts_id;
+                    $notification->posts_replies_id = $this->id;
+                    $notification->type             = Notifications::TYPE_COMMENT;
+                    $notification->save();
+
+                    $activity                       = new ActivityNotifications();
+                    $activity->users_id             = $user->id;
+                    $activity->posts_id             = $this->posts_id;
+                    $activity->posts_replies_id     = $this->id;
+                    $activity->users_origin_id      = $this->users_id;
+                    $activity->type                 = 'C';
+                    $activity->save();
+
+                    $toNotify[$user->id] = $notification->id;
+                }
+            }
+
+            /**
+             * Register users subscribed to the post
+             */
+            foreach (PostsSubscribers::findByPostsId($this->posts_id) as $subscriber) {
+                if (!isset($toNotify[$subscriber->users_id])) {
+                    $notification                   = new Notifications();
+                    $notification->users_id         = $subscriber->users_id;
+                    $notification->posts_id         = $this->posts_id;
+                    $notification->posts_replies_id = $this->id;
+                    $notification->type             = Notifications::TYPE_COMMENT;
+                    $notification->save();
+
+                    $activity                       = new ActivityNotifications();
+                    $activity->users_id             = $subscriber->users_id;
+                    $activity->posts_id             = $this->posts_id;
+                    $activity->posts_replies_id     = $this->id;
+                    $activity->users_origin_id      = $this->users_id;
+                    $activity->type                 = 'C';
+                    $activity->save();
+
+                    $toNotify[$subscriber->users_id] = $notification->id;
+                }
+            }
+
+            /**
+             * Register the user in the post's notifications
+             */
+            if (!isset($toNotify[$this->users_id])) {
+                $parameters       = [
+                    'users_id = ?0 AND posts_id = ?1',
+                    'bind' => [$this->users_id, $this->posts_id]
+                ];
+                $hasNotifications = PostsNotifications::count($parameters);
+
+                if (!$hasNotifications) {
+                    $notification           = new PostsNotifications();
+                    $notification->users_id = $this->users_id;
+                    $notification->posts_id = $this->posts_id;
+                    $notification->save();
+                }
+            }
+
+            /**
+             * Notify users that have commented in the same post
+             */
+            $postsNotifications = PostsNotifications::findByPostsId($this->posts_id);
+            foreach ($postsNotifications as $postNotification) {
+                if (!isset($toNotify[$postNotification->users_id])) {
+                    if ($postNotification->users_id != $this->users_id) {
+
+                        /**
+                         * Generate an e-mail notification
+                         */
+                        $notification                   = new Notifications();
+                        $notification->users_id         = $postNotification->users_id;
+                        $notification->posts_id         = $this->posts_id;
+                        $notification->posts_replies_id = $this->id;
+                        $notification->type             = Notifications::TYPE_COMMENT;
+                        $notification->save();
+
+                        $activity                       = new ActivityNotifications();
+                        $activity->users_id             = $postNotification->users_id;
+                        $activity->posts_id             = $this->posts_id;
+                        $activity->posts_replies_id     = $this->id;
+                        $activity->users_origin_id      = $this->users_id;
+                        $activity->type                 = 'C';
+                        $activity->save();
+
+                        $toNotify[$postNotification->users_id] = $notification->id;
+                    }
+                }
+            }
+
+            /**
+             * Queue notifications to be sent
+             */
+            /** @var Beanstalk $queue */
+            $queue = container('queue');
+            $queue->choose('notifications');
+            $queue->put($toNotify);
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $discord->addMessageAboutReply($this);
+        }
+    }
+
+    public function afterSave()
+    {
+        $this->clearCache();
+
+        $usersId = $this->users_id;
+        if (container()->has('session') && container('session')->isStarted() && container('session')->has('identity')) {
+            $usersId = container('session')->get('identity');
+        }
+
+        $history                   = new PostsRepliesHistory();
+        $history->posts_replies_id = $this->id;
+        $history->users_id         = $usersId;
+        $history->content          = $this->content;
+
+        $history->save();
+        if ($this->hasUpdated('accepted') && $this->accepted == 'Y') {
+            /** @var DiscordComponent $discord */
+            $discord = container('discord');
+            $discord->addMessageAboutSolvedDiscussion($this);
+        }
+    }
+
+    public function afterDelete()
+    {
+        $this->clearCache();
     }
 
     /**
@@ -122,9 +279,17 @@ class PostsReplies extends Model
         $diff = time() - $this->created_at;
         if ($diff > (86400 * 30)) {
             return date('M \'y', $this->created_at);
+        } else {
+            if ($diff > 86400) {
+                return ((int)($diff / 86400)) . 'd ago';
+            } else {
+                if ($diff > 3600) {
+                    return ((int)($diff / 3600)) . 'h ago';
+                } else {
+                    return ((int)($diff / 60)) . 'm ago';
+                }
+            }
         }
-
-        return $this->getDiffTime($diff);
     }
 
     /**
@@ -135,9 +300,17 @@ class PostsReplies extends Model
         $diff = time() - $this->edited_at;
         if ($diff > (86400 * 30)) {
             return date('M \'y', $this->edited_at);
+        } else {
+            if ($diff > 86400) {
+                return ((int)($diff / 86400)) . 'd ago';
+            } else {
+                if ($diff > 3600) {
+                    return ((int)($diff / 3600)) . 'h ago';
+                } else {
+                    return ((int)($diff / 60)) . 'm ago';
+                }
+            }
         }
-
-        return $this->getDiffTime($diff);
     }
 
     public function clearCache()
@@ -185,24 +358,5 @@ class PostsReplies extends Model
         $modifiedAt = new DateTime('@' . $this->created_at, new DateTimeZone('UTC'));
 
         return $modifiedAt->format('Y-m-d\TH:i:s\Z');
-    }
-
-    /**
-     * Return different time
-     *
-     * @param int $diff
-     * @return string
-     */
-    protected function getDiffTime($diff)
-    {
-        if ($diff > 86400) {
-            return ((int)($diff / 86400)) . 'd ago';
-        }
-
-        if ($diff > 3600) {
-            return ((int)($diff / 3600)) . 'h ago';
-        }
-
-        return ((int)($diff / 60)) . 'm ago';
     }
 }

@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Provider\Mailer;
 
-use Phalcon\Ext\Mailer\Manager;
+use Phalcon\Mailer\Manager;
 use InvalidArgumentException;
 use Phosphorum\Provider\AbstractServiceProvider;
 
