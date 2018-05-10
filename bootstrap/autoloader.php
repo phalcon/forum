@@ -25,11 +25,6 @@ define('APP_START_TIME', microtime(true));
  */
 define('APP_START_MEMORY', memory_get_usage());
 
-/**
- * @const BASE_PATH Base path to project directory
- */
-defined('BASE_PATH') || define('BASE_PATH', realpath(dirname(dirname(__FILE__))));
-
 // Then register the Composer autoloader
 require dirname(__DIR__) . '/vendor/autoload.php';
 

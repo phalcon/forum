@@ -81,9 +81,7 @@ class Markdown extends ParsedownExtra
      */
     protected function inlineUrlMentions($excerpt)
     {
-        $regexp = '/(?:^|[^a-zA-Z0-9.])@([A-Za-z0-9^\-\_]+)/';
-
-        if (preg_match($regexp, $excerpt['context'], $matches, PREG_OFFSET_CAPTURE)) {
+        if (preg_match('/(?:^|[^a-zA-Z0-9.])@([A-Za-z0-9]+)/', $excerpt['context'], $matches, PREG_OFFSET_CAPTURE)) {
             return [
                 'extent' => strlen($matches[0][0]),
                 'position' => $matches[0][1],
@@ -91,7 +89,7 @@ class Markdown extends ParsedownExtra
                     'name' => 'a',
                     'text' => $matches[0][0],
                     'attributes' => [
-                        'href' => '/user/0/' . $matches[1][0],
+                        'href' => container('config')->site->url . '/user/0/' . $matches[1][0],
                     ],
                 ],
             ];
@@ -113,6 +111,7 @@ class Markdown extends ParsedownExtra
     protected function inlineInsTags($excerpt)
     {
         if (preg_match('/^~{2}(.*?)~{2}/', $excerpt['text'], $matches)) {
+            //var_dump($excerpt);
             return [
                 'extent' => strlen($matches[0]),
                 'element' => [

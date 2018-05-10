@@ -1,33 +1,16 @@
 <?php
 
-/*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
-*/
-
 namespace Phosphorum\Discord;
 
-use Phalcon\Di;
 use Phalcon\Di\Injectable;
 use Phosphorum\Model\Posts;
-use Aws\Exception\AwsException;
 use Phosphorum\Model\PostsReplies;
 use Phosphorum\Model\Services\Service\Posts as PostsService;
 
 /**
  * Phosphorum\Discord\DiscordComponent
  *
- * @property \Aws\AwsClientInterface $queue
+ * @property \Phalcon\Queue\Beanstalk $queue
  * @package Phosphorum\Discord
  */
 class DiscordComponent extends Injectable
@@ -123,13 +106,12 @@ class DiscordComponent extends Injectable
                     'icon_url' => $this->gravatar->setSize(220)->getAvatar($posts->user->email),
                 ],
             ];
-
-            $this->addToQueue(
+            $this->queue->choose('discord');
+            $this->queue->put(
                 [
                     'message' => $message,
                     'embed' => $embed,
-                ],
-                'discussion'
+                ]
             );
         }
     }
@@ -162,12 +144,12 @@ class DiscordComponent extends Injectable
                     'icon_url' => $this->gravatar->setSize(220)->getAvatar($reply->user->email),
                 ],
             ];
-            $this->addToQueue(
+            $this->queue->choose('discord');
+            $this->queue->put(
                 [
                     'message' => $message,
                     'embed' => $embed,
-                ],
-                'reply'
+                ]
             );
         }
     }
@@ -199,12 +181,12 @@ class DiscordComponent extends Injectable
                     'icon_url' => $this->gravatar->setSize(220)->getAvatar($reply->user->email),
                 ],
             ];
-            $this->addToQueue(
+            $this->queue->choose('discord');
+            $this->queue->put(
                 [
                     'message' => $message,
                     'embed' => $embed,
-                ],
-                'solved discusiion'
+                ]
             );
         }
     }
@@ -232,39 +214,5 @@ class DiscordComponent extends Injectable
         }
 
         return substr($description, 0, min($lengthDot + $toLength + 1, $lengthSpace + $toLength)) . "...";
-    }
-
-    /**
-     * Add information array to discord queue.
-     * @param array $data
-     * @param string $title
-     * @return void
-     */
-    protected function addToQueue(array $data, $title = '')
-    {
-        if (empty($data)) {
-            return;
-        }
-
-        try {
-            $queue = Di::getDefault()->get('queue');
-            $queue->sendMessage([
-                'DelaySeconds' => 1,
-                'MessageAttributes' => [
-                    "Title" => [
-                        'DataType' => "String",
-                        'StringValue' => "Message about " . $title,
-                    ],
-                ],
-                'MessageBody' => json_encode($data),
-                'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'discord'])->get('QueueUrl'),
-            ]);
-        } catch (AwsException $e) {
-            Di::getDefault()->get('logger')->error($e->getMessage());
-        } catch (\Exception $e) {
-            // Do nothing
-        } catch (\Throwable $e) {
-            // Do nothing
-        }
     }
 }

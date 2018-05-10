@@ -14,7 +14,7 @@ use Codeception\Module;
  */
 class Mail extends Module
 {
-    public function seeHtmlBody($actual, array $attributes = null)
+    public function seeHtmlBodyForReply($actual, array $attributes = null)
     {
         $attributes = $attributes ?: [];
 
@@ -26,12 +26,11 @@ class Mail extends Module
             'post_id'  => '',
             'slug'     => '',
             'reply_id' => '',
-            'template_path' => 'mails/reply_notification.html',
         ];
 
         $attributes = array_merge($default, $attributes);
 
-        $template = file_get_contents(codecept_data_dir($attributes['template_path']));
+        $template = file_get_contents(codecept_data_dir('mails/reply_notification.html'));
 
         $expected = strtr($template, [
             '%app%'      => $attributes['app_name'],
@@ -43,14 +42,6 @@ class Mail extends Module
             '%reply_id%' => $attributes['reply_id'],
         ]);
 
-        $this->assertEquals($expected, $actual, 'HTML part of email is wrong for ' . $attributes['template_path']);
-    }
-
-    public function getTextPartOfMailFromNotification($template)
-    {
-        $textPart = explode('--_=_', $template);
-        $textPart = explode('_=_', $textPart[1]);
-
-        return str_replace("\r", '', trim($textPart[1]));
+        $this->assertEquals($expected, $actual);
     }
 }

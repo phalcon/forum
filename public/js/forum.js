@@ -574,14 +574,7 @@ var Forum = {
 					data: {'content': content }
 				}).done(function(parent, response){
 					$('#preview-box', parent).html(response);
-
-                    $('#preview-box').find('code').each(function(index, element) {
-                        Prism.highlightElement($(element)[0]);
-                    });
-
-                    $('.preview-box').find('code').each(function(index, element) {
-                        Prism.highlightElement($(element)[0]);
-                    });
+					prettyPrint();
 				}.bind(this, parent));
 			} else {
 				$('#preview-box', parent).html('Nothing to preview');

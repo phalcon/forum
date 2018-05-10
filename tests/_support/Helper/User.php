@@ -79,23 +79,4 @@ class User extends Module
 
         return $attributes;
     }
-
-    /**
-     * Log In as regular user, start session and return its id
-     *
-     * @param array $attributes Model attributes [Optional]
-     * @return array
-     */
-    public function haveUserWithSession(array $attributes = null)
-    {
-        $this->phalcon->getApplication()->getDI()->get('session')->start();
-
-        $attributes = $this->haveUser($attributes);
-
-        $this->phalcon->haveInSession('identity', $attributes['id']);
-        $this->phalcon->haveInSession('identity-name', $attributes['name']);
-        $this->phalcon->haveInSession('identity-karma', $attributes['karma']);
-
-        return $attributes;
-    }
 }

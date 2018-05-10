@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
+ | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -17,7 +17,7 @@
 
 namespace Phosphorum\Provider\Assets;
 
-use Phosphorum\Assets\AssetsManagerExtended;
+use Phalcon\Assets\Manager;
 use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
@@ -40,13 +40,6 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->di->setShared(
-            $this->serviceName,
-            function () {
-                $manager = new AssetsManagerExtended();
-
-                return $manager;
-            }
-        );
+        $this->di->setShared($this->serviceName, Manager::class);
     }
 }

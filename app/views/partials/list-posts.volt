@@ -36,17 +36,10 @@
                 <th class="hidden-xs">Last Reply</th>
             </tr>
         {%- for post in posts -%}
-            {%- if (post.reply_time != null) -%}
-                {%- set post.p.modified_at = post.reply_time -%}
-            {%- endif -%}
-
-            {%- set post.p.number_replies = post.count_replies,
-                post = post.p,
-                row_class = "post-positive"
-            -%}
-
             {%- if (post.votes_up - post.votes_down) <= -3 -%}
                 {%- set row_class = "post-negative" -%}
+            {%- else -%}
+                {%- set row_class = "post-positive" -%}
             {%- endif -%}
             <tr class="{% if post.sticked == "Y" %}row-sticked{% endif %} {{ row_class }}" itemscope itemtype="http://schema.org/Question">
                 {%  if config.theme.use_topics_icon %}

@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+ | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -39,38 +39,28 @@ class Fake
     /**
      * Simulates putting a job in the queue.
      *
-     * @param  array $params
+     * @param  array $job
      * @return bool
      */
-    public function sendMessage(array $params)
+    public function put(array $job)
     {
-        container('logger')->debug('Putting job: ' . $params['MessageBody']);
+        container('logger')->debug('Putting job: ' . json_encode($job));
 
         return true;
     }
 
     /**
-     * Simulates getting queue url
-     * @param array $params
-     * @return array
-     */
-    public function getQueueUrl(array $params)
-    {
-        return $this;
-    }
-
-    /**
-     * Simulates getting param from `Aws\Result`
-     * @param string $queueParam
+     * Simulates retrieving messages.
+     *
      * @return bool
      */
-    public function get($queueParam)
+    public function peekReady()
     {
-        return true;
+        return false;
     }
 
-    public function deleteMessage(array $param)
+    public function choose($tube)
     {
-        return true;
+        container('logger')->debug("Chosen tube: {$tube}");
     }
 }

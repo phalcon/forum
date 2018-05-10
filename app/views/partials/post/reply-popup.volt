@@ -20,7 +20,7 @@
                             {{- hidden_field('reply-id') -}}
                             <div id="comment-textarea"></div>
                         </div>
-                        <div id="preview-box" style="display:none" class="preview-box"></div>
+                        <div id="preview-box" style="display:none"></div>
                     </div>
                 </div>
 

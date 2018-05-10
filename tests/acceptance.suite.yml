@@ -12,7 +12,6 @@ modules:
         - Helper\User
         - Helper\Post
         - Filesystem
-        - Asserts
         - Phalcon:
             part: services
         - PhpBrowser:
