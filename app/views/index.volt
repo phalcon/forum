@@ -20,6 +20,7 @@
     {%- endif -%}
 
     {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
+    {{- stylesheet_link("css/bootstrap.min.css?v=" ~ forum_version(), true) -}}
 
     {%- if theme == 'L' -%}
         {{- stylesheet_link("css/theme-white.css?v=" ~ forum_version(), true) -}}
@@ -43,6 +44,8 @@
 </head>
 <body class="with-top-navbar">
     {{ content() }}
+    {{ javascript_include("js/jquery-3.2.1.min.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/bootstrap.min.js?v=" ~ forum_version()) }}
     {{ javascript_include("js/editor.js?v=" ~ forum_version()) }}
     {{ javascript_include("js/forum.js?v=" ~ forum_version()) }}
     {{ javascript_include("js/prism.js?v=" ~ forum_version()) }}
