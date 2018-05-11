@@ -35,16 +35,20 @@ class AssetsManagerExtended extends Manager
      **/
     public function cachedOutputJs($collectionName = null)
     {
+        $logger = Di::getDefault()->get('logger');
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $collection = $this->collection($collectionName);
         $hashManager = new AssetsHash($collection);
         $hashManager->setLogger(Di::getDefault()->get('logger'));
-
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $name = $hashManager->getHashedFileName();
         if (empty($name)) {
+            $logger->debug(__FILE__ . ' - ' . (string)__LINE__.$name);
             return $this->outputJs($collectionName);
         }
-
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $collection->setTargetUri($name);
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         return Tag::javascriptInclude($collection->getTargetUri());
     }
 
@@ -56,16 +60,19 @@ class AssetsManagerExtended extends Manager
      **/
     public function cachedOutputCss($collectionName = null)
     {
+        $logger = Di::getDefault()->get('logger');
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $collection = $this->collection($collectionName);
         $hashManager = new AssetsHash($collection);
         $hashManager->setLogger(Di::getDefault()->get('logger'));
-
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $name = $hashManager->getHashedFileName();
         if (empty($name)) {
             return $this->outputCss($collectionName);
         }
-
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         $collection->setTargetUri($name);
+        $logger->debug(__FILE__ . ' - ' . (string)__LINE__);
         return Tag::stylesheetLink($collection->getTargetUri());
     }
 }
