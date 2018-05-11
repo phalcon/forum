@@ -592,16 +592,14 @@ class DiscussionsController extends ControllerBase
             ];
 
             // A view is stored by ip address
-            if (!$viewed = PostsViews::count($parameters)) {
+            if (PostsViews::count($parameters) == 0 && $post->users_id != $usersId) {
                 // Increase the number of views in the post
                 $post->number_views++;
-                if ($post->users_id != $usersId) {
-                    $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
+                $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
-                    if ($user = Users::findFirstById($usersId)) {
-                        $user->increaseKarma($user->moderator == 'Y' ? Karma::MODERATE_VISIT_POST : Karma::VISIT_POST);
-                        $user->save();
-                    }
+                if ($user = Users::findFirstById($usersId)) {
+                    $user->increaseKarma($user->moderator == 'Y' ? Karma::MODERATE_VISIT_POST : Karma::VISIT_POST);
+                    $user->save();
                 }
 
                 $postView            = new PostsViews();
