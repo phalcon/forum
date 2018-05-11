@@ -15,31 +15,30 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Assets;
+namespace Phosphorum\AssetsHash;
 
-use Phosphorum\Assets\AssetsManagerExtended as Manager;
-use Phosphorum\Provider\AbstractServiceProvider;
+use Phalcon\Assets\Collection;
 
 /**
- * Phosphorum\Provider\Assets\ServiceProvider
+ * Phosphorum\AssetsHash\AssetsHashInterface
  *
- * @package Phosphorum\Provider\Assets
+ * Interface for hash in title of assets collection
+ *
+ * @package Phosphorum\AssetsHash
  */
-class ServiceProvider extends AbstractServiceProvider
+interface AssetsHashInterface
 {
     /**
-     * The Service name.
-     * @var string
+     * Set assets collection
+     *
+     * @param Collection $collection
      */
-    protected $serviceName = 'assets';
+    public function setCollection(Collection $collection);
 
     /**
-     * {@inheritdoc}
+     * Get File name with hash
      *
-     * @return void
+     * @return string
      */
-    public function register()
-    {
-        $this->di->setShared($this->serviceName, Manager::class);
-    }
+    public function getHashedFileName();
 }

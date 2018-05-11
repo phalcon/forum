@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -46,6 +46,7 @@ return [
     Phosphorum\Provider\Mailer\ServiceProvider::class,
     Phosphorum\Provider\Assets\ServiceProvider::class,
     Phosphorum\Provider\Discord\ServiceProvider::class,
+    Phosphorum\Provider\Registry\ServiceProvider::class,
 
     // Third Party Providers
     // ...

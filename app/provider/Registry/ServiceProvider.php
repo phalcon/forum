@@ -15,23 +15,31 @@
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Provider\Assets;
+namespace Phosphorum\Provider\Registry;
 
-use Phosphorum\Assets\AssetsManagerExtended as Manager;
 use Phosphorum\Provider\AbstractServiceProvider;
+use Phalcon\Registry;
 
 /**
- * Phosphorum\Provider\Assets\ServiceProvider
+ * Phosphorum\Provider\Registry\ServiceProvider
  *
- * @package Phosphorum\Provider\Assets
+ * @package Phosphorum\Provider\Registry
  */
 class ServiceProvider extends AbstractServiceProvider
 {
     /**
      * The Service name.
-     * @var string
+     * @var string $serviceName
      */
-    protected $serviceName = 'assets';
+    protected $serviceName = 'registry';
+
+    /**
+     * Pathes should be added to registry
+     * @var array $path
+     */
+    protected $path = [
+        'public_path' => BASE_PATH . '/public/'
+    ];
 
     /**
      * {@inheritdoc}
@@ -40,6 +48,18 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->di->setShared($this->serviceName, Manager::class);
+        $path = $this->path;
+
+        $this->di->setShared(
+            $this->serviceName,
+            function () use ($path) {
+                $registry = new Registry();
+                foreach ($path as $offset => $value) {
+                    $registry->offsetSet($offset, $value);
+                }
+
+                return $registry;
+            }
+        );
     }
 }
