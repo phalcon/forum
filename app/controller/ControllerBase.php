@@ -6,8 +6,6 @@ use Phalcon\Mvc\Controller;
 use Phosphorum\Model\Posts;
 use Phosphorum\Model\Users;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Assets\Filters\Jsmin;
-use Phalcon\Assets\Filters\Cssmin;
 
 /**
  * Class ControllerBase
@@ -29,11 +27,6 @@ class ControllerBase extends Controller
 
     public function onConstruct()
     {
-        /**
-         * @var \Phalcon\Registry $registry
-         */
-        $registry = $this->getDI()->get('registry');
-
         $lastThreads = $this
             ->modelsManager
             ->createBuilder()
@@ -70,50 +63,6 @@ class ControllerBase extends Controller
             'actionName'     => $this->dispatcher->getActionName(),
             'controllerName' => $this->dispatcher->getControllerName(),
         ]);
-
-        $this->assets
-            ->collection('globalJs')
-            ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalJs.js')
-            ->setTargetUri('assets/globalJs.js')
-            ->addJs($registry->offsetGet('public_path') . 'js/jquery-3.2.1.min.js', true, false)
-            ->addJs($registry->offsetGet('public_path') . 'js/bootstrap.min.js', true, false)
-            ->addJs($registry->offsetGet('public_path') . 'js/editor.min.js', true, false)
-            ->addJs($registry->offsetGet('public_path') . 'js/forum.js', true)
-            ->addJs($registry->offsetGet('public_path') . 'js/prism.js', true)
-            ->join(true)
-            ->addFilter(new Jsmin);
-
-        if ($this->session->get('identity-theme') == 'L') {
-            $this->assets
-                ->collection('globalWhiteCss')
-                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalWhiteCss.css')
-                ->setTargetUri('assets/globalWhiteCss.css')
-                ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
-                ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/theme-white.css', true)
-                ->join(true)
-                ->addFilter(new Cssmin);
-        } else {
-            $this->assets
-                ->collection('globalCss')
-                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalCss.css')
-                ->setTargetUri('assets/globalCss.css')
-                ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
-                ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
-                ->addCss($registry->offsetGet('public_path') . 'css/theme.css', true)
-                ->join(true)
-                ->addFilter(new Cssmin);
-        }
     }
 
     /**
