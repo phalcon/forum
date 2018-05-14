@@ -87,7 +87,8 @@
             "Phosphorum\\Task\\": "app/task",
             "Phosphorum\\Controller\\": "app/controller",
             "Phosphorum\\Provider\\": "app/provider",
-            "Phosphorum\\Listener\\": "app/listener"
+            "Phosphorum\\Listener\\": "app/listener",
+            "Phosphorum\\Services\\": "app/services"
         },
         "files": [
             "bootstrap/helpers.php"

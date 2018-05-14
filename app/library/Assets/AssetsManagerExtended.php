@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-present Phalcon Team and contributors               |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Assets;
@@ -20,6 +20,8 @@ namespace Phosphorum\Assets;
 use Phalcon\Di;
 use Phalcon\Tag;
 use Phalcon\Assets\Manager;
+use Phalcon\Assets\Collection;
+use Phosphorum\Exception\InvalidParameterException;
 use Phosphorum\AssetsHash\HashManager\AssetsHashVersion;
 
 /**
@@ -37,11 +39,9 @@ class AssetsManagerExtended extends Manager
      **/
     public function cachedOutputJs($collectionName = null)
     {
-        $collection = $this->collection($collectionName);
-        $hashManager = new AssetsHashVersion($collection);
-        $hashManager->setLogger(Di::getDefault()->get('logger'));
+        $collection = $this->getCollection($collectionName);
+        $name = $this->getFileName($collection);
 
-        $name = $hashManager->getHashedFileName();
         if (empty($name)) {
             return $this->outputJs($collectionName);
         }
@@ -58,16 +58,39 @@ class AssetsManagerExtended extends Manager
      **/
     public function cachedOutputCss($collectionName = null)
     {
-        $collection = $this->collection($collectionName);
-        $hashManager = new AssetsHashVersion($collection);
-        $hashManager->setLogger(Di::getDefault()->get('logger'));
+        $collection = $this->getCollection($collectionName);
+        $name = $this->getFileName($collection);
 
-        $name = $hashManager->getHashedFileName();
         if (empty($name)) {
             return $this->outputCss($collectionName);
         }
 
         $collection->setTargetUri($name);
         return Tag::stylesheetLink($collection->getTargetUri());
+    }
+
+    /**
+     * @param string $collectionName
+     * @return Collection
+     **/
+    protected function getCollection($collectionName)
+    {
+        if ($collectionName === null) {
+            throw new InvalidParameterException("Assets collection name mustn't be null");
+        }
+
+        return $this->collection($collectionName);
+    }
+
+    /**
+     * @param Collection $collection
+     * @return string
+     **/
+    protected function getFileName(Collection $collection)
+    {
+        $hashManager = new AssetsHashVersion($collection);
+        $hashManager->setLogger(Di::getDefault()->get('logger'));
+
+        return $hashManager->getHashedFileName();
     }
 }
