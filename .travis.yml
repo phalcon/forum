@@ -46,7 +46,7 @@ before_script:
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
 
 script:
-  - vendor/bin/phpcs
+#  - vendor/bin/phpcs
   - vendor/bin/codecept build
   - vendor/bin/codecept run unit
   - vendor/bin/codecept run functional
