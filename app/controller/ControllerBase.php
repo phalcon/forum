@@ -88,7 +88,7 @@ class ControllerBase extends Controller
                 ->join(true)
                 ->addFilter(new Jsmin);
         } catch (\Exception $e) {
-            $this->getDI()->get('logger')->error((string)__LINE__ . ' ' . $e->getMessage());
+            $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());
         }
 
         try {
@@ -124,7 +124,7 @@ class ControllerBase extends Controller
                     ->addFilter(new Cssmin);
             }
         } catch (\Exception $e) {
-            $this->getDI()->get('logger')->error((string)__LINE__ . ' ' . $e->getMessage());
+            $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());
         }
 
         if ($timezone = $this->session->get('identity-timezone')) {
