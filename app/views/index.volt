@@ -20,12 +20,20 @@
     {%- endif -%}
 
     {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
+    {{- stylesheet_link("css/bootstrap.min.css?v=" ~ forum_version(), true) -}}
 
     {%- if theme == 'L' -%}
-        {{ assets.cachedOutputCss('globalWhiteCss') }}
+        {{- stylesheet_link("css/theme-white.css?v=" ~ forum_version(), true) -}}
     {%- else -%}
-        {{ assets.cachedOutputCss('globalCss') }}
+        {{- stylesheet_link("css/theme.css?v=" ~ forum_version(), true) -}}
     {%- endif -%}
+
+    {{- stylesheet_link("css/editor.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/fonts.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/octicons.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/diff.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/style.css?v=" ~ forum_version(), true) -}}
+    {{- stylesheet_link("css/prism.css?v=" ~ forum_version(), true) -}}
 
     {#- reCaptcha -#}
     {%- if recaptcha.isEnabled() -%}
@@ -36,7 +44,11 @@
 </head>
 <body class="with-top-navbar">
     {{ content() }}
-    {{ assets.cachedOutputJs('globalJs') }}
+    {{ javascript_include("js/jquery-3.2.1.min.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/bootstrap.min.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/editor.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/forum.js?v=" ~ forum_version()) }}
+    {{ javascript_include("js/prism.js?v=" ~ forum_version()) }}
 
     <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 </body>
