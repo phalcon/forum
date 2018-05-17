@@ -28,6 +28,7 @@ use Phosphorum\Model\Activities;
 use Phosphorum\Model\PostsViews;
 use Phosphorum\Model\PostsHistory;
 use Phosphorum\Model\Notifications;
+use Phosphorum\Services\QueueService;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phosphorum\Model\PostsNotifications;
 use Phosphorum\Discord\DiscordComponent;
@@ -137,6 +138,7 @@ class PostListener
         if (!empty($toNotify)) {
             try {
                 $queue = Di::getDefault()->get('queue');
+                $queueName = (new QueueService())->getFullQueueName('notifications');
                 $queue->sendMessage([
                     'DelaySeconds' => 1,
                     'MessageAttributes' => [
@@ -146,7 +148,7 @@ class PostListener
                         ],
                     ],
                     'MessageBody' => json_encode($toNotify),
-                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
                 ]);
             } catch (AwsException $e) {
                 Di::getDefault()->get('logger')->error($e->getMessage());

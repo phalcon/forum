@@ -25,6 +25,7 @@ use Phalcon\Ext\Mailer\Manager;
 use Phalcon\Ext\Mailer\Message;
 use Aws\Exception\AwsException;
 use Phosphorum\Model\Notifications;
+use Phosphorum\Services\QueueService;
 use Phosphorum\Model\Services\Service;
 
 /**
@@ -88,6 +89,8 @@ class SendNotifications extends Injectable
             if (count($messages->get('Messages')) == 0) {
                 return;
             }
+
+            $queueName = (new QueueService())->getFullQueueName('notifications');
             foreach ($messages->get('Messages') as $message) {
                 $idList = json_decode($message['Body'], true);
 
@@ -96,7 +99,7 @@ class SendNotifications extends Injectable
                 }
 
                 $queue->deleteMessage([
-                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
                     'ReceiptHandle' => $message['ReceiptHandle'],
                 ]);
             }
@@ -123,7 +126,9 @@ class SendNotifications extends Injectable
             'AttributeNames' => ['SentTimestamp'],
             'MaxNumberOfMessages' => 10,
             'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+            'QueueUrl' => $queue->getQueueUrl(
+                ['QueueName' => (new QueueService())->getFullQueueName('notifications')]
+            )->get('QueueUrl'),
         ]);
     }
 

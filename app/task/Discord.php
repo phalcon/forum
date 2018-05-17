@@ -21,6 +21,7 @@ use Aws\Sqs\SqsClient;
 use League\CLImate\CLImate;
 use Discord\Parts\Channel\Channel;
 use Phosphorum\Console\AbstractTask;
+use Phosphorum\Services\QueueService;
 use Phosphorum\Discord\DiscordComponent;
 use Phosphorum\Exception\InvalidParameterException;
 
@@ -100,7 +101,9 @@ class Discord extends AbstractTask
             'AttributeNames' => ['SentTimestamp'],
             'MaxNumberOfMessages' => 10,
             'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'discord'])->get('QueueUrl'),
+            'QueueUrl' => $queue->getQueueUrl([
+                'QueueName' => (new QueueService())->getFullQueueName('notifications')
+            ])->get('QueueUrl'),
             'WaitTimeSeconds' => 0,
         ]);
     }
@@ -116,6 +119,7 @@ class Discord extends AbstractTask
             return;
         }
 
+        $queueName = (new QueueService())->getFullQueueName('notifications');
         foreach ($messages->get('Messages') as $message) {
             $body = json_decode($message['Body'], true);
             if (empty($body['message']) || empty($body['embed'])) {
@@ -127,7 +131,7 @@ class Discord extends AbstractTask
             }
 
             $queue->deleteMessage([
-                'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'discord'])->get('QueueUrl'),
+                'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
                 'ReceiptHandle' => $message['ReceiptHandle'],
             ]);
         }
