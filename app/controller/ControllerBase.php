@@ -78,59 +78,53 @@ class ControllerBase extends Controller
         try {
             $this->assets
                 ->collection('globalJs')
-//                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalJs.js')
-                ->setTargetPath('globalJs.js')
+                ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalJs.js')
                 ->setTargetUri('assets/globalJs.js')
-                ->setSourcePath('js/')
-                ->addJs('jquery-3.2.1.min.js', true, false)
-                ->addJs('bootstrap.min.js', true, false)
-                ->addJs('editor.min.js', true, false)
-                ->addJs('forum.js', true)
-                ->addJs('prism.js', true)
+                ->addJs($registry->offsetGet('public_path') . 'js/jquery-3.2.1.min.js', true, false)
+                ->addJs($registry->offsetGet('public_path') . 'js/bootstrap.min.js', true, false)
+                ->addJs($registry->offsetGet('public_path') . 'js/editor.min.js', true, false)
+                ->addJs($registry->offsetGet('public_path') . 'js/forum.js', true)
+                ->addJs($registry->offsetGet('public_path') . 'js/prism.js', true)
                 ->join(true)
                 ->addFilter(new Jsmin);
         } catch (\Exception $e) {
-            $this->getDI()->get('logger')->error((string)__LINE__ . ' ' . $e->getMessage());
+            $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());
         }
 
         try {
             if ($this->session->get('identity-theme') == 'L') {
                 $this->assets
                     ->collection('globalWhiteCss')
-//                    ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalWhiteCss.css')
-                    ->setTargetPath('globalWhiteCss.css')
+                    ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalWhiteCss.css')
                     ->setTargetUri('assets/globalWhiteCss.css')
-                    ->setSourcePath('css/')
-                    ->addCss('bootstrap.min.css', true, false)
-                    ->addCss('editor.css', true)
-                    ->addCss('fonts.css', true)
-                    ->addCss('octicons.css', true)
-                    ->addCss('diff.css', true)
-                    ->addCss('style.css', true)
-                    ->addCss('prism.css', true)
-                    ->addCss('theme-white.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
+                    ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/theme-white.css', true)
                     ->join(true)
                     ->addFilter(new Cssmin);
             } else {
                 $this->assets
                     ->collection('globalCss')
-//                    ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalCss.css')
-                    ->setTargetPath('globalCss.css')
+                    ->setTargetPath($registry->offsetGet('public_path') . 'assets/globalCss.css')
                     ->setTargetUri('assets/globalCss.css')
-                    ->setSourcePath('css/')
-                    ->addCss('bootstrap.min.css', true, false)
-                    ->addCss('editor.css', true)
-                    ->addCss('fonts.css', true)
-                    ->addCss('octicons.css', true)
-                    ->addCss('diff.css', true)
-                    ->addCss('style.css', true)
-                    ->addCss('prism.css', true)
-                    ->addCss('theme.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
+                    ->addCss($registry->offsetGet('public_path') . 'css/editor.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/fonts.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/octicons.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/diff.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
+                    ->addCss($registry->offsetGet('public_path') . 'css/theme.css', true)
                     ->join(true)
                     ->addFilter(new Cssmin);
             }
         } catch (\Exception $e) {
-            $this->getDI()->get('logger')->error((string)__LINE__ . ' ' . $e->getMessage());
+            $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());
         }
 
         if ($timezone = $this->session->get('identity-timezone')) {
