@@ -25,6 +25,7 @@ use Aws\Exception\AwsException;
 use Phosphorum\Model\Activities;
 use Phosphorum\Model\PostsReplies;
 use Phosphorum\Model\Notifications;
+use Phosphorum\Services\QueueService;
 use Phosphorum\Model\PostsSubscribers;
 use Phosphorum\Model\PostsNotifications;
 use Phosphorum\Discord\DiscordComponent;
@@ -171,6 +172,7 @@ class PostRepliesListener
         if (!empty($toNotify)) {
             try {
                 $queue = Di::getDefault()->get('queue');
+                $queueName = (new QueueService())->getFullQueueName('notifications');
                 $queue->sendMessage([
                     'DelaySeconds' => 1,
                     'MessageAttributes' => [
@@ -180,7 +182,7 @@ class PostRepliesListener
                         ],
                     ],
                     'MessageBody' => json_encode($toNotify),
-                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
                 ]);
             } catch (AwsException $e) {
                 Di::getDefault()->get('logger')->error($e->getMessage());

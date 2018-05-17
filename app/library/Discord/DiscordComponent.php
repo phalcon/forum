@@ -22,6 +22,7 @@ use Phalcon\Di\Injectable;
 use Phosphorum\Model\Posts;
 use Aws\Exception\AwsException;
 use Phosphorum\Model\PostsReplies;
+use Phosphorum\Services\QueueService;
 use Phosphorum\Model\Services\Service\Posts as PostsService;
 
 /**
@@ -246,6 +247,7 @@ class DiscordComponent extends Injectable
             return;
         }
 
+        $queueName = (new QueueService())->getFullQueueName('discord');
         try {
             $queue = Di::getDefault()->get('queue');
             $queue->sendMessage([
@@ -257,7 +259,7 @@ class DiscordComponent extends Injectable
                     ],
                 ],
                 'MessageBody' => json_encode($data),
-                'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'discord'])->get('QueueUrl'),
+                'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
             ]);
         } catch (AwsException $e) {
             Di::getDefault()->get('logger')->error($e->getMessage());
