@@ -85,8 +85,7 @@ class ControllerBase extends Controller
                 ->addJs($registry->offsetGet('public_path') . 'js/editor.min.js', true, false)
                 ->addJs($registry->offsetGet('public_path') . 'js/forum.js', true)
                 ->addJs($registry->offsetGet('public_path') . 'js/prism.js', true)
-                ->join(true)
-                ->addFilter(new Jsmin);
+                ->join(true);
         } catch (\Exception $e) {
             $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());
         }
@@ -105,8 +104,7 @@ class ControllerBase extends Controller
                     ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
                     ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
                     ->addCss($registry->offsetGet('public_path') . 'css/theme-white.css', true)
-                    ->join(true)
-                    ->addFilter(new Cssmin);
+                    ->join(true);
             } else {
                 $this->assets
                     ->collection('globalCss')
@@ -120,8 +118,7 @@ class ControllerBase extends Controller
                     ->addCss($registry->offsetGet('public_path') . 'css/style.css', true)
                     ->addCss($registry->offsetGet('public_path') . 'css/prism.css', true)
                     ->addCss($registry->offsetGet('public_path') . 'css/theme.css', true)
-                    ->join(true)
-                    ->addFilter(new Cssmin);
+                    ->join(true);
             }
         } catch (\Exception $e) {
             $this->getDI()->get('registry')->error((string)__LINE__ . ' ' . $e->getMessage());

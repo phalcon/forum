@@ -21,6 +21,8 @@ use Phalcon\Assets\Manager;
 use Phalcon\Tag;
 use Phosphorum\AssetsHash\HashManager\AssetsHashVersion as AssetsHash;
 use Phalcon\Di;
+use Phalcon\Assets\Collection;
+use Phosphorum\AssetsHash\HashManager\AssetsHashVersion;
 
 /**
  * Add Assets caching
@@ -67,5 +69,316 @@ class AssetsManagerExtended extends Manager
 
         $collection->setTargetUri($name);
         return Tag::stylesheetLink($collection->getTargetUri());
+    }
+
+    /**
+     * Rewrite function
+     * @param Collection $collection
+     * @param callback $callback
+     * @param string $type
+     */
+    public function output(Collection $collection, $callback, $type)
+    {
+        $useImplicitOutput = $this->_implicitOutput;
+        $output = "";
+
+        /** Get the resources as an array */
+        $resources = $this->collectionResourcesByType($collection->getResources(), $type);
+
+        /** Get filters in the collection */
+        $filters = $collection->getFilters();
+
+        /** Get the collection's prefix */
+        $prefix = $collection->getPrefix();
+        $typeCss = "css";
+
+        /** Check if the collection have its own target base path */
+        $join = $collection->getJoin();
+        $sourceBasePath = '';
+        $targetBasePath = '';
+        $options = $this->_options;
+
+        /** Check for global options in the assets manager */
+        if (gettype($options) == "array") {
+            /** The source base path is a global location where all resources are located */
+            if (isset($options["sourceBasePath"])) {
+                $sourceBasePath = $options["sourceBasePath"];
+            }
+
+            /** The target base path is a global location where all resources are written */
+            if (isset($options["targetBasePath"])) {
+                $targetBasePath = $options["targetBasePath"];
+            }
+        }
+
+        /** Check if the collection have its own source base path */
+        $collectionSourcePath = $collection->getSourcePath();
+
+        /**
+         * Concatenate the global base source path with the collection one
+         */
+        if ($collectionSourcePath) {
+            $completeSourcePath = $sourceBasePath . $collectionSourcePath;
+        } else {
+            $completeSourcePath = $sourceBasePath;
+        }
+
+        /** Check if the collection have its own target base path */
+        $collectionTargetPath = $collection->getTargetPath();
+//        var_dump($collectionTargetPath);die;
+        /** Concatenate the global base source path with the collection one */
+        if ($collectionTargetPath) {
+            $completeTargetPath = $targetBasePath . $collectionTargetPath;
+        } else {
+            $completeTargetPath = $targetBasePath;
+        }
+        /** Global unfiltered content */
+        $unfilteredJoinedContent = '';
+
+        /** Prepare options if the collection must be filtered */
+        if (count($filters)) {
+            /** Global filtered content */
+            $filteredJoinedContent = "";
+
+            /** Check for valid target paths if the collection must be joined */
+            if ($join) {
+                /** We need a valid final target path */
+                if (!$completeTargetPath) {
+                    throw new \Exception("Path '". $completeTargetPath. "' is not a valid target path (1)");
+                }
+
+                if (is_dir($completeTargetPath)) {
+                    throw new \Exception("Path '". $completeTargetPath. "' is not a valid target path (2), is dir.");
+                }
+            }
+        }
+
+        /** walk in resources */
+        foreach ($resources as $resource) {
+            $filterNeeded = false;
+            $type = $resource->getType();
+            /** Gets the resource's content */
+            $content = $resource->getContent($completeSourcePath);
+
+            /** Is the resource local? */
+            $local = $resource->getLocal();
+
+            /** If the collection must not be joined we must print a HTML for each one */
+            if (count($filters)) {
+                if ($local) {
+                    /** Get the complete path */
+                    $sourcePath = $resource->getRealSourcePath($completeSourcePath);
+
+                    /** We need a valid source path */
+                    if (!$sourcePath) {
+                        $sourcePath = $resource->getPath();
+                        throw new \Exception("Resource '". $sourcePath. "' does not have a valid source path");
+                    }
+                } else {
+                    /** Get the complete source path */
+                    $sourcePath = $resource->getPath();
+
+                    /** resources paths are always filtered */
+                    $filterNeeded = true;
+                }
+
+                /** Get the target path, we need to write the filtered content to a file */
+                $targetPath = $resource->getRealTargetPath($completeTargetPath);
+
+                /** We need a valid final target path */
+                if (!$targetPath) {
+                    throw new \Exception("Resource '". $sourcePath. "' does not have a valid target path");
+                }
+
+                if ($local) {
+                    /**
+                     * Make sure the target path is not the same source path
+                     */
+                    if ($targetPath == $sourcePath) {
+                        throw new \Exception("Resource '". $targetPath. "' have the same source and target paths");
+                    }
+
+                    if (file_exists($targetPath)) {
+                        if (compare_mtime($targetPath, $sourcePath)) {
+                            $filterNeeded = true;
+                        }
+                    } else {
+                        $filterNeeded = true;
+                    }
+                }
+            } else {
+                /** If there are not filters, just print/buffer the HTML */
+                $path = $resource->getRealTargetUri();
+
+                if ($prefix) {
+                    $prefixedPath = $prefix . $path;
+                } else {
+                    $prefixedPath = $path;
+                }
+
+                /** Gets extra HTML attributes in the resource */
+                $attributes = $resource->getAttributes();
+
+                /** Prepare the parameters for the callback */
+                $parameters = [];
+                if (gettype($attributes) == "array") {
+                    $attributes[0] = $prefixedPath;
+                    $parameters[] = $attributes;
+                } else {
+                    $parameters[] = $prefixedPath;
+                }
+                $parameters[] = $local;
+
+                /** Call the callback to generate the HTML */
+                $html = call_user_func_array($callback, $parameters);
+
+                /** Implicit output prints the content directly */
+                if ($useImplicitOutput == true) {
+                    echo $html;
+                } else {
+                    $output .= $html;
+                }
+
+                /** Update the joined filtered content */
+                if ($join == true) {
+                    if ($type == $typeCss) {
+                        $unfilteredJoinedContent .= $content;
+                    } else {
+                        $unfilteredJoinedContent .= $content . ";";
+                    }
+                }
+
+
+                continue;
+            }
+
+            if ($filterNeeded == true) {
+                /** Check if the resource must be filtered */
+                $mustFilter = $resource->getFilter();
+
+                /** Only filter the resource if it's marked as 'filterable' */
+                if ($mustFilter == true) {
+                    foreach ($filters as $filter) {
+
+                        /** Filters must be valid objects */
+                        if (gettype($filter) != "object") {
+                            throw new \Exception("Filter is invalid");
+                        }
+
+                        /** Calls the method 'filter' which must return a filtered version of the content */
+                        $filteredContent = $filter->filter($content);
+                        $notFilteredContent = $content;
+                        $content = $filteredContent;
+                    }
+                    /** Update the joined filtered content */
+                    if ($join == true) {
+                        if ($type == $typeCss) {
+                            $filteredJoinedContent .= $filteredContent;
+                        } else {
+                            $filteredJoinedContent .= $filteredContent . ";";
+                        }
+                    }
+                } else {
+
+                    /** Update the joined filtered content */
+                    if ($join == true) {
+                        $filteredJoinedContent .= $content;
+                    } else {
+                        $filteredContent = $content;
+                    }
+                }
+
+                if (!$join) {
+                    /** Write the file using file-put-contents. This respects the openbase-dir also writes to streams */
+                    file_put_contents($targetPath, $filteredContent);
+                }
+            }
+
+            if (!$join) {
+                /** Generate the HTML using the original path in the resource */
+                $path = $resource->getRealTargetUri();
+
+                if ($prefix) {
+                    $prefixedPath = $prefix . $path;
+                } else {
+                    $prefixedPath = $path;
+                }
+
+                /** Gets extra HTML attributes in the resource */
+                $attributes = $resource->getAttributes();
+
+                /** Filtered resources are always local */
+                $local = true;
+
+                /** Prepare the parameters for the callback */
+                $parameters = [];
+                if (gettype($attributes) == "array") {
+                    $attributes[0] = $prefixedPath;
+                    $parameters[] = $attributes;
+                } else {
+                    $parameters[] = $prefixedPath;
+                }
+                $parameters[] = $local;
+
+                /** Call the callback to generate the HTML */
+                $html = call_user_func_array($callback, $parameters);
+
+                /** Implicit output prints the content directly */
+                if ($useImplicitOutput == true) {
+                    echo $html;
+                } else {
+                    $output .= $html;
+                }
+            }
+        }
+
+        if (!count($filters)) {
+
+            if ($join == true) {
+                /**
+                 * Write the file using file_put_contents. This respects the openbase-dir also
+                 * writes to streams
+                 */
+//                var_dump($completeTargetPath);die;
+                file_put_contents($completeTargetPath, $unfilteredJoinedContent);
+
+                /** Generate the HTML using the original path in the resource */
+                $targetUri = $collection->getTargetUri();
+
+                if ($prefix) {
+                    $prefixedPath = $prefix . $targetUri;
+                } else {
+                    $prefixedPath = $targetUri;
+                }
+
+                /** Gets extra HTML attributes in the collection */
+                $attributes = $collection->getAttributes();
+
+                /** Gets local */
+                $local = $collection->getTargetLocal();
+
+                /** Prepare the parameters for the callback */
+                $parameters = [];
+                if (gettype($attributes) == "array") {
+                    $attributes[0] = $prefixedPath;
+                    $parameters[] = $attributes;
+                } else {
+                    $parameters[] = $prefixedPath;
+                }
+                $parameters[] = $local;
+
+                /** Call the callback to generate the HTML */
+                $html = call_user_func_array($callback, $parameters);
+
+                /** Implicit output prints the content directly */
+                if ($useImplicitOutput == true) {
+                    echo $html;
+                } else {
+                    $output .= $html;
+                }
+            }
+        }
+
+        return $output;
     }
 }
