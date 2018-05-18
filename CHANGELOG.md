@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added `AWS SQS` instead `beanstalk`
 - Added `queue service` and method that generate queue name
+- Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
 
 ### Changed
 - Refactor `Assets/AssetsManagerExtended`
