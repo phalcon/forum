@@ -22,8 +22,7 @@ namespace Phosphorum\Services\Controller;
 use Phalcon\Di;
 use Phalcon\Registry;
 use Phalcon\Assets\Manager;
-use Phalcon\Assets\Filters\Jsmin;
-use Phalcon\Assets\Filters\Cssmin;
+use Phosphorum\Assets\Filters\NoneFilter;
 use Phosphorum\Exception\RuntimeException;
 
 /**
@@ -82,7 +81,7 @@ class AssetsService
                 ->addJs($this->registry->offsetGet('public_path') . 'js/forum.js', true)
                 ->addJs($this->registry->offsetGet('public_path') . 'js/prism.js', true)
                 ->join(true)
-                ->addFilter(new Jsmin());
+                ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
             $this->di->get('logger')->error($e->getMessage());
         }
@@ -110,7 +109,7 @@ class AssetsService
                 ->addCss($this->registry->offsetGet('public_path') . 'css/prism.css', true)
                 ->addCss($this->registry->offsetGet('public_path') . "css/{$params['themeFile']}", true)
                 ->join(true)
-                ->addFilter(new Cssmin());
+                ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
             $this->di->get('logger')->error($e->getMessage());
         }
