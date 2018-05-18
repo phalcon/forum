@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -21,12 +21,10 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Diff;
 use Phalcon\Mvc\Model;
-use Phalcon\Queue\Beanstalk;
-use Phosphorum\Discord\DiscordComponent;
 use Phalcon\Diff\Renderer\Html\SideBySide;
-use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Events\Manager as EventsManager;
 use Phosphorum\Listener\PostRepliesListener;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
  * Class PostsReplies
