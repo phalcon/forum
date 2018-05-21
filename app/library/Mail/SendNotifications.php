@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-present Phalcon Team and contributors               |
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -17,41 +17,40 @@
 
 namespace Phosphorum\Mail;
 
-use Phosphorum\Model\Notifications;
-use Phosphorum\Model\Services\Service;
+use Phalcon\Di;
+use Aws\Sqs\SqsClient;
+use Phalcon\Di\Injectable;
+use Aws\AwsClientInterface;
 use Phalcon\Ext\Mailer\Manager;
 use Phalcon\Ext\Mailer\Message;
+use Aws\Exception\AwsException;
+use Phosphorum\Model\Notifications;
+use Phosphorum\Model\Services\Service;
 
-class SendNotifications
+/**
+ * Phosphorum\Mail\SendNotifications
+ *
+ * @property AwsClientInterface $queue
+ * @package Phosphorum\Mail
+ */
+class SendNotifications extends Injectable
 {
-    /**
-     * @var Notifications $notification
-     */
+    /** @var Notifications $notification */
     protected $notification;
 
-    /**
-     * @var Service\Notifications $notificationService
-     */
+    /** @var Service\Notifications $notificationService */
     protected $notificationService;
 
-    /**
-     * @var Service\Users $userService
-     */
+    /** @var Service\Users $userService */
     protected $userService;
 
-    /**
-     * @var Manager $mailer
-     */
+    /** @var Manager $mailer */
     public $mailer;
 
-    /**
-     * @var \Phalcon\Config
-     */
+    /** @var \Phalcon\Config */
     protected $config;
 
-    /**
-     * @var string $content
-     */
+    /** @var string $content */
     protected $content;
 
     public function __construct()
@@ -63,38 +62,85 @@ class SendNotifications
     }
 
     /**
-     * Check the queue from Beanstalk and send the notifications scheduled there
+     * Check the queue from Amazon SQS and send the notifications scheduled there
+     * @return void
      */
     public function consumeQueue()
     {
-        $queue = container('queue');
-        $queue->watch('notifications');
+        try {
+            $queue = Di::getDefault()->get('queue');
 
-        while (true) {
-            while ($job = $queue->reserve() !== false) {
-                $message = $job->getBody();
+            /** @var \Aws\Result $messages*/
+            $messages = $this->getMessagesFromQueue($queue);
 
-                foreach ($message as $userId => $id) {
-                    if ($notification = Notifications::findFirstById($id)) {
-                        try {
-                            $this->send($notification);
-                        } catch (\Exception $e) {
-                            // Do nothing
-                        } catch (\Throwable $t) {
-                            // Do nothing
-                        }
-                    }
+            if (count($messages->get('Messages')) == 0) {
+                return;
+            }
+            foreach ($messages->get('Messages') as $message) {
+                $idList = json_decode($message['Body'], true);
+
+                if (!empty($idList)) {
+                    $this->trySendNotificationsFromMessage($idList);
                 }
 
-                $job->delete();
+                $queue->deleteMessage([
+                    'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+                    'ReceiptHandle' => $message['ReceiptHandle'],
+                ]);
+            }
+        } catch (AwsException $e) {
+            Di::getDefault()->get('logger')->error($e->getMessage());
+        } catch (\Exception $e) {
+            // Do nothing
+        } catch (\Throwable $e) {
+            // Do nothing
+        }
+
+        sleep(5);
+        $this->consumeQueue();
+    }
+
+    /**
+     * Get messages from queue, max amount 10
+     * @param SqsClient $queue
+     * @return \Aws\Result
+     */
+    protected function getMessagesFromQueue(SqsClient $queue)
+    {
+        return $queue->receiveMessage([
+            'AttributeNames' => ['SentTimestamp'],
+            'MaxNumberOfMessages' => 10,
+            'MessageAttributeNames' => ['All'],
+            'QueueUrl' => $queue->getQueueUrl(['QueueName' => 'notifications'])->get('QueueUrl'),
+        ]);
+    }
+
+    /**
+     * Try to send to users from queue's message
+     * @param array $idList
+     * @return void
+     * @throws \Exception|\Throwable
+     */
+    protected function trySendNotificationsFromMessage(array $idList)
+    {
+        foreach ($idList as $userId => $id) {
+            if (!$notification = Notifications::findFirstById($id)) {
+                return;
             }
 
-            sleep(5);
+            try {
+                $this->send($notification);
+            } catch (\Exception $e) {
+                // Do nothing
+            } catch (\Throwable $t) {
+                // Do nothing
+            }
         }
     }
 
     /**
      * Check notifications marked as not send on the databases and send them
+     * @return void
      */
     public function sendRemaining()
     {
@@ -115,6 +161,7 @@ class SendNotifications
 
     /**
      * @param Notifications $notification
+     * @return void
      */
     protected function send(Notifications $notification)
     {
@@ -130,8 +177,8 @@ class SendNotifications
 
     /**
      * Set params for notification
-     *
      * @param Notifications $notification
+     * @return void
      */
     protected function setNotificationParam(Notifications $notification)
     {
@@ -141,10 +188,9 @@ class SendNotifications
 
     /**
      * Checking different params that allow sending email
-     *
      * @return bool
      */
-    protected function checkMailCanBeSent()
+    protected function checkMailCanBeSent(): bool
     {
         if (!$this->checkNotificationCanBeSent()) {
             return false;
@@ -167,10 +213,9 @@ class SendNotifications
 
     /**
      * Set option to object Message for sending email
-     *
      * @return Message
      */
-    protected function getLetter()
+    protected function getLetter(): Message
     {
         $mailParams = $this->prepareAndGetMailParams();
 
@@ -191,7 +236,7 @@ class SendNotifications
     /**
      * @return bool
      */
-    protected function checkNotificationCanBeSent()
+    protected function checkNotificationCanBeSent(): bool
     {
         if (!$this->notificationService->isReadyToBeSent($this->notification)) {
             return false ;
@@ -208,7 +253,7 @@ class SendNotifications
     /**
      * @return bool
      */
-    protected function checkEmailIsValid()
+    protected function checkEmailIsValid(): bool
     {
         /** @var \Phosphorum\Email\EmailComponent $email */
         $email = container('email', [$this->notification->user->email, false]);
@@ -223,7 +268,7 @@ class SendNotifications
     /**
      * @return bool
      */
-    protected function checkUserExpectsNotification()
+    protected function checkUserExpectsNotification(): bool
     {
         if (!$this->userService->doesExpectNotifications($this->notification->user)) {
             $this->notificationService->markAsSkipped($this->notification);
@@ -236,7 +281,7 @@ class SendNotifications
     /**
      * @return bool
      */
-    protected function checkMailContent()
+    protected function checkMailContent(): bool
     {
         if (!trim($this->content)) {
             $this->notificationService->markAsInvalid($this->notification);
@@ -248,10 +293,9 @@ class SendNotifications
 
     /**
      * prepare and return param for email
-     *
      * @return $array
      */
-    protected function prepareAndGetMailParams()
+    protected function prepareAndGetMailParams(): array
     {
         $sendParam['title'] = strip_tags($this->notification->post->title);
         $sendParam['subject'] = "[{$this->config->site->name}] " . strip_tags($this->notification->post->title);
@@ -272,10 +316,9 @@ class SendNotifications
      * </code>
      *
      * @param  Message       $message
-     * @param  Notifications $notification
      * @return string
      */
-    protected function prepareMessageId(Message $message)
+    protected function prepareMessageId(Message $message): string
     {
         $msgId  = $message->getSwiftMessage()->getHeaders()->get('Message-ID');
         $parsed = parse_url(container('config')->site->url);
@@ -294,7 +337,10 @@ class SendNotifications
         return $id;
     }
 
-    protected function prepareHtmlContent(array $param)
+    /**
+     * @return string
+     */
+    protected function prepareHtmlContent(array $param): string
     {
         $param['html_content'] = container('markdown')->render($this->content);
 
@@ -307,7 +353,7 @@ class SendNotifications
      * @param string $message
      * @return string
      */
-    protected function getTextContent($message)
+    protected function getTextContent(string $message): string
     {
         $message = preg_replace('#<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>#', '$2:' . "\n" . '$1', $message);
         $message = trim($this->stripHtmlTags($message));
@@ -332,7 +378,10 @@ class SendNotifications
         return str_replace('&mdash;', '--', $message);
     }
 
-    protected function prepareTextlContent(array $param)
+    /**
+     * @return string
+     */
+    protected function prepareTextlContent(array $param): string
     {
         $param['html_content'] = $this->content;
 
@@ -347,7 +396,7 @@ class SendNotifications
      *
      * @return string
      */
-    protected function prepareContent($viewPath, array $params = null)
+    protected function prepareContent(string $viewPath, array $params = null)
     {
         $view = container('view');
 
@@ -368,7 +417,7 @@ class SendNotifications
      * @param  string $text
      * @return string
      */
-    protected function stripHtmlTags($text)
+    protected function stripHtmlTags(string $text): string
     {
         $text = preg_replace(
             [

@@ -17,8 +17,8 @@
 
 namespace Phosphorum\Task;
 
-use Phosphorum\Mail\SendNotifications;
 use Phosphorum\Console\AbstractTask;
+use Phosphorum\Mail\SendNotifications;
 
 /**
  * Phosphorum\Task\Notifications
@@ -32,46 +32,7 @@ class Notifications extends AbstractTask
      */
     public function send()
     {
-        // Exit to avoid  race condition
-        $filehandle = fopen(storage_path('pids/notifications-send.lock'), 'c+');
-
-        if (flock($filehandle, LOCK_EX | LOCK_NB)) {
-            try {
-                $spool = new SendNotifications();
-                $spool->sendRemaining();
-            } catch (\Exception $t) {
-                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-                container('logger')->error($message, [
-                    'class'   => get_class($t),
-                    'message' => $t->getMessage(),
-                    'file'    => $t->getFile(),
-                    'line'    => $t->getLine(),
-                ]);
-            } catch (\Throwable $e) {
-                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-                container('logger')->error($message, [
-                    'class'   => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file'    => $e->getFile(),
-                    'line'    => $e->getLine(),
-                ]);
-            }
-
-            // don't forget to release the lock
-            flock($filehandle, LOCK_UN);
-        } else {
-            container('logger')->warning('The {task} already running. Exit...', [
-                'task'    => __METHOD__,
-            ]);
-        }
-
-        if (is_resource($filehandle)) {
-            fclose($filehandle);
-        }
-
-        if (file_exists(storage_path('pids/notifications-send.lock'))) {
-            @unlink(storage_path('pids/notifications-send.lock'));
-        }
+        $this->handleTask('sendRemaining');
     }
 
     /**
@@ -79,29 +40,24 @@ class Notifications extends AbstractTask
      */
     public function queue()
     {
+        $this->handleTask('consumeQueue');
+    }
+
+    /**
+     * @return void
+     */
+    protected function handleTask($funcName)
+    {
         // Exit to avoid  race condition
         $filehandle = fopen(storage_path('pids/notifications-queue.lock'), 'c+');
 
         if (flock($filehandle, LOCK_EX | LOCK_NB)) {
             try {
-                $spool = new SendNotifications();
-                $spool->consumeQueue();
+                (new SendNotifications())->$funcName();
             } catch (\Exception $t) {
-                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-                container('logger')->error($message, [
-                    'class'   => get_class($t),
-                    'message' => $t->getMessage(),
-                    'file'    => $t->getFile(),
-                    'line'    => $t->getLine(),
-                ]);
+                $this->addErrorMessageToLog($t);
             } catch (\Throwable $e) {
-                $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
-                container('logger')->error($message, [
-                    'class'   => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file'    => $e->getFile(),
-                    'line'    => $e->getLine(),
-                ]);
+                $this->addErrorMessageToLog($e);
             }
 
             // don't forget to release the lock
@@ -119,5 +75,19 @@ class Notifications extends AbstractTask
         if (file_exists(storage_path('pids/notifications-queue.lock'))) {
             @unlink(storage_path('pids/notifications-queue.lock'));
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function addErrorMessageToLog(\Throwable $t)
+    {
+        $message = '[{class}]: Failed to send notification: {message} on {file}:{line}';
+        container('logger')->error($message, [
+            'class'   => get_class($t),
+            'message' => $t->getMessage(),
+            'file'    => $t->getFile(),
+            'line'    => $t->getLine(),
+        ]);
     }
 }
