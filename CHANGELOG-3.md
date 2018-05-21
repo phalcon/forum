@@ -3,6 +3,17 @@ All notable changes to this project regarding 3.x branch.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
+
+### Changed
+- Replaced beanstalkd by AWS SQS
+- Refactor and cleaned up the `Assets\AssetsManagerExtended`
+
+### Fixed
+- Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
+
 ## [3.5.0] - 2018-05-01
 ### Added
 - Add pagination when category was selected [#371](https://github.com/phalcon/forum/issues/371)
@@ -218,6 +229,7 @@ Removed no longer needed `error_polyfill`
 ### Deprecated
 - Phalcon < 3.0.0 are now fully deprecated
 
+[Unreleased]: https://github.com/phalcon/forum/compare/v3.5.0...HEAD
 [3.5.0]: https://github.com/phalcon/forum/compare/v3.4.1...v3.5.0
 [3.4.1]: https://github.com/phalcon/forum/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/phalcon/forum/compare/v3.3.2...v3.4.0
