@@ -17,8 +17,9 @@
 
 namespace Phosphorum\Provider\Registry;
 
-use Phosphorum\Provider\AbstractServiceProvider;
+use Phalcon\Text;
 use Phalcon\Registry;
+use Phosphorum\Provider\AbstractServiceProvider;
 
 /**
  * Phosphorum\Provider\Registry\ServiceProvider
@@ -34,13 +35,24 @@ class ServiceProvider extends AbstractServiceProvider
     protected $serviceName = 'registry';
 
     /**
-     * Pathes should be added to registry
-     * @var array $path
+     * Data should be added to registry
+     * @var array $data
      */
-    protected $path = [
-        'public_path' => BASE_PATH . '/public/',
-        'tests_data' => BASE_PATH . '/tests/_data/',
-        'tests_fixtures' => BASE_PATH . '/tests/_fixtures/',
+    protected $data = [
+        'paths' => [
+            'basePath' => '/',
+            'public' => 'public',
+            'assets' => 'public/assets',
+            'storage' => 'storage',
+            'logs' => 'storage/logs',
+            'pids' => 'storage/pids',
+            'annotationsCache' => 'storage/cache/annotations',
+            'configCache' => 'storage/cache/config',
+            'dataCache' => 'storage/cache/data',
+            'metaDataCache' => 'storage/cache/metaData',
+            'viewsCache' => 'storage/cache/views',
+            'voltCache' => 'storage/cache/volt',
+        ],
     ];
 
     /**
@@ -50,15 +62,19 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $path = $this->path;
+        $data = $this->data;
 
         $this->di->setShared(
             $this->serviceName,
-            function () use ($path) {
+            function () use ($data) {
                 $registry = new Registry();
-                foreach ($path as $offset => $value) {
-                    $registry->offsetSet($offset, $value);
-                }
+
+                $registry->offsetSet('paths', (object) array_map(function ($path) {
+                    $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+                    $newPath = BASE_PATH . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR;
+
+                    return Text::reduceSlashes($newPath);
+                }, $data['paths']));
 
                 return $registry;
             }
