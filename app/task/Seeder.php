@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Task;
@@ -41,10 +41,10 @@ class Seeder extends AbstractTask
     {
         $faker = Faker::create();
 
-        $this->output('Start');
+        $this->outputMessage('Start');
 
         /** @var \Phalcon\Db\AdapterInterface $database */
-        $database = container('db');
+        $database = $this->getDI()->get('db');
 
         $database->begin();
 
@@ -65,7 +65,7 @@ class Seeder extends AbstractTask
                 throw new Exception(implode('. ', $category->getMessages()));
             }
 
-            $this->output('Category: ' . $category->name);
+            $this->outputMessage('Category: ' . $category->name);
         }
 
         for ($i = 0; $i <= 50; $i++) {
@@ -81,7 +81,7 @@ class Seeder extends AbstractTask
                 throw new Exception(implode('. ', $user->getMessages()));
             }
 
-            $this->output('User: ' . $user->name);
+            $this->outputMessage('User: ' . $user->name);
         }
         $database->commit();
 
@@ -127,11 +127,11 @@ class Seeder extends AbstractTask
                         throw new Exception(implode('. ', $option->getMessages()));
                     }
 
-                    $this->output('Option: ' . $option->title);
+                    $this->outputMessage('Option: ' . $option->title);
                 }
             }
 
-            $this->output('Post: ' . $post->title);
+            $this->outputMessage('Post: ' . $post->title);
         }
         $database->commit();
 
@@ -159,11 +159,11 @@ class Seeder extends AbstractTask
             $reply->post->modified_at = time();
             $reply->save();
 
-            $this->output('Reply to post: ' . $reply->posts_id);
+            $this->outputMessage('Reply to post: ' . $reply->posts_id);
         }
 
         $database->commit();
 
-        $this->output('Done');
+        $this->outputMessage('Done');
     }
 }

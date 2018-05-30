@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Task;
@@ -28,6 +28,7 @@ use Phosphorum\Console\AbstractTask;
  */
 class Cache extends AbstractTask
 {
+    /** @var array */
     protected $excludeFileNames = [
         '.',
         '..',
@@ -40,26 +41,29 @@ class Cache extends AbstractTask
      */
     public function clear()
     {
-        $this->output('Start');
+        $this->outputMessage('Start');
 
-        $this->output('Clear file cache...');
+        $this->outputMessage('Clear file cache...');
         $this->clearFileCache();
 
-        $this->output('Clear models cache...');
+        $this->outputMessage('Clear models cache...');
         $this->clearCache('modelsCache');
 
-        $this->output('Clear view cache...');
+        $this->outputMessage('Clear view cache...');
         $this->clearCache('viewCache');
 
-        $this->output('Clear annotations cache...');
+        $this->outputMessage('Clear annotations cache...');
         $this->clearCache('annotations');
 
-        $this->output('Clear assets collections files...');
+        $this->outputMessage('Clear assets collections files...');
         $this->clearFileAssetsCollection();
 
-        $this->output('Done');
+        $this->outputMessage('Done');
     }
 
+    /**
+     * @return void
+     */
     protected function clearFileCache()
     {
         $iterator = new RecursiveIteratorIterator(
@@ -76,6 +80,9 @@ class Cache extends AbstractTask
         }
     }
 
+    /**
+     * @return void
+     */
     protected function clearCache($service)
     {
         if (!container()->has($service)) {
@@ -89,22 +96,29 @@ class Cache extends AbstractTask
 
     /**
      * Delete all assets collections files
+     * @return void
      */
     protected function clearFileAssetsCollection()
     {
-        $pathToCollection = container()->get('registry')->offsetGet('public_path') . 'assets';
-
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($pathToCollection),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($iterator as $entry) {
+        foreach ($this->getIterator() as $entry) {
             if ($entry->isDir() || in_array($entry->getBasename(), $this->excludeFileNames)) {
                 continue;
             }
 
             unlink($entry->getPathname());
         }
+    }
+
+    /**
+     * @return RecursiveIteratorIterator
+     */
+    protected function getIterator()
+    {
+        $registry = $this->getDI()->get('registry');
+
+        return new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($registry->offsetGet('paths')->public . 'assets'),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
     }
 }

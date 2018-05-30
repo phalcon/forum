@@ -73,13 +73,13 @@ class AssetsService
         try {
             $this->manager
                 ->collection('globalJs')
-                ->setTargetPath($this->registry->offsetGet('public_path') . 'assets/global.js')
+                ->setTargetPath($this->getPath('public') . 'assets/global.js')
                 ->setTargetUri('assets/global.js')
-                ->addJs($this->registry->offsetGet('public_path') . 'js/jquery-3.2.1.min.js', true, false)
-                ->addJs($this->registry->offsetGet('public_path') . 'js/bootstrap.min.js', true, false)
-                ->addJs($this->registry->offsetGet('public_path') . 'js/editor.min.js', true, false)
-                ->addJs($this->registry->offsetGet('public_path') . 'js/forum.js', true)
-                ->addJs($this->registry->offsetGet('public_path') . 'js/prism.js', true)
+                ->addJs($this->getPath('public') . 'js/jquery-3.2.1.min.js', true, false)
+                ->addJs($this->getPath('public') . 'js/bootstrap.min.js', true, false)
+                ->addJs($this->getPath('public') . 'js/editor.min.js', true, false)
+                ->addJs($this->getPath('public') . 'js/forum.js', true)
+                ->addJs($this->getPath('public') . 'js/prism.js', true)
                 ->join(true)
                 ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
@@ -98,16 +98,16 @@ class AssetsService
         try {
             $this->manager
                 ->collection($params['collectionName'])
-                ->setTargetPath($this->registry->offsetGet('public_path') . "assets/{$params['fileName']}")
+                ->setTargetPath($this->getPath('public') . "assets/{$params['fileName']}")
                 ->setTargetUri("assets/{$params['fileName']}")
-                ->addCss($this->registry->offsetGet('public_path') . 'css/bootstrap.min.css', true, false)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/editor.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/fonts.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/octicons.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/diff.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/style.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . 'css/prism.css', true)
-                ->addCss($this->registry->offsetGet('public_path') . "css/{$params['themeFile']}", true)
+                ->addCss($this->getPath('public') . 'css/bootstrap.min.css', true, false)
+                ->addCss($this->getPath('public') . 'css/editor.css', true)
+                ->addCss($this->getPath('public') . 'css/fonts.css', true)
+                ->addCss($this->getPath('public') . 'css/octicons.css', true)
+                ->addCss($this->getPath('public') . 'css/diff.css', true)
+                ->addCss($this->getPath('public') . 'css/style.css', true)
+                ->addCss($this->getPath('public') . 'css/prism.css', true)
+                ->addCss($this->getPath('public') . "css/{$params['themeFile']}", true)
                 ->join(true)
                 ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
@@ -131,5 +131,15 @@ class AssetsService
         }
 
         return $param;
+    }
+
+    /**
+     * Get path from registry
+     * @param string $directory
+     * @return string
+     */
+    protected function getPath($directory)
+    {
+        return $this->registry->offsetGet('paths')->{$directory};
     }
 }

@@ -15,23 +15,24 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Task;
-
-use Phosphorum\Console\AbstractTask;
+namespace Phosphorum\System;
 
 /**
- * Phosphorum\Task\Help
+ * Phosphorum\System\Platform
  *
- * @package Phosphorum\Task
+ * @package Phosphorum\System
  */
-class Help extends AbstractTask
+class Platform
 {
     /**
-     * @Doc("Getting the application help")
+     * @return bool
      */
-    public function main()
+    public function isWindows()
     {
-        $this->outputInfo(sprintf('%s %s', container('app')->getName(), container('app')->getVersion()));
-        $this->outputInfo('Usage: php forum [command <arguments>] [--help | -H] [--version | -V] [--list]');
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return true;
+        }
+
+        return false;
     }
 }
