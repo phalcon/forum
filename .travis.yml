@@ -8,7 +8,6 @@ php:
     - 7.0
     - 7.1
     - 7.2
-    - nightly
 
 git:
     depth: 1
@@ -16,16 +15,12 @@ git:
 env:
     global:
         - CC="ccache gcc"
-        - PHALCON_VERSION=v3.3.2
+        - PHALCON_VERSION=v3.4.0
 
 matrix:
     fast_finish: true
-    allow_failures:
-        - php: nightly
 
 cache:
-    # See: https://github.com/travis-ci/travis-ci/issues/8714
-    edge: true
     apt: true
     ccache: true
     timeout: 604800
