@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Console;
@@ -41,6 +41,9 @@ class AbstractTask extends Injectable implements TaskInterface
      */
     protected $basePath;
 
+    /** @var \League\CLImate\CLImate */
+    protected $consoleOutput;
+
     /**
      * AbstractTask constructor.
      */
@@ -62,6 +65,51 @@ class AbstractTask extends Injectable implements TaskInterface
     public function output($message, array $context = null)
     {
         $this->output->info($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function outputError($message)
+    {
+        $this->consoleOutput->error($message);
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function outputInfo($message)
+    {
+        $this->consoleOutput->info($message);
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function outputMessage($message)
+    {
+        $this->consoleOutput->out($message);
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function outputBlue($message)
+    {
+        $this->consoleOutput->blue($message);
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function outputBackgroundBlue($message)
+    {
+        $this->consoleOutput->backgroundBlue()->out($message);
     }
 
     /**
@@ -140,5 +188,7 @@ class AbstractTask extends Injectable implements TaskInterface
         $this->output->setFormatter(new Line('%message%'));
 
         $this->basePath = dirname(app_path());
+
+        $this->consoleOutput = $this->getDI()->get('consoleOutput');
     }
 }

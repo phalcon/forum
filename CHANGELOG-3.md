@@ -6,10 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
+- Added `Install` task and `check` action.
 
 ### Changed
 - Replaced beanstalkd by AWS SQS
 - Refactor and cleaned up the `Assets\AssetsManagerExtended`
+- Refactor `Cache`, `Commands`, `Help`, `Searchengine`, `Seeder`, `Version` tasks
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
@@ -218,6 +220,9 @@ Removed no longer needed `error_polyfill`
 - Refactor post history (diff)
 - Separated post views into partials
 
+### Deprecated
+- Phalcon < 3.0.0 are now fully deprecated
+
 ### Fixed
 - Fixed `RepliesController::historyAction`
 - Fixed `Posts::afterSave`
@@ -225,9 +230,6 @@ Removed no longer needed `error_polyfill`
 - Minor style fix
 - Fixed CSRF check for subscription, voting, editing, user settings, etc
 - Fixed tests
-
-### Deprecated
-- Phalcon < 3.0.0 are now fully deprecated
 
 [Unreleased]: https://github.com/phalcon/forum/compare/v3.5.0...HEAD
 [3.5.0]: https://github.com/phalcon/forum/compare/v3.4.1...v3.5.0

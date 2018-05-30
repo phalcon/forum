@@ -70,7 +70,7 @@ class NotificationsCest
         $mailer = $di->get('mailer');
         $mailer->setEventsManager($eventsManager);
 
-        $this->fixturePath = container('registry')->offsetGet('tests_fixtures');
+        $this->fixturePath = $di->get('registry')->offsetGet('paths')->basePath . 'tests/_fixtures/';
     }
 
     public function _after(ConsoleTester $I)
