@@ -43,7 +43,10 @@ class ServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                return new Markdown();
+                $markdown = new Markdown();
+                $markdown->setMarkupEscaped(true);
+
+                return $markdown;
             }
         );
     }

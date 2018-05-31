@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replaced beanstalkd by AWS SQS
 - Refactor and cleaned up the `Assets\AssetsManagerExtended`
 - Refactor `Cache`, `Commands`, `Help`, `Searchengine`, `Seeder`, `Version` tasks
+- Update `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
+- Fixed generating incorrect user's emails in `NotificationCest`. [#480](https://github.com/phalcon/forum/issues/480)
 
 ## [3.5.0] - 2018-05-01
 ### Added
