@@ -6,6 +6,7 @@ use Codeception\Module;
 use Faker\Factory as Faker;
 use Phosphorum\Model\Karma;
 use Phosphorum\Model\Users;
+use Phosphorum\Email\EmailComponent;
 
 /**
  * User Helper
@@ -97,5 +98,19 @@ class User extends Module
         $this->phalcon->haveInSession('identity-karma', $attributes['karma']);
 
         return $attributes;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateValidEmail()
+    {
+        $email = $this->faker->email;
+        $validator = new EmailComponent($email, false);
+        if ($validator->valid()) {
+            return $email;
+        }
+
+        return $this->generateValidEmail();
     }
 }
