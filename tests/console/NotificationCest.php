@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-present Phalcon Team and contributors               |
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -20,8 +20,8 @@ use Helper\User;
 use Helper\Mail;
 use Helper\Category;
 use Phalcon\Events\Event;
-use Phosphorum\Mail\SendNotifications;
 use Phalcon\Ext\Mailer\Message;
+use Phosphorum\Mail\SendNotifications;
 
 class NotificationsCest
 {
@@ -93,7 +93,7 @@ class NotificationsCest
      * @author Sergii Svyrydenko <sergey.v.svyrydenko@gmail.com>
      * @since  2018-01-08
      */
-    public function shouldCreateCorrectEmailFromPost(ConsoleTester $I)//++
+    public function shouldCreateCorrectEmailFromPost(ConsoleTester $I)
     {
         $fixtureData = include $this->fixturePath . 'console/notification/data_to_check_post.php';
 
@@ -105,6 +105,7 @@ class NotificationsCest
         $guest = $this->user->haveUser([
             'karma' => 301,
             'notifications' => 'Y',
+            'email' => $this->user->generateValidEmail(),
         ]);
 
         $catId  = $this->category->haveCategory();
@@ -159,7 +160,7 @@ class NotificationsCest
      * @author Sergii Svyrydenko <sergey.v.svyrydenko@gmail.com>
      * @since  2018-01-08
      */
-    public function shouldCreateCorrectEmailFromReply(ConsoleTester $I)//+
+    public function shouldCreateCorrectEmailFromReply(ConsoleTester $I)
     {
         $fixtureData = include $this->fixturePath . 'console/notification/data_to_check_reply.php';
 
@@ -179,6 +180,7 @@ class NotificationsCest
 
         $guest = $this->user->haveUser([
             'karma' => 301,
+            'email' => $this->user->generateValidEmail(),
         ]);
 
         $replyId = $this->post->havePostReply([
@@ -199,7 +201,7 @@ class NotificationsCest
             'app_name'     => $config->mailer->from->name,
             'base_uri'     => $config->site->url,
             'slug'         => 'some-slug-here',
-'           template_path' => 'mails/reply_notification.html', //added
+'           template_path' => 'mails/reply_notification.html',
         ];
 
         if (!array_key_exists($guest['name'] . $author['name'], $this->messages)) {
@@ -232,7 +234,7 @@ class NotificationsCest
      * @author Sergii Svyrydenko <sergey.v.svyrydenko@gmail.com>
      * @since  2018-01-08
      */
-    public function shouldDoesntCreateEmailWithEmptyContent(ConsoleTester $I)//++
+    public function shouldDoesntCreateEmailWithEmptyContent(ConsoleTester $I)
     {
         $author = $this->user->haveUser([
             'karma'         => 401,
@@ -242,6 +244,7 @@ class NotificationsCest
         $guest = $this->user->haveUser([
             'karma' => 301,
             'notifications' => 'Y',
+            'email' => $this->user->generateValidEmail(),
         ]);
 
         $catId  = $this->category->haveCategory();
@@ -266,7 +269,7 @@ class NotificationsCest
      * @author Sergii Svyrydenko <sergey.v.svyrydenko@gmail.com>
      * @since  2018-01-08
      */
-    public function shouldDoesntCreateEmailWithIncorrectEmail(ConsoleTester $I)//++
+    public function shouldDoesntCreateEmailWithIncorrectEmail(ConsoleTester $I)
     {
         $author = $this->user->haveUser([
             'karma'         => 401,
@@ -301,7 +304,7 @@ class NotificationsCest
      * @author Sergii Svyrydenko <sergey.v.svyrydenko@gmail.com>
      * @since  2018-01-08
      */
-    public function shouldDoesntCreateEmailWithProhibitionToSend(ConsoleTester $I)//
+    public function shouldDoesntCreateEmailWithProhibitionToSend(ConsoleTester $I)
     {
         $author = $this->user->haveUser([
             'karma'         => 401,
