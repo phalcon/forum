@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Replaced beanstalkd by AWS SQS
 - Updated `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
-- Changed `guzzle/guzzle` package by `guzzlehttp/guzzle` in github authorization
+- Using `GuzzleHttp\Client` in favor of `Guzzle\Http\Client`
+- Updated dependencies
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
