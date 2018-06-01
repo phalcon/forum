@@ -1,18 +1,18 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Github;
@@ -20,7 +20,8 @@ namespace Phosphorum\Github;
 use Phalcon\Text;
 use Phalcon\Config;
 use Phalcon\Di\Injectable;
-use Guzzle\Http\Client as HttpClient;
+use GuzzleHttp\Client as HttpClient;
+use Phosphorum\Exception\InvalidParameterException;
 
 /**
  * Class OAuth
@@ -103,30 +104,25 @@ class OAuth extends Injectable
     }
 
     /**
-     * @param        $url
-     * @param        $parameters
+     * @param string $url
+     * @param array $parameters
      * @param string $method
      *
      * @return bool|mixed
      */
-    public function send($url, $parameters, $method = 'post')
+    public function send($url, array $parameters, $method = 'post')
     {
         try {
-            $client = new HttpClient();
-            $headers = ['Accept' => 'application/json'];
-
-            switch ($method) {
-                case 'post':
-                    $request = $client->post($url, $headers, $parameters);
-                    break;
-                case 'get':
-                    $request = $client->get($url, $headers, $parameters);
-                    break;
-                default:
-                    throw new \Exception('Invalid HTTP method');
+            if (!in_array($method, ['post', 'get'])) {
+                throw new InvalidParameterException('Invalid HTTP method ' . $method);
             }
 
-            return json_decode((string)$request->send()->getBody(), true);
+            $response = (new HttpClient())->request($method, $url, [
+                'form_params' => $parameters,
+                'headers' => ['Accept' => 'application/json'],
+            ]);
+
+            return json_decode((string)$response->getBody(), true);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             return false;

@@ -10,9 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Replaced beanstalkd by AWS SQS
-- Refactor and cleaned up the `Assets\AssetsManagerExtended`
-- Refactor `Cache`, `Commands`, `Help`, `Searchengine`, `Seeder`, `Version` tasks
-- Update `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
+- Updated `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
+- Changed `guzzle/guzzle` package by `guzzlehttp/guzzle` in github authorization
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
@@ -20,16 +19,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.5.0] - 2018-05-01
 ### Added
-- Add pagination when category was selected [#371](https://github.com/phalcon/forum/issues/371)
-- Add changelog [#58](https://github.com/phalcon/forum/issues/58)
-- Add `UsersListener` to `Users` model [#465](https://github.com/phalcon/forum/issues/465)
+- Added pagination when category was selected [#371](https://github.com/phalcon/forum/issues/371)
+- Added changelog [#58](https://github.com/phalcon/forum/issues/58)
+- Added `UsersListener` to `Users` model [#465](https://github.com/phalcon/forum/issues/465)
 - Added support syntax highlight in preview
 - Added Post listener
 - Added Assets Collection feature and do not use CDN anymore
-- Add mailer and change notification task
+- Added mailer and change notification task
 
 ### Changed
-- Change replies counter. Amount include posts's owner and visitors' replies [#50](https://github.com/phalcon/forum/issues/50)
+- Changed replies counter. Amount include posts's owner and visitors' replies [#50](https://github.com/phalcon/forum/issues/50)
 - Cleaned Posts model
 
 ### Fixed
@@ -53,7 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.4.0] - 2017-11-29
 ### Added
-- Add support of `<del>` and `<ins>` tags
+- Added support of `<del>` and `<ins>` tags
 
 ### Changed
 - Changed view render from `kzykhys/ciconia` to `erusev/parsedown`
@@ -68,7 +67,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed dependencies and composer config
 
 ### Deleted
-Removed no longer needed `error_polyfill`
+- Removed no longer needed `error_polyfill`
 
 ## [3.3.2] - 2017-11-03
 ### Fixed
@@ -85,14 +84,13 @@ Removed no longer needed `error_polyfill`
 ## [3.3.0] - 2017-10-30
 ### Added
 - Provided ability to customize social links
-- Improved categories route
-- Improved tests suites
 - Added `Discord` integration
 - Added media queries so that the forum tab navigation isn't lost on iPads in portrait mode
 - Added `SearchEngine` task
 
 ### Changed
-- Refactored meta tags
+- Improved categories route
+- Improved tests suites
 - Improved digest mail template
 - Updated dependencies
 
@@ -139,7 +137,6 @@ Removed no longer needed `error_polyfill`
 - Improved routing
 - Improved `Travis CI` build
 - Improved mail templates
-- Refactored tests
 
 ### Fixed
 - Minor fix for detecting debug mode
@@ -169,7 +166,6 @@ Removed no longer needed `error_polyfill`
 - Added ability to cache config on production mode
 
 ### Changed
-- Refactored the error views
 - Tune up the static pages
 - Improved config factory
 - Improved the discussions ordering
@@ -200,8 +196,6 @@ Removed no longer needed `error_polyfill`
 - Added `ReCaptcha` support
 
 ### Changed
-- Refactored configs
-- Refactored tests
 - Store karma to the session
 - Tune up some views
 
@@ -219,7 +213,6 @@ Removed no longer needed `error_polyfill`
 - Improved Help index
 - Code cleanup
 - Amended development configs
-- Refactor post history (diff)
 - Separated post views into partials
 
 ### Deprecated
