@@ -1,24 +1,24 @@
 <?php
 
 /*
- +------------------------------------------------------------------------+
- | Phosphorum                                                             |
- +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
- +------------------------------------------------------------------------+
- | This source file is subject to the New BSD License that is bundled     |
- | with this package in the file LICENSE.txt.                             |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@phalconphp.com so we can send you a copy immediately.       |
- +------------------------------------------------------------------------+
+  +------------------------------------------------------------------------+
+  | Phosphorum                                                             |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file LICENSE.txt.                             |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@phalconphp.com so we can send you a copy immediately.       |
+  +------------------------------------------------------------------------+
 */
 
 namespace Phosphorum\Github;
 
-use Guzzle\Http\Client as HttpClient;
 use Phalcon\Di\Injectable;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * Class Users
@@ -56,15 +56,15 @@ class Users extends Injectable
     public function request($method)
     {
         try {
-            $client = new HttpClient();
-            $url    = sprintf(
+            $url = sprintf(
                 '%s%s?access_token=%s',
                 $this->endPoint,
                 $method,
                 $this->accessToken
             );
+
             return @json_decode(
-                $client->get($url)->send()->getBody(),
+                (new HttpClient())->get($url)->getBody(),
                 true
             );
         } catch (\Exception $e) {
