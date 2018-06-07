@@ -39,10 +39,15 @@
                     <li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
                 </ul>
 
+                <div id="wmd-button-bar"></div>
                 <div id="comment-box">
-                    {{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
+                    {{ text_area("wmd-input", "rows": 15, "placeholder": "Leave the content", "class": "form-control", "name": "content") }}
                 </div>
+                <div id="wmd-preview"></div>
                 <div id="preview-box" style="display:none"></div>
+                <div class="editor-statusbar">
+                    {#Here will be added lines and words counter and cursor position pointer#}
+                </div>
 
                 {% include 'partials/poll-form' with ['post': post]  %}
 

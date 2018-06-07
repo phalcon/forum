@@ -16,12 +16,14 @@
 
             <form method="post" autocomplete="off" role="form">
                 {{ hidden_field(tokenKey, "value": token, "id": "csrf-token") }}
-                <div style="width: 100%">
-                    <div id="comment-box">
-                        {{- hidden_field('id', 'value': post.id) -}}
-                        {{- text_area("content", "rows": 5, "class": "form-control") -}}
-                    </div>
-                    <div id="preview-box" style="display:none"></div>
+                <div id="comment-box" class="wmd-container">
+                    <div id="wmd-button-bar"></div>
+                    {{- text_area("wmd-input", "rows": 5, "class": "form-control input-sm", "name": "content") -}}
+                    <div id="wmd-preview"></div>
+                    {{- hidden_field('id', 'value': post.id) -}}
+                </div>
+                <div class="editor-statusbar">
+                    {#Here will be added lines and words counter and cursor position pointer#}
                 </div>
                 <div style="width: 100%">
                     <div class="pull-left">

@@ -25,6 +25,7 @@
     {%- else -%}
         {{ assets.cachedOutputCss('globalCss') }}
     {%- endif -%}
+    {{ assets.cachedOutputCss('editorCss') }}
 
     {#- reCaptcha -#}
     {%- if recaptcha.isEnabled() -%}
@@ -36,6 +37,7 @@
 <body class="with-top-navbar">
     {{ content() }}
     {{ assets.cachedOutputJs('globalJs') }}
+    {{ assets.cachedOutputJs('editorJs') }}
 
     <script type="text/javascript">Forum.initializeView('{{ url() }}');</script>
 </body>

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Updated `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
 - Using `GuzzleHttp\Client` in favor of `Guzzle\Http\Client`
 - Updated dependencies
+- Using `StackExchange/pagedown` instead `CodeMirror` editor
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)

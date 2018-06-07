@@ -32,7 +32,7 @@ class StartDiscussionCest
         $I->see('Start a Discussion', 'h1');
         $I->seeRecord(Categories::class, ['name' => 'Testing']);
         $I->fillField('#title', 'How can I write tests in Codeception');
-        $I->fillField('#content', 'Is there any manual');
+        $I->fillField('#wmd-input', 'Is there any manual');
         $I->selectOption('#categoryId', 'Testing');
         $I->click('Submit Discussion');
         $I->see('How can I write tests in Codeception','h1');

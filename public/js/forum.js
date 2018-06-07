@@ -37,18 +37,26 @@ var Forum = {
 	makeCommentEditable: function(response)
 	{
 		if (response.status == 'OK') {
-
 			var form = document.createElement('FORM');
 			form.className = 'edit-form';
 			form.method = 'POST';
 			form.action = Forum._uri + 'reply/update';
 
+			var div = document.createElement('DIV');
+			div.id = "wmd-button-bar";
+			form.appendChild(div);
+
 			var textarea = document.createElement('TEXTAREA');
 			textarea.name = 'content';
 			textarea.rows = 7;
 			textarea.value = response.comment;
-			textarea.className = 'form-control';
+			textarea.className = 'form-control input-sm';
+			textarea.id = 'wmd-input';
 			form.appendChild(textarea);
+
+			var statusBar = document.createElement('DIV');
+			statusBar.className = "editor-statusbar";
+			form.appendChild(statusBar);
 
 			var hidden = document.createElement('INPUT');
 			hidden.name = 'id';
@@ -63,6 +71,7 @@ var Forum = {
 			form.appendChild(token);
 
 			var cancel = document.createElement('INPUT');
+			cancel.type = 'button';
 			cancel.type = 'button';
 			cancel.className = 'btn btn-default btn-sm pull-left';
 			cancel.value = 'Cancel';
@@ -82,9 +91,7 @@ var Forum = {
 			this.hide();
 
 			this.parent().append(form);
-
-			var editor = new Editor({ 'element': textarea });
-			editor.render();
+			Forum.initializePagedown();
 		}
 	},
 
@@ -102,12 +109,7 @@ var Forum = {
 			$('#replyModal').modal('show');
 			var textarea = $('#replyModal textarea')[0];
 			$(textarea).val(str);
-			window.setTimeout(function(){
-				var editor = new Editor({
-					'element': textarea
-				});
-				editor.render();
-			}, 200)
+            Forum.initializePagedown();
 		}
 	},
 
@@ -556,43 +558,49 @@ var Forum = {
 	/**
 	 * Changes a tab in a comment, highlightight the preview page
 	 */
-	changeCommentTab: function(event)
-	{
+    changeCommentTab: function(event)
+    {
+        var extraTitle = '';
+        if ($(this).parent().parent().attr('class') == 'modal-body') {
+            extraTitle = '-modal';
+        }
 
-		event.data.links.each(function(position, element){
-			$(element).removeClass('active');
-		});
+        event.data.links.each(function(position, element){
+            $(element).removeClass('active');
+        });
 
-		$(this).addClass('active');
-		var parent = $(this).parents()[2];
-		if ($('a', this).html() == 'Preview') {
-			var content = $('textarea', parent).data('editor').codemirror.getValue()
-			if (content !== '') {
-				$.ajax({
-					method: 'POST',
-					url: Forum._uri + 'preview',
-					data: {'content': content }
-				}).done(function(parent, response){
-					$('#preview-box', parent).html(response);
+        $(this).addClass('active');
+        var parent = $(this).parents()[2];
+        if ($('a', this).html() == 'Preview') {
+            var content = $('#wmd-input' + extraTitle).val();
+            if (content !== '') {
+                $.ajax({
+                    method: 'POST',
+                    url: Forum._uri + 'preview',
+                    data: {'content': content }
+                }).done(function(parent, response){
+                    $('#wmd-preview' + extraTitle, parent).html(response);
 
-                    $('#preview-box').find('code').each(function(index, element) {
+                    $('#wmd-preview' + extraTitle).find('code').each(function(index, element) {
                         Prism.highlightElement($(element)[0]);
                     });
 
-                    $('.preview-box').find('code').each(function(index, element) {
+                    $('.wmd-preview' + extraTitle).find('code').each(function(index, element) {
                         Prism.highlightElement($(element)[0]);
                     });
-				}.bind(this, parent));
-			} else {
-				$('#preview-box', parent).html('Nothing to preview');
-			};
-			$('#comment-box, #reply-comment-box', parent).hide();
-			$('#preview-box', parent).show();
-		} else {
-			$('#comment-box, #reply-comment-box', parent).show();
-			$('#preview-box', parent).hide();
-		}
-	},
+                }.bind(this, parent));
+            } else {
+                $('#wmd-preview' + extraTitle).html('Nothing to preview');
+            };
+            $('#wmd-input' + extraTitle).hide();
+            $('#wmd-button-bar' + extraTitle).hide();
+            $('#wmd-preview' + extraTitle).show();
+        } else {
+            $('#wmd-input' + extraTitle).show();
+            $('#wmd-button-bar' + extraTitle).show();
+            $('#wmd-preview' + extraTitle).hide();
+        }
+    },
 
 	reloadCategories: function(event)
 	{
@@ -714,6 +722,7 @@ var Forum = {
 		});
 
 		$('a.reply-reply').each(function(position, element) {
+            Forum.initializeModalPagedown();
 			$(element).bind('click', {element: element}, Forum.replyReply);
 		});
 
@@ -736,8 +745,7 @@ var Forum = {
 
 		var textarea = $('textarea');
 		if (textarea.length && !textarea.hasClass('no-editor')) {
-			var editor = new Editor();
-			editor.render();
+            Forum.initializePagedown();
 		}
 
 		$('#recommended-posts-create').each(function(position, element){
@@ -771,6 +779,36 @@ var Forum = {
 	{
 		Forum._uri = uri;
 		Forum.addCallbacks();
-	}
+	},
 
+    /**
+     * Initializes modal pagedown
+     */
+    initializeModalPagedown: function () {
+        var converter = new Markdown.Converter();
+        converter.hooks.chain("preConversion", function (text) {
+            return text.replace(/\b(a\w*)/gi, "*$1*");
+        });
+
+        converter.hooks.chain("plainLinkText", function (url) {
+            return "This is a link to " + url.replace(/^https?:\/\//, "");
+        });
+        var editor = new Markdown.Editor(converter, "-modal", options);
+
+        editor.run();
+    },
+
+    /**
+     * Initializes pagedown
+     */
+    initializePagedown: function () {
+        var converter = Markdown.getSanitizingConverter();
+        converter.hooks.chain("preBlockGamut", function (text, rbg) {
+            return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+                return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+            });
+        });
+        var editor = new Markdown.Editor(converter);
+        editor.run();
+    }
 };
