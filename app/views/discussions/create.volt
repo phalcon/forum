@@ -64,13 +64,15 @@
                                 <li class="pull-right">{{ link_to('help/markdown', 'Help', 'target': '_blank') }}</li>
                             </ul>
 
-                            <div id="comment-box">
-                                <div class="form-group">
-                                    {{ text_area("content", "rows": 15, "placeholder": "Leave the content", "class": "form-control") }}
-                                </div>
+                            <div id="comment-box" class="wmd-container">
+                                <div id="wmd-button-bar"></div>
+                                {{- text_area("wmd-input", "rows": 5, "class": "form-control input-sm", "name": "content") -}}
+                                <div id="wmd-preview"></div>
                             </div>
+                        </div>
 
-                            <div id="preview-box" style="display:none"></div>
+                        <div class="editor-statusbar">
+                            {#Here will be added lines and words counter and cursor position pointer#}
                         </div>
 
                         {% include 'partials/poll-form.volt' %}

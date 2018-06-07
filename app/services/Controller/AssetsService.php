@@ -24,6 +24,7 @@ use Phalcon\Registry;
 use Phalcon\Assets\Manager;
 use Phosphorum\Assets\Filters\NoneFilter;
 use Phosphorum\Exception\RuntimeException;
+use Phosphorum\Exception\InvalidParameterException;
 
 /**
  * Phosphorum\Services\Controller\AssetsService
@@ -77,9 +78,18 @@ class AssetsService
                 ->setTargetUri('assets/global.js')
                 ->addJs($this->getPath('public') . 'js/jquery-3.2.1.min.js', true, false)
                 ->addJs($this->getPath('public') . 'js/bootstrap.min.js', true, false)
-                ->addJs($this->getPath('public') . 'js/editor.min.js', true, false)
                 ->addJs($this->getPath('public') . 'js/forum.js', true)
                 ->addJs($this->getPath('public') . 'js/prism.js', true)
+                ->join(true)
+                ->addFilter(new NoneFilter());
+
+            $this->manager
+                ->collection('editorJs')
+                ->setTargetPath($this->getPath('public') . 'assets/editor.js')
+                ->setTargetUri('assets/editor.js')
+                ->addJs($this->getPagedownPath('Markdown.Converter.js'), true)
+                ->addJs($this->getPagedownPath('Markdown.Sanitizer.js'), true)
+                ->addJs($this->getPagedownPath('Markdown.Editor.js'), true)
                 ->join(true)
                 ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
@@ -101,13 +111,20 @@ class AssetsService
                 ->setTargetPath($this->getPath('public') . "assets/{$params['fileName']}")
                 ->setTargetUri("assets/{$params['fileName']}")
                 ->addCss($this->getPath('public') . 'css/bootstrap.min.css', true, false)
-                ->addCss($this->getPath('public') . 'css/editor.css', true)
                 ->addCss($this->getPath('public') . 'css/fonts.css', true)
                 ->addCss($this->getPath('public') . 'css/octicons.css', true)
                 ->addCss($this->getPath('public') . 'css/diff.css', true)
                 ->addCss($this->getPath('public') . 'css/style.css', true)
                 ->addCss($this->getPath('public') . 'css/prism.css', true)
                 ->addCss($this->getPath('public') . "css/{$params['themeFile']}", true)
+                ->join(true)
+                ->addFilter(new NoneFilter());
+
+            $this->manager
+                ->collection('editorCss')
+                ->setTargetPath($this->getPath('public') . 'assets/editor.css')
+                ->setTargetUri('assets/editor.css')
+                ->addCss($this->getPath('public') . 'css/editor.min.css', true, false)
                 ->join(true)
                 ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
@@ -141,5 +158,21 @@ class AssetsService
     protected function getPath($directory)
     {
         return $this->registry->offsetGet('paths')->{$directory};
+    }
+
+    /**
+     * Get path to pagedown's file
+     * @param string $fileName
+     * @return string
+     * @throws InvalidParameterException
+     */
+    private function getPagedownPath($fileName)
+    {
+        $filePath = $this->getPath('basePath') . '/vendor/stackexchange/pagedown/' . $fileName;
+        if (file_exists($filePath)) {
+            return $filePath;
+        }
+
+        throw new InvalidParameterException("Pagedown's file '{$fileName}' isn't exist in vendor");
     }
 }

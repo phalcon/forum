@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team (https://www.phalconphp.com)   |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -398,7 +398,7 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
-            $this->tag->displayTo('content', $this->escaper->escapeHtml($post->content));
+            $this->tag->displayTo('wmd-input', $this->escaper->escapeHtml($post->content));
             $this->tag->displayTo('categoryId', $post->categories_id);
         }
 
