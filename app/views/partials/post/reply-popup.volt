@@ -15,11 +15,15 @@
                         <li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
                     </ul>
                     <div>
-                        <div id="reply-comment-box">
-                            {{- hidden_field('id', 'value': post.id) -}}
-                            {{- hidden_field('reply-id') -}}
-                            <div id="comment-textarea"></div>
-                        </div>
+                    <div id="reply-comment-box" class="">
+                        <div id="wmd-button-bar-modal"></div>
+                        {{- text_area("wmd-input-modal", "rows": 5, "class": "form-control input-sm", "name": "content") -}}
+                        <div id="wmd-preview-modal"></div>
+                        {{- hidden_field('id', 'value': post.id) -}}
+                    </div>
+                    <div class="editor-statusbar">
+                        {#Here will be added lines and words counter and cursor position pointer#}
+                    </div>
                         <div id="preview-box" style="display:none" class="preview-box"></div>
                     </div>
                 </div>

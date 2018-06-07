@@ -40,7 +40,7 @@ class ReplyInDiscussionCest
         $I->seeLink('Please help with testing');
         $I->click('Please help with testing');
         $I->see('Please help with testing','h1');
-        $I->fillField('#content', 'I can do that!');
+        $I->fillField('#wmd-input', 'I can do that!');
         $I->click('Add Comment');
         $I->see('I can do that!', '.post-content');
     }

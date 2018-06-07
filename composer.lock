@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b888695dcead1ce2b13b81fef5996761",
+    "content-hash": "1d750df147e14c4ba3827fe20333f5e7",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -2694,6 +2694,32 @@
                 "prompt"
             ],
             "time": "2017-03-18T11:32:45+00:00"
+        },
+        {
+            "name": "stackexchange/pagedown",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kael-shipman/pagedown.git",
+                "reference": "6c619eb94392ebe419d609ee82f01451756d16c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kael-shipman/pagedown/zipball/6c619eb94392ebe419d609ee82f01451756d16c0",
+                "reference": "6c619eb94392ebe419d609ee82f01451756d16c0",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "markdown converter, based on showdown",
+            "homepage": "http://code.google.com/p/pagedown/wiki/PageDown",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2017-06-07T18:58:13+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
