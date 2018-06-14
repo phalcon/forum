@@ -18,8 +18,8 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core;
 
-use Phalcon\Escaper;
 use Phalcon\DiInterface;
+use Phalcon\Escaper;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Filter;
 use Phalcon\Http\Response;
@@ -28,6 +28,7 @@ use Phosphorum\Core\Modules\AbstractModule;
 use Phosphorum\Core\Providers\ConfigProvider;
 use Phosphorum\Core\Providers\DispatcherProvider;
 use Phosphorum\Core\Providers\LoggerProvider;
+use Phosphorum\Core\Providers\SessionProvider;
 use Phosphorum\Core\Providers\UrlResolverProvider;
 use Phosphorum\Core\Providers\ViewProvider;
 use Phosphorum\Core\Providers\VoltProvider;
@@ -78,6 +79,7 @@ class Module extends AbstractModule
 
         $this->serviceRegistrator->registerService(new UrlResolverProvider());
         $this->serviceRegistrator->registerService(new DispatcherProvider());
+        $this->serviceRegistrator->registerService(new SessionProvider());
     }
 
     /**

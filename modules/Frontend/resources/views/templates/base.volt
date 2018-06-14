@@ -5,7 +5,7 @@
 <html lang="en-US" class="no-js">
 <!--<![endif]-->
 <head>
-    {%- set url = url() -%}
+    {%- set url = url(), theme = session.get('identity-theme') -%}
 
     {%- if config.social is defined and not(config.social.twitter_name is empty) -%}
         {%- set twitter_name = config.social.twitter_name -%}
