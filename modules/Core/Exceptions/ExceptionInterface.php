@@ -16,14 +16,14 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Core\Exceptions;
+namespace Phosphorum\Core\Exceptions;
 
 /**
- * Core\Exceptions\ExceptionInterface
+ * Phosphorum\Core\Exceptions\ExceptionInterface
  *
  * This interface must be implemented by all Phosphorum Exception classes
  *
- * @package Core\Exceptions
+ * @package Phosphorum\Core\Exceptions
  */
 interface ExceptionInterface extends \Throwable
 {

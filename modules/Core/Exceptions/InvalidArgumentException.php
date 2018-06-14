@@ -16,12 +16,12 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Core\Exceptions;
+namespace Phosphorum\Core\Exceptions;
 
 /**
- * Core\Exceptions\InvalidArgumentException
+ * Phosphorum\Core\Exceptions\InvalidArgumentException
  *
- * @package Core\Exceptions
+ * @package Phosphorum\Core\Exceptions
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
