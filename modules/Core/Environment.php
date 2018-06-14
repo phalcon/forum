@@ -21,6 +21,7 @@ namespace Phosphorum\Core;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Registry;
+use Phosphorum\Core\Exceptions\InvalidArgumentException;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
@@ -80,6 +81,7 @@ final class Environment implements InjectionAwareInterface
      * Set the base path for the forum installation.
      *
      * @param  string $basePath
+     *
      * @return $this
      */
     public function setBasePath(string $basePath): Environment
@@ -126,7 +128,7 @@ final class Environment implements InjectionAwareInterface
      */
     public function getConfigBasePath(): string
     {
-        return $this->registry->paths->config;
+        return $this->registry->offsetGet('paths')->config;
     }
 
     /**
@@ -136,7 +138,7 @@ final class Environment implements InjectionAwareInterface
      */
     public function getCachedConfigPath(): string
     {
-        return $this->registry->paths->cache . '/application/config.php';
+        return $this->registry->offsetGet('paths')->cache . '/application/config.php';
     }
 
     /**
@@ -146,7 +148,7 @@ final class Environment implements InjectionAwareInterface
      */
     public function getVoltCachePath(): string
     {
-        return $this->registry->paths->cache . '/volt';
+        return $this->registry->offsetGet('paths')->cache . '/volt';
     }
 
     /**
@@ -162,12 +164,14 @@ final class Environment implements InjectionAwareInterface
     /**
      * Sets current application stage.
      *
-     * @param int $stage
+     * @param  int $stage
+     *
+     * @throes InvalidArgumentException
      */
     public function setStage(int $stage): void
     {
         if ($stage > Environment::DEVELOPMENT || $stage < Environment::PRODUCTION) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Application stage "%d" is not valid.', $stage)
             );
         }

@@ -116,7 +116,7 @@ final class VoltManager implements InjectionAwareInterface
     {
         $isDevelopmentStage = $env->isCurrentStage(Environment::DEVELOPMENT);
 
-        return (bool) ($isDevelopmentStage || $config->get('debug', false));
+        return ($isDevelopmentStage || $config->get('debug', false));
     }
 
     /**
