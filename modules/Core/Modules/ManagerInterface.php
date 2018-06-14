@@ -31,9 +31,9 @@ interface ManagerInterface
      * Register modules present in the application.
      *
      * @param  Application $application
-     * @param  $merge = true
+     * @param  bool        $merge
      *
      * @return void
      */
-    public function registerModules(Application $application, $merge = true): void;
+    public function registerModules(Application $application, bool $merge = true): void;
 }

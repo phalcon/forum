@@ -110,7 +110,7 @@ final class Manager implements ManagerInterface
      *
      * @return void
      */
-    public function registerModules(Application $application, $merge = true): void
+    public function registerModules(Application $application, bool $merge = true): void
     {
         $this->initializeModules();
 
