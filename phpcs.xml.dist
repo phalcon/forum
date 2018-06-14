@@ -8,7 +8,6 @@
         except in this file, so it can contain information for
         developers who may change this file in the future.
     -->
-
     <description>Phalcon Coding Standards</description>
 
     <!-- Show sniff codes in all reports -->
@@ -24,13 +23,5 @@
         Note that specifying any file or directory path
         on the command line will ignore all file tags.
     -->
-    <file>app</file>
-
-    <!--
-        You can hard-code ignore patterns directly into your
-        custom standard so you don't have to specify the
-        patterns on the command line.
-    -->
-    <exclude-pattern>config/*</exclude-pattern>
-    <exclude-pattern>cache/*</exclude-pattern>
+    <file>modules</file>
 </ruleset>

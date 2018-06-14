@@ -54,11 +54,11 @@ before_script:
 
 script:
     - vendor/bin/phpcs
-    - vendor/bin/codecept build
-    - vendor/bin/codecept run unit
-    - vendor/bin/codecept run console
-    - vendor/bin/codecept run functional
-    - vendor/bin/codecept run acceptance
+#    - vendor/bin/codecept build
+#    - vendor/bin/codecept run unit
+#    - vendor/bin/codecept run console
+#    - vendor/bin/codecept run functional
+#    - vendor/bin/codecept run acceptance
 
 after_failure:
     - for file in `ls ./tests/_output`; do [ -f ./tests/_output/$file ] && cat ./tests/_output/$file; done;

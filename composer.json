@@ -44,7 +44,8 @@
   },
 
   "require-dev": {
-    "phpstan/phpstan": "0.9.*"
+    "phpstan/phpstan": "0.9.*",
+    "squizlabs/php_codesniffer": "3.3.*"
   },
 
   "suggest": {
