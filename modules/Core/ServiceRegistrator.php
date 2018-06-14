@@ -18,11 +18,11 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core;
 
-use Core\Exceptions\InvalidArgumentException;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
 use Phalcon\Registry;
+use Phosphorum\Core\Exceptions\InvalidArgumentException;
 use Phosphorum\Core\Modules\Manager;
 use Phosphorum\Core\Modules\ManagerInterface;
 use Phosphorum\Core\Providers\EventsManagerProvider;
@@ -58,10 +58,10 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Create a new Registrator instance.
      *
-     * @param string|null      $basePath
+     * @param string           $basePath
      * @param DiInterface|null $container
      */
-    public function __construct(string $basePath = null, DiInterface $container = null)
+    public function __construct(string $basePath, DiInterface $container = null)
     {
         $this->__DiInject($container);
 
@@ -77,10 +77,12 @@ final class ServiceRegistrator implements InjectionAwareInterface
      */
     protected function registerBaseBindings(): void
     {
-        $this->getDI()->setShared(Registry::class, Registry::class);
-        $this->getDI()->setShared(ServiceRegistrator::class, $this);
-        $this->getDI()->setShared(ManagerInterface::class, function () {
-            return new Manager($this);
+        $container = $this->getDI();
+
+        $container->setShared(Registry::class, Registry::class);
+        $container->setShared(ServiceRegistrator::class, $this);
+        $container->setShared(ManagerInterface::class, function () use ($container) {
+            return new Manager($container);
         });
     }
 
@@ -99,10 +101,11 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Creates and registers application environment.
      *
-     * @param string|null $basePath
+     * @param  string $basePath
+     *
      * @return void
      */
-    protected function createEnvironment(string $basePath = null): void
+    protected function createEnvironment(string $basePath): void
     {
         $environment = new Environment($basePath, $this->getDI());
         $this->getDI()->setShared(Environment::class, $environment);
@@ -113,9 +116,10 @@ final class ServiceRegistrator implements InjectionAwareInterface
      *
      * @param  ServiceProviderInterface|string $provider
      * @param  bool                            $force
+     *
      * @return ServiceProviderInterface
      */
-    public function registerService($provider, $force = false): ServiceProviderInterface
+    public function registerService($provider, bool $force = false): ServiceProviderInterface
     {
         $registered = $this->getServiceProviderByInstanceOf($provider);
 
@@ -127,7 +131,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
 
         if ($registered && $force == false) {
             // Do not register twice
-            return $provider;
+            return $registered;
         }
 
         if (is_string($provider)) {
@@ -193,6 +197,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * Checks if a Service Provider is registered in the current ServiceRegistrator instance.
      *
      * @param  ServiceProviderInterface|string $serviceProvider
+     *
      * @return bool
      */
     public function hasServiceProvider($serviceProvider)
