@@ -16,13 +16,48 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Frontend\Events;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Application;
+use Phalcon\Events\EventInterface;
+use Phalcon\Mvc\User\Component;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Frontend\Events\ApplicationListener
+ *
+ * @package Phosphorum\Frontend\Events
+ */
+class ApplicationListener extends Component
+{
+    /**
+     * Default module name.
+     *
+     * @var string
+     */
+    private $moduleName;
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+    /**
+     * ApplicationListener constructor.
+     *
+     * @param string $moduleName
+     */
+    public function __construct(string $moduleName)
+    {
+        $this->moduleName = $moduleName;
+    }
+
+    /**
+     * Perform initialization actions on application boot,
+     *
+     * @param  EventInterface $event
+     * @param  Application    $application
+     *
+     * @return bool
+     */
+    public function boot(EventInterface $event, Application $application)
+    {
+        $application->setDefaultModule($this->moduleName);
+
+        return true;
+    }
+}

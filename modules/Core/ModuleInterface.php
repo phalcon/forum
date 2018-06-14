@@ -16,13 +16,44 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Mvc\ModuleDefinitionInterface;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Core\Modules\ModuleInterface
+ *
+ * @package Phosphorum\Core\Modules
+ */
+interface ModuleInterface extends ModuleDefinitionInterface
+{
+    /**
+     * Get module name.
+     *
+     * @return string
+     */
+    public function getName(): string;
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+    /**
+     * Get module path.
+     *
+     * @param  string $path
+     *
+     * @return string
+     */
+    public function getPath(string $path = ''): string;
+
+    /**
+     * Gets the name of the default namespace.
+     *
+     * @return string
+     */
+    public function getDefaultNamespace(): string;
+
+    /**
+     * Get service registrator.
+     *
+     * @return ServiceRegistrator
+     */
+    public function getServiceRegistrator(): ServiceRegistrator;
+}

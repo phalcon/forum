@@ -16,13 +16,38 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core\Providers;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Config;
+use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\DiInterface;
+use Phalcon\Logger\AdapterInterface;
+use Phalcon\Registry;
+use Phosphorum\Core\Logger\LoggerManager;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Core\Providers\LoggerProvider
+ *
+ * @package Phosphorum\Core\Providers
+ */
+class LoggerProvider implements ServiceProviderInterface
+{
+    /**
+     * {@inheritdoc}
+     *
+     * @param DiInterface $container
+     */
+    public function register(DiInterface $container)
+    {
+        $service = function () use ($container) {
+            $manager = new LoggerManager();
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+            return $manager->create(
+                $container->get(Registry::class),
+                $container->get(Config::class)->get('logger', new Config())
+            );
+        };
+
+        $container->set(AdapterInterface::class, $service);
+    }
+}

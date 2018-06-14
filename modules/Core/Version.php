@@ -16,13 +16,26 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Version as PhVersion;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
-
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+/**
+ * Phosphorum\Core\Version
+ *
+ * @package Phosphorum\Core
+ */
+class Version extends PhVersion
+{
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     * @codingStandardsIgnoreStart
+     */
+    protected static function _getVersion()
+    {
+        // @codingStandardsIgnoreEnd
+        return [4, 0, 0, 0, 0];
+    }
+}

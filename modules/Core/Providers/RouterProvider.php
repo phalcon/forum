@@ -16,13 +16,38 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core\Providers;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\DiInterface;
+use Phalcon\Mvc\Router;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Core\Providers\RouterProvider
+ *
+ * @package Phosphorum\Core\Providers
+ */
+class RouterProvider implements ServiceProviderInterface
+{
+    /**
+     * {@inheritdoc}
+     *
+     * @param DiInterface $container
+     */
+    public function register(DiInterface $container)
+    {
+        $service = function () use ($container) {
+            $router = new Router(false);
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+            $router->setDI($container);
+            $router->setEventsManager($container->get('eventsManager'));
+
+            $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
+            $router->removeExtraSlashes(true);
+
+            return $router;
+        };
+
+        $container->setShared('router', $service);
+    }
+}

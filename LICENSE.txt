@@ -1,6 +1,6 @@
 New BSD License
 
-Copyright (c) 2013-2018, Phalcon Team and contributors
+Copyright (c) 2013-present, Phalcon Team and contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

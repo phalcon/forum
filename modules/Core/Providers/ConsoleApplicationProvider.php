@@ -16,13 +16,36 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core\Providers;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Cli\Console;
+use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\DiInterface;
+use Phosphorum\Core\Console\Application;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Core\Providers\ConsoleApplicationProvider
+ *
+ * @package Phosphorum\Core\Providers
+ */
+class ConsoleApplicationProvider implements ServiceProviderInterface
+{
+    /**
+     * {@inheritdoc}
+     *
+     * @param DiInterface $container
+     */
+    public function register(DiInterface $container)
+    {
+        $service = function () use ($container) {
+            $application = new Application($container);
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+            $application->setDI($container);
+            $application->setEventsManager($container->get('eventsManager'));
+
+            return $application;
+        };
+
+        $container->setShared(Console::class, $service);
+    }
+}

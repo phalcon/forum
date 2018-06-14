@@ -16,13 +16,39 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Frontend\Providers;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\DiInterface;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
+/**
+ * Phosphorum\Frontend\Providers\ViewProvider
+ *
+ * @package Phosphorum\Frontend\Providers
+ */
+class ViewProvider implements ServiceProviderInterface
+{
+    protected $viewsDir;
 
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+    /**
+     * ViewProvider constructor.
+     *
+     * @param string $viewsDir
+     */
+    public function __construct(string $viewsDir)
+    {
+        $this->viewsDir = $viewsDir;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param DiInterface $container
+     */
+    public function register(DiInterface $container)
+    {
+        $view = $container->get('view');
+
+        $view->setViewsDir($this->viewsDir);
+    }
+}

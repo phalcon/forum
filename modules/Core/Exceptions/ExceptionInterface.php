@@ -16,13 +16,15 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Core\Exceptions;
 
-require __DIR__.'/../vendor/autoload.php';
-
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
-
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+/**
+ * Core\Exceptions\ExceptionInterface
+ *
+ * This interface must be implemented by all Phosphorum Exception classes
+ *
+ * @package Core\Exceptions
+ */
+interface ExceptionInterface extends \Throwable
+{
+}

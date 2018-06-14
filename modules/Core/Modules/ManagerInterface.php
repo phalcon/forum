@@ -16,13 +16,24 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core\Modules;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Application;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
-
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+/**
+ * Phosphorum\Core\Modules\ManagerInterface
+ *
+ * @package Phosphorum\Core\Modules
+ */
+interface ManagerInterface
+{
+    /**
+     * Register modules present in the application.
+     *
+     * @param  Application $application
+     * @param  $merge = true
+     *
+     * @return void
+     */
+    public function registerModules(Application $application, $merge = true): void;
+}

@@ -16,13 +16,29 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Frontend\Mvc\Controllers;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phosphorum\Core\Mvc\Controller;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
-
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+/**
+ * Phosphorum\Frontend\Mvc\Controllers\DiscussionsController
+ *
+ * @package Phosphorum\Frontend\Mvc\Controllers
+ */
+class DiscussionsController extends Controller
+{
+    /**
+     * Shows latest posts using an order clause
+     *
+     * @param  string $order
+     * @param  int    $offset
+     *
+     * @return void
+     */
+    public function indexAction(string $order = null, int $offset = 0): void
+    {
+        $this->view->setVars([
+            'canonical' => '',
+        ]);
+    }
+}

@@ -16,13 +16,16 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-defined('APP_START_TIME')   || define('APP_START_TIME', microtime(true));
-defined('APP_START_MEMORY') || define('APP_START_MEMORY', memory_get_usage());
+namespace Phosphorum\Core\Mvc;
 
-require __DIR__.'/../vendor/autoload.php';
+use Phalcon\Mvc\Application as BaseApplication;
 
-$application = (new Phosphorum\Core\Bootstrap(realpath(__DIR__.'/../')))->makeMvcApplication();
-
-$response = $application->handle();
-// TODO: Enable debug component
-echo $response->getContent();
+/**
+ * Phosphorum\Core\Mvc\Application
+ *
+ * @package Phosphorum\Core\Mvc
+ */
+class Application extends BaseApplication
+{
+    //
+}
