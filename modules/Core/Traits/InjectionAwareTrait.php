@@ -26,6 +26,9 @@ use Phalcon\DiInterface;
  *
  * Dependency container trait.
  *
+ * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+ * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
+ *
  * @package Phosphorum\Core
  */
 trait InjectionAwareTrait

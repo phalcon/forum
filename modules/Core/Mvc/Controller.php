@@ -26,6 +26,10 @@ use Phosphorum\Core\Traits\InjectionAwareTrait;
 /**
  * Phosphorum\Core\Mvc\Controller
  *
+ * @property \Phalcon\Mvc\View $view
+ *
+ * @method void onConstruct()
+ *
  * @package Phosphorum\Core\Mvc
  */
 abstract class Controller extends Injectable implements ControllerInterface
