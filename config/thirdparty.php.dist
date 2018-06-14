@@ -17,33 +17,8 @@ declare(strict_types=1);
 */
 
 return [
-    'default' => 'files',
-
-    'drivers' => [
-        'libmemcached' => [
-            'servers' => [
-                [
-                    'host' => '127.0.0.1',
-                    'port' => 11211,
-                    'weight' => 100,
-                ]
-            ],
-            // Client options must be instance of array
-            'client' => [
-            ],
-        ],
-        'redis' => [
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'index' => 0,
-            'persistent' => true,
-        ],
-        'files' => [
-            'adapter'=> 'Files',
-        ],
+    'analytics' => [
+        'enabled' => false,
+        'tracking_id' => 'UA-XXXXX-Y',
     ],
-
-    'prefix' => 'forum_session_',
-    'uniqueId' => 'phosphorum_',
-    'lifetime' => 3600,
 ];

@@ -65,7 +65,7 @@
     {%- endblock -%}
 
     {%- block page_passport -%}
-        {%- if action_name is not "index" and not(post_user_id is empty) -%}
+        {%- if not(action_name is "index") and not(post_user_id is empty) -%}
             {%- include "include/page-passport" with [
                 'base_url': config.site.url,
                 'post_user_name': post_user_name,
@@ -80,7 +80,21 @@
         {%- endif -%}
     {%- endblock -%}
 
-    {% include "include/ie-support.volt" -%}
+    {%- block icons -%}
+        {%- include "include/icons" with [
+            'base_url': config.site.url
+        ] -%}
+    {%- endblock -%}
+
+    {%- if config.thirdparty.analytics.enabled and not(config.thirdparty.analytics.tracking_id is empty) -%}
+        {%- include "include/analytics" with [
+            'canonical_url': canonical_url,
+            'analytics_title': get_title(false) ~ ' - ' ~ config.site.name,
+            'tracking_id': config.thirdparty.analytics.tracking_id
+        ] -%}
+    {%- endif -%}
+
+    {%- include "include/ie-support.volt" -%}
 </head>
 <body>
     {%- block head -%}{%- endblock -%}
