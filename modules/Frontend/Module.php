@@ -43,7 +43,7 @@ class Module extends AbstractModule
         parent::__construct($container, $eventManager);
 
         $this->registerBaseServices();
-        $this->registerBaseListeners($container->get('eventsManager'));
+        $this->registerBaseListeners();
     }
 
     /**
@@ -68,11 +68,11 @@ class Module extends AbstractModule
         );
     }
 
-    protected function registerBaseListeners(ManagerInterface $eventManager): void
+    protected function registerBaseListeners(): void
     {
         $applicationListener = new ApplicationListener($this->getName());
 
-        $eventManager->attach('application:boot', $applicationListener);
+        $this->eventManager->attach('application:boot', $applicationListener);
     }
 
     /**

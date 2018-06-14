@@ -40,6 +40,9 @@ abstract class AbstractModule implements ModuleInterface
     /** @var Registry */
     protected $registry;
 
+    /** @var ManagerInterface */
+    protected $eventManager;
+
     /**
      * Module constructor.
      *
@@ -48,7 +51,7 @@ abstract class AbstractModule implements ModuleInterface
      */
     public function __construct(DiInterface $container, ManagerInterface $eventManager)
     {
-        $this->setBaseServices($container);
+        $this->setBaseServices($container, $eventManager);
     }
 
     /**
@@ -95,11 +98,15 @@ abstract class AbstractModule implements ModuleInterface
     /**
      * Setting up base services.
      *
-     * @param DiInterface $container
+     * @param  DiInterface      $container
+     * @param  ManagerInterface $eventManager
+     *
+     * @return void
      */
-    protected function setBaseServices(DiInterface $container)
+    protected function setBaseServices(DiInterface $container, ManagerInterface $eventManager): void
     {
         $this->container = $container;
+        $this->eventManager = $eventManager;
         $this->registry = $this->container->get(Registry::class);
         $this->serviceRegistrator = $container->get(ServiceRegistrator::class);
     }
