@@ -17,6 +17,10 @@ declare(strict_types=1);
 */
 
 return [
+    'name' => 'Phosphorum',
+    'description' => 'Official Phalcon Forum. Get support using Phalcon, the next-generation PHP Framework.',
+    'keywords' => 'php, phalcon, phalcon php, php framework, faster php framework, forum, phosphorum',
+    'url' => 'http://phosphorum.local',
     'staticBaseUri' => '/',
     'baseUri' => '/',
     'debug' => true,

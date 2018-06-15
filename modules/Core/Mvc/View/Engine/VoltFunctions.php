@@ -67,8 +67,6 @@ class VoltFunctions
                 return '$this->getDI()->get("gravatar")->getAvatar(' . $arguments . ')';
             case 'forum_version':
                 return Version::class . '::get()';
-            case 'forum_name':
-                return '"'. $config->path('site.software', 'Phosphorum') . '"';
         }
 
         return null;

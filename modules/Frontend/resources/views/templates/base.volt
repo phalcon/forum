@@ -5,7 +5,7 @@
 <html lang="en-US" class="no-js">
 <!--<![endif]-->
 <head>
-    {%- set url = url(), theme = session.get('identity-theme') -%}
+    {%- set url = url() -%}
 
     {%- if config.social is defined and not(config.social.twitter_name is empty) -%}
         {%- set twitter_name = config.social.twitter_name -%}
@@ -13,7 +13,7 @@
         {%- set twitter_name = "" -%}
     {%- endif -%}
 
-    {%- include "include/base-meta" with ['name': config.site.name] -%}
+    {%- include "include/base-meta" with ['name': config.application.name] -%}
 
     {%- if noindex is defined and noindex is true -%}
         <meta name="robots" content="noindex">
@@ -32,31 +32,31 @@
     {%- endif -%}
 
     {%- if canonical is defined and not(canonical is empty) -%}
-        {%- set canonical_url = config.site.url ~ '/' ~ canonical,
+        {%- set canonical_url = config.application.url ~ '/' ~ canonical,
                 author_picture = gravatar(post.user.email),
                 author_picture_alt = post.user.name
         -%}
     {%- else -%}
-        {%- set canonical_url = config.site.url,
-                author_picture = config.site.url ~ '/img/logo.png',
-                author_picture_alt = config.site.name
+        {%- set canonical_url = config.application.url,
+                author_picture = config.application.url ~ '/img/logo.png',
+                author_picture_alt = config.application.name
         -%}
     {%- endif -%}
 
     {%- block seo -%}
         {%- include "include/seo" with [
-            'description': config.site.description,
-            'keywords': config.site.keywords,
+            'description': config.application.description,
+            'keywords': config.application.keywords,
             'canonical_url': canonical_url
         ] -%}
     {%- endblock -%}
 
     {%- block social -%}
         {%- include "include/social-meta" with [
-            'description': config.site.description,
-            'keywords': config.site.keywords,
-            'name': config.site.name,
-            'base_url': config.site.url,
+            'description': config.application.description,
+            'keywords': config.application.keywords,
+            'name': config.application.name,
+            'base_url': config.application.url,
             'twitter_name': twitter_name,
             'canonical_url': canonical_url,
             'author_picture': author_picture,
@@ -67,29 +67,29 @@
     {%- block page_passport -%}
         {%- if not(action_name is "index") and not(post_user_id is empty) -%}
             {%- include "include/page-passport" with [
-                'base_url': config.site.url,
+                'base_url': config.application.url,
                 'post_user_name': post_user_name,
                 'post_user_id': post_user_id,
                 'post_user_login': post_user_login
             ] -%}
         {%- else -%}
             {%- include "include/no-page-passport" with [
-                'name': config.site.name,
-                'base_url': config.site.url
+                'name': config.application.name,
+                'base_url': config.application.url
             ] -%}
         {%- endif -%}
     {%- endblock -%}
 
     {%- block icons -%}
         {%- include "include/icons" with [
-            'base_url': config.site.url
+            'base_url': config.application.url
         ] -%}
     {%- endblock -%}
 
     {%- if config.thirdparty.analytics.enabled and not(config.thirdparty.analytics.tracking_id is empty) -%}
         {%- include "include/analytics" with [
             'canonical_url': canonical_url,
-            'analytics_title': get_title(false) ~ ' - ' ~ config.site.name,
+            'analytics_title': get_title(false) ~ ' - ' ~ config.application.name,
             'tracking_id': config.thirdparty.analytics.tracking_id
         ] -%}
     {%- endif -%}
