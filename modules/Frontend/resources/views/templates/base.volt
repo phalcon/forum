@@ -92,9 +92,18 @@
             'analytics_title': get_title(false) ~ ' - ' ~ config.application.name,
             'tracking_id': config.thirdparty.analytics.tracking_id
         ] -%}
-    {%- endif -%}
+    {%- endif %}
 
-    {%- include "include/ie-support.volt" -%}
+    <!-- The main theme -->
+    {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
+    {{ assets.cachedOutputCss('defaultCss') }}
+    <!-- End the main theme -->
+
+    {% include "include/ie-support.volt" %}
+
+    {#- todo: reCaptcha -#}
+
+    <title>{{ get_title(false) ~ ' - ' ~ config.application.name }}</title>
 </head>
 <body>
     {%- block head -%}{%- endblock -%}

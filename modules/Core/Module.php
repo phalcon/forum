@@ -25,13 +25,7 @@ use Phalcon\Filter;
 use Phalcon\Http\Response;
 use Phalcon\Tag;
 use Phosphorum\Core\Modules\AbstractModule;
-use Phosphorum\Core\Providers\ConfigProvider;
-use Phosphorum\Core\Providers\DispatcherProvider;
-use Phosphorum\Core\Providers\LoggerProvider;
-use Phosphorum\Core\Providers\SessionProvider;
-use Phosphorum\Core\Providers\UrlResolverProvider;
-use Phosphorum\Core\Providers\ViewProvider;
-use Phosphorum\Core\Providers\VoltProvider;
+use Phosphorum\Core\Providers;
 
 /**
  * Phosphorum\Core\Module
@@ -71,15 +65,17 @@ class Module extends AbstractModule
      */
     protected function registerBaseServices(): void
     {
-        $this->serviceRegistrator->registerService(new ConfigProvider());
-        $this->serviceRegistrator->registerService(new LoggerProvider());
+        $this->serviceRegistrator->registerService(new Providers\ConfigProvider());
+        $this->serviceRegistrator->registerService(new Providers\LoggerProvider());
 
-        $this->serviceRegistrator->registerService(new VoltProvider());
-        $this->serviceRegistrator->registerService(new ViewProvider());
+        $this->serviceRegistrator->registerService(new Providers\VoltProvider());
+        $this->serviceRegistrator->registerService(new Providers\ViewProvider());
 
-        $this->serviceRegistrator->registerService(new UrlResolverProvider());
-        $this->serviceRegistrator->registerService(new DispatcherProvider());
-        $this->serviceRegistrator->registerService(new SessionProvider());
+        $this->serviceRegistrator->registerService(new Providers\UrlResolverProvider());
+        $this->serviceRegistrator->registerService(new Providers\DispatcherProvider());
+
+        $this->serviceRegistrator->registerService(new Providers\SessionProvider());
+        $this->serviceRegistrator->registerService(new Providers\AssetsManagerProvider());
     }
 
     /**

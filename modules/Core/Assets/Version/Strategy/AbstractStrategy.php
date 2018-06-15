@@ -45,7 +45,7 @@ abstract class AbstractStrategy implements StrategyInterface
     /**
      * The path where resource files are located.
      *
-     * @var string
+     * @var string|null
      */
     protected $baseResourcePath;
 
@@ -104,11 +104,11 @@ abstract class AbstractStrategy implements StrategyInterface
     public function resolve()
     {
         // Is collection not initialized yet?
-        if ($this->collection->valid() == false) {
+        if ($this->collection == null) {
             return null;
         }
 
-        /** @var string|null $filename */
+        /** @var string $filename */
         $filename = $this->collection->getTargetPath();
 
         if ($filename == null || file_exists($filename) == false) {
