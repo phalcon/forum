@@ -22,11 +22,11 @@ use Phalcon\Di\Injectable;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ControllerInterface;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
-
 /**
  * Phosphorum\Core\Mvc\Controller
  *
  * @property \Phalcon\Mvc\View $view
+ * @property \Phosphorum\Core\ModuleInterface $module
  *
  * @method void onConstruct()
  *

@@ -83,6 +83,8 @@ class Module extends AbstractModule
      */
     public function registerServices(DiInterface $container)
     {
+        parent::registerServices($container);
+
         $this->serviceRegistrator->registerService(
             new ViewProvider($this->getPath('resources/views'))
         );

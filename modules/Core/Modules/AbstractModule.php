@@ -93,6 +93,7 @@ abstract class AbstractModule implements ModuleInterface
      */
     public function registerServices(DiInterface $container)
     {
+        $container->setShared('module', $this);
     }
 
     /**
