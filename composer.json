@@ -40,6 +40,7 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-phalcon": "~3.2",
+    "google/recaptcha": "1.1.*",
     "league/flysystem": "1.0.*"
   },
 

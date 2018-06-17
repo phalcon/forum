@@ -101,12 +101,14 @@
 
     {% include "include/ie-support.volt" %}
 
-    {#- todo: reCaptcha -#}
+    {%- if recaptcha.isEnabled() -%}
+        {{- recaptcha.getJs() -}}
+    {%- endif -%}
 
     <title>{{ get_title(false) ~ ' - ' ~ config.application.name }}</title>
 </head>
 <body>
-    {%- block head -%}{%- endblock -%}
+    {%- block header -%}{%- endblock -%}
     {%- block body -%}{%- endblock -%}
 </body>
 </html>
