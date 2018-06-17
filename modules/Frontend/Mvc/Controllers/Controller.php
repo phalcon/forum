@@ -20,7 +20,6 @@ namespace Phosphorum\Frontend\Mvc\Controllers;
 
 use Phosphorum\Core\Environment;
 use Phosphorum\Core\Mvc\Controller as ControllerBase;
-use Phalcon\Assets\Filters\Jsmin;
 use Phalcon\Assets\Filters\Cssmin;
 
 /**
@@ -51,7 +50,7 @@ class Controller extends ControllerBase
             ->setTargetUri('css/style.css')
             ->addCss($this->module->getPath('resources/assets/css/bootstrap.css'), true)
             ->addCss($this->module->getPath('resources/assets/css/material-design-iconic-font.min.css'), true, false)
-           // ->addCss($this->module->getPath('resources/assets/css/font-awesome.min.css'), true, false)
+            ->addCss($this->module->getPath('resources/assets/css/font-awesome.min.css'), true, false)
             ->addCss($this->module->getPath('resources/assets/css/style.css'), true)
             ->addCss($this->module->getPath('resources/assets/css/responsive.css'), true)
             ->addCss('https://fonts.googleapis.com/css?family=Titillium+Web:200,400,600', false, false)

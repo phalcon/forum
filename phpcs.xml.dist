@@ -24,4 +24,11 @@
         on the command line will ignore all file tags.
     -->
     <file>modules</file>
+
+    <!--
+        You can hard-code ignore patterns directly into your
+        custom standard so you don't have to specify the
+        patterns on the command line.
+    -->
+    <exclude-pattern>resources/*</exclude-pattern>
 </ruleset>

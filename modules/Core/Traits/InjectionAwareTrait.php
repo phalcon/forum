@@ -27,6 +27,7 @@ use Phalcon\DiInterface;
  * Dependency container trait.
  *
  * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+ * @property \Phosphorum\Core\Assets\AssetsManager $assets
  * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
  *
  * @package Phosphorum\Core
