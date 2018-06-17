@@ -18,8 +18,6 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\Controllers;
 
-use Phosphorum\Core\Mvc\Controller;
-
 /**
  * Phosphorum\Frontend\Mvc\Controllers\DiscussionsController
  *

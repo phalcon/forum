@@ -13,7 +13,7 @@
         {%- set twitter_name = "" -%}
     {%- endif -%}
 
-    {%- include "include/base-meta" with ['name': config.application.name] -%}
+    {%- include "include/base-meta" with ['application_name': config.application.name] -%}
 
     {%- if noindex is defined and noindex is true -%}
         <meta name="robots" content="noindex">
@@ -55,7 +55,7 @@
         {%- include "include/social-meta" with [
             'description': config.application.description,
             'keywords': config.application.keywords,
-            'name': config.application.name,
+            'application_name': config.application.name,
             'base_url': config.application.url,
             'twitter_name': twitter_name,
             'canonical_url': canonical_url,
@@ -74,7 +74,7 @@
             ] -%}
         {%- else -%}
             {%- include "include/no-page-passport" with [
-                'name': config.application.name,
+                'application_name': config.application.name,
                 'base_url': config.application.url
             ] -%}
         {%- endif -%}
@@ -96,7 +96,7 @@
 
     <!-- The main theme -->
     {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
-    {{ assets.cachedOutputCss('defaultCss') }}
+    {{ assets.cachedOutputCss('default_css') }}
     <!-- End the main theme -->
 
     {% include "include/ie-support.volt" %}
@@ -108,7 +108,13 @@
     <title>{{ get_title(false) ~ ' - ' ~ config.application.name }}</title>
 </head>
 <body>
-    {%- block header -%}{%- endblock -%}
+    {%- block header -%}
+        {%- include "include/header" with [
+            'application_name': config.application.name,
+            'base_url': config.application.url
+        ] -%}
+    {%- endblock -%}
+
     {%- block body -%}{%- endblock -%}
 </body>
 </html>
