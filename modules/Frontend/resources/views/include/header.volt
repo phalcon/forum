@@ -20,16 +20,15 @@
                             <div class="social-box">
                                 <ul>
                                     <li><a href="#"><i class="zmdi zmdi-comments"></i></a></li>
+                                    <li><a href="#"><i class="zmdi zmdi-eye"></i></a></li>
                                     <li><a href="#"><i class="zmdi zmdi-notifications"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-pin-help"></i></a></li>
-                                    {# @todo #}
                                     <li><a href="#"><i class="zmdi zmdi-pin-help"></i></a></li>
                                 </ul>
 
                                 <div class="btns-group">
                                     {# @todo #}
-                                    <a href="#"><i class="zmdi zmdi-account-add"></i> Register </a>
-                                    <a href="#"><i class="zmdi zmdi-github"></i> Log In </a>
+                                    <a href="#"><i class="zmdi zmdi-account-add"></i>Register</a>
+                                    <a href="#"><i class="zmdi zmdi-github"></i>Log In</a>
                                 </div>
                             </div>
                         </div>
