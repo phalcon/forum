@@ -10,8 +10,8 @@
 
                 <div class="modal-body" id="errorBody">
                     <ul class="nav nav-tabs preview-nav">
-                        <li class="active"><a href="#" onclick="return false">Comment</a></li>
-                        <li><a href="#" onclick="return false">Preview</a></li>
+                        <li class="active"><a href="#" data-editor-type="modal" onclick="return false">Comment</a></li>
+                        <li><a href="#" data-editor-type="modal" onclick="return false">Preview</a></li>
                         <li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
                     </ul>
                     <div>
