@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
 - Added `Install` task and `check` action.
+- Added preview for reply edit
 
 ### Changed
 - Replaced beanstalkd by AWS SQS

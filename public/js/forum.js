@@ -37,13 +37,45 @@ var Forum = {
 	makeCommentEditable: function(response)
 	{
 		if (response.status == 'OK') {
+			var ul = document.createElement('UL');
+			ul.className = 'nav nav-tabs preview-nav';
+			this.parent().append(ul);
+
+			var li = document.createElement('LI');
+			li.className = 'active';
+			var a = document.createElement('A');
+			a.href = '#';
+			a.setAttribute('onclick', 'return false');
+			a.setAttribute('data-editor-type', 'edit');
+			a.innerHTML = 'Comment';
+			li.appendChild(a);
+			ul.appendChild(li);
+
+			li = document.createElement('LI');
+			a = document.createElement('A');
+			a.href = '#';
+			a.setAttribute('onclick', 'return false');
+			a.setAttribute('data-editor-type', 'edit');
+			a.innerHTML = 'Preview';
+			li.appendChild(a);
+			ul.appendChild(li);
+
+			li = document.createElement('LI');
+			li.className = 'pull-right';
+			a = document.createElement('A');
+			a.href = '/help/markdown';
+			a.setAttribute('target', '_blank');
+			a.innerHTML = 'Help';
+			li.appendChild(a);
+			ul.appendChild(li);
+
 			var form = document.createElement('FORM');
 			form.className = 'edit-form';
 			form.method = 'POST';
 			form.action = Forum._uri + 'reply/update';
 
 			var div = document.createElement('DIV');
-			div.id = "wmd-button-bar";
+			div.id = "wmd-button-bar-edit";
 			form.appendChild(div);
 
 			var textarea = document.createElement('TEXTAREA');
@@ -51,8 +83,12 @@ var Forum = {
 			textarea.rows = 7;
 			textarea.value = response.comment;
 			textarea.className = 'form-control input-sm';
-			textarea.id = 'wmd-input';
+			textarea.id = 'wmd-input-edit';
 			form.appendChild(textarea);
+
+			div = document.createElement('DIV');
+			div.id = 'wmd-preview-edit';
+			form.appendChild(div);
 
 			var statusBar = document.createElement('DIV');
 			statusBar.className = "editor-statusbar";
@@ -91,7 +127,12 @@ var Forum = {
 			this.hide();
 
 			this.parent().append(form);
-			Forum.initializePagedown();
+
+			Forum.initializeEditPagedown();
+			var previewNavLinks = this.siblings("ul").children();
+				previewNavLinks.each(function(position, element) {
+					$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
+			});
 		}
 	},
 
@@ -109,7 +150,6 @@ var Forum = {
 			$('#replyModal').modal('show');
 			var textarea = $('#replyModal textarea')[0];
 			$(textarea).val(str);
-            Forum.initializePagedown();
 		}
 	},
 
@@ -122,6 +162,7 @@ var Forum = {
 		var element = $(event.data.element);
 		var form = $(event.data.form);
 		$('div.posts-buttons', element.parents()[1]).show();
+		element.siblings("ul").hide();
 		element.show();
 		form.remove();
 	},
@@ -163,6 +204,8 @@ var Forum = {
 	 */
 	replyReply: function(event)
 	{
+		Forum.initializeModalPagedown();
+
 		var element = $(event.data.element);
 		if (element.length) {
 			$('#reply-id').val(element.data('id'))
@@ -560,9 +603,9 @@ var Forum = {
 	 */
     changeCommentTab: function(event)
     {
-        var extraTitle = '';
-        if ($(this).parent().parent().attr('class') == 'modal-body') {
-            extraTitle = '-modal';
+		var extraTitle = '';
+        if (typeof $(this).children().attr('data-editor-type') == 'string') {
+            extraTitle = '-' + $(this).children().attr('data-editor-type');
         }
 
         event.data.links.each(function(position, element){
@@ -722,7 +765,6 @@ var Forum = {
 		});
 
 		$('a.reply-reply').each(function(position, element) {
-            Forum.initializeModalPagedown();
 			$(element).bind('click', {element: element}, Forum.replyReply);
 		});
 
@@ -743,9 +785,13 @@ var Forum = {
 			$(element).bind('click', {links: previewNavLinks}, Forum.changeCommentTab);
 		});
 
-		var textarea = $('textarea');
+		var textarea = $('#wmd-input');
 		if (textarea.length && !textarea.hasClass('no-editor')) {
             Forum.initializePagedown();
+		}
+		textarea = $('#wmd-input-edit');
+		if (textarea.length && !textarea.hasClass('no-editor')) {
+			Forum.initializeEditPagedown();
 		}
 
 		$('#recommended-posts-create').each(function(position, element){
@@ -781,6 +827,20 @@ var Forum = {
 		Forum.addCallbacks();
 	},
 
+	/**
+	 * Initializes pagedown
+	 */
+	initializePagedown: function () {
+		var converter = Markdown.getSanitizingConverter();
+		converter.hooks.chain("preBlockGamut", function (text, rbg) {
+			return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+				return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+			});
+		});
+		var editor = new Markdown.Editor(converter);
+		editor.run();
+	},
+
     /**
      * Initializes modal pagedown
      */
@@ -798,17 +858,20 @@ var Forum = {
         editor.run();
     },
 
-    /**
-     * Initializes pagedown
-     */
-    initializePagedown: function () {
-        var converter = Markdown.getSanitizingConverter();
-        converter.hooks.chain("preBlockGamut", function (text, rbg) {
-            return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-                return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-            });
-        });
-        var editor = new Markdown.Editor(converter);
-        editor.run();
-    }
+	/**
+	 * Initializes edit pagedown
+	 */
+	initializeEditPagedown: function () {
+		var converter = new Markdown.Converter();
+		converter.hooks.chain("preConversion", function (text) {
+			return text.replace(/\b(a\w*)/gi, "*$1*");
+		});
+
+		converter.hooks.chain("plainLinkText", function (url) {
+			return "This is a link to " + url.replace(/^https?:\/\//, "");
+		});
+		var editor = new Markdown.Editor(converter, "-edit", options);
+
+		editor.run();
+	}
 };

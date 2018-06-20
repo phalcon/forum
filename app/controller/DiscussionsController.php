@@ -398,7 +398,7 @@ class DiscussionsController extends ControllerBase
         } else {
             $this->tag->displayTo('id', $post->id);
             $this->tag->displayTo('title', $post->title);
-            $this->tag->displayTo('wmd-input', $this->escaper->escapeHtml($post->content));
+            $this->tag->displayTo('wmd-input-edit', $this->escaper->escapeHtml($post->content));
             $this->tag->displayTo('categoryId', $post->categories_id);
         }
 

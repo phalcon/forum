@@ -58,7 +58,7 @@ class AssetsHashTime extends AssetsHashAware
      * Get hash string from time
      *
      * @param string $filename
-     * @return string
+     * @return mixed
      */
     protected function getHash($filename)
     {

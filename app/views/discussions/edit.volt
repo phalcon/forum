@@ -34,16 +34,16 @@
                 </div>
 
                 <ul class="nav nav-tabs preview-nav">
-                    <li class="active"><a href="#" onclick="return false">Write</a></li>
-                    <li><a href="#" onclick="return false">Preview</a></li>
+                    <li class="active"><a href="#" data-editor-type="edit" onclick="return false">Write</a></li>
+                    <li><a href="#" data-editor-type="edit" onclick="return false">Preview</a></li>
                     <li class="pull-right">{{ link_to('help/markdown', 'Help', 'parent': '_new') }}</li>
                 </ul>
 
-                <div id="wmd-button-bar"></div>
+                <div id="wmd-button-bar-edit"></div>
                 <div id="comment-box">
-                    {{ text_area("wmd-input", "rows": 15, "placeholder": "Leave the content", "class": "form-control", "name": "content") }}
+                    {{ text_area("wmd-input-edit", "rows": 15, "placeholder": "Leave the content", "class": "form-control", "name": "content") }}
                 </div>
-                <div id="wmd-preview"></div>
+                <div id="wmd-preview-edit"></div>
                 <div id="preview-box" style="display:none"></div>
                 <div class="editor-statusbar">
                     {#Here will be added lines and words counter and cursor position pointer#}
