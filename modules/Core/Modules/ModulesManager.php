@@ -22,15 +22,15 @@ use Phalcon\Application;
 use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Registry;
-use Phosphorum\Core\ModuleInterface;
+use Phosphorum\Core\Modules\ModuleInterface;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
- * Phosphorum\Core\Modules\Manager
+ * Phosphorum\Core\Modules\ModulesManager
  *
  * @package Phosphorum\Core\Modules
  */
-final class Manager implements ManagerInterface
+final class ModulesManager implements ManagerInterface
 {
     use InjectionAwareTrait {
         InjectionAwareTrait::__construct as protected __DiInject;

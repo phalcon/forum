@@ -16,9 +16,10 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core;
+namespace Phosphorum\Core\Modules;
 
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phosphorum\Core\ServiceRegistrator;
 
 /**
  * Phosphorum\Core\Modules\ModuleInterface

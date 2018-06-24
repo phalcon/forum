@@ -23,8 +23,8 @@ use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
 use Phalcon\Registry;
 use Phosphorum\Core\Exceptions\InvalidArgumentException;
-use Phosphorum\Core\Modules\Manager;
 use Phosphorum\Core\Modules\ManagerInterface;
+use Phosphorum\Core\Modules\ModulesManager;
 use Phosphorum\Core\Providers\EventsManagerProvider;
 use Phosphorum\Core\Providers\FileSystemProvider;
 use Phosphorum\Core\Providers\RouterProvider;
@@ -82,7 +82,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
         $container->setShared(Registry::class, Registry::class);
         $container->setShared(ServiceRegistrator::class, $this);
         $container->setShared(ManagerInterface::class, function () use ($container) {
-            return new Manager($container);
+            return new ModulesManager($container);
         });
     }
 

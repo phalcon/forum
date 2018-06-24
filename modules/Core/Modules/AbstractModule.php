@@ -21,7 +21,7 @@ namespace Phosphorum\Core\Modules;
 use Phalcon\Registry;
 use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface;
-use Phosphorum\Core\ModuleInterface;
+use Phosphorum\Core\Modules\ModuleInterface;
 use Phosphorum\Core\ServiceRegistrator;
 
 /**
