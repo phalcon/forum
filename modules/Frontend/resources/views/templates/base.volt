@@ -94,10 +94,8 @@
         ] -%}
     {%- endif %}
 
-    <!-- The main theme -->
     {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
     {{ assets.cachedOutputCss('default_css') }}
-    <!-- End the main theme -->
 
     {% include "include/ie-support.volt" %}
 
@@ -116,9 +114,16 @@
         ] -%}
     {%- endblock -%}
 
-    {%- block body -%}{%- endblock -%}
+    {%- block breadcrumbs -%}{%- endblock -%}
 
-    <hr datatype="12">
+    {%- block content -%}
+        {{ content() }}
+    {%- endblock -%}
+
+    {%- block footer -%}
+        <!-- footer -->
+    {%- endblock -%}
+
     {{ assets.cachedOutputJs('default_js') }}
 </body>
 </html>

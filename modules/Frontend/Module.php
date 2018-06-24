@@ -22,6 +22,7 @@ use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface;
 use Phosphorum\Core\Modules\AbstractModule;
 use Phosphorum\Frontend\Events\ApplicationListener;
+use Phosphorum\Frontend\Providers\BreadcrumbsProvider;
 use Phosphorum\Frontend\Providers\ReCaptchaProvider;
 use Phosphorum\Frontend\Providers\RouterProvider;
 use Phosphorum\Frontend\Providers\ViewProvider;
@@ -91,6 +92,10 @@ class Module extends AbstractModule
 
         $this->serviceRegistrator->registerService(
             new ReCaptchaProvider()
+        );
+
+        $this->serviceRegistrator->registerService(
+            new BreadcrumbsProvider()
         );
     }
 }

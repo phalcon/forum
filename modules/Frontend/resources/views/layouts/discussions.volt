@@ -1,6 +1,6 @@
 {%- extends "templates/base.volt" -%}
 
-{% block body %}
+{% block content %}
     <hr/><code>Start Frontend/resources/views/layouts/discussions.volt</code><br/>
     {{ content() }}
     <code>End Frontend/resources/views/layouts/discussions.volt</code><br/><hr/>
