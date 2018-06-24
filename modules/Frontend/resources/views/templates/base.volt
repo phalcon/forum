@@ -110,6 +110,7 @@
 <body>
     {%- block header -%}
         {%- include "include/header" with [
+            'description': config.application.description,
             'application_name': config.application.name,
             'base_url': config.application.url
         ] -%}

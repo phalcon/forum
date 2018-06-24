@@ -7,7 +7,7 @@
                     {# ---- logo ---- #}
                     <div class="col-lg-2 col-md-4 col-5">
                         <div class="logoBox">
-                            <a href="{{ base_url }}">
+                            <a href="{{ base_url }}" title="{{ description }}">
                                 {% set logo_src = base_url ~ '/img/logo-header.png?v=' ~ forum_version() %}
                                 <img src="{{ logo_src }}" class="img-fluid" alt="{{ application_name }}">
                             </a>
@@ -19,17 +19,36 @@
                         <div class="socialBox">
                             <div class="social-box">
                                 <ul>
-                                    <li><a href="#"><i class="zmdi zmdi-comments"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-eye"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-notifications"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-pin-help"></i></a></li>
-                                </ul>
+                                    <li>
+                                        {{- link_to('discussions', '<i class="zmdi zmdi-comments"></i>', 'title': 'Discussions') -}}
+                                    </li>
+                                    <li>
+                                        {{ link_to('activity', '<i class="zmdi zmdi-eye"></i>', 'title': 'Activity') }}
+                                    </li>
+                                    {%- if session.get('identity') -%}
+                                        <li>
+                                            {{- link_to('notifications', '<i class="zmdi zmdi-notifications"></i>', 'title': 'Notifications') -}}
+                                            {# @todo: notifications number #}
+                                        </li>
+                                    {%- endif -%}
 
-                                <div class="btns-group">
-                                    {# @todo #}
-                                    <a href="#"><i class="zmdi zmdi-account-add"></i>Register</a>
-                                    <a href="#"><i class="zmdi zmdi-github"></i>Log In</a>
-                                </div>
+                                    <li>
+                                        {{ link_to('help', '<i class="zmdi zmdi-pin-help"></i>', 'title': 'Help') }}
+                                    </li>
+
+                                    {%- if session.get('identity') -%}
+                                        <li>
+                                            {{ link_to('activity', '<i class="zmdi zmdi-settings"></i>', 'title': 'Settings') }}
+                                        </li>
+                                        <li>
+                                            {{ link_to('activity', '<i class="zmdi zmdi-sign-in"></i>', 'title': 'Logout') }}
+                                        </li>
+                                    {%- else -%}
+                                        <div class="btns-group">
+                                            {{ link_to('login/oauth/authorize', '<i class="zmdi zmdi-github"></i>Log In', 'title': 'Log In') }}
+                                        </div>
+                                    {%- endif -%}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -37,11 +56,11 @@
                     {# ---- search bar ---- #}
                     <div class="col-lg-5 col-md-12 col-sm-12 col-12  col-md-pull-5">
                         <div class="searchBar">
-                            <form>
+                            {{- form('search', 'method': 'get', 'autocomplete': 'off') -}}
                                 {# @todo #}
-                                <input type="search" class="form-control" placeholder="Search discussion">
+                                <input type="search" class="form-control" placeholder="Search discussion" name="q" id="forum-search-input">
                                 <span><i class="zmdi zmdi-search"></i></span>
-                            </form>
+                            {{- end_form() -}}
                         </div>
                     </div>
 
