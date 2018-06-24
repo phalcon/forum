@@ -26,10 +26,15 @@ use Phalcon\Assets\Filters\Jsmin;
 /**
  * Phosphorum\Frontend\Mvc\Controllers\Controller
  *
+ * @property \Phalcon\Breadcrumbs $breadcrumbs
+ * @property \Phalcon\Session\Adapter $session
+ *
  * @package Phosphorum\Frontend\Mvc\Controllers
  */
 class Controller extends ControllerBase
 {
+    const POSTS_PER_PAGE = 40;
+
     public function onConstruct(): void
     {
         /** @var Environment $env */
@@ -47,6 +52,7 @@ class Controller extends ControllerBase
     protected function registerCss(Environment $env): void
     {
         // TODO: Do not minify on CentOS
+        // TODO: Add diff.css support
         $this->assets
             ->collection('default_css')
             ->setTargetPath($env->getPath('public/css/style.css'))
@@ -64,6 +70,7 @@ class Controller extends ControllerBase
     protected function registerJs(Environment $env): void
     {
         // TODO: Do not minify on CentOS
+        // TODO: Add prism.js support
         $this->assets
             ->collection('default_js')
             ->setTargetPath($env->getPath('public/js/scripts.js'))
@@ -74,5 +81,22 @@ class Controller extends ControllerBase
             ->addJs($this->module->getPath('resources/assets/js/scripts.js'), true)
             ->join(true)
             ->addFilter(new Jsmin());
+    }
+
+    /**
+     * This method is executed first, before any action is executed on a controller.
+     *
+     * NOTE: The this method is only called if the 'beforeExecuteRoute' event is executed with success.
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        if ($timezone = $this->session->get('identity-timezone')) {
+            date_default_timezone_set($timezone);
+        }
+
+        $this->breadcrumbs->add('Home', '/');
+        $this->view->setVar('limitPost', self::POSTS_PER_PAGE);
     }
 }
