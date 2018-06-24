@@ -21,6 +21,7 @@ namespace Phosphorum\Frontend\Mvc\Controllers;
 use Phosphorum\Core\Environment;
 use Phosphorum\Core\Mvc\Controller as ControllerBase;
 use Phalcon\Assets\Filters\Cssmin;
+use Phalcon\Assets\Filters\Jsmin;
 
 /**
  * Phosphorum\Frontend\Mvc\Controllers\Controller
@@ -35,6 +36,7 @@ class Controller extends ControllerBase
         $env = $this->getDI()->get(Environment::class);
 
         $this->registerCss($env);
+        $this->registerJs($env);
     }
 
     /**
@@ -44,6 +46,7 @@ class Controller extends ControllerBase
      */
     protected function registerCss(Environment $env): void
     {
+        // TODO: Do not minify on CentOS
         $this->assets
             ->collection('default_css')
             ->setTargetPath($env->getPath('public/css/style.css'))
@@ -56,5 +59,20 @@ class Controller extends ControllerBase
             ->addCss('https://fonts.googleapis.com/css?family=Titillium+Web:200,400,600', false, false)
             ->join(true)
             ->addFilter(new Cssmin());
+    }
+
+    protected function registerJs(Environment $env): void
+    {
+        // TODO: Do not minify on CentOS
+        $this->assets
+            ->collection('default_js')
+            ->setTargetPath($env->getPath('public/js/scripts.js'))
+            ->setTargetUri('js/scripts.js')
+            ->addJs($this->module->getPath('resources/assets/js/jquery.min.js'), true, false)
+            ->addJs($this->module->getPath('resources/assets/js/popper.min.js'), true, false)
+            ->addJs($this->module->getPath('resources/assets/js/bootstrap.min.js'), true, false)
+            ->addJs($this->module->getPath('resources/assets/js/scripts.js'), true)
+            ->join(true)
+            ->addFilter(new Jsmin());
     }
 }

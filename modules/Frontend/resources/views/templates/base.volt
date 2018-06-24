@@ -117,5 +117,8 @@
     {%- endblock -%}
 
     {%- block body -%}{%- endblock -%}
+
+    <hr datatype="12">
+    {{ assets.cachedOutputJs('default_js') }}
 </body>
 </html>
