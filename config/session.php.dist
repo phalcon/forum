@@ -28,9 +28,7 @@ return [
                     'weight' => 100,
                 ]
             ],
-            // Client options must be instance of array
-            'client' => [
-            ],
+            'client' => [],
         ],
         'redis' => [
             'host' => '127.0.0.1',
@@ -38,9 +36,7 @@ return [
             'index' => 0,
             'persistent' => true,
         ],
-        'files' => [
-            'adapter'=> 'Files',
-        ],
+        'files' => [],
     ],
 
     'prefix' => 'forum_session_',

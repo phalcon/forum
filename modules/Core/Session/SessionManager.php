@@ -26,19 +26,19 @@ use Phalcon\Session\AdapterInterface;
  *
  * @package Phosphorum\Core\Session
  */
-class SessionManager
+final class SessionManager
 {
     /**
      * Creates the application session instance.
      *
-     * @param Config   $config
+     * @param Config $config
      *
      * @return AdapterInterface
      */
     public function create(Config $config): AdapterInterface
     {
         $default = $config->get('default', 'files');
-        $possibleAdaper = $config->get('adapter');
+        $possibleAdaper = $config->path(sprintf('drivers.%s.adapter', $default));
 
         if ($possibleAdaper != null) {
             $adapter = $possibleAdaper;
@@ -52,7 +52,7 @@ class SessionManager
     }
 
     /**
-     * Creates session adapter configuration.
+     * Creates a session adapter configuration.
      *
      * @param  Config $commonConfig
      * @param  string $driverName
@@ -61,7 +61,10 @@ class SessionManager
      */
     protected function createConfig(Config $commonConfig, string $driverName): array
     {
-        $driver = $commonConfig->path('drivers.' . $driverName);
+        $driver = $commonConfig->path(sprintf('drivers.%s', $driverName));
+        if ($driver instanceof Config == false) {
+            $driver = new Config();
+        }
 
         $defaults = [
             'prefix'   => $commonConfig->get('prefix'),
