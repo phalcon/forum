@@ -209,7 +209,10 @@ final class ServiceRegistrator implements InjectionAwareInterface
     {
         if (is_string($serviceProvider) == false && is_object($serviceProvider) == false) {
             throw new InvalidArgumentException(
-                'The $serviceProvider parameter must be either a string or an object instance.'
+                sprintf(
+                    'The $serviceProvider parameter must be either a string or an object instance, got %s',
+                    gettype($serviceProvider)
+                )
             );
         }
     }
