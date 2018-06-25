@@ -18,19 +18,20 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Events;
 
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 use Phalcon\Events\Event;
+use Phalcon\Logger\AdapterInterface;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\ViewBaseInterface;
-use Phalcon\DiInterface;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
-use Phalcon\Logger\AdapterInterface;
 
 /**
  * Phosphorum\Core\Events\ViewListener
  *
  * @package Phosphorum\Core\Events
  */
-class ViewListener
+class ViewListener implements InjectionAwareInterface
 {
     use InjectionAwareTrait {
         InjectionAwareTrait::__construct as protected __DiInject;
