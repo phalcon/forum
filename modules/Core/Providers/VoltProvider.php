@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Providers;
 
+use Closure;
 use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
@@ -45,14 +46,22 @@ class VoltProvider implements ServiceProviderInterface
         $container->setShared(Volt::class, $service);
     }
 
-    protected function createService(DiInterface $container)
+    protected function createService(DiInterface $container): Closure
     {
         return function (ViewBaseInterface $view, DiInterface $internalContainer = null) use ($container) {
+            /** @var Config $config */
+            $config = $container->get(Config::class);
+
+            $applicationConfig = $config->get('application');
+            if ($applicationConfig instanceof Config == false) {
+                $applicationConfig = new Config();
+            }
+
             $manager = new VoltManager($container);
 
             return $manager->create(
                 $container->get(Environment::class),
-                $container->get(Config::class)->get('application', new Config()),
+                $applicationConfig,
                 $view,
                 $internalContainer
             );

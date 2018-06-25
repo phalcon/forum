@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Providers;
 
+use Closure;
 use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
@@ -37,17 +38,30 @@ class SessionProvider implements ServiceProviderInterface
      */
     public function register(DiInterface $container)
     {
-        $service = function () use ($container) {
+        $service = $this->createService($container);
+
+        $container->setShared('session', $service);
+    }
+
+    protected function createService(DiInterface $container): Closure
+    {
+        return function () use ($container) {
             /** @var Config $config */
             $config = $container->get(Config::class);
+
+            $sessionConfig = $config->get('session');
+            if ($sessionConfig instanceof Config == false) {
+                $sessionConfig = new Config();
+            }
+
             $manager = new SessionManager();
 
-            $session = $manager->create($config->get('session', new Config()));
-            $session->start();
+            $session = $manager->create($sessionConfig);
+            if ($session->isStarted() == false) {
+                $session->start();
+            }
 
             return $session;
         };
-
-        $container->setShared('session', $service);
     }
 }
