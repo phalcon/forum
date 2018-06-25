@@ -216,6 +216,16 @@ final class Environment implements InjectionAwareInterface
      */
     public function isCommandLineInterface(): bool
     {
-        return (php_sapi_name() === 'cli');
+        return php_sapi_name() === 'cli';
+    }
+
+    /**
+     * Checks if currently running under MS Windows.
+     *
+     * @return bool
+     */
+    public function isWindows(): bool
+    {
+        return 'WIN' === strtoupper(substr(PHP_OS, 0, 3));
     }
 }
