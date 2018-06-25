@@ -78,6 +78,7 @@ class Module extends AbstractModule
         $this->serviceRegistrator->registerService(new Providers\AssetsManagerProvider());
 
         $this->serviceRegistrator->registerService(new Providers\ModelsManagerProvider());
+        $this->serviceRegistrator->registerService(new Providers\ModelsMetadataProvider());
     }
 
     /**

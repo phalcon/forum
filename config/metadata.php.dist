@@ -1,0 +1,50 @@
+<?php
+declare(strict_types=1);
+
+/*
+ +------------------------------------------------------------------------+
+ | Phosphorum                                                             |
+ +------------------------------------------------------------------------+
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
+ +------------------------------------------------------------------------+
+ | This source file is subject to the New BSD License that is bundled     |
+ | with this package in the file LICENSE.txt.                             |
+ |                                                                        |
+ | If you did not receive a copy of the license and are unable to         |
+ | obtain it through the world-wide-web, please send an email             |
+ | to license@phalconphp.com so we can send you a copy immediately.       |
+ +------------------------------------------------------------------------+
+*/
+
+return [
+    'default' => 'memory',
+
+    'drivers' => [
+        'memory' => [],
+        'memcached' => [
+            'adapter' => 'Libmemcached',
+            'servers' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
+                    'weight' => 100,
+                ]
+            ],
+        ],
+        'files' => [
+            'metaDataDir' => 'storage/metadata',
+        ],
+        'redis' => [
+            'host' => '127.0.0.1',
+            'port' => 6379,
+            'index' => 0,
+            'persistent' => true,
+        ],
+        'apc' => [],
+        'session' => [],
+
+    ],
+
+    'prefix'   => 'forum_session_',
+    'lifetime' => 3600,
+];
