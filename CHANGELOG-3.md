@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Using `GuzzleHttp\Client` in favor of `Guzzle\Http\Client`
 - Updated dependencies
 - Using `StackExchange/pagedown` instead `CodeMirror` editor
+- Using `srmklive/flysystem-dropbox-v2` of version v1.0.7 instead `league/flysystem-dropbox`
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
