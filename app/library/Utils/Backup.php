@@ -18,10 +18,10 @@
 namespace Phosphorum\Utils;
 
 use Phalcon\Config;
-use Dropbox\Client;
 use Phalcon\DI\Injectable;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Dropbox\DropboxAdapter;
+use Srmklive\Dropbox\Client\DropboxClient;
+use Srmklive\Dropbox\Adapter\DropboxAdapter;
 
 /**
  * Backup
@@ -63,8 +63,8 @@ class Backup extends Injectable
             throw new \Exception("Backup could not be created");
         }
 
-        $client = new Client($config->get('accessToken'), $config->get('appSecret'));
-        $adapter = new DropboxAdapter($client, $config->get('prefix', null));
+        $client = new DropboxClient($config->get('accessToken'));
+        $adapter = new DropboxAdapter($client);
         $filesystem = new Filesystem($adapter);
 
         $dropboxPath = '/phosphorum.sql.bz2';
