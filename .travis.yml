@@ -56,8 +56,8 @@ before_script:
     - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
     - echo "CREATE USER 'phosphorum'@'%' IDENTIFIED BY 'secret'" | mysql -u root
     - echo "GRANT ALL PRIVILEGES ON phosphorum.* TO 'phosphorum'@'%' WITH GRANT OPTION" | mysql -u root
-    - cat schemas/forum.sql | mysql -u root phosphorum
-    - cp ./tests/.env.travis .env
+    #- cat schemas/forum.sql | mysql -u root phosphorum
+    #- cp ./tests/.env.travis .env
     - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
 
 script:
@@ -69,8 +69,8 @@ script:
 #    - vendor/bin/codecept run functional
 #    - vendor/bin/codecept run acceptance
 
-after_failure:
-    - for file in `ls ./tests/_output`; do [ -f ./tests/_output/$file ] && cat ./tests/_output/$file; done;
+#after_failure:
+#    - for file in `ls ./tests/_output`; do [ -f ./tests/_output/$file ] && cat ./tests/_output/$file; done;
 
 after_success:
     - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
