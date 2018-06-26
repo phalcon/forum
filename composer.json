@@ -46,14 +46,14 @@
         "egulias/email-validator": "^2.1",
         "google/recaptcha": "^1.1",
         "filp/whoops": "^2.1",
-        "team-reflex/discord-php": "4.0.*",
         "elasticsearch/elasticsearch": "^5.3",
         "erusev/parsedown-extra": "^0.7",
         "erusev/parsedown": "^1.7",
         "phalcon-ext/mailer": "~2.0",
         "league/climate": "^3.2",
         "stackexchange/pagedown": "^1.1",
-        "srmklive/flysystem-dropbox-v2": "^1.0"
+        "srmklive/flysystem-dropbox-v2": "^1.0",
+        "restcord/restcord": "^0.2"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^3.3",
