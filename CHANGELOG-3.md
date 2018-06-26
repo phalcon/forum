@@ -12,10 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Replaced beanstalkd by AWS SQS
 - Updated `erusev/parsedown` to 1.7.1 version [#481](https://github.com/phalcon/forum/issues/481)
-- Using `GuzzleHttp\Client` in favor of `Guzzle\Http\Client`
-- Updated dependencies
-- Using `StackExchange/pagedown` instead `CodeMirror` editor
-- Using `srmklive/flysystem-dropbox-v2` of version v1.0.7 instead `league/flysystem-dropbox`
+- Replace abandoned `Guzzle\Http\Client` by `GuzzleHttp\Client`
+- Replace `CodeMirror` editor by `StackExchange/pagedown` with some improvements and changes
+- Replace abandoned `league/flysystem-dropbox` by `srmklive/flysystem-dropbox-v2`
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
@@ -28,12 +27,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `UsersListener` to `Users` model [#465](https://github.com/phalcon/forum/issues/465)
 - Added support syntax highlight in preview
 - Added Post listener
-- Added Assets Collection feature and do not use CDN anymore
-- Added mailer and change notification task
+- Added Assets Collection feature to avoid usung CDN
+- Added mailer and updated notification task
 
 ### Changed
 - Changed replies counter. Amount include posts's owner and visitors' replies [#50](https://github.com/phalcon/forum/issues/50)
-- Cleaned Posts model
 
 ### Fixed
 - Prevent throwing error when queue does not work
