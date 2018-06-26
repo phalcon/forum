@@ -18,11 +18,10 @@
 namespace Phosphorum\Task;
 
 use Aws\Sqs\SqsClient;
-use League\CLImate\CLImate;
-use Discord\Parts\Channel\Channel;
+use Aws\AwsClientInterface;
+use RestCord\DiscordClient;
 use Phosphorum\Console\AbstractTask;
 use Phosphorum\Services\QueueService;
-use Phosphorum\Discord\DiscordComponent;
 use Phosphorum\Exception\InvalidParameterException;
 
 /**
@@ -32,46 +31,32 @@ use Phosphorum\Exception\InvalidParameterException;
  */
 class Discord extends AbstractTask
 {
+    /**@var AwsClientInterface | SqsClient $queue */
+    private $queue;
+
+    /**@var DiscordClient $discord */
+    private $discord;
+
+    /**@var QueueService $queueService */
+    private $queueService;
+
     /**
      * @Doc("Send notifications to the Discord")
      */
     public function send()
     {
-        $queue = $this->getQueue();
+        $this->init();
+        $this->tryToSendMessagesFromQueue();
+    }
 
-        /** @var DiscordComponent $discordService */
-        $discordService = container('discord');
-
-        $discord = new \Discord\Discord(
-            [
-                'token' => $discordService->getToken(),
-            ]
-        );
-
-        $discord->loop->addPeriodicTimer(
-            5,
-            function () use ($queue, $discord, $discordService) {
-                $guild = $discord->guilds->get('id', $discordService->getGuildId());
-
-                if (!is_object($guild)) {
-                    throw new \RuntimeException("Looks like you didn't add bot to your guild.");
-                }
-
-                /**@var Channel $channel */
-                $channel = $guild->channels->get('id', $discordService->getChannelId());
-
-                $this->tryToSendMessagesFromQueue($queue, $channel);
-            }
-        ); // each 5 seconds get jobs from queue and send to channel
-
-        $discord->on(
-            'ready',
-            function () {
-                // we don't listen anything so we don't need it
-            }
-        );
-
-        $discord->run();
+    /**
+     * @return void
+     */
+    private function init()
+    {
+        $this->queue = $this->getQueue();
+        $this->discord = new DiscordClient(['token' => container('discord')->getToken()]);
+        $this->queueService = new QueueService();
     }
 
     /**
@@ -79,47 +64,27 @@ class Discord extends AbstractTask
      * @return SqsClient
      * @throws InvalidParameterException
      */
-    protected function getQueue()
+    private function getQueue()
     {
         $queue = container('queue');
-        if ($queue instanceof SqsClient) {
+        if ($queue instanceof AwsClientInterface) {
             return $queue;
         }
 
-        (new CLImate)->error('This task does not works with Fake queue adapter.' . PHP_EOL . 'Exit...');
+        $this->outputError('This task does not works with Fake queue adapter.' . PHP_EOL . 'Exit...');
         throw new InvalidParameterException();
     }
 
     /**
-     * Get messages from queue, max amount 10
-     * @param SqsClient $queue
-     * @return \Aws\Result
+     * @return void
      */
-    protected function getMessagesFromQueue(SqsClient $queue)
+    private function tryToSendMessagesFromQueue()
     {
-        return $queue->receiveMessage([
-            'AttributeNames' => ['SentTimestamp'],
-            'MaxNumberOfMessages' => 10,
-            'MessageAttributeNames' => ['All'],
-            'QueueUrl' => $queue->getQueueUrl([
-                'QueueName' => (new QueueService())->getFullQueueName('notifications')
-            ])->get('QueueUrl'),
-            'WaitTimeSeconds' => 0,
-        ]);
-    }
-
-    /**
-     * @param SqsClient $queue
-     * @param Channel $channel
-     */
-    protected function tryToSendMessagesFromQueue(SqsClient $queue, Channel $channel)
-    {
-        $messages = $this->getMessagesFromQueue($queue);
+        $messages = $this->getMessagesFromQueue($this->queue);
         if (count($messages->get('Messages')) == 0) {
             return;
         }
 
-        $queueName = (new QueueService())->getFullQueueName('notifications');
         foreach ($messages->get('Messages') as $message) {
             $body = json_decode($message['Body'], true);
             if (empty($body['message']) || empty($body['embed'])) {
@@ -127,15 +92,38 @@ class Discord extends AbstractTask
                     'message' => json_encode($message)
                 ]);
             } else {
-                $channel->sendMessage($body['message'], false, $body['embed']);
+                $this->discord->channel->createMessage([
+                    'channel.id' => (int)container('discord')->getChannelId(),
+                    'content' => $body['message'],
+                    'embed' => $body['embed'],
+                ]);
             }
 
-            $queue->deleteMessage([
-                'QueueUrl' => $queue->getQueueUrl(['QueueName' => $queueName])->get('QueueUrl'),
+            $this->queue->deleteMessage([
+                'QueueUrl' => $this->queue->getQueueUrl([
+                    'QueueName' => $this->queueService->getFullQueueName('discord')])->get('QueueUrl'),
                 'ReceiptHandle' => $message['ReceiptHandle'],
             ]);
         }
 
-        $this->tryToSendMessagesFromQueue($queue, $channel);
+        $this->tryToSendMessagesFromQueue();
+    }
+
+    /**
+     * Get messages from queue, max amount 10
+     * @param AwsClientInterface | SqsClient $queue
+     * @return \Aws\Result
+     */
+    private function getMessagesFromQueue(AwsClientInterface $queue)
+    {
+        return $queue->receiveMessage([
+            'AttributeNames' => ['SentTimestamp'],
+            'MaxNumberOfMessages' => 10,
+            'MessageAttributeNames' => ['All'],
+            'QueueUrl' => $queue->getQueueUrl([
+                'QueueName' => $this->queueService->getFullQueueName('discord')
+            ])->get('QueueUrl'),
+            'WaitTimeSeconds' => 0,
+        ]);
     }
 }
