@@ -33,6 +33,7 @@ return [
         ],
         'files' => [
             'metaDataDir' => 'storage/metadata',
+            'adapter' => 'Phosphorum\Core\Models\MetaData\Files'
         ],
         'redis' => [
             'host' => '127.0.0.1',

@@ -19,10 +19,7 @@ declare(strict_types=1);
 namespace Phosphorum\Core\Models;
 
 use Phalcon\Config;
-use Phosphorum\Core\Environment;
 use Phalcon\Mvc\Model\MetaDataInterface;
-use Phosphorum\Core\Exceptions\DomainException;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
 
 /**
  * Phosphorum\Core\Models\MetaDataManager
@@ -34,12 +31,11 @@ final class MetaDataManager
     /**
      * Creates the application metadata instance.
      *
-     * @param  Environment $env
-     * @param  Config      $config
+     * @param  Config $config
      *
      * @return MetaDataInterface
      */
-    public function create(Environment $env, Config $config): MetaDataInterface
+    public function create(Config $config): MetaDataInterface
     {
         $default = $config->get('default', 'files');
         $possibleAdaper = $config->path(sprintf('drivers.%s.adapter', $default));
@@ -51,75 +47,30 @@ final class MetaDataManager
         }
 
         return new $adapter(
-            $this->createConfig($env, $config, $default)
+            $this->createConfig($config, $default)
         );
     }
 
     /**
      * Creates a models metadata adapter configuration.
      *
-     * @param  Environment $env
-     * @param  Config      $commonConfig
-     * @param  string      $driverName
+     * @param  Config $config
+     * @param  string $driverName
      *
      * @return array
      */
-    protected function createConfig(Environment $env, Config $commonConfig, string $driverName): array
+    protected function createConfig(Config $config, string $driverName): array
     {
-        $driver = $commonConfig->path(sprintf('drivers.%s', $driverName));
+        $driver = $config->path(sprintf('drivers.%s', $driverName));
         if ($driver instanceof Config == false) {
             $driver = new Config();
         }
 
         $defaults = [
-            'prefix'   => $commonConfig->get('prefix'),
-            'lifetime' => $commonConfig->get('lifetime'),
+            'prefix'   => $config->get('prefix', ''),
+            'lifetime' => $config->get('lifetime', 0),
         ];
 
-        $merged = $driver->merge(new Config($defaults));
-
-        $this->resolveMetaDataDir($env, $merged);
-
-        return $merged;
-    }
-
-    /**
-     * Resolve MetaData path (make it absolute) if needed.
-     *
-     * @param  Environment $env
-     * @param  Config      $config
-     *
-     * @return void
-     *
-     * @throws InvalidArgumentException
-     * @throws DomainException
-     */
-    protected function resolveMetaDataDir(Environment $env, Config $config): void
-    {
-        if ($config->offsetExists('metaDataDir') == false) {
-            return;
-        }
-
-        $path = $config->get('metaDataDir');
-
-        if (is_string($path) == false) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'The metaDataDir parameter must be a string, got %s.',
-                    gettype($path)
-                )
-            );
-        }
-
-        if (ctype_print($path) == false) {
-            throw new DomainException(
-                'The metaDataDir can not have non-printable characters or be empty.'
-            );
-        }
-
-        // Looks like it is relative path
-        if ($path[0] !== DIRECTORY_SEPARATOR && preg_match('#\A[A-Z]:(?![^/\\\\])#i', $path) > 0) {
-            $config->offsetSet('metaDataDir', $env->getPath($path));
-        }
+        return array_merge($driver->toArray(), $defaults);
     }
 }

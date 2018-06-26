@@ -22,7 +22,6 @@ use Closure;
 use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
-use Phosphorum\Core\Environment;
 use Phosphorum\Core\Models\MetaDataManager;
 
 /**
@@ -56,12 +55,8 @@ class ModelsMetadataProvider implements ServiceProviderInterface
             }
 
             $manager = new MetaDataManager();
-            $modelsMetadata = $manager->create(
-                $container->get(Environment::class),
-                $metadataConfig
-            );
 
-            return $modelsMetadata;
+            return $manager->create($metadataConfig);
         };
     }
 }
