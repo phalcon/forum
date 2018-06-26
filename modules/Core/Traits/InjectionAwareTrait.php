@@ -30,7 +30,7 @@ use Phalcon\DiInterface;
  * @property \Phosphorum\Core\Assets\AssetsManager $assets
  * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
  *
- * @package Phosphorum\Core
+ * @package Phosphorum\Core\Traits
  */
 trait InjectionAwareTrait
 {
