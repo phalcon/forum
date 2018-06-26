@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replace abandoned `Guzzle\Http\Client` by `GuzzleHttp\Client`
 - Replace `CodeMirror` editor by `StackExchange/pagedown` with some improvements and changes
 - Replace abandoned `league/flysystem-dropbox` by `srmklive/flysystem-dropbox-v2`
+- Replace abandoned `team-reflex/discord-php` by `restcord/restcord`
 
 ### Fixed
 - Fixed error logs path [#473](https://github.com/phalcon/forum/issues/473)
