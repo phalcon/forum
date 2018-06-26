@@ -46,6 +46,6 @@ return [
 
     ],
 
-    'prefix'   => 'forum_session_',
+    'prefix' => 'forum_session_',
     'lifetime' => 3600,
 ];

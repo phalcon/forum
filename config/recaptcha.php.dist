@@ -19,5 +19,5 @@ declare(strict_types=1);
 return [
     'enabled' => 'false',
     'siteKey' => 'xxxxxxxxxx',
-    'secret'  => 'yyyyyyyyyy',
+    'secret' => 'yyyyyyyyyy',
 ];
