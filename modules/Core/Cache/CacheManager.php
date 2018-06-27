@@ -16,26 +16,27 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models;
+namespace Phosphorum\Core\Cache;
 
+use Phalcon\Cache\BackendInterface;
+use Phalcon\Cache\Frontend\Data;
 use Phalcon\Config;
-use Phalcon\Mvc\Model\MetaDataInterface;
 
 /**
- * Phosphorum\Core\Models\MetaDataManager
+ * Phosphorum\Core\Cache\CacheManager
  *
- * @package Phosphorum\Core\Models
+ * @package Phosphorum\Core\Cache
  */
-final class MetaDataManager
+final class CacheManager
 {
     /**
-     * Creates the application metadata instance.
+     * Creates the models cache instance.
      *
      * @param  Config $config
      *
-     * @return MetaDataInterface
+     * @return BackendInterface
      */
-    public function create(Config $config): MetaDataInterface
+    public function create(Config $config): BackendInterface
     {
         $default = $config->get('default', 'files');
         $possibleAdaper = $config->path(sprintf('drivers.%s.adapter', $default));
@@ -43,16 +44,17 @@ final class MetaDataManager
         if ($possibleAdaper != null) {
             $adapter = $possibleAdaper;
         } else {
-            $adapter = sprintf('\Phalcon\Mvc\Model\Metadata\%s', ucfirst($default));
+            $adapter = sprintf('\Phalcon\Cache\Backend\%s', ucfirst($default));
         }
 
         return new $adapter(
+            new Data(['lifetime' => $config->get('lifetime', 0)]),
             $this->createConfig($config, $default)
         );
     }
 
     /**
-     * Creates a models metadata configuration.
+     * Creates a models cache configuration.
      *
      * @param  Config $config
      * @param  string $driverName
@@ -67,8 +69,8 @@ final class MetaDataManager
         }
 
         $defaults = [
-            'prefix'   => $config->get('prefix', ''),
-            'lifetime' => $config->get('lifetime', 0),
+            'statsKey' => 'SMC:' . substr(md5($config->get('prefix', '')), 0, 16) . '_',
+            'prefix' => 'PMC_'.$config->get('prefix', ''),
         ];
 
         return array_merge($driver->toArray(), $defaults);
