@@ -20,9 +20,20 @@ namespace Phosphorum\Domain\Entities;
 
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Phosphorum\Domain\Entities\UserEntity
+ *
+ * @property Simple badges
+ *
+ * @method Simple getBadges($parameters = null)
+ * @method static UserEntity findFirstById(int $id)
+ * @method static UserEntity findFirstByLogin(string $login)
+ * @method static UserEntity findFirstByName(string $name)
+ * @method static UserEntity findFirstByEmail(string $email)
+ * @method static UserEntity findFirstByAccessToken(string $token)
+ * @method static UserEntity[] find($parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -107,6 +118,13 @@ class UserEntity extends Model
      */
     public function initialize(): void
     {
+        $this->hasMany(
+            'id',
+            UserBadgesEntity::class,
+            'users_id',
+            ['alias' => 'badges', 'reusable' => true]
+        );
+
         $this->addBehavior(
             new Timestampable([
                 'beforeCreate' => ['field' => 'created_at'],
@@ -158,7 +176,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'id'.
      *
-     * @param int $id
+     * @param  int $id
      *
      * @return UserEntity
      */
@@ -182,7 +200,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'name'.
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return UserEntity
      */
@@ -206,7 +224,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'login'.
      *
-     * @param string $login
+     * @param  string $login
      *
      * @return UserEntity
      */
@@ -230,7 +248,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'email'.
      *
-     * @param string $email
+     * @param  string $email
      *
      * @return UserEntity
      */
@@ -254,7 +272,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'gravatar_id'.
      *
-     * @param string $gravatarId
+     * @param  string $gravatarId
      *
      * @return UserEntity
      */
@@ -278,7 +296,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'token_type'.
      *
-     * @param string $tokenType
+     * @param  string $tokenType
      *
      * @return UserEntity
      */
@@ -302,7 +320,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'access_token'.
      *
-     * @param string $accessToken
+     * @param  string $accessToken
      *
      * @return UserEntity
      */
@@ -326,7 +344,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'notifications'.
      *
-     * @param string $notifications
+     * @param  string $notifications
      *
      * @return UserEntity
      */
@@ -350,7 +368,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'digest'.
      *
-     * @param string $digest
+     * @param  string $digest
      *
      * @return UserEntity
      */
@@ -374,7 +392,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'timezone'.
      *
-     * @param string $timezone
+     * @param  string $timezone
      *
      * @return UserEntity
      */
@@ -398,7 +416,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'moderator'.
      *
-     * @param string $moderator
+     * @param  string $moderator
      *
      * @return UserEntity
      */
@@ -422,7 +440,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'karma'.
      *
-     * @param int $karma
+     * @param  int $karma
      *
      * @return UserEntity
      */
@@ -446,7 +464,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'votes'.
      *
-     * @param int $votes
+     * @param  int $votes
      *
      * @return UserEntity
      */
@@ -470,7 +488,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'votes_points'.
      *
-     * @param int $votesPoints
+     * @param  int $votesPoints
      *
      * @return UserEntity
      */
@@ -494,7 +512,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'banned'.
      *
-     * @param string $banned
+     * @param  string $banned
      *
      * @return UserEntity
      */
@@ -522,7 +540,7 @@ class UserEntity extends Model
      *
      * @deprecated 4.0.0 No longer used.
      *
-     * @param string $theme
+     * @param  string $theme
      *
      * @return UserEntity
      */
@@ -546,7 +564,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'created_at'.
      *
-     * @param int $createdAt
+     * @param  int $createdAt
      *
      * @return UserEntity
      */
@@ -570,7 +588,7 @@ class UserEntity extends Model
     /**
      * Method to set the value of field 'modified_at'.
      *
-     * @param int $modifiedAt
+     * @param  int $modifiedAt
      *
      * @return UserEntity
      */
