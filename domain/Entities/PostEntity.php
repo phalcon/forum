@@ -29,15 +29,17 @@ use Phalcon\Mvc\Model\Row;
  * @property UserEntity user
  * @property CategoryEntity category
  * @property Simple replies
+ * @property Simple pollOptions
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
- * @method Simple getReplies(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
  * @method static PostEntity|bool findFirstById(int $id)
  * @method static PostEntity|bool findFirstByCategoryId(int $id)
  * @method static Simple findByCategoryId(int $id)
  * @method static PostEntity|Row|bool findFirst(mixed $parameters = null)
  * @method static Simple find(mixed $parameters = null)
+ * @method Simple getReplies(mixed $parameters = null)
+ * @method Simple getPollOptions(mixed $parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -137,6 +139,13 @@ class PostEntity extends Model
                     'message' => 'The category is not valid'
                 ]
             ]
+        );
+
+        $this->hasMany(
+            'id',
+            PollOptionsEntity::class,
+            'postId',
+            ['alias' => 'pollOptions']
         );
 
         $this->hasMany(
