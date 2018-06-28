@@ -30,6 +30,7 @@ use Phalcon\Mvc\Model\Row;
  * @property CategoryEntity category
  * @property Simple replies
  * @property Simple pollOptions
+ * @property Simple pollVotes
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
@@ -40,6 +41,7 @@ use Phalcon\Mvc\Model\Row;
  * @method static Simple find(mixed $parameters = null)
  * @method Simple getReplies(mixed $parameters = null)
  * @method Simple getPollOptions(mixed $parameters = null)
+ * @method Simple getPollVotes(mixed $parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -146,6 +148,13 @@ class PostEntity extends Model
             PollOptionsEntity::class,
             'postId',
             ['alias' => 'pollOptions']
+        );
+
+        $this->hasMany(
+            'id',
+            PollVotesEntity::class,
+            'postId',
+            ['alias' => 'pollVotes']
         );
 
         $this->hasMany(
