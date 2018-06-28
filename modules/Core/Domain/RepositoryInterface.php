@@ -40,7 +40,7 @@ interface RepositoryInterface
      *
      * @param int|string|array $parameters
      *
-     * @return null|ResultsetInterface
+     * @return ResultsetInterface
      */
-    public function find($parameters = null): ?ResultsetInterface;
+    public function find($parameters = null): ResultsetInterface;
 }
