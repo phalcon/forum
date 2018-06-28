@@ -27,10 +27,11 @@ use Phalcon\Mvc\Model\Row;
  * Phosphorum\Domain\Entities\PostEntity
  *
  * @property UserEntity user
+ * @property CategoryEntity category
  * @property Simple replies
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
- * @method PostRepliesEntity|Row|bool getReplies(mixed $parameters = null)
+ * @method Simple getReplies(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
  * @method static PostEntity|bool findFirstById(int $id)
  * @method static PostEntity|bool findFirstByCategoryId(int $id)
@@ -125,6 +126,19 @@ class PostEntity extends Model
             ['alias' => 'user', 'reusable' => true]
         );
 
+        $this->belongsTo(
+            'categoryId',
+            CategoryEntity::class,
+            'id',
+            [
+                'alias' => 'category',
+                'reusable' => true,
+                'foreignKey' => [
+                    'message' => 'The category is not valid'
+                ]
+            ]
+        );
+
         $this->hasMany(
             'id',
             PostRepliesEntity::class,
@@ -184,7 +198,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'id'.
      *
-     * @param int $id
+     * @param  int $id
      *
      * @return PostEntity
      */
@@ -208,7 +222,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'users_id'.
      *
-     * @param int $userId
+     * @param  int $userId
      *
      * @return PostEntity
      */
@@ -232,7 +246,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'categories_id'.
      *
-     * @param int $categoryId
+     * @param  int $categoryId
      *
      * @return PostEntity
      */
@@ -256,7 +270,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'title'.
      *
-     * @param string $title
+     * @param  string $title
      *
      * @return PostEntity
      */
@@ -280,7 +294,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'slug'.
      *
-     * @param string $slug
+     * @param  string $slug
      *
      * @return PostEntity
      */
@@ -304,7 +318,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'content'.
      *
-     * @param string $content
+     * @param  string $content
      *
      * @return PostEntity
      */
@@ -328,7 +342,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'number_views'.
      *
-     * @param int $numberViews
+     * @param  int $numberViews
      *
      * @return PostEntity
      */
@@ -352,7 +366,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'number_replies'.
      *
-     * @param int $numberReplies
+     * @param  int $numberReplies
      *
      * @return PostEntity
      */
@@ -376,7 +390,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'votes_up'.
      *
-     * @param int $votesUp
+     * @param  int $votesUp
      *
      * @return PostEntity
      */
@@ -400,7 +414,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'votes_down'.
      *
-     * @param int $votesDown
+     * @param  int $votesDown
      *
      * @return PostEntity
      */
@@ -424,7 +438,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'sticked'.
      *
-     * @param string $sticked
+     * @param  string $sticked
      *
      * @return PostEntity
      */
@@ -448,7 +462,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'status'.
      *
-     * @param string $status
+     * @param  string $status
      *
      * @return PostEntity
      */
@@ -472,7 +486,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'locked'.
      *
-     * @param string $locked
+     * @param  string $locked
      *
      * @return PostEntity
      */
@@ -496,7 +510,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'deleted'.
      *
-     * @param int $deleted
+     * @param  int $deleted
      *
      * @return PostEntity
      */
@@ -520,7 +534,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'accepted_answer'.
      *
-     * @param string $acceptedAnswer
+     * @param  string $acceptedAnswer
      *
      * @return PostEntity
      */
@@ -544,7 +558,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'created_at'.
      *
-     * @param int $createdAt
+     * @param  int $createdAt
      *
      * @return PostEntity
      */
@@ -568,7 +582,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'modified_at'.
      *
-     * @param int $modifiedAt
+     * @param  int $modifiedAt
      *
      * @return PostEntity
      */
@@ -592,7 +606,7 @@ class PostEntity extends Model
     /**
      * Method to set the value of field 'edited_at'.
      *
-     * @param int $editedAt
+     * @param  int $editedAt
      *
      * @return PostEntity
      */

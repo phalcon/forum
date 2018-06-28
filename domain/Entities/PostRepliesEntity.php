@@ -160,7 +160,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'id'.
      *
-     * @param int $id
+     * @param  int $id
      *
      * @return PostRepliesEntity
      */
@@ -184,7 +184,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'posts_id'.
      *
-     * @param int $postId
+     * @param  int $postId
      *
      * @return PostRepliesEntity
      */
@@ -208,7 +208,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'users_id'.
      *
-     * @param int $userId
+     * @param  int $userId
      *
      * @return PostRepliesEntity
      */
@@ -232,7 +232,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'in_reply_to_id'.
      *
-     * @param int $inReplyToId
+     * @param  int $inReplyToId
      *
      * @return PostRepliesEntity
      */
@@ -256,7 +256,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'content'.
      *
-     * @param string $content
+     * @param  string $content
      *
      * @return PostRepliesEntity
      */
@@ -280,7 +280,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'votes_up'.
      *
-     * @param int $votesUp
+     * @param  int $votesUp
      *
      * @return PostRepliesEntity
      */
@@ -304,7 +304,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'votes_down'.
      *
-     * @param int $votesDown
+     * @param  int $votesDown
      *
      * @return PostRepliesEntity
      */
@@ -328,7 +328,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'accepted'.
      *
-     * @param string $accepted
+     * @param  string $accepted
      *
      * @return PostRepliesEntity
      */
@@ -352,7 +352,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'created_at'.
      *
-     * @param int $createdAt
+     * @param  int $createdAt
      *
      * @return PostRepliesEntity
      */
@@ -376,7 +376,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'modified_at'.
      *
-     * @param int $modifiedAt
+     * @param  int $modifiedAt
      *
      * @return PostRepliesEntity
      */
@@ -400,7 +400,7 @@ class PostRepliesEntity extends Model
     /**
      * Method to set the value of field 'edited_at'.
      *
-     * @param int $editedAt
+     * @param  int $editedAt
      *
      * @return PostRepliesEntity
      */
