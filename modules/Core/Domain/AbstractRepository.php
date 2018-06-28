@@ -16,17 +16,17 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models\Repositories;
+namespace Phosphorum\Core\Domain;
 
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phosphorum\Core\Models\Repositories\AbstractRepository
+ * Phosphorum\Core\Domain\AbstractRepository
  *
- * @package Phosphorum\Core\Repositories
+ * @package Phosphorum\Core\Domain
  */
-class BaseRepository implements RepositoryInterface
+abstract class AbstractRepository implements RepositoryInterface
 {
     /** @var ModelInterface */
     private $model;
@@ -58,7 +58,7 @@ class BaseRepository implements RepositoryInterface
      *
      * @return null|ResultsetInterface
      */
-    public function find($parameters): ?ResultsetInterface
+    public function find($parameters = null): ?ResultsetInterface
     {
         $result = $this->getModel()->find($parameters);
 

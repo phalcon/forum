@@ -16,15 +16,15 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models;
+namespace Phosphorum\Core\Mvc\Model;
 
 use Phalcon\Config;
 use Phalcon\Mvc\Model\MetaDataInterface;
 
 /**
- * Phosphorum\Core\Models\MetaDataManager
+ * Phosphorum\Core\Mvc\Model\MetaDataManager
  *
- * @package Phosphorum\Core\Models
+ * @package Phosphorum\Core\Mvc\Model
  */
 final class MetaDataManager
 {

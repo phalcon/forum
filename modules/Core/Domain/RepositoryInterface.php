@@ -16,36 +16,31 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models\MetaData;
+namespace Phosphorum\Core\Domain;
 
-use Phalcon\Mvc\Model\MetaData\Files as BaseAdapter;
-use Phosphorum\Core\Exceptions\DomainException;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
-use Phosphorum\Core\Traits\FileSystemTrait;
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phosphorum\Core\Models\MetaData\Files
+ * Phosphorum\Core\Domain\RepositoryInterface
  *
- * @package Phosphorum\Core\Models\MetaData
+ * @package Phosphorum\Core\Domain
  */
-class Files extends BaseAdapter
+interface RepositoryInterface
 {
-    use FileSystemTrait;
+    /**
+     * Get related model.
+     *
+     * @return ModelInterface
+     */
+    public function getModel(): ModelInterface;
 
     /**
-     * Files constructor.
+     * Find a specific record.
      *
-     * @param  array $options
+     * @param int|string|array $parameters
      *
-     * @throws InvalidArgumentException
-     * @throws DomainException
+     * @return null|ResultsetInterface
      */
-    public function __construct(array $options = [])
-    {
-        if (isset($options['metaDataDir'])) {
-            $options['metaDataDir'] = $this->resolveAbsolutePath($options['metaDataDir']);
-        }
-
-        parent::__construct($options);
-    }
+    public function find($parameters = null): ?ResultsetInterface;
 }

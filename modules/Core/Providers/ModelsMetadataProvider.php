@@ -22,7 +22,7 @@ use Closure;
 use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
-use Phosphorum\Core\Models\MetaDataManager;
+use Phosphorum\Core\Mvc\Model\MetaDataManager;
 
 /**
  * Phosphorum\Core\Providers\ModelsMetadataProvider

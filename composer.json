@@ -57,7 +57,8 @@
 
   "autoload": {
     "psr-4": {
-      "Phosphorum\\": "modules/"
+      "Phosphorum\\": "modules/",
+      "Phosphorum\\Domain\\": "domain/"
     }
   },
 

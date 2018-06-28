@@ -16,31 +16,15 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models\Repositories;
+namespace Phosphorum\Core\Domain;
 
-use Phalcon\Mvc\Model\ResultsetInterface;
-use Phalcon\Mvc\ModelInterface;
+use Phosphorum\Core\Exceptions\DomainException;
 
 /**
- * Phosphorum\Core\Models\Repositories\RepositoryInterface
+ * Phosphorum\Core\Domain\InvalidRepositoryException
  *
- * @package Phosphorum\Core\Repositories
+ * @package Phosphorum\Core\Domain
  */
-interface RepositoryInterface
+class InvalidRepositoryException extends DomainException
 {
-    /**
-     * Get related model.
-     *
-     * @return ModelInterface
-     */
-    public function getModel(): ModelInterface;
-
-    /**
-     * Find a specific record.
-     *
-     * @param int|string|array $parameters
-     *
-     * @return null|ResultsetInterface
-     */
-    public function find($parameters): ?ResultsetInterface;
 }

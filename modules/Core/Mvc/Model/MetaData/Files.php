@@ -16,19 +16,36 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models\Entities;
+namespace Phosphorum\Core\Mvc\Model\MetaData;
+
+use Phalcon\Mvc\Model\MetaData\Files as BaseAdapter;
+use Phosphorum\Core\Exceptions\DomainException;
+use Phosphorum\Core\Exceptions\InvalidArgumentException;
+use Phosphorum\Core\Traits\FileSystemTrait;
 
 /**
- * Phosphorum\Core\Models\Entities\RepositoryAwareInterface
+ * Phosphorum\Core\Mvc\Model\MetaData\Files
  *
- * @package Phosphorum\Core\Entities
+ * @package Phosphorum\Core\Mvc\Model\MetaData
  */
-interface RepositoryAwareInterface
+class Files extends BaseAdapter
 {
+    use FileSystemTrait;
+
     /**
-     * Gets fully qualified repository name.
+     * Files constructor.
      *
-     * @return string
+     * @param  array $options
+     *
+     * @throws InvalidArgumentException
+     * @throws DomainException
      */
-    public function getRepositoryType(): string;
+    public function __construct(array $options = [])
+    {
+        if (isset($options['metaDataDir'])) {
+            $options['metaDataDir'] = $this->resolveAbsolutePath($options['metaDataDir']);
+        }
+
+        parent::__construct($options);
+    }
 }

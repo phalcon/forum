@@ -16,38 +16,35 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Core\Models\Repositories;
+namespace Phosphorum\Core\Domain;
 
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Mvc\ModelInterface;
-use Phosphorum\Core\Models\Entities\RepositoryAwareInterface;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
- * Phosphorum\Core\Models\Repositories\RepositoryFactory
+ * Phosphorum\Core\Domain\RepositoryFactory
  *
- * @package Phosphorum\Core\Repositories
+ * @package Phosphorum\Core\Domain
  */
 class RepositoryFactory implements InjectionAwareInterface
 {
     use InjectionAwareTrait;
 
     /**
-     * Create repository by model.
+     * Create repository by enoty name.
      *
-     * @param string $modelClass
+     * @param string $entityName
      *
      * @return RepositoryInterface
      */
-    public function createByModel(string $modelClass): RepositoryInterface
+    public function createByEntityName(string $entityName): RepositoryInterface
     {
-        /** @var ModelInterface $model */
-        $model = $this->container->get($modelClass);
+        $className = "\\Phosphorum\\Domain\\Repositories\\{$entityName}Repository";
 
-        if ($model instanceof RepositoryAwareInterface) {
-            return $this->container->get($model->getRepositoryType(), [$model]);
+        if (!class_exists($className)) {
+            throw new InvalidRepositoryException("Repository {$className} doesn't exists.");
         }
 
-        return $this->container->get(BaseRepository::class, [$model]);
+        return $this->getDI()->get($this->getDI());
     }
 }
