@@ -26,14 +26,16 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  * Phosphorum\Domain\Entities\UserEntity
  *
  * @property Simple badges
+ * @property Simple posts
  *
  * @method Simple getBadges($parameters = null)
- * @method static UserEntity findFirstById(int $id)
- * @method static UserEntity findFirstByLogin(string $login)
- * @method static UserEntity findFirstByName(string $name)
- * @method static UserEntity findFirstByEmail(string $email)
- * @method static UserEntity findFirstByAccessToken(string $token)
- * @method static UserEntity[] find($parameters = null)
+ * @method Simple getPosts($parameters = null)
+ * @method static UserEntity|bool findFirstById(int $id)
+ * @method static UserEntity|bool findFirstByLogin(string $login)
+ * @method static UserEntity|bool findFirstByName(string $name)
+ * @method static UserEntity|bool findFirstByEmail(string $email)
+ * @method static UserEntity|bool findFirstByAccessToken(string $token)
+ * @method static Simple find($parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -121,14 +123,21 @@ class UserEntity extends Model
         $this->hasMany(
             'id',
             UserBadgesEntity::class,
-            'users_id',
+            'userId',
             ['alias' => 'badges', 'reusable' => true]
+        );
+
+        $this->hasMany(
+            'id',
+            PostEntity::class,
+            'userId',
+            ['alias' => 'posts', 'reusable' => true]
         );
 
         $this->addBehavior(
             new Timestampable([
-                'beforeCreate' => ['field' => 'created_at'],
-                'beforeUpdate' => ['field' => 'modified_at']
+                'beforeCreate' => ['field' => 'createdAt'],
+                'beforeUpdate' => ['field' => 'modifiedAt']
             ])
         );
     }

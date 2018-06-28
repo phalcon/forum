@@ -73,7 +73,7 @@ class UserBadgesEntity extends Model
     {
         $this->addBehavior(
             new Timestampable([
-                'beforeValidationOnCreate' => ['field' => 'created_at']
+                'beforeValidationOnCreate' => ['field' => 'createdAt']
             ])
         );
     }
