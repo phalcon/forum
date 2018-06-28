@@ -27,8 +27,10 @@ use Phalcon\Mvc\Model\Row;
  * Phosphorum\Domain\Entities\PostEntity
  *
  * @property UserEntity user
+ * @property Simple replies
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
+ * @method PostRepliesEntity|Row|bool getReplies(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
  * @method static PostEntity|bool findFirstById(int $id)
  * @method static PostEntity|bool findFirstByCategoryId(int $id)
@@ -121,6 +123,13 @@ class PostEntity extends Model
             UserEntity::class,
             'id',
             ['alias' => 'user', 'reusable' => true]
+        );
+
+        $this->hasMany(
+            'id',
+            PostRepliesEntity::class,
+            'postId',
+            ['alias' => 'replies']
         );
 
         $this->addBehavior(

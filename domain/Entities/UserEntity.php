@@ -27,15 +27,17 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  *
  * @property Simple badges
  * @property Simple posts
+ * @property Simple replies
  *
- * @method Simple getBadges($parameters = null)
- * @method Simple getPosts($parameters = null)
+ * @method Simple getBadges(mixed $parameters = null)
+ * @method Simple getPosts(mixed $parameters = null)
+ * @method Simple getReplies(mixed $parameters = null)
  * @method static UserEntity|bool findFirstById(int $id)
  * @method static UserEntity|bool findFirstByLogin(string $login)
  * @method static UserEntity|bool findFirstByName(string $name)
  * @method static UserEntity|bool findFirstByEmail(string $email)
  * @method static UserEntity|bool findFirstByAccessToken(string $token)
- * @method static Simple find($parameters = null)
+ * @method static Simple find(mixed $parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -132,6 +134,13 @@ class UserEntity extends Model
             PostEntity::class,
             'userId',
             ['alias' => 'posts', 'reusable' => true]
+        );
+
+        $this->hasMany(
+            'id',
+            PostRepliesEntity::class,
+            'userId',
+            ['alias' => 'replies', 'reusable' => true]
         );
 
         $this->addBehavior(
