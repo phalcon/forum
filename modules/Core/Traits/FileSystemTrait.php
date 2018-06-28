@@ -19,10 +19,10 @@ declare(strict_types=1);
 namespace Phosphorum\Core\Traits;
 
 use Phalcon\Di;
-use Phalcon\Text;
 use Phosphorum\Core\Environment;
 use Phosphorum\Core\Exceptions\DomainException;
 use Phosphorum\Core\Exceptions\InvalidArgumentException;
+use Phosphorum\Core\TextManager;
 
 /**
  * Phosphorum\Core\Traits\FileSystemTrait
@@ -50,18 +50,20 @@ trait FileSystemTrait
             );
         }
 
+        $path = rtrim($path, '\\/');
+
         if ($appendDirectotySeparator == true) {
-            $path = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
+            $path .= DIRECTORY_SEPARATOR;
         }
 
         // Looks like it is relative path
-        if ($path[0] !== DIRECTORY_SEPARATOR && preg_match('#\A[A-Z]:(?![^/\\\\])#i', $path) > 0) {
+        if ($path[0] !== DIRECTORY_SEPARATOR && preg_match('#\A[A-Z]:(?![^/\\\\])#i', $path) == 0) {
             $env = Di::getDefault()->get(Environment::class);
             $path = $env->getPath($path);
         }
 
-        /** @var Text $textManager */
-        $textManager = Di::getDefault()->get(Text::class);
+        /** @var TextManager $textManager */
+        $textManager = Di::getDefault()->get(TextManager::class);
 
         return $textManager->reduceSlashes($path);
     }
