@@ -68,6 +68,8 @@ final class CacheManager
             $driver = new Config();
         }
 
+        $driver->offsetUnset('adapter');
+
         $defaults = [
             'statsKey' => 'SMC:' . substr(md5($config->get('prefix', '')), 0, 16) . '_',
             'prefix' => 'PMC_'.$config->get('prefix', ''),

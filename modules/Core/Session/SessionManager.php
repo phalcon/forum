@@ -66,6 +66,8 @@ final class SessionManager
             $driver = new Config();
         }
 
+        $driver->offsetUnset('adapter');
+
         $defaults = [
             'prefix'   => $commonConfig->get('prefix'),
             'uniqueId' => $commonConfig->get('uniqueId'),

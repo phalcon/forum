@@ -66,6 +66,8 @@ final class MetaDataManager
             $driver = new Config();
         }
 
+        $driver->offsetUnset('adapter');
+
         $defaults = [
             'prefix'   => $config->get('prefix', ''),
             'lifetime' => $config->get('lifetime', 0),
