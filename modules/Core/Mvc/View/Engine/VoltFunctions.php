@@ -54,9 +54,6 @@ class VoltFunctions
      */
     public function compileFunction(string $name, $arguments)
     {
-        /** @var Config $config */
-        $config = $this->getDI()->get(Config::class);
-
         switch ($name) {
             case 'join':
                 return 'implode(' . $arguments . ')';

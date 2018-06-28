@@ -22,7 +22,6 @@ use Phalcon\Application;
 use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Registry;
-use Phosphorum\Core\Modules\ModuleInterface;
 use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**

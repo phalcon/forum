@@ -33,9 +33,11 @@ class RepositoryFactory implements InjectionAwareInterface
     /**
      * Create repository by enoty name.
      *
-     * @param string $entityName
+     * @param  string $entityName
      *
      * @return RepositoryInterface
+     *
+     * @throws InvalidRepositoryException
      */
     public function createByEntityName(string $entityName): RepositoryInterface
     {

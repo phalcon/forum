@@ -18,10 +18,9 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Modules;
 
-use Phalcon\Registry;
 use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface;
-use Phosphorum\Core\Modules\ModuleInterface;
+use Phalcon\Registry;
 use Phosphorum\Core\ServiceRegistrator;
 
 /**
