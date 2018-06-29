@@ -24,7 +24,7 @@ use Phalcon\Mvc\Model\Row;
 /**
  * Phosphorum\Domain\Entities\PollOptionsEntity
  *
- * @property PostEntity post
+ * @property PostEntity $post
  *
  * @method static PollOptionsEntity|bool findFirstById(int $id)
  * @method PostEntity|Row|bool getPost(mixed $parameters = null)

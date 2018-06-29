@@ -26,9 +26,9 @@ use Phalcon\Mvc\Model\Row;
 /**
  * Phosphorum\Domain\Entities\PostRepliesEntity
  *
- * @property PostEntity post
- * @property PostRepliesEntity postReplyTo
- * @property UserEntity user
+ * @property PostEntity $post
+ * @property PostRepliesEntity $postReplyTo
+ * @property UserEntity $user
  *
  * @method static PostRepliesEntity|bool findFirstById(int $id)
  * @method static PostRepliesEntity|Row|bool findFirst(mixed $parameters = null)

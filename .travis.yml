@@ -62,7 +62,7 @@ before_script:
 
 script:
     - vendor/bin/phpcs
-    - vendor/bin/phpstan analyse -l max modules
+    - vendor/bin/phpstan analyse -l max domain modules
 #    - vendor/bin/codecept build
 #    - vendor/bin/codecept run unit
 #    - vendor/bin/codecept run console

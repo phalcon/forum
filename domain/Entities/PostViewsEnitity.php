@@ -24,7 +24,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 /**
  * Phosphorum\Domain\Entities\PostViewsEnitity
  *
- * @property PostEntity post
+ * @property PostEntity $post
  *
  * @method Simple getPost(mixed $parameters = null)
  *

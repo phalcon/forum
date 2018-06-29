@@ -27,13 +27,13 @@ use Phalcon\Mvc\Model\Row;
 /**
  * Phosphorum\Domain\Entities\PostEntity
  *
- * @property UserEntity user
- * @property CategoryEntity category
- * @property Simple replies
- * @property Simple pollOptions
- * @property Simple pollVotes
- * @property Simple views
- * @property Simple subscribers
+ * @property UserEntity $user
+ * @property CategoryEntity $category
+ * @property Simple $replies
+ * @property Simple $pollOptions
+ * @property Simple $pollVotes
+ * @property Simple $views
+ * @property Simple $subscribers
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
  * @method static int countByUserId(int $userId)

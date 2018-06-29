@@ -25,9 +25,9 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 /**
  * Phosphorum\Domain\Entities\UserEntity
  *
- * @property Simple badges
- * @property Simple posts
- * @property Simple replies
+ * @property Simple $badges
+ * @property Simple $posts
+ * @property Simple $replies
  *
  * @method Simple getBadges(mixed $parameters = null)
  * @method Simple getPosts(mixed $parameters = null)

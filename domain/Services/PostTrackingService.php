@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phosphorum\Domain\Services;
 
 use Phalcon\Db\Column;
+use Phalcon\Mvc\Model\Row;
 use Phalcon\Platform\Domain\AbstractService;
 use Phosphorum\Domain\Repositories\PostTrackingRepository;
 
@@ -50,7 +51,11 @@ class PostTrackingService extends AbstractService
                 'columns'   => ['postId'],
             ]);
 
-        $postIds = explode(',', $posts ? $posts->offsetGet('postId') : '');
+        $postIds = [];
+
+        if ($posts instanceof Row == true) {
+            $postIds = explode(',', $posts->offsetGet('postId'));
+        }
 
         return array_map(function ($value) {
             return (int) $value;

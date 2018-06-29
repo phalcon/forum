@@ -25,9 +25,9 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 /**
  * Phosphorum\Domain\Entities\PollVotesEntity
  *
- * @property UserEntity user
- * @property PostEntity post
- * @property PollOptionsEntity pollOption
+ * @property UserEntity $user
+ * @property PostEntity $post
+ * @property PollOptionsEntity $pollOption
  *
  * @method static PollVotesEntity|bool findFirstById(int $id)
  * @method static PollVotesEntity|bool findFirstByUsersId(int $id)
