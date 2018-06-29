@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phosphorum\Domain\Entities;
 
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Row;
@@ -138,6 +139,10 @@ class PostEntity extends Model
                     'field' => ['createdAt', 'modifiedAt'],
                 ]
             ])
+        );
+
+        $this->addBehavior(
+            new SoftDelete(['field' => 'deleted', 'value' => 1])
         );
     }
 
