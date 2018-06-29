@@ -21,7 +21,7 @@ namespace Phosphorum\Core\Mvc;
 use Phalcon\Di\Injectable;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ControllerInterface;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\Mvc\Controller

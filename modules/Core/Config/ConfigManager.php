@@ -22,8 +22,8 @@ use DirectoryIterator;
 use Phalcon\Config;
 use Phalcon\Config\Factory;
 use Phalcon\DiInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phosphorum\Core\Environment;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\Config\ConfigManager

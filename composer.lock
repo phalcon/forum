@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "76df17fadfc57fa2c14e3d41635b709f",
+    "content-hash": "69edaecf224cfb8c7d7cd8cbfa944a42",
     "packages": [
         {
             "name": "google/recaptcha",
@@ -191,6 +191,59 @@
                 "phalcon"
             ],
             "time": "2018-05-24T11:02:46+00:00"
+        },
+        {
+            "name": "phalcon/platform",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/platform.git",
+                "reference": "8107ad58f95747a0563e5ece253a6641682f313a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/platform/zipball/8107ad58f95747a0563e5ece253a6641682f313a",
+                "reference": "8107ad58f95747a0563e5ece253a6641682f313a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-phalcon": "~3.2",
+                "php": ">= 7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "0.9.*",
+                "squizlabs/php_codesniffer": "3.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Platform\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalconphp.com",
+                    "homepage": "https://phalconphp.com/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/forum/graphs/contributors"
+                }
+            ],
+            "description": "A foundation to build applications using Phalcon.",
+            "homepage": "https://phalconphp.com/",
+            "keywords": [
+                "core",
+                "foundation",
+                "phalcon",
+                "platform"
+            ],
+            "time": "2018-06-29T11:47:19+00:00"
         }
     ],
     "packages-dev": [
@@ -1147,7 +1200,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "phalcon/platform": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

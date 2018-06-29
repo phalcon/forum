@@ -42,7 +42,8 @@
     "ext-phalcon": "~3.2",
     "google/recaptcha": "1.1.*",
     "league/flysystem": "1.0.*",
-    "phalcon/breadcrumbs": "1.4.*"
+    "phalcon/breadcrumbs": "1.4.*",
+    "phalcon/platform": "dev-master"
   },
 
   "require-dev": {

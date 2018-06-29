@@ -24,7 +24,7 @@ use Phalcon\Events\Event;
 use Phalcon\Logger\AdapterInterface;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\ViewBaseInterface;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\Events\ViewListener

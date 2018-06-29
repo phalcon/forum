@@ -18,11 +18,11 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\QueryBuilders;
 
-use Phosphorum\Core\Traits\InjectionAwareTrait;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Frontend\Mvc\QueryBuilders\PostsBuilder

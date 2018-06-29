@@ -18,9 +18,9 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Mvc\View\Engine;
 
-use Phalcon\Config;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phosphorum\Core\Version;
 
 /**
@@ -28,7 +28,7 @@ use Phosphorum\Core\Version;
  *
  * @package Phosphorum\Core\Mvc\View\Engine
  */
-class VoltFunctions
+class VoltFunctions implements InjectionAwareInterface
 {
     use InjectionAwareTrait {
         InjectionAwareTrait::__construct as protected __DiInject;

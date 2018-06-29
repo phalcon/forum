@@ -20,12 +20,12 @@ namespace Phosphorum\Core\Mvc\View\Engine;
 
 use Closure;
 use Phalcon\Config;
-use Phalcon\DiInterface;
-use Phosphorum\Core\Environment;
-use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Di\InjectionAwareInterface;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
+use Phalcon\DiInterface;
+use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phosphorum\Core\Environment;
 
 /**
  * Phosphorum\Core\Mvc\View\Engine\VoltManager

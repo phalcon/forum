@@ -19,17 +19,18 @@ declare(strict_types=1);
 namespace Phosphorum\Core\Modules;
 
 use Phalcon\Application;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phalcon\Registry;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\Modules\ModulesManager
  *
  * @package Phosphorum\Core\Modules
  */
-final class ModulesManager implements ManagerInterface
+final class ModulesManager implements ManagerInterface, InjectionAwareInterface
 {
     use InjectionAwareTrait {
         InjectionAwareTrait::__construct as protected __DiInject;

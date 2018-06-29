@@ -20,9 +20,9 @@ namespace Phosphorum\Core;
 
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phalcon\Registry;
 use Phosphorum\Core\Exceptions\InvalidArgumentException;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\Environment

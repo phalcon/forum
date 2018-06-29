@@ -21,6 +21,7 @@ namespace Phosphorum\Core;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
+use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phalcon\Registry;
 use Phosphorum\Core\Exceptions\InvalidArgumentException;
 use Phosphorum\Core\Modules\ManagerInterface;
@@ -28,7 +29,6 @@ use Phosphorum\Core\Modules\ModulesManager;
 use Phosphorum\Core\Providers\EventsManagerProvider;
 use Phosphorum\Core\Providers\FileSystemProvider;
 use Phosphorum\Core\Providers\RouterProvider;
-use Phosphorum\Core\Traits\InjectionAwareTrait;
 
 /**
  * Phosphorum\Core\ServiceRegistrator
