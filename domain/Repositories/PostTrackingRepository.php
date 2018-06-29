@@ -19,8 +19,8 @@ declare(strict_types=1);
 namespace Phosphorum\Domain\Repositories;
 
 use Phalcon\Db\Column;
+use Phalcon\Platform\Domain\AbstractRepository;
 use Phosphorum\Domain\Entities\PostTrackingEntity;
-use Phosphorum\Core\Domain\AbstractRepository;
 
 /**
  * Phosphorum\Domain\Repositories\PostTrackingRepository
