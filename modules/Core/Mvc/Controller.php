@@ -26,8 +26,10 @@ use Phalcon\Platform\Traits\InjectionAwareTrait;
 /**
  * Phosphorum\Core\Mvc\Controller
  *
- * @property \Phalcon\Mvc\View                        $view
+ * @property \Phalcon\Mvc\View $view
+ * @property \Phalcon\Assets\Manager $assets
  * @property \Phosphorum\Core\Modules\ModuleInterface $module
+ * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
  *
  * @method void onConstruct()
  *
