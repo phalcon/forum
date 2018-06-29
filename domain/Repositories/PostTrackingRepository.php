@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace Phosphorum\Domain\Repositories;
 
-use Phalcon\Db\Column;
 use Phalcon\Platform\Domain\AbstractRepository;
 use Phosphorum\Domain\Entities\PostTrackingEntity;
 
@@ -31,37 +30,4 @@ use Phosphorum\Domain\Entities\PostTrackingEntity;
  */
 class PostTrackingRepository extends AbstractRepository
 {
-    /**
-     * PostTrackingRepository constructor.
-     *
-     * @param PostTrackingEntity $entity
-     */
-    public function __construct(PostTrackingEntity $entity)
-    {
-        parent::__construct($entity);
-    }
-
-    /**
-     * Gets the message IDs that the user has already read.
-     *
-     * @param  int $userId
-     *
-     * @return int[]
-     */
-    public function getReadPostsIds(int $userId): array
-    {
-        $posts = $this->getEntity()
-            ->findFirst([
-                'userId = :user_id:',
-                'bind'      => ['user_id' => $userId],
-                'bindTypes' => ['user_id' => Column::BIND_PARAM_INT],
-                'columns'   => ['postId'],
-            ]);
-
-        $postIds = explode(',', $posts ? $posts->offsetGet('postId') : '');
-
-        return array_map(function ($value) {
-            return (int) $value;
-        }, array_filter($postIds));
-    }
 }

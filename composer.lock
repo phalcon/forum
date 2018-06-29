@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/platform.git",
-                "reference": "8107ad58f95747a0563e5ece253a6641682f313a"
+                "reference": "159e419083e39892c36c27aaf9ad444720ef4033"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/platform/zipball/8107ad58f95747a0563e5ece253a6641682f313a",
-                "reference": "8107ad58f95747a0563e5ece253a6641682f313a",
+                "url": "https://api.github.com/repos/phalcon/platform/zipball/159e419083e39892c36c27aaf9ad444720ef4033",
+                "reference": "159e419083e39892c36c27aaf9ad444720ef4033",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
                 "phalcon",
                 "platform"
             ],
-            "time": "2018-06-29T11:47:19+00:00"
+            "time": "2018-06-29T13:12:00+00:00"
         }
     ],
     "packages-dev": [
