@@ -29,11 +29,11 @@ use Phalcon\Mvc\ModelInterface;
 interface RepositoryInterface
 {
     /**
-     * Get related model.
+     * Get related enity.
      *
      * @return ModelInterface
      */
-    public function getModel(): ModelInterface;
+    public function getEntity(): ModelInterface;
 
     /**
      * Find a specific record.

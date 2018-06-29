@@ -29,16 +29,16 @@ use Phalcon\Mvc\ModelInterface;
 abstract class AbstractRepository implements RepositoryInterface
 {
     /** @var ModelInterface */
-    private $model;
+    private $entity;
 
     /**
      * AbstractRepository constructor.
      *
-     * @param ModelInterface $model
+     * @param ModelInterface $entity
      */
-    public function __construct(ModelInterface $model)
+    public function __construct(ModelInterface $entity)
     {
-        $this->model = $model;
+        $this->entity = $entity;
     }
 
     /**
@@ -46,9 +46,9 @@ abstract class AbstractRepository implements RepositoryInterface
      *
      * @return ModelInterface
      */
-    public function getModel(): ModelInterface
+    public function getEntity(): ModelInterface
     {
-        return $this->model;
+        return $this->entity;
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     public function find($parameters = null): ResultsetInterface
     {
-        $result = $this->getModel()->find($parameters);
+        $result = $this->getEntity()->find($parameters);
 
         return $result ?: null;
     }
