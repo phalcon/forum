@@ -35,11 +35,11 @@ class PostTrackingService extends AbstractService
     /**
      * Gets the message IDs that the user has already read.
      *
-     * @param  int $userId
+     * @param  int|null $userId
      *
      * @return int[]
      */
-    public function getReadPostsIds(int $userId): array
+    public function getReadPostsIds($userId = null): array
     {
         $posts = $this
             ->getRepository()
