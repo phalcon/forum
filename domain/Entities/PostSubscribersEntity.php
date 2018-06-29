@@ -22,7 +22,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
- * Phosphorum\Domain\Entities\PostViewsEnitity
+ * Phosphorum\Domain\Entities\PostSubscribersEntity
  *
  * @property PostEntity post
  *
@@ -30,7 +30,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  *
  * @package Phosphorum\Domain\Entities
  */
-class PostViewsEnitity extends Model
+class PostSubscribersEntity extends Model
 {
     /** @var int */
     protected $id;
@@ -38,8 +38,11 @@ class PostViewsEnitity extends Model
     /** @var int */
     protected $postId;
 
-    /** @var string */
-    protected $ipAddress;
+    /** @var int */
+    protected $userId;
+
+    /** @var int */
+    protected $createdAt;
 
     /**
      * {@inheritdoc}
@@ -48,7 +51,7 @@ class PostViewsEnitity extends Model
      */
     public function getSource(): string
     {
-        return 'posts_views';
+        return 'posts_subscribers';
     }
 
     /**
@@ -82,7 +85,8 @@ class PostViewsEnitity extends Model
         return [
             'id' => 'id',
             'posts_id' => 'postId',
-            'ipaddress' => 'ipAddress',
+            'users_id' => 'userId',
+            'created_at' => 'createdAt',
         ];
     }
 
@@ -101,9 +105,9 @@ class PostViewsEnitity extends Model
      *
      * @param  int $id
      *
-     * @return PostViewsEnitity
+     * @return PostSubscribersEntity
      */
-    public function setId(int $id): PostViewsEnitity
+    public function setId(int $id): PostSubscribersEntity
     {
         $this->id = $id;
 
@@ -125,9 +129,9 @@ class PostViewsEnitity extends Model
      *
      * @param  int $postId
      *
-     * @return PostViewsEnitity
+     * @return PostSubscribersEntity
      */
-    public function setPostId(int $postId): PostViewsEnitity
+    public function setPostId(int $postId): PostSubscribersEntity
     {
         $this->postId = $postId;
 
@@ -135,25 +139,49 @@ class PostViewsEnitity extends Model
     }
 
     /**
-     * Returns the value of field 'ipaddress'.
+     * Returns the value of field 'users_id'.
      *
-     * @return string
+     * @return int
      */
-    public function getIpAddress(): string
+    public function getUserId(): int
     {
-        return $this->ipAddress;
+        return $this->userId;
     }
 
     /**
-     * Method to set the value of field 'ipaddress'.
+     * Method to set the value of field 'users_id'.
      *
-     * @param  string $ipAddress
+     * @param  int $userId
      *
-     * @return PostViewsEnitity
+     * @return PostSubscribersEntity
      */
-    public function setIpAddress(string $ipAddress): PostViewsEnitity
+    public function setUserId(int $userId): PostSubscribersEntity
     {
-        $this->ipAddress = $ipAddress;
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Returns the value of field 'created_at'.
+     *
+     * @return int
+     */
+    public function getCreatedAt(): int
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Method to set the value of field 'created_at'.
+     *
+     * @param  int $createdAt
+     *
+     * @return PostSubscribersEntity
+     */
+    public function setCreatedAt(int $createdAt): PostSubscribersEntity
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

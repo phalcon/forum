@@ -32,6 +32,7 @@ use Phalcon\Mvc\Model\Row;
  * @property Simple pollOptions
  * @property Simple pollVotes
  * @property Simple views
+ * @property Simple subscribers
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
@@ -40,10 +41,12 @@ use Phalcon\Mvc\Model\Row;
  * @method static Simple findByCategoryId(int $id)
  * @method static PostEntity|Row|bool findFirst(mixed $parameters = null)
  * @method static Simple find(mixed $parameters = null)
+ * @method int countSubscribers(mixed $parameters = null)
  * @method Simple getReplies(mixed $parameters = null)
  * @method Simple getPollOptions(mixed $parameters = null)
  * @method Simple getPollVotes(mixed $parameters = null)
  * @method Simple getViews(mixed $parameters = null)
+ * @method Simple getSubscribers(mixed $parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -191,6 +194,13 @@ class PostEntity extends Model
             PostViewsEnitity::class,
             'postId',
             ['alias' => 'views']
+        );
+
+        $this->hasMany(
+            'id',
+            PostSubscribersEntity::class,
+            'postId',
+            ['alias' => 'subscribers']
         );
     }
 
