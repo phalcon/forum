@@ -31,6 +31,7 @@ use Phalcon\Mvc\Model\Row;
  * @property Simple replies
  * @property Simple pollOptions
  * @property Simple pollVotes
+ * @property Simple views
  *
  * @method UserEntity|Row|bool getUser(mixed $parameters = null)
  * @method static int countByUserId(int $userId)
@@ -42,6 +43,7 @@ use Phalcon\Mvc\Model\Row;
  * @method Simple getReplies(mixed $parameters = null)
  * @method Simple getPollOptions(mixed $parameters = null)
  * @method Simple getPollVotes(mixed $parameters = null)
+ * @method Simple getViews(mixed $parameters = null)
  *
  * @package Phosphorum\Domain\Entities
  */
@@ -123,6 +125,26 @@ class PostEntity extends Model
      */
     public function initialize(): void
     {
+        $this->registerRelationships();
+
+        $this->keepSnapshots(true);
+
+        $this->addBehavior(
+            new Timestampable([
+                'beforeCreate' => [
+                    'field' => ['createdAt', 'modifiedAt'],
+                ]
+            ])
+        );
+    }
+
+    /**
+     * Register Post's relationships.
+     *
+     * @return void
+     */
+    protected function registerRelationships(): void
+    {
         $this->belongsTo(
             'userId',
             UserEntity::class,
@@ -164,12 +186,11 @@ class PostEntity extends Model
             ['alias' => 'replies']
         );
 
-        $this->addBehavior(
-            new Timestampable([
-                'beforeCreate' => [
-                    'field' => ['createdAt', 'modifiedAt'],
-                ]
-            ])
+        $this->hasMany(
+            'id',
+            PostViewsEnitity::class,
+            'postId',
+            ['alias' => 'views']
         );
     }
 
