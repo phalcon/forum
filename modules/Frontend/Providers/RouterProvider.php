@@ -115,14 +115,14 @@ class RouterProvider implements ServiceProviderInterface
 
         $discussions
             ->add(
-                '/discussions/(hot|my|unanswered|answers)',
+                '/discussions/(hot|my|unanswered|answers|new)',
                 ['action' => 1]
             )
             ->setName('discussions-order');
 
         $discussions
             ->add(
-                '/discussions/(hot|my|unanswered|answers)/:int',
+                '/discussions/(hot|my|unanswered|answers|new)/:int',
                 ['action' => 1, 'offset' => 2]
             )
             ->setName('discussions-order-offset');
@@ -144,7 +144,7 @@ class RouterProvider implements ServiceProviderInterface
         $discussions
             ->add(
                 '/',
-                ['action' => 'welcome']
+                ['action' => 'new']
             )
             ->setName('discussions-index');
 
