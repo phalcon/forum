@@ -124,10 +124,10 @@ header .btns-group a:hover,.socialBox ul li a:hover{
 }
 header .socialBox ul li a rect#Rectangle-6{
     -webkit-transition: all .5s;
-    -moz-transition: all .5s;
-    -ms-transition: all .5s;
-    -o-transition: all .5s;
-    transition: all .5s;
+       -moz-transition: all .5s;
+        -ms-transition: all .5s;
+         -o-transition: all .5s;
+            transition: all .5s;
 }
 header .socialBox ul li a:hover rect#Rectangle-6 {
     fill: #fff;
@@ -146,49 +146,59 @@ header .btns-group a i{
     display: none !important;
 }
 .content-sec{
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 72px 0;
 }
-.leftMain ul{
-    border-bottom: 1px solid #dddddd;;
+.leftMain ul {
+    border-bottom: 1px solid #ddd;
 }
-.leftMenu ul li{
+.leftMenu ul li {
     margin-bottom: 15px;
 }
-.leftMenu ul li a{
+.leftMenu ul li a {
     font-size: 12px;
     color: #5f5f5f;
     font-family: 'Titillium Web', sans-serif;
     text-transform: capitalize;
 }
-.leftMain ul li i{
+.leftMain ul li i {
     font-size: 18px !important;
 }
-.leftMain ul li span{
+.leftMain ul li span {
     display: inline-block;
     vertical-align: middle;
     width: 30px;
 }
-.leftMain ul li:first-child i{
-    color: #002645;
-}
-.leftMain ul li:nth-child(2) i{
-    color: #d0021b;
-}
-.leftMain ul li:last-child i{
+.leftMain ul li:last-child i {
     color: #878787;
 }
-.menuLinks{
+.leftMain ul li.active a {
+    color: #002645;
+    font-weight: bold;
+}
+.leftMain ul li.active i {
+    color: #002645;
+}
+.leftMain ul li.hot i {
+    color: #d0021b;
+}
+.leftMain ul li a:hover {
+    text-decoration: underline;
+}
+.leftMain ul li.active a:hover {
+    text-decoration: none;
+}
+.menuLinks {
     margin-top: 20px;
 }
-.menuLinks ul li a{
+.menuLinks ul li a {
     display: block;
 }
 .menuLinks ul li.active a,
-.menuLinks ul li a:hover{
+.menuLinks ul li a:hover {
     padding: 10px;
 }
-.menuLinks ul li a span{
+.menuLinks ul li a span {
     width: 15px;
     height: 15px;
     border-radius: 3px;
@@ -196,10 +206,10 @@ header .btns-group a i{
     vertical-align: sub;
     margin-right: 15px;
     -webkit-transition: all .5s;
-    -moz-transition: all .5s;
-    -ms-transition: all .5s;
-    -o-transition: all .5s;
-    transition: all .5s;
+       -moz-transition: all .5s;
+        -ms-transition: all .5s;
+         -o-transition: all .5s;
+            transition: all .5s;
 }
 .menuLinks ul li.active a,
 .menuLinks ul li a:hover{
