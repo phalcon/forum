@@ -32,8 +32,9 @@
     {%- endif -%}
 
     {%- if canonical is defined and not(canonical is empty) -%}
-        {%- set canonical_url = config.application.url ~ '/' ~ canonical,
-                author_picture = gravatar(post.user.email),
+        {# todo: author_picture = gravatar(post.user.email) #}
+        {%- set canonical_url = config.application.url ~ canonical,
+                author_picture = '',
                 author_picture_alt = post.user.name
         -%}
     {%- else -%}

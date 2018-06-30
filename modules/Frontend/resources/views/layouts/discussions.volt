@@ -1,7 +1,13 @@
 {%- extends "templates/base.volt" -%}
 
 {% block content %}
-    <hr/><code>Start Frontend/resources/views/layouts/discussions.volt</code><br/>
-    {{ content() }}
-    <code>End Frontend/resources/views/layouts/discussions.volt</code><br/><hr/>
+    <section class="content-sec">
+        <div class="container">
+            <div class="row">
+                {% include 'partials/sidebar.volt' %}
+
+                {{ content() }}
+            </div>
+        </div>
+    </section>
 {% endblock %}
