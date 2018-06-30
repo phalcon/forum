@@ -39,7 +39,7 @@ class PostTrackingService extends AbstractService
      *
      * @return int[]
      */
-    public function getReadPostsIds($userId = null): array
+    public function getReadPostsIds(?int $userId = null): array
     {
         $posts = $this
             ->getRepository()
