@@ -109,16 +109,44 @@ class RouterProvider implements ServiceProviderInterface
         $discussions = new Group(
             [
                 'module' => $moduleName,
+                'controller' => 'discussions',
             ]
         );
 
-        $discussions->add(
-            '/',
-            [
-                'controller' => 'discussions',
-                'action'     => 'index',
-            ]
-        );
+        $discussions
+            ->add(
+                '/discussions/(hot|my|unanswered|answers)',
+                ['action' => 1]
+            )
+            ->setName('discussions-order');
+
+        $discussions
+            ->add(
+                '/discussions/(hot|my|unanswered|answers)/:int',
+                ['action' => 1, 'offset' => 2]
+            )
+            ->setName('discussions-order-offset');
+
+        $discussions
+            ->add(
+                '/discussions/{id:[0-9]+}',
+                ['action' => 'view']
+            )
+            ->setName('discussions-view');
+
+        $discussions
+            ->add(
+                '/discussions/{id:[0-9]+}/{slug}',
+                ['action' => 'view']
+            )
+            ->setName('discussions-view-slug');
+
+        $discussions
+            ->add(
+                '/',
+                ['action' => 'welcome']
+            )
+            ->setName('discussions-index');
 
         return $discussions;
     }
