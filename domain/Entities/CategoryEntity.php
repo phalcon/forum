@@ -92,9 +92,9 @@ class CategoryEntity extends Model
             'id' => 'id',
             'name' => 'name',
             'slug' => 'slug',
-            'number_posts' => 'number_posts',
-            'no_bounty' => 'no_bounty',
-            'no_digest' => 'no_digest',
+            'number_posts' => 'numberPosts',
+            'no_bounty' => 'noBounty',
+            'no_digest' => 'noDigest',
         ];
     }
 
