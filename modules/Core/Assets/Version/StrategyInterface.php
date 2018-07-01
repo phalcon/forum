@@ -56,7 +56,7 @@ interface StrategyInterface
     public function checkModificationTimeAlways(bool $check): void;
 
     /**
-     * Resolve final file name.
+     * Resolve final file URI.
      *
      * @return string|null
      */
