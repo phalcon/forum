@@ -95,7 +95,6 @@
         ] %}
     {%  endif %}
 
-    {#- CSS resources from jsdelivr cannot be combined due to Bootstrap icons -#}
     {{ assets.cachedOutputCss('default_css') }}
 
     {% include "include/ie-support.volt" %}

@@ -63,7 +63,7 @@ class VoltFunctions implements InjectionAwareInterface
             case 'gravatar':
                 return '$this->getDI()->get("gravatar")->getAvatar(' . $arguments . ')';
             case 'forum_version':
-                return Version::class . '::get()';
+                return 'str_replace(".", "", ' . Version::class . '::get())';
         }
 
         return null;
