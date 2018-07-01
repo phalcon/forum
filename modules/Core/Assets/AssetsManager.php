@@ -18,10 +18,14 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Assets;
 
+use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;
+use Phalcon\Config;
 use Phalcon\Tag;
 use Phosphorum\Core\Assets\Version\Strategy\AppVersionStrategy;
 use Phosphorum\Core\Assets\Version\StrategyInterface;
+use Phosphorum\Core\Environment;
+use Phosphorum\Core\Exceptions\DomainException;
 
 /**
  * Phosphorum\Core\Assets\AssetsManager
@@ -30,42 +34,38 @@ use Phosphorum\Core\Assets\Version\StrategyInterface;
  */
 final class AssetsManager extends Manager
 {
-    /** @var StrategyInterface  */
-    protected $versioningStrategy;
-
     /** @var Tag */
     protected $tagManager;
+
+    /** @var bool */
+    protected $modifyFilename = false;
+
+    /** @var bool */
+    protected $checkMTimeAlways = false;
+
+    /** @var Environment */
+    protected $environment;
+
+    /** @var StrategyInterface */
+    protected $strategy;
 
     /**
      * AssetsManager constructor.
      *
-     * @param Tag   $tagManager
-     * @param array $options
+     * @param Tag         $tagManager
+     * @param Config      $config
+     * @param Environment $environment
      */
-    public function __construct(Tag $tagManager, array $options = [])
+    public function __construct(Tag $tagManager, Config $config, Environment $environment)
     {
-        parent::__construct($options);
-
-        $this->versioningStrategy = $this->createVersioningStrategy();
         $this->tagManager = $tagManager;
-    }
+        $this->environment = $environment;
 
-    /**
-     * Versioning strategy factory method.
-     *
-     * @return StrategyInterface
-     */
-    protected function createVersioningStrategy(): StrategyInterface
-    {
-        $options = $this->getOptions();
+        $this->checkMTimeAlways = $this->checkModificationTimeAlways($config);
+        $this->modifyFilename = $config->get('modifyFilename', false);
+        $this->strategy = $config->get('strategy', AppVersionStrategy::class);
 
-        if (isset($options['strategy'])) {
-            $strategy = $options['strategy'];
-        } else {
-            $strategy = AppVersionStrategy::class;
-        }
-
-        return new $strategy();
+        parent::__construct($config->toArray());
     }
 
     /**
@@ -74,12 +74,23 @@ final class AssetsManager extends Manager
      * @param  string $collectionName
      *
      * @return string
+     *
+     * @throws DomainException
      */
     public function cachedOutputJs(string $collectionName): string
     {
         $collection = $this->collection($collectionName);
+        $collection->rewind();
 
-        $fileName = $this->versioningStrategy->resolve();
+        if ($collection->valid() == false) {
+            throw new DomainException(
+                "The collection '{$collectionName}' doesn't exists."
+            );
+        }
+
+        $versioningStrategy = $this->createVersioningStrategy($collection);
+
+        $fileName = $versioningStrategy->resolve();
         if ($fileName === null) {
             return $this->outputJs($collectionName);
         }
@@ -95,12 +106,23 @@ final class AssetsManager extends Manager
      * @param string $collectionName
      *
      * @return string
+     *
+     * @throws DomainException
      */
     public function cachedOutputCss(string $collectionName): string
     {
         $collection = $this->collection($collectionName);
+        $collection->rewind();
 
-        $fileName = $this->versioningStrategy->resolve();
+        if ($collection->valid() == false) {
+            throw new DomainException(
+                "The collection '{$collectionName}' doesn't exists."
+            );
+        }
+
+        $versioningStrategy = $this->createVersioningStrategy($collection);
+
+        $fileName = $versioningStrategy->resolve();
         if ($fileName === null) {
             return $this->outputCss($collectionName);
         }
@@ -108,5 +130,35 @@ final class AssetsManager extends Manager
         $collection->setTargetUri($fileName);
 
         return $this->tagManager->stylesheetLink($collection->getTargetUri());
+    }
+
+    /**
+     * Versioning strategy factory method.
+     *
+     * @param  Collection $collection
+     *
+     * @return StrategyInterface
+     */
+    protected function createVersioningStrategy(Collection $collection): StrategyInterface
+    {
+        return new $this->strategy(
+            $collection,
+            $this->modifyFilename,
+            $this->checkMTimeAlways
+        );
+    }
+
+    /**
+     * Tell the Assets Version Strategy if we should check modification time in each request.
+     *
+     * @param  Config $config
+     *
+     * @return bool
+     */
+    protected function checkModificationTimeAlways(Config $config): bool
+    {
+        $isDevelopmentStage = $this->environment->isCurrentStage(Environment::DEVELOPMENT);
+
+        return ($isDevelopmentStage || $config->get('debug', false));
     }
 }

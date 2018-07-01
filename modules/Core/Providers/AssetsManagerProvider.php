@@ -18,9 +18,12 @@ declare(strict_types=1);
 
 namespace Phosphorum\Core\Providers;
 
-use Phalcon\DiInterface;
+use Closure;
+use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\DiInterface;
 use Phosphorum\Core\Assets\AssetsManager;
+use Phosphorum\Core\Environment;
 
 /**
  * Phosphorum\Core\Providers\AssetsManagerProvider
@@ -36,14 +39,31 @@ class AssetsManagerProvider implements ServiceProviderInterface
      */
     public function register(DiInterface $container)
     {
-        $service = function () use ($container) {
+        $service = $this->createService($container);
+
+        $container->setShared('assets', $service);
+    }
+
+    protected function createService(DiInterface $container): Closure
+    {
+        return function () use ($container) {
+            /** @var Config $config */
+            $config = $container->get(Config::class);
+
+            $assetsConfig = $config->get('assets');
+            if ($assetsConfig instanceof Config == false) {
+                $assetsConfig = new Config();
+            }
+
+            $assetsConfig->offsetSet('debug', (bool) $config->path('application.debug'));
+
             $manager = new AssetsManager(
-                $container->get('tag')
+                $container->get('tag'),
+                $assetsConfig,
+                $container->get(Environment::class)
             );
 
             return $manager;
         };
-
-        $container->setShared('assets', $service);
     }
 }
