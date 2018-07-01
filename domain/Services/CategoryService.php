@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Domain\Services;
 
+use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Platform\Domain\AbstractService;
 use Phosphorum\Domain\Repositories\CategoryRepository;
 
@@ -38,5 +39,15 @@ class CategoryService extends AbstractService
     public function __construct(CategoryRepository $repository)
     {
         parent::__construct($repository);
+    }
+
+    /**
+     * Get ordered categories list.
+     *
+     * @return ResultsetInterface
+     */
+    public function getOrderedList(): ResultsetInterface
+    {
+        return $this->getRepository()->find(['order' => 'numberPosts DESC, name']);
     }
 }
