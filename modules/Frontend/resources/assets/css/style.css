@@ -54,44 +54,43 @@ p {
 
 input:focus,
 select:focus,
-textarea:focus{
+textarea:focus {
     outline: none;
 }
 
-
-header{
+header {
     background-color: #002645;
     padding: 33px 0;
 }
-header .logoBox img{
+header .logoBox img {
     max-width: 140px;
     width: 100%;
     margin-top: -8px;
     height: 45px;
     object-fit: cover;
 }
-.searchBar{
+.searchBar {
     position: relative;
     height: 36px;
 }
-.searchBar input{
+.searchBar input {
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: #fff;
     box-shadow: none;
     font-size: 14px;
 }
-.searchBar span{
+.searchBar span {
     display: block;
     position: absolute;
     top: 50%;
     right:12px;
     -webkit-transform: translate(0,-50%);
-    -moz-transform: translate(0,-50%);
-    -ms-transform: translate(0,-50%);
-    -o-transform: translate(0,-50%);
-    transform: translate(0,-50%);
+       -moz-transform: translate(0,-50%);
+        -ms-transform: translate(0,-50%);
+         -o-transform: translate(0,-50%);
+            transform: translate(0,-50%);
 }
-.searchBar span i{
+.searchBar span i {
     color: #96a6b2;
     font-size: 18px !important;
 }
@@ -100,17 +99,17 @@ header .logoBox img{
     display: inline-block;
     width: 100%;
 }
-.socialBox ul li{
+.socialBox ul li {
     float: left;
     margin-right: 24px;
 }
 
-.socialBox ul li a{
+.socialBox ul li a {
     font-size: 24px;
     color: #435f75;
     display: block;
 }
-header .btns-group a{
+header .btns-group a {
     font-size: 16px;
     color: #435f75;
     font-family: 'Titillium Web', sans-serif;
@@ -119,10 +118,10 @@ header .btns-group a{
     display: inline-block;
     vertical-align: middle;
 }
-header .btns-group a:hover,.socialBox ul li a:hover{
+header .btns-group a:hover,.socialBox ul li a:hover {
     color: #ffffff;
 }
-header .socialBox ul li a rect#Rectangle-6{
+header .socialBox ul li a rect#Rectangle-6 {
     -webkit-transition: all .5s;
        -moz-transition: all .5s;
         -ms-transition: all .5s;
@@ -132,20 +131,20 @@ header .socialBox ul li a rect#Rectangle-6{
 header .socialBox ul li a:hover rect#Rectangle-6 {
     fill: #fff;
 }
-header .btns-group a:last-child{
+header .btns-group a:last-child {
     margin-right: 0;
 }
-header .btns-group a i{
+header .btns-group a i {
     margin-right: 10px;
 }
 
-.activeBox{
+.activeBox {
     display: inline-block !important;
 }
-.hideBox{
+.hideBox {
     display: none !important;
 }
-.content-sec{
+.content-sec {
     background-color: #fff;
     padding: 72px 0;
 }
@@ -196,7 +195,7 @@ header .btns-group a i{
 }
 .menuLinks ul li.active a,
 .menuLinks ul li a:hover {
-    padding: 10px;
+    padding: 10px 0 10px 10px;
 }
 .menuLinks ul li a span {
     width: 15px;
@@ -212,65 +211,114 @@ header .btns-group a i{
             transition: all .5s;
 }
 .menuLinks ul li.active a,
-.menuLinks ul li a:hover{
+.menuLinks ul li a:hover {
     background-color: #744c7d;
 }
 .menuLinks ul li.active a,
-.menuLinks ul li a:hover{
-    color: #ffffff;
+.menuLinks ul li a:hover {
+    color: #fff;
 }
 .menuLinks ul li.active a span,
-.menuLinks ul li a:hover span{
+.menuLinks ul li a:hover span {
     background-color: #fff !important;
 }
-.menuLinks ul li:first-child a span{
+
+.category-1-label {
     background-color: #cc5b69;
 }
-.menuLinks ul li:nth-child(2) a span{
+.category-2-label {
     background-color: #f7ca81;
 }
-.menuLinks ul li:nth-child(3) a span{
-    background-color: #8a715a;
-}
-.menuLinks ul li:nth-child(4) a span{
-    background-color: #a9a572;
-}
-.menuLinks ul li:nth-child(5) a span{
-    background-color: #000;
-}
-.menuLinks ul li:nth-child(6) a span{
+.category-3-label {
     background-color: #eeec6e;
 }
-.menuLinks ul li:nth-child(7) a span{
-    background-color: #74a3db;
-}
-.menuLinks ul li:nth-child(8) a span{
-    background-color: #626262;
-}
-.menuLinks ul li:nth-child(9) a span{
+.category-4-label {
     background-color: #ab74dc;
 }
-.menuLinks ul li:nth-child(10) a span{
-    background-color: #78dedb;
+.category-5-label {
+    background-color: #8a715a;
 }
-.menuLinks ul li:nth-child(11) a span{
+.category-6-label {
+    background-color: #74a3db;
+}
+.category-7-label {
+    background-color: #ee6ee3;
+}
+.category-8-label {
+    background-color: #626262;
+}
+.category-9-label {
+    background-color: #72a7a9;
+}
+.category-10-label {
+    background-color: #f79a81;
+}
+.category-11-label {
     background-color: #335379;
 }
-.menuLinks ul li:nth-child(12) a span{
+.category-12-label {
+    background-color: #f79a81;
+}
+.category-13-label {
+    background-color: #f7ca81;
+}
+.category-14-label {
+    background-color: #eeec6e;
+}
+.category-15-label {
+    background-color: #ab74dc;
+}
+.category-16-label {
+    background-color: #335379;
+}
+.category-17-label {
+    background-color: #8a715a;
+}
+.category-18-label {
+    background-color: #74a3db;
+}
+.category-19-label {
+    background-color: #ee6ee3;
+}
+.category-20-label {
+    background-color: #002645;
+}
+.category-21-label {
+    background-color: #cc5b69;
+}
+.category-22-label {
     background-color: #7cad6d;
 }
-.menuLinks ul li:nth-child(13) a span{
+.category-23-label {
     background-color: #dc9274;
 }
+.category-24-label {
+    background-color: #626262;
+}
+.category-25-label {
+    background-color: #78dedb;
+}
+.category-26-label {
+    background-color: #72a7a9;
+}
+.category-27-label {
+    background-color: #4f555d;
+}
+.category-28-label {
+    background-color: #dc9274;
+}
+.category-29-label {
+    background-color: #7cad6d;
+}
 
-.forum-block{
+.forum-block {
     display: inline-block;
     width: 100%;
 }
-.forum-block .createBox{
+.forum-block .createBox {
     float: right;
 }
-.createBox span{
+.createBox span {
     color: #5f5f5f;
     font-size: 16px;
     text-transform: capitalize;
@@ -278,7 +326,7 @@ header .btns-group a i{
     vertical-align: middle;
     margin-right: 10px;
 }
-.createBox select{
+.createBox select {
     width: 117px;
     height: 32px !important;
     border-radius: 5px;
@@ -289,20 +337,20 @@ header .btns-group a i{
     font-size: 14px;
     text-transform: capitalize;
     color: #002645;
-    padding: 0px 7px;
+    padding: 0 7px;
     line-height: 32px;
     display: inline-block;
     vertical-align: middle;
 }
-.forumbox{
+.forumbox {
     padding: 30px 0;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #ddd;
 }
-.forumbox,.forumHead,.forum-detail{
+.forumbox,.forumHead,.forum-detail {
     display: inline-block;
     width: 100%;
 }
-.forum-block .forumHead .imgHolder{
+.forum-block .forumHead .imgHolder {
     float: left;
 }
 .forum-block .forumHead .imgHolder img{
