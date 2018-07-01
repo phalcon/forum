@@ -33,6 +33,16 @@ use Phosphorum\Domain\Repositories\PostTrackingRepository;
 class PostTrackingService extends AbstractService
 {
     /**
+     * PostTrackingService constructor.
+     *
+     * @param PostTrackingRepository $repository
+     */
+    public function __construct(PostTrackingRepository $repository)
+    {
+        parent::__construct($repository);
+    }
+
+    /**
      * Gets the message IDs that the user has already read.
      *
      * @param  int|null $userId
