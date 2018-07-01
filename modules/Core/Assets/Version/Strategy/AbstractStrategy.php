@@ -40,7 +40,7 @@ abstract class AbstractStrategy implements StrategyInterface
      *
      * @var bool
      */
-    private $modifyFilename = true;
+    private $modifyFilename = false;
 
     /**
      * The path where resource files are located.
@@ -55,6 +55,23 @@ abstract class AbstractStrategy implements StrategyInterface
      * @var bool
      */
     private $checkModificationTimeAlways = false;
+
+    /**
+     * AbstractStrategy constructor.
+     *
+     * @param Collection $collection
+     * @param bool       $modifyFilename
+     * @param bool       $checkModificationTimeAlways
+     */
+    public function __construct(
+        Collection $collection,
+        bool $modifyFilename = false,
+        bool $checkModificationTimeAlways = false
+    ) {
+        $this->collection = $collection;
+        $this->modifyFilename = $modifyFilename;
+        $this->checkModificationTimeAlways = $checkModificationTimeAlways;
+    }
 
     /**
      * {@inheritdoc}
@@ -103,11 +120,6 @@ abstract class AbstractStrategy implements StrategyInterface
      */
     public function resolve()
     {
-        // Is collection not initialized yet?
-        if ($this->collection == null) {
-            return null;
-        }
-
         /** @var string $filename */
         $filename = $this->collection->getTargetPath();
 
@@ -129,9 +141,8 @@ abstract class AbstractStrategy implements StrategyInterface
         }
 
         $fileHash = $this->getHash($filename);
-
         if ($this->shouldModifyFilename() == false) {
-            return $filename . '?' . $fileHash;
+            return $this->collection->getTargetUri() . '?v' . $fileHash;
         }
 
         $collectionExp = explode('.', $this->collection->getTargetUri());
