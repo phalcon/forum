@@ -121,7 +121,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      * @param  int  $postsPerPage
      * @param  bool $joinReply
      *
-     * @return BuilderInterface|Builder
+     * @return Builder
      */
     protected function createItemBuilder(int $postsPerPage = 40, bool $joinReply = false): BuilderInterface
     {
@@ -139,7 +139,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      *
      * @param  bool $joinReply
      *
-     * @return BuilderInterface|Builder
+     * @return Builder
      */
     protected function createTotalBuilder(bool $joinReply = false): BuilderInterface
     {
@@ -157,7 +157,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      *
      * @param  bool $joinReply
      *
-     * @return BuilderInterface|Builder
+     * @return Builder
      */
     protected function createBuilder(bool $joinReply = false): BuilderInterface
     {

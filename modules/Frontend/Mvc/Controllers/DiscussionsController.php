@@ -139,13 +139,12 @@ class DiscussionsController extends Controller
 
     public function viewAction(string $id, ?string $slug = null): void
     {
-        var_dump([
+        echo json_encode([
             __METHOD__,
             '$id' => $id,
             '$slug' => $slug,
             $this->dispatcher->getParams()
-
-        ]);die;
+        ]);
     }
 
     private function getCanonicalUri(?string $offset = null): string
