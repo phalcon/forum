@@ -18,8 +18,12 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\Controllers;
 
-use Phosphorum\Domain\Services\PostTrackingService;
+use Phosphorum\Domain\Factories\CategoryFactory;
+use Phosphorum\Domain\Factories\PostFactory;
 use Phosphorum\Domain\Factories\PostTrackingFactory;
+use Phosphorum\Domain\Services\CategoryService;
+use Phosphorum\Domain\Services\PostService;
+use Phosphorum\Domain\Services\PostTrackingService;
 
 /**
  * Phosphorum\Frontend\Mvc\Controllers\DiscussionsController
@@ -29,7 +33,16 @@ use Phosphorum\Domain\Factories\PostTrackingFactory;
 class DiscussionsController extends Controller
 {
     /** @var PostTrackingService */
-    protected $postService;
+    private $postTrackingService;
+
+    /** @var PostService */
+    private $postService;
+
+    /** @var CategoryService */
+    private $categoryService;
+
+    /** @var null|int */
+    private $userId = null;
 
     /**
      * {@inheritdoc}
@@ -40,48 +53,109 @@ class DiscussionsController extends Controller
     {
         parent::initialize();
 
-        $this->postService = $this->getDI()
+        $this->postTrackingService = $this->getDI()
             ->get(PostTrackingFactory::class)
             ->createService();
+
+        $this->postService = $this->getDI()
+            ->get(PostFactory::class)
+            ->createService();
+
+        $this->categoryService = $this->getDI()
+            ->get(CategoryFactory::class)
+            ->createService();
+
+        if ($this->session->has('identity')) {
+            $this->userId = (int) $this->session->get('identity');
+        }
     }
 
-    /**
-     * Shows latest posts using an order clause
-     *
-     * @param  string $order
-     * @param  int    $offset
-     *
-     * @return void
-     */
-    public function indexAction(string $order = null, int $offset = 0): void
+    public function hotAction(?string $offset = null): void
     {
-        $this->appendTitle($order);
-
-        $userId = $this->session->get('identity');
+        $this->tag->setTitle('Hot Discussions');
 
         $this->view->setVars([
-            'canonical' => '',
-            'readposts' => $this->postService->getReadPostsIds($userId),
+            'canonical' => $this->getCanonicalUri($offset),
+            'user_id' => $this->userId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'posts' => $this->postService->getPopularPosts(),
+            'categories' => $this->categoryService->getOrderedList(),
         ]);
     }
 
-    private function appendTitle(string $order = null): void
+    public function myAction(?string $offset = null): void
     {
-        switch ($order) {
-            case 'hot':
-                $this->tag->setTitle('Hot Discussions');
-                break;
-            case 'my':
-                $this->tag->setTitle('My Discussions');
-                break;
-            case 'unanswered':
-                $this->tag->setTitle('Unanswered Discussions');
-                break;
-            case 'answers':
-                $this->tag->setTitle('My Answers');
-                break;
-            default:
-                $this->tag->setTitle('Discussions');
-        }
+        // todo: Prevent to see by unauthorized users
+        $this->tag->setTitle('My Discussions');
+
+        $this->view->setVars([
+            'canonical' => $this->getCanonicalUri($offset),
+            'user_id' => $this->userId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'posts' => $this->postService->getPopularPosts(), // todo
+            'categories' => $this->categoryService->getOrderedList(),
+        ]);
+    }
+
+    public function unansweredAction(?string $offset = null): void
+    {
+        $this->tag->setTitle('Unanswered Discussions');
+
+        $this->view->setVars([
+            'canonical' => $this->getCanonicalUri($offset),
+            'user_id' => $this->userId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'posts' => $this->postService->getPopularPosts(), // todo
+            'categories' => $this->categoryService->getOrderedList(),
+        ]);
+    }
+
+    public function answersAction(?string $offset = null): void
+    {
+        // todo: Prevent to see by unauthorized users
+        $this->tag->setTitle('My Answers');
+
+        $this->view->setVars([
+            'canonical' => $this->getCanonicalUri($offset),
+            'user_id' => $this->userId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'posts' => $this->postService->getPopularPosts(), // todo
+            'categories' => $this->categoryService->getOrderedList(),
+        ]);
+    }
+
+    public function newAction(?string $offset = null): void
+    {
+        $this->tag->setTitle('All Discussions');
+
+        $this->view->setVars([
+            'canonical' => $this->getCanonicalUri($offset),
+            'user_id' => $this->userId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'posts' => $this->postService->getPopularPosts(), // todo
+            'categories' => $this->categoryService->getOrderedList(),
+        ]);
+    }
+
+    public function viewAction(string $id, ?string $slug = null): void
+    {
+        var_dump([
+            __METHOD__,
+            '$id' => $id,
+            '$slug' => $slug,
+            $this->dispatcher->getParams()
+
+        ]);die;
+    }
+
+    private function getCanonicalUri(?string $offset = null): string
+    {
+        return $this->url->get(
+            [
+                'for'    => $offset ? 'discussions-order-offset' : 'discussions-order',
+                'action' => $this->dispatcher->getActionName(),
+                'offset' => $offset,
+            ]
+        );
     }
 }
