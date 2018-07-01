@@ -11,6 +11,37 @@
         </div>
     </div>
     <div class="clearfix"></div>
+    {%- if posts|length -%}
+        {%- for topic in posts -%}
+            <div class="forumbox database">
+                <div class="forumHead">
+                    <div class="imgHolder">
+                        <img src="img/user1.png" class="img-fluid" alt="">
+                    </div>
+                    <div class="headRight">
+                        <h4 itemprop="name">
+                            {{- link_to('discussion/' ~ topic.p.getId() ~ '/' ~ topic.p.getSlug(), topic.p.getTitle()|e) -}}
+                        </h4>
+                        <ul>
+                            <li><a href="#"><span></span>Database</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-calendar-alt"></i> May 17</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-time"></i> 7d ago</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-comment"></i> 68 replies</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-eye"></i> 2934 views</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {%- endfor -%}
+    {%- else -%}
+        <div class="jumbotron" style="margin: 1em 0">
+            <h1 class="display-4">There! Caught up.</h1>
+            <p class="lead">
+                There are no new posts here. Set your mind to something new.
+            </p>
+        </div>
+    {%- endif -%}
+
     <div class="forumbox database">
         <div class="forumHead">
             <div class="imgHolder">

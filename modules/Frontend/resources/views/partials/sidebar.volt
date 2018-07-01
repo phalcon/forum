@@ -24,19 +24,17 @@
         </div>
         <div class="menuLinks">
             <ul>
-                <li class="active"><a href="javascript:void(0);" data-tag="begin"><span></span> Beginners</a></li>
-                <li><a href="javascript:void(0);" data-tag="orm"><span></span> ORM</a></li>
-                <li><a href="javascript:void(0);" data-tag="general"><span></span> General</a></li>
-                <li><a href="javascript:void(0);" data-tag="mvc"><span></span> MVC</a></li>
-                <li><a href="javascript:void(0);" data-tag="database"><span></span> Database</a></li>
-                <li><a href="javascript:void(0);" data-tag="volt"><span></span> Volt</a></li>
-                <li><a href="javascript:void(0);" data-tag="install"><span></span> Installation</a></li>
-                <li><a href="javascript:void(0);" data-tag="cache"><span></span> Cache</a></li>
-                <li><a href="javascript:void(0);" data-tag="offtopic"><span></span> Offtopic</a></li>
-                <li><a href="javascript:void(0);" data-tag="config"><span></span> Configuration</a></li>
-                <li><a href="javascript:void(0);" data-tag="security"><span></span> Security</a></li>
-                <li><a href="javascript:void(0);" data-tag="micro"><span></span> Micro</a></li>
-                <li><a href="javascript:void(0);" data-tag="odm"><span></span> ODM</a></li>
+                {%- for category in categories -%}
+                    <li>
+                        {%- set cssClass = 'category-' ~ category.getId() ~ '-label'  -%}
+
+                        {{- link_to(
+                            'category/' ~ category.getId() ~ '/' ~ category.getSlug(),
+                            '<span class="' ~ cssClass ~ '"></span>' ~ category.getName(),
+                            'data-tag': category.getSlug()
+                        ) -}}
+                    </li>
+                {%- endfor -%}
             </ul>
         </div>
     </div>

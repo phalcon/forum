@@ -4,7 +4,7 @@
     <section class="content-sec">
         <div class="container">
             <div class="row">
-                {% include 'partials/sidebar.volt' %}
+                {% include 'partials/sidebar' with ['categories': categories] %}
 
                 {{ content() }}
             </div>
