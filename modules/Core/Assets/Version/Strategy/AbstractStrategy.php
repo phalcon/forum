@@ -50,27 +50,28 @@ abstract class AbstractStrategy implements StrategyInterface
     protected $baseResourcePath;
 
     /**
-     * If the strategy shoul check modification time in each request.
+     * If the strategy should check modification time in each request.
      *
      * @var bool
      */
-    private $checkModificationTimeAlways = false;
+    private $checkMTimeAlways = false;
 
     /**
      * AbstractStrategy constructor.
      *
      * @param Collection $collection
      * @param bool       $modifyFilename
-     * @param bool       $checkModificationTimeAlways
+     * @param bool       $checkMTimeAlways
      */
     public function __construct(
         Collection $collection,
         bool $modifyFilename = false,
-        bool $checkModificationTimeAlways = false
+        bool $checkMTimeAlways = false
     ) {
-        $this->collection = $collection;
         $this->modifyFilename = $modifyFilename;
-        $this->checkModificationTimeAlways = $checkModificationTimeAlways;
+        $this->checkMTimeAlways = $checkMTimeAlways;
+
+        $this->setCollection($collection);
     }
 
     /**
@@ -102,7 +103,7 @@ abstract class AbstractStrategy implements StrategyInterface
      */
     public function checkModificationTimeAlways(bool $check): void
     {
-        $this->checkModificationTimeAlways = $check;
+        $this->checkMTimeAlways = $check;
     }
 
     /**
@@ -127,7 +128,7 @@ abstract class AbstractStrategy implements StrategyInterface
             return null;
         }
 
-        if ($this->checkModificationTimeAlways) {
+        if ($this->checkMTimeAlways == true) {
             $this->attemptUpdateBaseResourcePath();
 
             if ($this->isResourcePathPresent() == false) {
@@ -232,10 +233,10 @@ abstract class AbstractStrategy implements StrategyInterface
     {
         $path = realpath($path);
 
-        if ($path === false || file_exists($path) == false || is_dir($path) == false) {
+        if ($path === false || file_exists($path) == false) {
             return;
         }
 
-        $this->baseResourcePath = $path;
+        $this->baseResourcePath = is_dir($path) ? $path : dirname($path);
     }
 }
