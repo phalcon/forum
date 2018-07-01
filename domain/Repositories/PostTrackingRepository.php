@@ -30,4 +30,13 @@ use Phosphorum\Domain\Entities\PostTrackingEntity;
  */
 class PostTrackingRepository extends AbstractRepository
 {
+    /**
+     * PostRepository constructor.
+     *
+     * @param PostTrackingEntity $entity
+     */
+    public function __construct(PostTrackingEntity $entity)
+    {
+        parent::__construct($entity);
+    }
 }
