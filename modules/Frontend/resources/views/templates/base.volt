@@ -13,7 +13,10 @@
         {%  set twitter_name = "" %}
     {%  endif %}
 
-    {%  include "include/base-meta" with ['application_name': config.application.name] %}
+    {%  include "include/base-meta" with [
+        'application_name': config.application.name,
+        'base_url': config.application.url
+    ] %}
 
     {%  if noindex is defined and noindex is true %}
         <meta name="robots" content="noindex">
@@ -31,17 +34,20 @@
         %}
     {%  endif %}
 
-    {%  if not(canonical is empty) and not(post is empty) %}
+    {%  if not(post is empty) %}
         {# todo: author_picture = gravatar(post.user.email) #}
-        {%  set canonical_url = config.application.url ~ canonical,
-                author_picture = '',
-                author_picture_alt = post.user.name
+        {%  set author_picture = '',
+            author_picture_alt = post.user.name
         %}
     {%  else %}
-        {%  set canonical_url = config.application.url,
-                author_picture = config.application.url ~ '/img/logo.png',
-                author_picture_alt = config.application.name
+        {%  set author_picture = config.application.url ~ '/img/logo.png',
+            author_picture_alt = config.application.name
         %}
+    {%  endif %}
+
+    {%  set canonical_url = config.application.url %}
+    {%  if not(canonical is empty) %}
+        {%  set canonical_url = config.application.url ~ canonical %}
     {%  endif %}
 
     {%  block seo %}

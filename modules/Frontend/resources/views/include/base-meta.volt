@@ -6,3 +6,6 @@
 <meta name="application-name" content="{{ application_name }}">
 
 <meta http-equiv="x-dns-prefetch-control" content="off">
+
+<base href="{{ base_url }}">
+
