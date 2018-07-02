@@ -222,7 +222,9 @@ header .btns-group a i {
 .menuLinks ul li a:hover span {
     background-color: #fff !important;
 }
-
+.category-label {
+    background-color: #002645;
+}
 .category-1-label {
     background-color: #cc5b69;
 }
@@ -353,49 +355,60 @@ header .btns-group a i {
 .forum-block .forumHead .imgHolder {
     float: left;
 }
-.forum-block .forumHead .imgHolder img{
+.forum-block .forumHead .imgHolder img {
     width: 60px;
     height: 60px;
     object-fit: cover;
     border-radius: 50%;
 }
-.forum-block .forumHead .headRight{
+.forum-block .forumHead .headRight {
     overflow: hidden;
     padding-left: 20px;
 }
-.forum-block .forumHead .headRight h4{
-    font-size: 24px;
-    float: left;
+.forum-block .forumHead .headRight .discussion-head {
+    display: inline-block;
+    width: 100%;
     margin-top: 5px;
-    margin-right: 20px;
+}
+.forum-block .forumHead .headRight .discussion-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #626262;
 }
 .forum-block .forumHead .headRight ul {
-    margin-top: 20px;
     display: inline-block;
+    width: 100%;
+    margin-top: 5px;
 }
 .form-detail {
     padding-left: 15px;
 }
-.forum-block .forumHead .headRight ul li{
+.forum-block .forumHead .headRight ul li {
     float: left;
     margin-right: 30px;
 }
-.forum-block .forumHead .headRight ul li:last-child{
+.forum-block .forumHead .headRight ul li:last-child {
     margin-right: 0;
 }
-.forum-block .forumHead .headRight ul li a{
+.forum-block .forumHead .headRight ul li time,
+.forum-block .forumHead .headRight ul li a {
     font-size: 12px;
     font-family: 'Titillium Web', sans-serif;
     text-transform: capitalize;
     color: #878787;
 }
-.forum-block .forumHead .headRight ul li a i{
-    font-size: 16px !important;
+.forum-block .forumHead .headRight ul li time i,
+.forum-block .forumHead .headRight ul li a i {
+    font-size: 15px !important;
     margin-right: 8px;
     vertical-align: middle;
     color: #60a781;
 }
-.forum-block .forumHead .headRight ul li a span{
+.forum-block .forumHead .headRight ul li a span {
     width: 15px;
     height: 15px;
     border-radius: 3px;
@@ -403,10 +416,10 @@ header .btns-group a i {
     vertical-align: sub;
     margin-right: 8px;
 }
-.form-detail .imgHolder{
+.form-detail .imgHolder {
     float: left;
 }
-.form-detail .imgHolder img{
+.form-detail .imgHolder img {
     height: 26px;
     width: 26px;
     object-fit: cover;
@@ -414,45 +427,20 @@ header .btns-group a i {
     display: block;
     margin-top: 10px;
 }
-.form-detail .form-detail-p{
+.form-detail .form-detail-p {
     overflow: hidden;
     padding-left: 38px;
 }
-.form-detail .form-detail-p p{
+.form-detail .form-detail-p p {
     font-size: 14px;
     color: #878787;
     font-family: 'Titillium Web', sans-serif;
     line-height: 1.2;
 }
-.database .headRight ul li:first-child a,.database .forumHead .headRight h4{
-    color: #626262;
-}
-.database .headRight ul li a span{
-    background-color: #626262;
-}
-.begin .headRight ul li:first-child a,.begin .forumHead .headRight h4{
-    color: #cc5b69;
-}
-.begin .headRight ul li a span{
-    background-color: #cc5b69;
-}
-.install .headRight ul li:first-child a,.install .forumHead .headRight h4{
-    color: #74a3db;
-}
-.install .headRight ul li a span{
-    background-color: #74a3db;
-}
-.security .headRight ul li:first-child a,.security .forumHead .headRight h4{
-    color: #335379;
-}
-.security .headRight ul li a span{
-    background-color: #335379;
-}
-.forum-block .forumbox.security{
+.forum-block .forumbox.security {
     border-bottom: none;
 }
-
-.pageNav{
+.pageNav {
     display: table;
     margin: 30px auto 0;
 }
