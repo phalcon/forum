@@ -13,18 +13,25 @@
     <div class="clearfix"></div>
     {%- if posts|length -%}
         {%- for topic in posts -%}
-            <div class="forumbox database">
+            <div class="forumbox">
                 <div class="forumHead">
                     <div class="imgHolder">
                         <img src="img/user1.png" class="img-fluid" alt="">
                     </div>
                     <div class="headRight">
-                        <h4 itemprop="name">
-                            {{- link_to('discussion/' ~ topic.p.getId() ~ '/' ~ topic.p.getSlug(), topic.p.getTitle()|e) -}}
-                        </h4>
+                        <a href="/discussion/{{ topic.p.getId() }}/{{ topic.p.getSlug() }}" class="discussion-head">
+                            <h3 class="discussion-title" itemprop="name">
+                                {{ topic.p.getTitle()|e }}
+                            </h3>
+                        </a>
                         <ul>
-                            <li><a href="#"><span></span>Database</a></li>
-                            <li><a href="#"><i class="zmdi zmdi-calendar-alt"></i> May 17</a></li>
+                            {%- set cssClass = 'category-' ~ topic.p.getCategoryId() ~ '-label'  -%}
+                            <li><a href="#"><span class="category-label {{ cssClass }}"></span>{{ topic.p.category.getName() }}</a></li>
+                            <li>
+                                <time itemprop="dateCreated" datetime="{{ date('c', topic.p.getCreatedAt()) }}">
+                                    <i class="zmdi zmdi-calendar-alt"></i> May 17
+                                </time>
+                            </li>
                             <li><a href="#"><i class="zmdi zmdi-time"></i> 7d ago</a></li>
                             <li><a href="#"><i class="zmdi zmdi-comment"></i> 68 replies</a></li>
                             <li><a href="#"><i class="zmdi zmdi-eye"></i> 2934 views</a></li>
