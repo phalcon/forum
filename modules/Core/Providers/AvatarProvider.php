@@ -16,7 +16,7 @@ declare(strict_types=1);
  +------------------------------------------------------------------------+
 */
 
-namespace Phosphorum\Frontend\Providers;
+namespace Phosphorum\Core\Providers;
 
 use Closure;
 use Phalcon\Config;
@@ -26,9 +26,9 @@ use Phalcon\Avatar\Avatarable;
 use Phalcon\Di\ServiceProviderInterface;
 
 /**
- * Phosphorum\Frontend\Providers\AvatarProvider
+ * Phosphorum\Core\Providers\AvatarProvider
  *
- * @package Phosphorum\Frontend\Providers
+ * @package Phosphorum\Core\Providers
  */
 class AvatarProvider implements ServiceProviderInterface
 {

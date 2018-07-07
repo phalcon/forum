@@ -89,6 +89,5 @@ class Module extends AbstractModule
 
         $this->serviceRegistrator->registerService(new Providers\ReCaptchaProvider());
         $this->serviceRegistrator->registerService(new Providers\BreadcrumbsProvider());
-        $this->serviceRegistrator->registerService(new Providers\AvatarProvider());
     }
 }
