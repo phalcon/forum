@@ -6,16 +6,16 @@
         margin-top: -4px;
         height: 37px;
     }
-    .forum-block .forumHead .headRight h4 {
+    .forum-block .topic-head .headRight h4 {
         font-size: 20px;
     }
-    .forum-block .forumHead .headRight ul li {
+    .forum-block .topic-head .headRight ul li {
         margin-right: 15px;
     }
-    .forum-block .forumHead .headRight ul li a i,.forum-block .forumHead .headRight ul li a span{
+    .forum-block .topic-head .headRight ul li a i,.forum-block .topic-head .headRight ul li a span{
         margin-right: 5px;
     }
-    .forum-block .forumHead .headRight ul {
+    .forum-block .topic-head .headRight ul {
         margin-top: 12px;
     }
 }
@@ -40,7 +40,7 @@
     header .searchBar{
         margin-top: 15px;
     }
-    .forum-block .forumHead .headRight ul {
+    .forum-block .topic-head .headRight ul {
         margin-top: 10px;
         margin-bottom: 10px;
     }
@@ -130,22 +130,22 @@
     header .social-box{
         width: auto;
     }
-    .forum-block .forumHead .headRight ul li {
+    .forum-block .topic-head .headRight ul li {
         margin-bottom: 10px;
     }
-    .forum-block .forumHead .headRight ul{
+    .forum-block .topic-head .headRight ul{
         margin-bottom: 0;
     }
     .forum-block {
         margin-top: 30px;
     }
-    .forum-block .forumHead .headRight{
+    .forum-block .topic-head .headRight{
         padding-left: 10px;
     }
     .form-detail .form-detail-p{
         padding-left: 24px;
     }
-    .forum-block .forumHead .imgHolder img{
+    .forum-block .topic-head .imgHolder img{
         width: 50px;
         height: 50px;
     }

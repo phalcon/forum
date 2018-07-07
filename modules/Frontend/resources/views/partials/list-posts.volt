@@ -11,46 +11,47 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    {%- if posts|length -%}
-        {%- for topic in posts -%}
-            <div class="forumbox">
-                <div class="forumHead">
-                    <div class="imgHolder">
-                        <a href="{{ url("user/" ~ topic.p.user.getId() ~ "/" ~ topic.p.user.getLogin()) }}" title="{{ topic.p.user.getLogin() }}">
-                            {{ image(gravatar(topic.p.user.getEmail()), 'class': 'img-fluid', 'alt': topic.p.user.getName()) }}
-                        </a>
-                    </div>
-                    <div class="headRight">
-                        <a href="/discussion/{{ topic.p.getId() }}/{{ topic.p.getSlug() }}" class="discussion-head">
-                            <h3 class="discussion-title" itemprop="name">
-                                {{ topic.p.getTitle()|e }}
-                            </h3>
-                        </a>
-                        <ul>
-                            {%- set cssClass = 'category-' ~ topic.p.getCategoryId() ~ '-label'  -%}
-                            <li><a href="#"><span class="category-label {{ cssClass }}"></span>{{ topic.p.category.getName() }}</a></li>
-                            <li>
-                                <time itemprop="dateCreated" datetime="{{ date('c', topic.p.getCreatedAt()) }}">
-                                    <i class="zmdi zmdi-calendar-alt"></i> May 17
-                                </time>
-                            </li>
-                            <li><a href="#"><i class="zmdi zmdi-time"></i> 7d ago</a></li>
-                            <li><a href="#"><i class="zmdi zmdi-comment"></i> 68 replies</a></li>
-                            <li><a href="#"><i class="zmdi zmdi-eye"></i> 2934 views</a></li>
-                        </ul>
+    <div class="topic-list">
+        {%- if posts|length -%}
+            {%- for topic in posts -%}
+                <div class="topic-item">
+                    <div class="topic-head">
+                        <div class="imgHolder">
+                            <a href="{{ url("user/" ~ topic.p.user.getId() ~ "/" ~ topic.p.user.getLogin()) }}" title="{{ topic.p.user.getLogin() }}">
+                                {{ image(gravatar(topic.p.user.getEmail()), 'class': 'img-fluid', 'alt': topic.p.user.getName()) }}
+                            </a>
+                        </div>
+                        <div class="headRight">
+                            <a href="/discussion/{{ topic.p.getId() }}/{{ topic.p.getSlug() }}" class="discussion-head">
+                                <h3 class="discussion-title" itemprop="name">
+                                    {{ topic.p.getTitle()|e }}
+                                </h3>
+                            </a>
+                            <ul>
+                                {%- set cssClass = 'category-' ~ topic.p.getCategoryId() ~ '-label'  -%}
+                                <li><a href="#"><span class="category-label {{ cssClass }}"></span>{{ topic.p.category.getName() }}</a></li>
+                                <li>
+                                    <time itemprop="dateCreated" datetime="{{ date('c', topic.p.getCreatedAt()) }}">
+                                        <i class="zmdi zmdi-calendar-alt"></i> May 17
+                                    </time>
+                                </li>
+                                <li><a href="#"><i class="zmdi zmdi-time"></i> 7d ago</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-comment"></i> 68 replies</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-eye"></i> 2934 views</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+            {%- endfor -%}
+        {%- else -%}
+            <div class="jumbotron" style="margin: 1em 0">
+                <h1 class="display-4">There! Caught up.</h1>
+                <p class="lead">
+                    There are no new posts here. Set your mind to something new.
+                </p>
             </div>
-        {%- endfor -%}
-    {%- else -%}
-        <div class="jumbotron" style="margin: 1em 0">
-            <h1 class="display-4">There! Caught up.</h1>
-            <p class="lead">
-                There are no new posts here. Set your mind to something new.
-            </p>
-        </div>
-    {%- endif -%}
-
+        {%- endif -%}
+    </div>
     <div class="clearfix"></div>
     <div class="pageNav">
         <ul class="pagination">
