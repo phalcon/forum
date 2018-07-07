@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Providers;
 
+use Closure;
 use Phalcon\Config;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
@@ -37,15 +38,26 @@ class ReCaptchaProvider implements ServiceProviderInterface
      */
     public function register(DiInterface $container)
     {
-        $service = function () use ($container) {
-            $reCaptcha = new ReCaptchaManager(
-                $container->get(Config::class)->get('recaptcha', new Config()),
-                $container->get('tag')
-            );
-
-            return $reCaptcha;
-        };
+        $service = $this->createService($container);
 
         $container->setShared('recaptcha', $service);
+    }
+
+    protected function createService(DiInterface $container): Closure
+    {
+        return function () use ($container) {
+            /** @var Config $config */
+            $config = $container->get(Config::class);
+
+            $reCaptchaConfig = $config->get('recaptcha');
+            if ($reCaptchaConfig instanceof Config == false) {
+                $reCaptchaConfig = new Config();
+            }
+
+            return new ReCaptchaManager(
+                $reCaptchaConfig,
+                $container->get('tag')
+            );
+        };
     }
 }
