@@ -77,6 +77,13 @@ class PostService extends AbstractService implements InjectionAwareInterface
         return $itemBuilder->getQuery()->execute();
     }
 
+    /**
+     * Adds into the query condition for selecting post items with their replies.
+     *
+     * @param  BuilderInterface $postBuilder
+     *
+     * @return PostService
+     */
     protected function withReplies(BuilderInterface $postBuilder): self
     {
         $postBuilder
@@ -91,6 +98,13 @@ class PostService extends AbstractService implements InjectionAwareInterface
         return $this;
     }
 
+    /**
+     * Adds into the query condition for selecting not deleted items.
+     *
+     * @param  BuilderInterface $postBuilder
+     *
+     * @return PostService
+     */
     protected function withoutTrash(BuilderInterface $postBuilder): self
     {
         $postBuilder->andWhere('p.deleted = 0');
