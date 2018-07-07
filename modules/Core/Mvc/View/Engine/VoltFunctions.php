@@ -61,7 +61,7 @@ class VoltFunctions implements InjectionAwareInterface
             case 'number_format':
                 return $name . '(' . $arguments . ')';
             case 'gravatar':
-                return '$this->getDI()->get("gravatar")->getAvatar(' . $arguments . ')';
+                return '$this->getDI()->get(\Phalcon\Avatar\Avatarable::class)->getAvatar(' . $arguments . ')';
             case 'forum_version':
                 return 'str_replace(".", "", ' . Version::class . '::get())';
         }

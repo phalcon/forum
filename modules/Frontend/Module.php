@@ -22,10 +22,7 @@ use Phalcon\DiInterface;
 use Phalcon\Events\ManagerInterface;
 use Phosphorum\Core\Modules\AbstractModule;
 use Phosphorum\Frontend\Events\ApplicationListener;
-use Phosphorum\Frontend\Providers\BreadcrumbsProvider;
-use Phosphorum\Frontend\Providers\ReCaptchaProvider;
-use Phosphorum\Frontend\Providers\RouterProvider;
-use Phosphorum\Frontend\Providers\ViewProvider;
+use Phosphorum\Frontend\Providers;
 
 /**
  * Phosphorum\Frontend\Module
@@ -66,7 +63,7 @@ class Module extends AbstractModule
     protected function registerBaseServices(): void
     {
         $this->serviceRegistrator->registerService(
-            new RouterProvider($this->getName(), $this->getDefaultNamespace())
+            new Providers\RouterProvider($this->getName(), $this->getDefaultNamespace())
         );
     }
 
@@ -87,15 +84,11 @@ class Module extends AbstractModule
         parent::registerServices($container);
 
         $this->serviceRegistrator->registerService(
-            new ViewProvider($this->getPath('resources/views'))
+            new Providers\ViewProvider($this->getPath('resources/views'))
         );
 
-        $this->serviceRegistrator->registerService(
-            new ReCaptchaProvider()
-        );
-
-        $this->serviceRegistrator->registerService(
-            new BreadcrumbsProvider()
-        );
+        $this->serviceRegistrator->registerService(new Providers\ReCaptchaProvider());
+        $this->serviceRegistrator->registerService(new Providers\BreadcrumbsProvider());
+        $this->serviceRegistrator->registerService(new Providers\AvatarProvider());
     }
 }
