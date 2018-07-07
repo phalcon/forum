@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [3.5.1] - 2018-07-07
 ### Added
 - Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
 - Added `Install` task and `check` action.
@@ -229,7 +230,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed CSRF check for subscription, voting, editing, user settings, etc
 - Fixed tests
 
-[Unreleased]: https://github.com/phalcon/forum/compare/v3.5.0...HEAD
+[Unreleased]: https://github.com/phalcon/forum/compare/v3.5.1...HEAD
+[3.5.1]: https://github.com/phalcon/forum/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/phalcon/forum/compare/v3.4.1...v3.5.0
 [3.4.1]: https://github.com/phalcon/forum/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/phalcon/forum/compare/v3.3.2...v3.4.0
