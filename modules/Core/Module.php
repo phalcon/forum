@@ -71,6 +71,7 @@ class Module extends AbstractModule
         $this->serviceRegistrator->registerService(new Providers\AvatarProvider());
         $this->serviceRegistrator->registerService(new Providers\VoltProvider());
         $this->serviceRegistrator->registerService(new Providers\ViewProvider());
+        $this->serviceRegistrator->registerService(new Providers\MarkdownProvider());
 
         $this->serviceRegistrator->registerService(new Providers\UrlResolverProvider());
         $this->serviceRegistrator->registerService(new Providers\DispatcherProvider());
