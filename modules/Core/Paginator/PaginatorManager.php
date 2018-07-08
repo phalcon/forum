@@ -96,4 +96,14 @@ final class PaginatorManager implements InjectionAwareInterface
             'urlMask' => $urlMask,
         ]);
     }
+
+    /**
+     * Gets limit posts per page.
+     *
+     * @return int
+     */
+    public function getPostsPerPageLimit(): int
+    {
+        return $this->postLimit;
+    }
 }
