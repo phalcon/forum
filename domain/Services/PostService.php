@@ -59,12 +59,12 @@ class PostService extends AbstractService implements InjectionAwareInterface
     /**
      * Get most popular posts.
      *
-     * @param  int      $postsPerPage
      * @param  int|null $offset
+     * @param  int      $postsPerPage
      *
      * @return Complex
      */
-    public function getPopularPosts(int $postsPerPage = 40, ?int $offset = null): Complex
+    public function getPopularPosts(?int $offset = null, int $postsPerPage = 20): Complex
     {
         $itemBuilder = $this->createItemBuilder($postsPerPage);
         $itemBuilder->orderBy('p.sticked DESC, p.modifiedAt DESC');
@@ -75,6 +75,23 @@ class PostService extends AbstractService implements InjectionAwareInterface
             ->applyOffset($itemBuilder, $offset);
 
         return $itemBuilder->getQuery()->execute();
+    }
+
+    /**
+     * Prepares the total builder to be executed in each list of posts.
+     *
+     * The returned builder will be used as base in the search, tagged list and index lists.
+     *
+     * @param  bool $joinReply
+     *
+     * @return Builder
+     */
+    public function getPaginatorQueryBuilder(bool $joinReply = false): BuilderInterface
+    {
+        $totalBuilder = $this->createBuilder($joinReply);
+
+        return $totalBuilder
+            ->columns('COUNT(*) AS count');
     }
 
     /**
@@ -137,7 +154,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      *
      * @return Builder
      */
-    protected function createItemBuilder(int $postsPerPage = 40, bool $joinReply = false): BuilderInterface
+    protected function createItemBuilder(int $postsPerPage = 20, bool $joinReply = false): BuilderInterface
     {
         $itemBuilder = $this->createBuilder($joinReply);
 
@@ -147,27 +164,10 @@ class PostService extends AbstractService implements InjectionAwareInterface
     }
 
     /**
-     * Prepares the total builder to be executed in each list of posts.
-     *
-     * The returned builder will be used as base in the search, tagged list and index lists.
-     *
-     * @param  bool $joinReply
-     *
-     * @return Builder
-     */
-    protected function createTotalBuilder(bool $joinReply = false): BuilderInterface
-    {
-        $totalBuilder = $this->createBuilder($joinReply);
-
-        return $totalBuilder
-            ->columns('COUNT(*) AS count');
-    }
-
-    /**
      * Create internal query builder.
      *
      * @see PostService::createItemBuilder
-     * @see PostService::createTotalBuilder
+     * @see PostService::getPaginatorQueryBuilder
      *
      * @param  bool $joinReply
      *
