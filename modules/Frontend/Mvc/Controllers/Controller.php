@@ -28,13 +28,12 @@ use Phalcon\Assets\Filters\Jsmin;
  *
  * @property \Phalcon\Breadcrumbs $breadcrumbs
  * @property \Phalcon\Session\Adapter $session
+ * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
  *
  * @package Phosphorum\Frontend\Mvc\Controllers
  */
 class Controller extends ControllerBase
 {
-    const POSTS_PER_PAGE = 40;
-
     public function onConstruct(): void
     {
         /** @var Environment $env */
@@ -97,6 +96,5 @@ class Controller extends ControllerBase
         }
 
         $this->breadcrumbs->add('Home', '/');
-        $this->view->setVar('limitPost', self::POSTS_PER_PAGE);
     }
 }

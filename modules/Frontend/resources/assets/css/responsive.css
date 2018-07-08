@@ -50,7 +50,7 @@
     .leftMain ul li span {
         width: 25px;
     }
-    .pageNav ul li {
+    .pagination-bar ul li {
         margin: 0 2px;
     }
     .breadcrumbs {
@@ -304,7 +304,8 @@
     header .btns-group a{
         margin-right: 15px;
     }
-    .pageNav ul li a {
+    .pagination-bar ul li a,
+    .pagination-bar ul li span {
         font-size: 14px;
         width: 20px;
         height: 20px;

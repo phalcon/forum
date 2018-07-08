@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\Controllers;
 
+use Phosphorum\Core\Paginator\PaginatorManager;
 use Phosphorum\Domain\Factories\CategoryFactory;
 use Phosphorum\Domain\Factories\PostFactory;
 use Phosphorum\Domain\Factories\PostTrackingFactory;
@@ -40,6 +41,9 @@ class DiscussionsController extends Controller
 
     /** @var CategoryService */
     private $categoryService;
+
+    /** @var PaginatorManager */
+    private $paginatorManager;
 
     /** @var null|int */
     private $userId = null;
@@ -65,6 +69,8 @@ class DiscussionsController extends Controller
             ->get(CategoryFactory::class)
             ->createService();
 
+        $this->paginatorManager = $this->getDI()->get(PaginatorManager::class);
+
         if ($this->session->has('identity')) {
             $this->userId = (int) $this->session->get('identity');
         }
@@ -74,12 +80,19 @@ class DiscussionsController extends Controller
     {
         $this->tag->setTitle('Hot Discussions');
 
+        $offset = $this->getPostsOffset($offset);
+
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
             'user_id' => $this->userId,
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(),
             'categories' => $this->categoryService->getOrderedList(),
+            'pager' => $this->paginatorManager->createPager(
+                $this->postService->getPaginatorQueryBuilder(),
+                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
+                $this->getCurrentPage()
+            ),
         ]);
     }
 
@@ -88,12 +101,19 @@ class DiscussionsController extends Controller
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Discussions');
 
+        $offset = $this->getPostsOffset($offset);
+
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
             'user_id' => $this->userId,
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
+            'pager' => $this->paginatorManager->createPager(
+                $this->postService->getPaginatorQueryBuilder(),
+                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
+                $this->getCurrentPage()
+            ),
         ]);
     }
 
@@ -101,12 +121,19 @@ class DiscussionsController extends Controller
     {
         $this->tag->setTitle('Unanswered Discussions');
 
+        $offset = $this->getPostsOffset($offset);
+
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
             'user_id' => $this->userId,
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
+            'pager' => $this->paginatorManager->createPager(
+                $this->postService->getPaginatorQueryBuilder(),
+                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
+                $this->getCurrentPage()
+            ),
         ]);
     }
 
@@ -115,12 +142,19 @@ class DiscussionsController extends Controller
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Answers');
 
+        $offset = $this->getPostsOffset($offset);
+
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
             'user_id' => $this->userId,
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
+            'pager' => $this->paginatorManager->createPager(
+                $this->postService->getPaginatorQueryBuilder(),
+                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
+                $this->getCurrentPage()
+            ),
         ]);
     }
 
@@ -128,12 +162,19 @@ class DiscussionsController extends Controller
     {
         $this->tag->setTitle('All Discussions');
 
+        $offset = $this->getPostsOffset($offset);
+
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
             'user_id' => $this->userId,
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
+            'pager' => $this->paginatorManager->createPager(
+                $this->postService->getPaginatorQueryBuilder(),
+                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
+                $this->getCurrentPage()
+            ),
         ]);
     }
 
@@ -147,7 +188,7 @@ class DiscussionsController extends Controller
         ]);
     }
 
-    private function getCanonicalUri(?string $offset = null): string
+    private function getCanonicalUri(?int $offset = null): string
     {
         return $this->url->get(
             [
@@ -156,5 +197,27 @@ class DiscussionsController extends Controller
                 'offset' => $offset,
             ]
         );
+    }
+
+    private function getCurrentPage(): int
+    {
+        $currentPage = abs($this->request->getQuery('page', 'int'));
+
+        if ($currentPage == 0) {
+            $currentPage = 1;
+        }
+
+        return $currentPage;
+    }
+
+    private function getPostsOffset($offset = null): int
+    {
+        $currentPage = $this->getCurrentPage();
+
+        if ($currentPage != 0) {
+            return ($currentPage - 1) * $this->paginatorManager->getPostsPerPageLimit();
+        }
+
+        return (int) $offset;
     }
 }

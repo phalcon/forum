@@ -440,14 +440,15 @@ header .btns-group a i {
     border-bottom: none;
 }
 
-.pageNav {
+.pagination-bar {
     display: table;
     margin: 30px auto 0;
 }
-.pageNav ul li{
+.pagination-bar ul li {
     margin: 0 5px;
 }
-.pageNav ul li a{
+.pagination-bar ul li a,
+.pagination-bar ul li span {
     color: #878787;
     font-size: 16px;
     font-family: 'Titillium Web', sans-serif;
@@ -461,30 +462,36 @@ header .btns-group a i {
     border: none !important;
     outline: none !important;
 }
-.pageNav ul li a:hover,
-.pageNav ul li.active a{
+
+.pagination-bar ul li a:hover,
+.pagination-bar ul li.active a,
+.pagination-bar ul li.active span {
     background-color: #002645 !important;
     color: #ffffff;
 }
-.pageNav ul li:first-child a,
-.pageNav ul li:last-child a{
+.pagination-bar ul li.active a:hover,
+.pagination-bar ul li.active span:hover {
+    cursor: default;
+}
+.pagination-bar ul li:first-child a,
+.pagination-bar ul li:last-child a {
     background: none !important;
     color: #878787 !important;
 }
 
-.breadcrumbs{
+.breadcrumbs {
     padding: 60px 0;
 }
 .breadcrumbs ul li {
     float: left;
     position: relative;
 }
-.breadcrumbs ul li a{
+.breadcrumbs ul li a {
     font-size: 18px;
     color: #435f75;
     text-transform: capitalize
 }
-.breadcrumbs ul li.active a{
+.breadcrumbs ul li.active a {
     color: #002645;
 }
 .breadcrumbs ul li:after{
