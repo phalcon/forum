@@ -21,6 +21,7 @@ namespace Phosphorum\Core\Mvc\View\Engine;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phosphorum\Core\Mvc\View\Engine\Functions\TeaserFunction;
 use Phosphorum\Core\Version;
 
 /**
@@ -52,18 +53,18 @@ class VoltFunctions implements InjectionAwareInterface
      *
      * @return string|null
      */
-    public function compileFunction(string $name, $arguments)
+    public function compileFunction(string $name, $arguments): ?string
     {
         switch ($name) {
             case 'join':
-                return 'implode(' . $arguments . ')';
+                return "\\implode({$arguments})";
             case 'chr':
             case 'number_format':
-                return $name . '(' . $arguments . ')';
+                return "\\{$name}({$arguments})";
             case 'gravatar':
                 return '$this->getDI()->get(\Phalcon\Avatar\Avatarable::class)->getAvatar(' . $arguments . ')';
             case 'forum_version':
-                return 'str_replace(".", "", ' . Version::class . '::get())';
+                return 'str_replace(".", "", \\' . Version::class . '::get())';
         }
 
         return null;
@@ -77,10 +78,13 @@ class VoltFunctions implements InjectionAwareInterface
      *
      * @return string|null
      */
-    public function compileFilter(string $name, $arguments)
+    public function compileFilter(string $name, $arguments): ?string
     {
         switch ($name) {
-            // @TODO
+            case 'teaser':
+                return '$this->getDI()->get("\\' . TeaserFunction::class . '")(' . $arguments . ');';
+            case 'strlen':
+                return "\\Stringy\\create($arguments)->length();";
         }
 
         return null;
