@@ -427,15 +427,14 @@ header .btns-group a i {
     display: block;
     margin-top: 10px;
 }
-.form-detail .form-detail-p {
+.form-detail .topic-excerpt {
     overflow: hidden;
     padding-left: 38px;
 }
-.form-detail .form-detail-p p {
-    font-size: 14px;
-    color: #878787;
-    font-family: 'Titillium Web', sans-serif;
-    line-height: 1.2;
+.form-detail .topic-excerpt p {
+    font: normal 14px/1.2 'Titillium Web', sans-serif;
+    color: #aaa;
+    display: block;
 }
 .forum-block .topic-list > div:last-child {
     border-bottom: none;

@@ -142,7 +142,7 @@
     .forum-block .topic-head .headRight{
         padding-left: 10px;
     }
-    .form-detail .form-detail-p{
+    .form-detail .topic-excerpt{
         padding-left: 24px;
     }
     .forum-block .topic-head .imgHolder img{
@@ -256,7 +256,7 @@
     .form-detail .imgHolder{
         display: none;
     }
-    .form-detail .form-detail-p {
+    .form-detail .topic-excerpt {
         padding-left: 50px;
     }
     .mobail-leftMenu{
