@@ -22,6 +22,7 @@ use Phalcon\DiInterface;
 use Phalcon\Escaper;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Filter;
+use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Tag;
 use Phosphorum\Core\Modules\AbstractModule;
@@ -94,6 +95,7 @@ class Module extends AbstractModule
      */
     protected function registerBaseBindings(DiInterface $container): void
     {
+        $container->setShared('request', Request::class);
         $container->setShared('response', Response::class);
         $container->setShared('filter', Filter::class);
         $container->setShared('tag', Tag::class);
