@@ -17,21 +17,25 @@
                 <div class="topic-item">
                     <div class="topic-head">
                         <div class="imgHolder">
-                            <a href="{{ url("user/" ~ topic.p.user.getId() ~ "/" ~ topic.p.user.getLogin()) }}" title="{{ topic.p.user.getLogin() }}">
-                                {{ image(gravatar(topic.p.user.getEmail()), 'class': 'img-fluid', 'alt': topic.p.user.getName()) }}
+                            <a href="{{ url("user/" ~ topic.p.user.id ~ "/" ~ topic.p.user.login) }}" title="{{ topic.p.user.login }}">
+                                {{ image(gravatar(topic.p.user.email), 'class': 'img-fluid', 'alt': topic.p.user.name) }}
                             </a>
                         </div>
                         <div class="headRight">
-                            <a href="/discussion/{{ topic.p.getId() }}/{{ topic.p.getSlug() }}" class="discussion-head">
+                            <a href="/discussion/{{ topic.p.id }}/{{ topic.p.slug }}" class="discussion-head">
                                 <h3 class="discussion-title" itemprop="name">
-                                    {{ topic.p.getTitle()|e }}
+                                    {{ topic.p.title|e }}
                                 </h3>
                             </a>
                             <ul>
-                                {%- set cssClass = 'category-' ~ topic.p.getCategoryId() ~ '-label'  -%}
-                                <li><a href="#"><span class="category-label {{ cssClass }}"></span>{{ topic.p.category.getName() }}</a></li>
+                                {%- set category_class = 'category-label category-' ~ topic.p.categoryId ~ '-label'  -%}
                                 <li>
-                                    <time itemprop="dateCreated" datetime="{{ date('c', topic.p.getCreatedAt()) }}">
+                                    <a href="/category/{{ topic.p.categoryId ~ '/' ~ topic.p.category.slug }}">
+                                        <span class="{{ category_class }}"></span>{{ topic.p.category.name }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <time itemprop="dateCreated" datetime="{{ date('c', topic.p.createdAt) }}">
                                         <i class="zmdi zmdi-calendar-alt"></i> May 17
                                     </time>
                                 </li>
@@ -39,6 +43,12 @@
                                 <li><a href="#"><i class="zmdi zmdi-comment"></i> 68 replies</a></li>
                                 <li><a href="#"><i class="zmdi zmdi-eye"></i> 2934 views</a></li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="form-detail">
+                        <div class="imgHolder" style="width: 26px; height: 52px"><!-- todo --></div>
+                        <div class="topic-excerpt">
+                            <p>{{ topic.p.content|teaser }}</p>
                         </div>
                     </div>
                 </div>
