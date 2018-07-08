@@ -23,6 +23,7 @@ use Phalcon\Events\ManagerInterface;
 use Phosphorum\Core\Modules\AbstractModule;
 use Phosphorum\Frontend\Events\ApplicationListener;
 use Phosphorum\Frontend\Providers;
+use Phosphorum\Core\Providers\PaginatorProvider;
 
 /**
  * Phosphorum\Frontend\Module
@@ -89,5 +90,6 @@ class Module extends AbstractModule
 
         $this->serviceRegistrator->registerService(new Providers\ReCaptchaProvider());
         $this->serviceRegistrator->registerService(new Providers\BreadcrumbsProvider());
+        $this->serviceRegistrator->registerService(new PaginatorProvider());
     }
 }

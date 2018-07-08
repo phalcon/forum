@@ -33,19 +33,7 @@ use Phalcon\Platform\Traits\InjectionAwareTrait;
  */
 class ViewListener implements InjectionAwareInterface
 {
-    use InjectionAwareTrait {
-        InjectionAwareTrait::__construct as protected __DiInject;
-    }
-
-    /**
-     * Create a new ViewListener instance.
-     *
-     * @param DiInterface|null $container
-     */
-    public function __construct(DiInterface $container = null)
-    {
-        $this->__DiInject($container);
-    }
+    use InjectionAwareTrait;
 
     /**
      * Notify about not found views.

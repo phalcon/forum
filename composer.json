@@ -45,7 +45,6 @@
     "erusev/parsedown-extra": "0.8.0-beta-1",
     "google/recaptcha": "1.1.*",
     "league/flysystem": "1.0.*",
-    "pagerfanta/pagerfanta": "2.0.*",
     "phalcon/breadcrumbs": "1.4.*",
     "phalcon/incubator": "3.4.*",
     "phalcon/platform": "dev-master"
