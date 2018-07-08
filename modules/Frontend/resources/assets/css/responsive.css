@@ -54,9 +54,10 @@
         margin: 0 2px;
     }
     .breadcrumbs {
-        padding: 40px 0;
+        padding: 20px 0;
     }
-    .breadcrumbs ul li a{
+    .breadcrumbs ul li a,
+    .breadcrumbs ul li > span {
         font-size: 14px;
     }
     .breadcrumbs ul li:after {
@@ -153,7 +154,7 @@
         padding-left: 10px;
     }
     .content-sec {
-        padding: 45px 0;
+        padding: 0 0 45px 0;
     }
     footer .col-md-7{
         margin-top: 30px;

@@ -79,6 +79,7 @@ class DiscussionsController extends Controller
     public function hotAction(?string $offset = null): void
     {
         $this->tag->setTitle('Hot Discussions');
+        $this->breadcrumbs->add('Popular', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -88,11 +89,7 @@ class DiscussionsController extends Controller
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(),
             'categories' => $this->categoryService->getOrderedList(),
-            'pager' => $this->paginatorManager->createPager(
-                $this->postService->getPaginatorQueryBuilder(),
-                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
-                $this->getCurrentPage()
-            ),
+            'pager' => $this->createPager($offset),
         ]);
     }
 
@@ -100,6 +97,7 @@ class DiscussionsController extends Controller
     {
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Discussions');
+        $this->breadcrumbs->add('My Questions', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -109,17 +107,14 @@ class DiscussionsController extends Controller
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
-            'pager' => $this->paginatorManager->createPager(
-                $this->postService->getPaginatorQueryBuilder(),
-                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
-                $this->getCurrentPage()
-            ),
+            'pager' => $this->createPager($offset),
         ]);
     }
 
     public function unansweredAction(?string $offset = null): void
     {
         $this->tag->setTitle('Unanswered Discussions');
+        $this->breadcrumbs->add('Unanswered', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -129,11 +124,7 @@ class DiscussionsController extends Controller
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
-            'pager' => $this->paginatorManager->createPager(
-                $this->postService->getPaginatorQueryBuilder(),
-                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
-                $this->getCurrentPage()
-            ),
+            'pager' => $this->createPager($offset),
         ]);
     }
 
@@ -141,6 +132,7 @@ class DiscussionsController extends Controller
     {
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Answers');
+        $this->breadcrumbs->add('My Answers', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -150,17 +142,14 @@ class DiscussionsController extends Controller
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
-            'pager' => $this->paginatorManager->createPager(
-                $this->postService->getPaginatorQueryBuilder(),
-                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
-                $this->getCurrentPage()
-            ),
+            'pager' => $this->createPager($offset),
         ]);
     }
 
     public function newAction(?string $offset = null): void
     {
         $this->tag->setTitle('All Discussions');
+        $this->breadcrumbs->add('All', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -170,11 +159,7 @@ class DiscussionsController extends Controller
             'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
-            'pager' => $this->paginatorManager->createPager(
-                $this->postService->getPaginatorQueryBuilder(),
-                sprintf('%s?page={%%page_number}', $this->getCanonicalUri($offset)),
-                $this->getCurrentPage()
-            ),
+            'pager' => $this->createPager($offset),
         ]);
     }
 
@@ -190,17 +175,21 @@ class DiscussionsController extends Controller
 
     private function getCanonicalUri(?int $offset = null): string
     {
-        return $this->url->get(
-            [
-                'for'    => $offset ? 'discussions-order-offset' : 'discussions-order',
-                'action' => $this->dispatcher->getActionName(),
-                'offset' => $offset,
-            ]
-        );
+        $routeName = $offset ? 'discussions-order-offset' : 'discussions-order';
+        $actionName = $this->dispatcher->getActionName();
+
+        return $this->url->get(['for' => $routeName, 'action' => $actionName, 'offset' => $offset]);
     }
 
-    private function getCurrentPage(): int
+    private function getCurrentPage(?int $offset = null): int
     {
+        if ($offset > 0) {
+            $postsPerPage = $this->paginatorManager->getPostsPerPageLimit();
+            $actualOffset = $offset - ceil($offset % $this->paginatorManager->getPostsPerPageLimit());
+
+            return (int) ($actualOffset / $postsPerPage) + 1;
+        }
+
         $currentPage = abs($this->request->getQuery('page', 'int'));
 
         if ($currentPage == 0) {
@@ -210,14 +199,17 @@ class DiscussionsController extends Controller
         return $currentPage;
     }
 
-    private function getPostsOffset($offset = null): int
+    private function getPostsOffset($offset = null): ?int
     {
-        $currentPage = $this->getCurrentPage();
+        return $offset = $offset !== null ? (int) $offset : $offset;;
+    }
 
-        if ($currentPage != 0) {
-            return ($currentPage - 1) * $this->paginatorManager->getPostsPerPageLimit();
-        }
-
-        return (int) $offset;
+    private function createPager(?int $offset = null)
+    {
+        return $this->paginatorManager->createPager(
+            $this->postService->getPaginatorQueryBuilder(),
+            sprintf('%s?page={%%page_number}', $this->getCanonicalUri()),
+            $this->getCurrentPage($offset)
+        );
     }
 }

@@ -41,6 +41,12 @@ class BreadcrumbsProvider implements ServiceProviderInterface
             $breadcrumbs->setEventsManager($container->get('eventsManager'));
             $breadcrumbs->setSeparator('');
 
+            $breadcrumbs->setTemplate(
+                '<li><a href="{{link}}">{{label}}</a></li>',
+                '<li class="active"><span>{{label}}</span></li>',
+                ''
+            );
+
             return $breadcrumbs;
         };
 

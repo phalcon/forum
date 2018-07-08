@@ -95,6 +95,7 @@ class Controller extends ControllerBase
             date_default_timezone_set($timezone);
         }
 
-        $this->breadcrumbs->add('Home', '/');
+        $this->breadcrumbs
+            ->add('Discussions', '/discussions');
     }
 }

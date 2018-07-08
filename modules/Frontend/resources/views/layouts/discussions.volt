@@ -1,10 +1,14 @@
 {%- extends "templates/base.volt" -%}
 
+{%  block breadcrumbs %}
+    {{- partial('partials/breadcrumbs') -}}
+{%  endblock %}
+
 {% block content %}
     <section class="content-sec">
         <div class="container">
             <div class="row">
-                {% include 'partials/sidebar' with ['categories': categories] %}
+                {% include 'include/sidebar' with ['categories': categories] %}
 
                 {{ content() }}
             </div>

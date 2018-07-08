@@ -90,6 +90,8 @@ class PostService extends AbstractService implements InjectionAwareInterface
     {
         $totalBuilder = $this->createBuilder($joinReply);
 
+        $this->withoutTrash($totalBuilder);
+
         return $totalBuilder
             ->columns('COUNT(*) AS count');
     }
