@@ -48,7 +48,7 @@ class CategoryEntity extends Model
     protected $noBounty;
 
     /** @var string */
-    protected $noNigest;
+    protected $noDigest;
 
     /**
      * {@inheritdoc}
