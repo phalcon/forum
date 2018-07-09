@@ -77,10 +77,10 @@ class PostEntity extends Model
     /** @var int */
     protected $numberReplies;
 
-    /** @var int */
+    /** @var int|null */
     protected $votesUp;
 
-    /** @var int */
+    /** @var int|null */
     protected $votesDown;
 
     /** @var string */
@@ -434,9 +434,9 @@ class PostEntity extends Model
     /**
      * Returns the value of field 'votes_up'.
      *
-     * @return int
+     * @return int|null
      */
-    public function getVotesUp(): int
+    public function getVotesUp(): ?int
     {
         return $this->votesUp;
     }
@@ -458,9 +458,9 @@ class PostEntity extends Model
     /**
      * Returns the value of field 'votes_down'.
      *
-     * @return int
+     * @return int|null
      */
-    public function getVotesDown(): int
+    public function getVotesDown(): ?int
     {
         return $this->votesDown;
     }
