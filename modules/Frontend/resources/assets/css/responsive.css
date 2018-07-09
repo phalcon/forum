@@ -143,14 +143,14 @@
     .forum-block .topic-head .headRight{
         padding-left: 10px;
     }
-    .form-detail .topic-excerpt{
+    .topic-detail .topic-excerpt{
         padding-left: 24px;
     }
-    .forum-block .topic-head .imgHolder img{
+    .forum-block .topic-head .img-holder img{
         width: 50px;
         height: 50px;
     }
-    .form-detail {
+    .topic-detail {
         padding-left: 10px;
     }
     .content-sec {
@@ -254,10 +254,10 @@
     .container {
         max-width: 100%;
     }
-    .form-detail .imgHolder{
+    .topic-detail .topic-counters {
         display: none;
     }
-    .form-detail .topic-excerpt {
+    .topic-detail .topic-excerpt {
         padding-left: 50px;
     }
     .mobail-leftMenu{
