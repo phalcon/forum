@@ -181,9 +181,11 @@ header .btns-group a i {
 .leftMain ul li.hot i {
     color: #d0021b;
 }
+.leftMain ul li a:focus,
 .leftMain ul li a:hover {
     text-decoration: underline;
 }
+.leftMain ul li.active a:focus,
 .leftMain ul li.active a:hover {
     text-decoration: none;
 }
@@ -193,9 +195,17 @@ header .btns-group a i {
 .sidebar-links ul li a {
     display: block;
 }
-.sidebar-links ul li.active a,
+.sidebar-links ul li.active a {
+    color: #002645;
+    font-weight: bold;
+}
+.sidebar-links ul li a:focus,
 .sidebar-links ul li a:hover {
-    padding: 10px 0 10px 10px;
+    text-decoration: underline;
+}
+.sidebar-links ul li.active a:focus,
+.sidebar-links ul li.active a:hover {
+    text-decoration: none;
 }
 .sidebar-links ul li a span {
     width: 15px;
@@ -204,23 +214,6 @@ header .btns-group a i {
     display: inline-block;
     vertical-align: sub;
     margin-right: 15px;
-    -webkit-transition: all .5s;
-       -moz-transition: all .5s;
-        -ms-transition: all .5s;
-         -o-transition: all .5s;
-            transition: all .5s;
-}
-.sidebar-links ul li.active a,
-.sidebar-links ul li a:hover {
-    background-color: #744c7d;
-}
-.sidebar-links ul li.active a,
-.sidebar-links ul li a:hover {
-    color: #fff;
-}
-.sidebar-links ul li.active a span,
-.sidebar-links ul li a:hover span {
-    background-color: #fff !important;
 }
 .category-label {
     background-color: #002645;
