@@ -18,21 +18,49 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\Controllers;
 
-use Phosphorum\Core\Environment;
-use Phosphorum\Core\Mvc\Controller as ControllerBase;
 use Phalcon\Assets\Filters\Cssmin;
 use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Platform\Mvc\Controller as ControllerBase;
+use Phosphorum\Core\Environment;
+use Phosphorum\Core\Paginator\PaginatorManager;
+use Phosphorum\Domain\Factories\CategoryFactory;
+use Phosphorum\Domain\Factories\PostFactory;
+use Phosphorum\Domain\Factories\PostTrackingFactory;
+use Phosphorum\Domain\Services\CategoryService;
+use Phosphorum\Domain\Services\PostService;
+use Phosphorum\Domain\Services\PostTrackingService;
 
 /**
  * Phosphorum\Frontend\Mvc\Controllers\Controller
  *
- * @property \Phalcon\Session\Adapter $session
+ * @property \Phalcon\Assets\Manager $assets
  * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
+ * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
+ * @property \Phalcon\Mvc\Url|\Phalcon\Mvc\UrlInterface $url
+ * @property \Phalcon\Mvc\View $view
+ * @property \Phalcon\Session\Adapter $session
+ * @property \Phalcon\Tag $tag
+ * @property \Phosphorum\Core\Modules\ModuleInterface $module
  *
  * @package Phosphorum\Frontend\Mvc\Controllers
  */
 class Controller extends ControllerBase
 {
+    /** @var PostTrackingService */
+    protected $postTrackingService;
+
+    /** @var PostService */
+    protected $postService;
+
+    /** @var CategoryService */
+    protected $categoryService;
+
+    /** @var PaginatorManager */
+    protected $paginatorManager;
+
+    /** @var null|int */
+    protected $loggedUserId = null;
+
     public function onConstruct(): void
     {
         /** @var Environment $env */
@@ -82,16 +110,70 @@ class Controller extends ControllerBase
     }
 
     /**
-     * This method is executed first, before any action is executed on a controller.
-     *
-     * NOTE: The this method is only called if the 'beforeExecuteRoute' event is executed with success.
+     * {@inheritdoc}
      *
      * @return void
      */
     public function initialize(): void
     {
-        if ($timezone = $this->session->get('identity-timezone')) {
-            date_default_timezone_set($timezone);
+        $this->setupSessionVariables();
+        $this->setupServices();
+        $this->setupGlobalTemplateVars();
+    }
+
+    /**
+     * Utileze session variables.
+     *
+     * @return void
+     */
+    protected function setupSessionVariables(): void
+    {
+        if ($this->session->isStarted() == false) {
+            return;
         }
+
+        if ($this->session->has('identity')) {
+            $this->loggedUserId = (int) $this->session->get('identity');
+        }
+
+        if ($this->session->has('identity-timezone')) {
+            date_default_timezone_set($this->session->get('identity-timezone'));
+        }
+    }
+
+    /**
+     * Setting up global services.
+     *
+     * @return void
+     */
+    protected function setupServices(): void
+    {
+        $this->postTrackingService = $this->getDI()
+            ->get(PostTrackingFactory::class)
+            ->createService();
+
+        $this->postService = $this->getDI()
+            ->get(PostFactory::class)
+            ->createService();
+
+        $this->categoryService = $this->getDI()
+            ->get(CategoryFactory::class)
+            ->createService();
+
+        $this->paginatorManager = $this->getDI()->get(PaginatorManager::class);
+    }
+
+    /**
+     * Setting up View's global variables.
+     *
+     * @return void
+     */
+    protected function setupGlobalTemplateVars(): void
+    {
+        $this->view->setVars([
+            'action_name' => $this->dispatcher->getActionName(),
+            'controller_name' => $this->dispatcher->getControllerName(),
+            'threads_count' => $this->postService->count(),
+        ]);
     }
 }

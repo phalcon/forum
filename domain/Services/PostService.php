@@ -86,7 +86,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      *
      * @return Builder
      */
-    public function getPaginatorQueryBuilder(bool $joinReply = false): BuilderInterface
+    public function getTotalPostsBuilder(bool $joinReply = false): BuilderInterface
     {
         $totalBuilder = $this->createBuilder($joinReply);
 
@@ -169,7 +169,7 @@ class PostService extends AbstractService implements InjectionAwareInterface
      * Create internal query builder.
      *
      * @see PostService::createItemBuilder
-     * @see PostService::getPaginatorQueryBuilder
+     * @see PostService::getTotalPostsBuilder
      *
      * @param  bool $joinReply
      *
@@ -192,5 +192,36 @@ class PostService extends AbstractService implements InjectionAwareInterface
         }
 
         return $itemBuilder;
+    }
+
+    /**
+     * Count all posts int the database.
+     *
+     * @param  bool $withoutTrash
+     *
+     * @return int
+     */
+    public function count(bool $withoutTrash = true): int
+    {
+        /** @var Manager $modelsManager */
+        $modelsManager = $this->getDI()->getShared('modelsManager');
+
+        $itemBuilder = $modelsManager
+            ->createBuilder()
+            ->from(['p' => PostEntity::class])
+            ->columns('COUNT(*) AS count');
+
+        if ($withoutTrash == true) {
+            $this->withoutTrash($itemBuilder);
+        }
+
+        /** @var \Phalcon\Mvc\Model\Resultset\Simple $result */
+        $result = $itemBuilder->getQuery()->execute();
+
+        if ($result && $result->valid()) {
+            return (int) $result->getFirst()['count'];
+        }
+
+        return 0;
     }
 }

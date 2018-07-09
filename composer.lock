@@ -362,12 +362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/platform.git",
-                "reference": "159e419083e39892c36c27aaf9ad444720ef4033"
+                "reference": "23ad64f39b611ff878ef60b779ce118cc5a46212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/platform/zipball/159e419083e39892c36c27aaf9ad444720ef4033",
-                "reference": "159e419083e39892c36c27aaf9ad444720ef4033",
+                "url": "https://api.github.com/repos/phalcon/platform/zipball/23ad64f39b611ff878ef60b779ce118cc5a46212",
+                "reference": "23ad64f39b611ff878ef60b779ce118cc5a46212",
                 "shasum": ""
             },
             "require": {
@@ -407,7 +407,7 @@
                 "phalcon",
                 "platform"
             ],
-            "time": "2018-06-29T13:12:00+00:00"
+            "time": "2018-07-09T20:28:17+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

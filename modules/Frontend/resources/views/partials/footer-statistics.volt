@@ -5,7 +5,7 @@
                 <h5><i class="zmdi zmdi-equalizer"></i>&nbsp;Statistics</h5>
 
                 <p>
-                    Our users have posted a total of <span>12503</span> Posts<br>
+                    Our users have posted a total of <span>{{ threads_count }}</span>&nbsp;posts<br>
                     We have <span>7276</span> registered users<br>
                     The newest member is <span>olivedev</span>
                 </p>

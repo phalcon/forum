@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace Phosphorum\Frontend\Mvc\Controllers;
 
-use Phosphorum\Core\Paginator\PaginatorManager;
-use Phosphorum\Domain\Factories\CategoryFactory;
-use Phosphorum\Domain\Factories\PostFactory;
-use Phosphorum\Domain\Factories\PostTrackingFactory;
-use Phosphorum\Domain\Services\CategoryService;
-use Phosphorum\Domain\Services\PostService;
-use Phosphorum\Domain\Services\PostTrackingService;
-
 /**
  * Phosphorum\Frontend\Mvc\Controllers\DiscussionsController
  *
@@ -33,49 +25,6 @@ use Phosphorum\Domain\Services\PostTrackingService;
  */
 class DiscussionsController extends Controller
 {
-    /** @var PostTrackingService */
-    private $postTrackingService;
-
-    /** @var PostService */
-    private $postService;
-
-    /** @var CategoryService */
-    private $categoryService;
-
-    /** @var PaginatorManager */
-    private $paginatorManager;
-
-    /** @var null|int */
-    private $userId = null;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-
-        $this->postTrackingService = $this->getDI()
-            ->get(PostTrackingFactory::class)
-            ->createService();
-
-        $this->postService = $this->getDI()
-            ->get(PostFactory::class)
-            ->createService();
-
-        $this->categoryService = $this->getDI()
-            ->get(CategoryFactory::class)
-            ->createService();
-
-        $this->paginatorManager = $this->getDI()->get(PaginatorManager::class);
-
-        if ($this->session->has('identity')) {
-            $this->userId = (int) $this->session->get('identity');
-        }
-    }
-
     public function hotAction(?string $offset = null): void
     {
         $this->tag->setTitle('Hot Discussions');
@@ -84,8 +33,8 @@ class DiscussionsController extends Controller
 
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
-            'user_id' => $this->userId,
-            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'user_id' => $this->loggedUserId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->loggedUserId),
             'posts' => $this->postService->getPopularPosts(),
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
@@ -101,8 +50,8 @@ class DiscussionsController extends Controller
 
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
-            'user_id' => $this->userId,
-            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'user_id' => $this->loggedUserId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->loggedUserId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
@@ -117,8 +66,8 @@ class DiscussionsController extends Controller
 
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
-            'user_id' => $this->userId,
-            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'user_id' => $this->loggedUserId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->loggedUserId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
@@ -134,8 +83,8 @@ class DiscussionsController extends Controller
 
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
-            'user_id' => $this->userId,
-            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'user_id' => $this->loggedUserId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->loggedUserId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
@@ -150,8 +99,8 @@ class DiscussionsController extends Controller
 
         $this->view->setVars([
             'canonical' => $this->getCanonicalUri($offset),
-            'user_id' => $this->userId,
-            'read_posts' => $this->postTrackingService->getReadPostsIds($this->userId),
+            'user_id' => $this->loggedUserId,
+            'read_posts' => $this->postTrackingService->getReadPostsIds($this->loggedUserId),
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
@@ -202,7 +151,7 @@ class DiscussionsController extends Controller
     private function createPager(?int $offset = null)
     {
         return $this->paginatorManager->createPager(
-            $this->postService->getPaginatorQueryBuilder(),
+            $this->postService->getTotalPostsBuilder(),
             sprintf('%s?page={%%page_number}', $this->getCanonicalUri()),
             $this->getCurrentPage($offset)
         );
