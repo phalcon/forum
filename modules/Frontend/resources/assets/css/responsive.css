@@ -53,17 +53,6 @@
     .pagination-bar ul li {
         margin: 0 2px;
     }
-    .breadcrumbs {
-        padding: 20px 0;
-    }
-    .breadcrumbs ul li a,
-    .breadcrumbs ul li > span {
-        font-size: 14px;
-    }
-    .breadcrumbs ul li:after {
-        font-size: 14px;
-        vertical-align: middle;
-    }
     .recent-box h3{
         margin-bottom: 20px;
     }
@@ -158,9 +147,6 @@
     }
     footer .col-md-7{
         margin-top: 30px;
-    }
-    .breadcrumbs {
-        padding-bottom: 20px;
     }
     .help-detail h4 {
         font-size: 20px;

@@ -1,9 +1,5 @@
 {%- extends "templates/base.volt" -%}
 
-{%  block breadcrumbs %}
-    {{- partial('partials/breadcrumbs') -}}
-{%  endblock %}
-
 {% block content %}
     <section class="content-sec">
         <div class="container">

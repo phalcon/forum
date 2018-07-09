@@ -146,7 +146,7 @@ header .btns-group a i {
 }
 .content-sec {
     background-color: #fff;
-    padding: 0 0 72px 0;
+    padding: 72px 0;
 }
 .leftMain ul {
     border-bottom: 1px solid #ddd;
@@ -383,14 +383,25 @@ header .btns-group a i {
 .forum-block .topic-head .img-holder .img-badge-sticked {
     background-color: #002645;
     color: #fff;
-    border-radius: 60px;
+    -webkit-border-radius: 60px;
+     -khtml-border-radius: 60px;
+       -moz-border-radius: 60px;
+            border-radius: 60px;
     object-fit: cover;
     width: 26px !important;
     height: 26px !important;
     text-align: center;
-    font-size: 20px;
+    font-size: 14px;
     vertical-align: middle;
-    line-height: 24px;
+    line-height: 1.8;
+    /* Prevent background color leak outs */
+    -webkit-background-clip: padding-box;
+           -moz-background-clip: padding;
+            background-clip: padding-box;
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+       -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+         -o-box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.35);
 }
 
 .forum-block .topic-head .headRight {
@@ -532,33 +543,6 @@ header .btns-group a i {
     color: #878787 !important;
 }
 
-.breadcrumbs {
-    padding: 30px 0;
-}
-.breadcrumbs ul li {
-    float: left;
-    position: relative;
-}
-.breadcrumbs ul li a,
-.breadcrumbs ul li > span {
-    font-size: 18px;
-    color: #435f75;
-    text-transform: capitalize
-}
-.breadcrumbs ul li.active a,
-.breadcrumbs ul li.active > span {
-    color: #002645;
-}
-.breadcrumbs ul li:after{
-    content: '\f2fb';
-    font-family: Material-Design-Iconic-Font;
-    font-size: 18px;
-    vertical-align: sub;
-    margin: 0 5px;
-}
-.breadcrumbs ul li:last-child:after{
-    display: none;
-}
 .activityTabs .nav-tabs{
     width: 100%;
     text-align: center;

@@ -26,7 +26,7 @@
 
                         {% if topic.sticked == "Y" %}
                             <span class="img-badge img-badge-sticked">
-                                <i class="zmdi zmdi-star"></i>
+                                <i class="fa fa-thumb-tack"></i>
                             </span>
                         {% endif %}
                     </div>
@@ -55,7 +55,7 @@
                             </li>
                             <li>
                                 <span title="Total Replies" class="iconic-help">
-                                    <i class="zmdi zmdi-comment"></i>{{ topic.count_replies }} replies
+                                    <i class="zmdi zmdi-comment"></i>{{ topic.numberReplies }} replies
                                 </span>
                             </li>
                             <li>

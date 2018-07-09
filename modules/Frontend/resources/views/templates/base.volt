@@ -120,8 +120,6 @@
         ] %}
     {%  endblock %}
 
-    {%  block breadcrumbs %}{%  endblock %}
-
     {%  block content %}
         {{ content() }}
     {%  endblock %}

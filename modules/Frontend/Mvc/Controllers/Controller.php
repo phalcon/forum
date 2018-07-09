@@ -26,7 +26,6 @@ use Phalcon\Assets\Filters\Jsmin;
 /**
  * Phosphorum\Frontend\Mvc\Controllers\Controller
  *
- * @property \Phalcon\Breadcrumbs $breadcrumbs
  * @property \Phalcon\Session\Adapter $session
  * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
  *
@@ -94,8 +93,5 @@ class Controller extends ControllerBase
         if ($timezone = $this->session->get('identity-timezone')) {
             date_default_timezone_set($timezone);
         }
-
-        $this->breadcrumbs
-            ->add('Discussions', '/discussions');
     }
 }

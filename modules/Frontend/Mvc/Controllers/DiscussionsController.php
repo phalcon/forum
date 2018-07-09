@@ -79,7 +79,6 @@ class DiscussionsController extends Controller
     public function hotAction(?string $offset = null): void
     {
         $this->tag->setTitle('Hot Discussions');
-        $this->breadcrumbs->add('Popular', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -97,7 +96,6 @@ class DiscussionsController extends Controller
     {
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Discussions');
-        $this->breadcrumbs->add('My Questions', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -114,7 +112,6 @@ class DiscussionsController extends Controller
     public function unansweredAction(?string $offset = null): void
     {
         $this->tag->setTitle('Unanswered Discussions');
-        $this->breadcrumbs->add('Unanswered', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -132,7 +129,6 @@ class DiscussionsController extends Controller
     {
         // todo: Prevent to see by unauthorized users
         $this->tag->setTitle('My Answers');
-        $this->breadcrumbs->add('My Answers', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
@@ -149,7 +145,6 @@ class DiscussionsController extends Controller
     public function newAction(?string $offset = null): void
     {
         $this->tag->setTitle('All Discussions');
-        $this->breadcrumbs->add('All', null, ['linked' => false]);
 
         $offset = $this->getPostsOffset($offset);
 
