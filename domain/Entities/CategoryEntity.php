@@ -223,21 +223,21 @@ class CategoryEntity extends Model
      *
      * @return string
      */
-    public function getNoNigest(): string
+    public function getNoDigest(): string
     {
-        return $this->noNigest;
+        return $this->noDigest;
     }
 
     /**
      * Method to set the value of field 'no_digest'.
      *
-     * @param  string $noNigest
+     * @param  string $noDigest
      *
      * @return CategoryEntity
      */
-    public function setNoNigest(string $noNigest): CategoryEntity
+    public function setNoDigest(string $noDigest): CategoryEntity
     {
-        $this->noNigest = $noNigest;
+        $this->noDigest = $noDigest;
 
         return $this;
     }
