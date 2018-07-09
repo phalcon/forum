@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $('.menuLinks a').on('click', function () {
-        $('.menuLinks li').removeClass('active');
+    $('.sidebar-links a').on('click', function () {
+        $('.sidebar-links li').removeClass('active');
         $(this).parent("li").addClass('active');
 
         var tagid = $(this).data('tag');

@@ -22,7 +22,7 @@
                 {%- endif -%}
             </ul>
         </div>
-        <div class="menuLinks">
+        <div class="sidebar-links">
             <ul>
                 {%- for category in categories -%}
                     <li>

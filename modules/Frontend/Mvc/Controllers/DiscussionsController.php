@@ -196,7 +196,7 @@ class DiscussionsController extends Controller
 
     private function getPostsOffset($offset = null): ?int
     {
-        return $offset = $offset !== null ? (int) $offset : $offset;;
+        return $offset = $offset !== null ? (int) $offset : $offset;
     }
 
     private function createPager(?int $offset = null)

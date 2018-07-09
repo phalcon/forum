@@ -44,18 +44,19 @@
                                 </a>
                             </li>
                             <li>
-                                <time itemprop="dateCreated" datetime="{{ date('c', topic.createdAt) }}" title="Last Reply" class="iconic-help">
-                                    <i class="zmdi zmdi-calendar-alt"></i>May 17
+                                <time title="Created Date" class="iconic-help">
+                                    <i class="zmdi zmdi-calendar-alt"></i>7d ago
                                 </time>
                             </li>
                             <li>
-                                <time title="Created Date" class="iconic-help">
-                                    <i class="zmdi zmdi-time"></i>7d ago
+                                <time itemprop="dateCreated" datetime="{{ date('c', topic.createdAt) }}" title="Last Reply" class="iconic-help">
+                                    <i class="zmdi zmdi-time"></i>May 17
                                 </time>
                             </li>
                             <li>
                                 <span title="Total Replies" class="iconic-help">
-                                    <i class="zmdi zmdi-comment"></i>{{ topic.numberReplies }} replies
+                                    <i class="zmdi zmdi-comment"></i>
+                                    <span itemprop="answerCount">{{ topic.numberReplies }}</span>&nbsp;replies
                                 </span>
                             </li>
                             <li>
