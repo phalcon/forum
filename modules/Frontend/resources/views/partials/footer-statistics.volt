@@ -5,8 +5,9 @@
                 <h5><i class="zmdi zmdi-equalizer"></i>&nbsp;Statistics</h5>
 
                 <p>
+                    {# @todo: pluralize 'posts' and 'registered users' #}
                     Our users have posted a total of <span>{{ threads_count }}</span>&nbsp;posts<br>
-                    We have <span>7276</span> registered users<br>
+                    We have <span>7276</span>&nbsp;registered users<br>
                     The newest member is <span>olivedev</span>
                 </p>
             </div>

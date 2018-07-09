@@ -18,8 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Domain\Factories;
 
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Domain\AbstractFactory;
 use Phosphorum\Domain\Entities\PostTrackingEntity;
 use Phosphorum\Domain\Repositories\PostTrackingRepository;
 use Phosphorum\Domain\Services\PostTrackingService;
@@ -29,10 +28,8 @@ use Phosphorum\Domain\Services\PostTrackingService;
  *
  * @package Phosphorum\Domain\Factories
  */
-class PostTrackingFactory implements InjectionAwareInterface
+class PostTrackingFactory extends AbstractFactory
 {
-    use InjectionAwareTrait;
-
     /**
      * Creates a PostTrackingEntity instance.
      *

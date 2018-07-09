@@ -13,7 +13,7 @@ git:
 
 env:
     global:
-        - CC="ccache gcc"
+        - CC="gcc"
         - PHALCON_VERSION=v3.4.0
 
 matrix:
@@ -26,7 +26,7 @@ cache:
     timeout: 604800
     directories:
         - $HOME/.composer/cache
-        - $HOME/pear
+        #- $HOME/pear
         - $HOME/.local/lib
 
 before_install:

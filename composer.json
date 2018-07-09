@@ -46,7 +46,7 @@
     "google/recaptcha": "1.1.*",
     "league/flysystem": "1.0.*",
     "phalcon/incubator": "3.4.*",
-    "phalcon/platform": "dev-master"
+    "phalcon/platform": "^0.0.1"
   },
 
   "require-dev": {

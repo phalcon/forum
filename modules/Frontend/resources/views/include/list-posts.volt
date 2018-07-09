@@ -45,23 +45,27 @@
                             </li>
                             <li>
                                 <time title="Created Date" class="iconic-help">
+                                    {# @todo: humanize date #}
                                     <i class="zmdi zmdi-calendar-alt"></i>7d ago
                                 </time>
                             </li>
                             <li>
                                 <time itemprop="dateCreated" datetime="{{ date('c', topic.createdAt) }}" title="Last Reply" class="iconic-help">
+                                    {# @todo: humanize date #}
                                     <i class="zmdi zmdi-time"></i>May 17
                                 </time>
                             </li>
                             <li>
                                 <span title="Total Replies" class="iconic-help">
                                     <i class="zmdi zmdi-comment"></i>
+                                    {# @todo: pluralize 'replies' #}
                                     <span itemprop="answerCount">{{ topic.numberReplies }}</span>&nbsp;replies
                                 </span>
                             </li>
                             <li>
                                 <span title="Total Views" class="iconic-help">
-                                    <i class="zmdi zmdi-eye"></i>2934 views
+                                    {# @todo: pluralize 'views' #}
+                                    <i class="zmdi zmdi-eye"></i>2934&nbsp;views
                                 </span>
                             </li>
                         </ul>

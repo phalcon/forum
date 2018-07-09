@@ -173,7 +173,7 @@ class Controller extends ControllerBase
         $this->view->setVars([
             'action_name' => $this->dispatcher->getActionName(),
             'controller_name' => $this->dispatcher->getControllerName(),
-            'threads_count' => $this->postService->count(),
+            'threads_count' => $this->postService->countAll(),
         ]);
     }
 }

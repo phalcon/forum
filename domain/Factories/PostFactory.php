@@ -18,8 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Domain\Factories;
 
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Domain\AbstractFactory;
 use Phosphorum\Domain\Entities\PostEntity;
 use Phosphorum\Domain\Repositories\PostRepository;
 use Phosphorum\Domain\Services\PostService;
@@ -29,10 +28,8 @@ use Phosphorum\Domain\Services\PostService;
  *
  * @package Phosphorum\Domain\Factories
  */
-class PostFactory implements InjectionAwareInterface
+class PostFactory extends AbstractFactory
 {
-    use InjectionAwareTrait;
-
     /**
      * Creates a PostEntity instance.
      *

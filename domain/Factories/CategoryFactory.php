@@ -18,8 +18,7 @@ declare(strict_types=1);
 
 namespace Phosphorum\Domain\Factories;
 
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phalcon\Platform\Domain\AbstractFactory;
 use Phosphorum\Domain\Entities\CategoryEntity;
 use Phosphorum\Domain\Repositories\CategoryRepository;
 use Phosphorum\Domain\Services\CategoryService;
@@ -29,12 +28,10 @@ use Phosphorum\Domain\Services\CategoryService;
  *
  * @package Phosphorum\Domain\Factories
  */
-class CategoryFactory implements InjectionAwareInterface
+class CategoryFactory extends AbstractFactory
 {
-    use InjectionAwareTrait;
-
     /**
-     * Creates a PostTrackingEntity instance.
+     * Creates a CategoryEntity instance.
      *
      * @return CategoryEntity
      */
@@ -44,7 +41,7 @@ class CategoryFactory implements InjectionAwareInterface
     }
 
     /**
-     * Creates a PostTrackingRepository instance.
+     * Creates a CategoryRepository instance.
      *
      * @param  CategoryEntity $entity
      *
@@ -56,7 +53,7 @@ class CategoryFactory implements InjectionAwareInterface
     }
 
     /**
-     * Creates a PostTrackingService instance.
+     * Creates a CategoryService instance.
      *
      * @return CategoryService
      */

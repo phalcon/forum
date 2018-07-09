@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dba6e7f612ae2966f9e99a1dad16e18",
+    "content-hash": "1444cbcd7bcff2e71b8bd8a55e1adc90",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -358,16 +358,16 @@
         },
         {
             "name": "phalcon/platform",
-            "version": "dev-master",
+            "version": "v0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/platform.git",
-                "reference": "23ad64f39b611ff878ef60b779ce118cc5a46212"
+                "reference": "9659c8f7396158f30e7887f18a7fe8dd879d14a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/platform/zipball/23ad64f39b611ff878ef60b779ce118cc5a46212",
-                "reference": "23ad64f39b611ff878ef60b779ce118cc5a46212",
+                "url": "https://api.github.com/repos/phalcon/platform/zipball/9659c8f7396158f30e7887f18a7fe8dd879d14a5",
+                "reference": "9659c8f7396158f30e7887f18a7fe8dd879d14a5",
                 "shasum": ""
             },
             "require": {
@@ -407,7 +407,7 @@
                 "phalcon",
                 "platform"
             ],
-            "time": "2018-07-09T20:28:17+00:00"
+            "time": "2018-07-09T21:51:45+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1486,8 +1486,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "erusev/parsedown": 10,
-        "erusev/parsedown-extra": 10,
-        "phalcon/platform": 20
+        "erusev/parsedown-extra": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
