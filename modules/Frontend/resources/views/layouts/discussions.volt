@@ -11,3 +11,9 @@
         </div>
     </section>
 {% endblock %}
+
+{%  block footer %}
+    {%  include "include/footer" with [
+        'application_short_description': config.application.shortDescription
+    ] %}
+{%  endblock %}

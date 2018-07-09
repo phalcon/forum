@@ -8,7 +8,7 @@
                     <div class="col-lg-2 col-md-4 col-5">
                         <div class="logoBox">
                             <a href="{{ base_url }}" title="{{ description }}">
-                                {% set logo_src = base_url ~ '/img/logo-header.png?v' ~ forum_version() %}
+                                {% set logo_src = base_url ~ '/img/logo-header.png?v' ~ forum_version_id() %}
                                 <img src="{{ logo_src }}" class="img-fluid" alt="{{ application_name }}">
                             </a>
                         </div>

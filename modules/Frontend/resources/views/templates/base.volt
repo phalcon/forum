@@ -124,9 +124,7 @@
         {{ content() }}
     {%  endblock %}
 
-    {%  block footer %}
-        <!-- footer -->
-    {%  endblock %}
+    {%  block footer %}{%  endblock %}
 
     {{ assets.cachedOutputJs('default_js') }}
 </body>
