@@ -21,11 +21,11 @@ namespace Phosphorum\Core\Assets;
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;
 use Phalcon\Config;
+use Phalcon\Platform\Exceptions\DomainException;
 use Phalcon\Tag;
 use Phosphorum\Core\Assets\Version\Strategy\AppVersionStrategy;
 use Phosphorum\Core\Assets\Version\StrategyInterface;
 use Phosphorum\Core\Environment;
-use Phosphorum\Core\Exceptions\DomainException;
 
 /**
  * Phosphorum\Core\Assets\AssetsManager

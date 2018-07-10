@@ -20,9 +20,9 @@ namespace Phosphorum\Core;
 
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
+use Phalcon\Platform\Exceptions\InvalidArgumentException;
 use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phalcon\Registry;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
 
 /**
  * Phosphorum\Core\Environment
@@ -166,7 +166,7 @@ final class Environment implements InjectionAwareInterface
      *
      * @param  int $stage
      *
-     * @throes InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setStage(int $stage): void
     {

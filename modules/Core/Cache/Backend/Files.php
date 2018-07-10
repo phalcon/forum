@@ -20,8 +20,7 @@ namespace Phosphorum\Core\Cache\Backend;
 
 use Phalcon\Cache\Backend\File;
 use Phalcon\Cache\FrontendInterface;
-use Phosphorum\Core\Exceptions\DomainException;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
+use Phalcon\Platform\Exceptions\DomainException;
 use Phosphorum\Core\Traits\FileSystemTrait;
 
 /**
@@ -39,7 +38,6 @@ class Files extends File
      * @param  FrontendInterface $frontend
      * @param  array             $options
      *
-     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function __construct(FrontendInterface $frontend, array $options)

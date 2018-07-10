@@ -19,9 +19,8 @@ declare(strict_types=1);
 namespace Phosphorum\Core\Traits;
 
 use Phalcon\Di;
+use Phalcon\Platform\Exceptions\DomainException;
 use Phosphorum\Core\Environment;
-use Phosphorum\Core\Exceptions\DomainException;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
 use Phosphorum\Core\TextManager;
 
 /**
@@ -39,7 +38,6 @@ trait FileSystemTrait
      *
      * @return string
      *
-     * @throws InvalidArgumentException
      * @throws DomainException
      */
     protected function resolveAbsolutePath(string $path, bool $appendDirectotySeparator = true): string

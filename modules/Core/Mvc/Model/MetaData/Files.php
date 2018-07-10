@@ -19,8 +19,7 @@ declare(strict_types=1);
 namespace Phosphorum\Core\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\MetaData\Files as BaseAdapter;
-use Phosphorum\Core\Exceptions\DomainException;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
+use Phalcon\Platform\Exceptions\DomainException;
 use Phosphorum\Core\Traits\FileSystemTrait;
 
 /**
@@ -37,7 +36,6 @@ class Files extends BaseAdapter
      *
      * @param  array $options
      *
-     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function __construct(array $options = [])

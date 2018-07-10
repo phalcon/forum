@@ -21,9 +21,9 @@ namespace Phosphorum\Core;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\DiInterface;
+use Phalcon\Platform\Exceptions\InvalidArgumentException;
 use Phalcon\Platform\Traits\InjectionAwareTrait;
 use Phalcon\Registry;
-use Phosphorum\Core\Exceptions\InvalidArgumentException;
 use Phosphorum\Core\Modules\ManagerInterface;
 use Phosphorum\Core\Modules\ModulesManager;
 use Phosphorum\Core\Providers\EventsManagerProvider;
@@ -60,6 +60,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      *
      * @param string           $basePath
      * @param DiInterface|null $container
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(string $basePath, DiInterface $container = null)
     {
@@ -90,6 +92,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * Registers the base services.
      *
      * @return void
+     *
+     * @throws InvalidArgumentException
      */
     protected function registerBaseServices(): void
     {
@@ -118,6 +122,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * @param  bool                            $force
      *
      * @return ServiceProviderInterface
+     *
+     * @throws InvalidArgumentException
      */
     public function registerService($provider, bool $force = false): ServiceProviderInterface
     {
@@ -154,7 +160,10 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * Gets a Service Provider matched by provided instance (if any).
      *
      * @param  ServiceProviderInterface|string $serviceProvider
+     *
      * @return ServiceProviderInterface|null
+     *
+     * @throws InvalidArgumentException
      */
     public function getServiceProviderByInstanceOf($serviceProvider)
     {
@@ -199,12 +208,21 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * @param  ServiceProviderInterface|string $serviceProvider
      *
      * @return bool
+     *
+     * @throws InvalidArgumentException
      */
     public function hasServiceProvider($serviceProvider)
     {
         return count($this->getServiceProvidersByInstanceOf($serviceProvider)) > 0;
     }
 
+    /**
+     * Validates $serviceProvider parameter.
+     *
+     * @param  string|object $serviceProvider
+     *
+     * @throws InvalidArgumentException
+     */
     protected function assertIsStringOrInstanceOfObject($serviceProvider)
     {
         if (is_string($serviceProvider) == false && is_object($serviceProvider) == false) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1444cbcd7bcff2e71b8bd8a55e1adc90",
+    "content-hash": "3e7fee2fee669c80a0e6327173769d1b",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -358,16 +358,16 @@
         },
         {
             "name": "phalcon/platform",
-            "version": "v0.0.1",
+            "version": "v0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/platform.git",
-                "reference": "9659c8f7396158f30e7887f18a7fe8dd879d14a5"
+                "reference": "37a29ebaa9965f68391821602a85fd37f8a8fce8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/platform/zipball/9659c8f7396158f30e7887f18a7fe8dd879d14a5",
-                "reference": "9659c8f7396158f30e7887f18a7fe8dd879d14a5",
+                "url": "https://api.github.com/repos/phalcon/platform/zipball/37a29ebaa9965f68391821602a85fd37f8a8fce8",
+                "reference": "37a29ebaa9965f68391821602a85fd37f8a8fce8",
                 "shasum": ""
             },
             "require": {
@@ -407,7 +407,7 @@
                 "phalcon",
                 "platform"
             ],
-            "time": "2018-07-09T21:51:45+00:00"
+            "time": "2018-07-10T05:37:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
