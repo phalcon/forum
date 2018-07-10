@@ -20,12 +20,15 @@ namespace Phosphorum\Frontend\Mvc\Controllers;
 
 use Phalcon\Assets\Filters\Cssmin;
 use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Platform\Domain\Exceptions\EntityNotFoundException;
 use Phalcon\Platform\Mvc\Controller as ControllerBase;
 use Phosphorum\Core\Environment;
 use Phosphorum\Core\Paginator\PaginatorManager;
+use Phosphorum\Domain\Factories\UserFactory;
 use Phosphorum\Domain\Factories\CategoryFactory;
 use Phosphorum\Domain\Factories\PostFactory;
 use Phosphorum\Domain\Factories\PostTrackingFactory;
+use Phosphorum\Domain\Services\UserService;
 use Phosphorum\Domain\Services\CategoryService;
 use Phosphorum\Domain\Services\PostService;
 use Phosphorum\Domain\Services\PostTrackingService;
@@ -52,6 +55,9 @@ class Controller extends ControllerBase
     /** @var PostService */
     protected $postService;
 
+    /** @var UserService */
+    protected $userService;
+
     /** @var CategoryService */
     protected $categoryService;
 
@@ -66,8 +72,36 @@ class Controller extends ControllerBase
         /** @var Environment $env */
         $env = $this->getDI()->get(Environment::class);
 
+        $this->setupServices();
+
         $this->registerCss($env);
         $this->registerJs($env);
+    }
+
+    /**
+     * Setting up global services.
+     *
+     * @return void
+     */
+    protected function setupServices(): void
+    {
+        $this->postTrackingService = $this->getDI()
+            ->get(PostTrackingFactory::class)
+            ->createService();
+
+        $this->postService = $this->getDI()
+            ->get(PostFactory::class)
+            ->createService();
+
+        $this->userService = $this->getDI()
+            ->get(UserFactory::class)
+            ->createService();
+
+        $this->categoryService = $this->getDI()
+            ->get(CategoryFactory::class)
+            ->createService();
+
+        $this->paginatorManager = $this->getDI()->get(PaginatorManager::class);
     }
 
     /**
@@ -113,11 +147,12 @@ class Controller extends ControllerBase
      * {@inheritdoc}
      *
      * @return void
+     *
+     * @throws EntityNotFoundException
      */
     public function initialize(): void
     {
         $this->setupSessionVariables();
-        $this->setupServices();
         $this->setupGlobalTemplateVars();
     }
 
@@ -142,31 +177,11 @@ class Controller extends ControllerBase
     }
 
     /**
-     * Setting up global services.
-     *
-     * @return void
-     */
-    protected function setupServices(): void
-    {
-        $this->postTrackingService = $this->getDI()
-            ->get(PostTrackingFactory::class)
-            ->createService();
-
-        $this->postService = $this->getDI()
-            ->get(PostFactory::class)
-            ->createService();
-
-        $this->categoryService = $this->getDI()
-            ->get(CategoryFactory::class)
-            ->createService();
-
-        $this->paginatorManager = $this->getDI()->get(PaginatorManager::class);
-    }
-
-    /**
      * Setting up View's global variables.
      *
      * @return void
+     *
+     * @throws EntityNotFoundException
      */
     protected function setupGlobalTemplateVars(): void
     {
@@ -174,6 +189,8 @@ class Controller extends ControllerBase
             'action_name' => $this->dispatcher->getActionName(),
             'controller_name' => $this->dispatcher->getControllerName(),
             'threads_count' => $this->postService->countAll(),
+            'users_count' => $this->userService->countAll(),
+            'last_user' => $this->userService->getLastRegisteredUser(),
         ]);
     }
 }

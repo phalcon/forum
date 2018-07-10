@@ -1210,27 +1210,29 @@ header .btns-group a i {
 }
 
 .thread-right ul li:nth-child(4) a,
-.thread-right ul li:nth-child(5) a{
-    background-color: #ffffff;
+.thread-right ul li:nth-child(5) a {
+    background-color: #fff;
     color: #84a2ba;
     border:1px solid #84a2ba;
 }
+
 .thread-right ul li:nth-child(4) a:hover,
-.thread-right ul li:nth-child(5) a:hover{
+.thread-right ul li:nth-child(5) a:hover {
     background-color: #84a2ba;
-    color: #ffffff;
+    color: #fff;
 }
 
-footer{
+footer {
     background-color: #002645;
     padding-top: 35px;
     padding-bottom: 15px;
 }
-footer h5{
+
+footer h5 {
     font-size: 16px;
     font-weight: 600;
     font-family: 'Titillium Web', sans-serif;
-    color: #ffffff;
+    color: #fff;
     text-transform: capitalize;
     border-bottom: 1px solid #435f75;
     padding-bottom: 10px;
@@ -1238,22 +1240,35 @@ footer h5{
     display: inline-block;
     padding-right: 15px;
 }
+
 footer p{
     color: #84a2ba;
     font-size: 14px;
     font-family: 'Titillium Web', sans-serif;
 }
-footer p span{
-    color: #ffffff;
+
+footer p span,
+footer p span a {
+    color: #fff;
     line-height: 1.4;
+    text-decoration: none;
 }
-.powerby p{
+
+footer p span a:focus,
+footer p span a:hover,
+footer p span a:active {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.powerby p {
     font-size: 12px;
     color: #84a2ba;
     font-weight: 200;
     text-align: center;
     margin-top: 35px;
 }
-.mobail-leftMenu{
+
+.mobail-leftMenu {
     display: none;
 }

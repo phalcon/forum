@@ -7,8 +7,10 @@
                 <p>
                     {# @todo: pluralize 'posts' and 'registered users' #}
                     Our users have posted a total of <span>{{ threads_count }}</span>&nbsp;posts<br>
-                    We have <span>7276</span>&nbsp;registered users<br>
-                    The newest member is <span>olivedev</span>
+                    We have <span>{{ users_count }}</span>&nbsp;registered users<br>
+                    The newest member is <span><a href="/user/{{ last_user.id }}/{{ last_user.login }}">{{ last_user.name }}</a></span>
+
+
                 </p>
             </div>
         </div>
