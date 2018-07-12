@@ -18,11 +18,18 @@
             <div class="footer-box">
                 <h5><i class="zmdi zmdi-comments"></i>&nbsp;Latest Threads</h5>
 
-                <p>
-                    [Installation]: <span>Phalcon installation on ubuntu 16.04 LTS with XAMPP server</span> by Mateo Agudelo<br>
-                    [General]: <span>Clearing form field</span> by Hoet<br>
-                    [Developer Tools]: <span>Issue with Rewrite Rules</span> by Marcelo Pavan
-                </p>
+                    {%- for last_thread in last_threads -%}
+                        <p itemscope itemtype="http://schema.org/Question">
+                            [<a href="/category/{{ last_thread.category_id }}/{{ last_thread.category_slug }}">{{ last_thread.category_name }}</a>]:
+                            <span itemprop="name">
+                                <a href="/discussion/{{ last_thread.post_id }}/{{ last_thread.post_slug }}">{{ last_thread.post_title|e }}</a>
+                            </span>
+                            by&nbsp;
+                            <span class="footer-author" itemprop="author">
+                                <a href="/user/{{ last_thread.user_id }}/{{ last_thread.user_login }}">{{ last_thread.user_name }}</a>
+                            </span>
+                        </p>
+                    {%- endfor -%}
             </div>
         </div>
     </div>

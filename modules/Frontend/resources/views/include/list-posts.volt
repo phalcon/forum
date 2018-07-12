@@ -9,20 +9,31 @@
                 topic = topic.p,
                 vote_class = "vote-relative",
                 vote_sign = "",
+                vote_count = topic.votesUp - topic.votesDown,
+                vote_span = '<span itemprop="upvoteCount">' ~ vote_count ~ '</span>',
                 topic_uri = "/discussion/" ~ topic.id ~ "/" ~ topic.slug
             -%}
 
-            {%- if (topic.votesUp - topic.votesDown) <= -3 -%}
-                {%- set vote_class = "vote-negative", vote_sign = "-" -%}
-            {%- elseif (topic.votesUp - topic.votesDown) > 0 -%}
-                {%- set vote_class = "vote-positive", vote_sign = "+" -%}
+            {%- if vote_count <= -3 -%}
+                {%-
+                    set vote_class = "vote-negative",
+                    vote_sign = "-",
+                    vote_span = '<span itemprop="downvoteCount">' ~ vote_count ~ '</span>'
+                -%}
+            {%- elseif vote_count > 0 -%}
+                {%-
+                    set vote_class = "vote-positive",
+                    vote_sign = "+"
+                -%}
             {%- endif -%}
             <div class="topic-item {% if topic.sticked == "Y" %}topic-sticked{% endif %}" itemscope itemtype="http://schema.org/Question">
                 <div class="topic-head">
                     <div class="img-holder">
-                        <a href="/user/{{ topic.user.id }}/{{ topic.user.login }}" title="{{ topic.user.login }}">
-                            {{ image(gravatar(topic.user.email), 'class': 'img-fluid', 'alt': topic.user.name) }}
-                        </a>
+                        <span itemprop="author">
+                            <a href="/user/{{ topic.user.id }}/{{ topic.user.login }}" title="{{ topic.user.login }}">
+                                {{ image(gravatar(topic.user.email), 'class': 'img-fluid', 'alt': topic.user.name) }}
+                            </a>
+                        </span>
 
                         {% if topic.sticked == "Y" %}
                             <span class="img-badge img-badge-sticked">
@@ -75,7 +86,7 @@
                     <div class="topic-counters" onclick="window.location.href='{{ topic_uri }}'">
                         <div class="topic-votes">
                             <div class="mini-counts {{ vote_class }}">
-                                {{ vote_sign ~ (topic.votesUp - topic.votesDown) }}
+                                {{ vote_sign ~ vote_span }}
                             </div>
                         </div>
                     </div>

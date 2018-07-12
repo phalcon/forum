@@ -23,12 +23,15 @@ use Phalcon\DiInterface;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
+use Phalcon\Mvc\Model\Resultset\Complex;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Platform\Domain\AbstractService;
 use Phalcon\Platform\Traits\InjectionAwareTrait;
+use Phosphorum\Domain\Entities\CategoryEntity;
 use Phosphorum\Domain\Entities\PostEntity;
 use Phosphorum\Domain\Entities\PostRepliesEntity;
+use Phosphorum\Domain\Entities\UserEntity;
 use Phosphorum\Domain\Repositories\PostRepository;
-use Phalcon\Mvc\Model\Resultset\Complex;
 
 /**
  * Phosphorum\Domain\Services\PostService
@@ -202,5 +205,41 @@ class PostService extends AbstractService implements InjectionAwareInterface
     public function countAll(): int
     {
         return $this->getRepository()->count();
+    }
+
+    /**
+     * Gets latest threads.
+     *
+     * @param  int $limit
+     *
+     * @return Simple
+     */
+    public function getLatestThreads(int $limit = 3): Simple
+    {
+        /** @var Manager $modelsManager */
+        $modelsManager = $this->getDI()->getShared('modelsManager');
+
+        return $modelsManager
+            ->createBuilder()
+            ->from(['p' => PostEntity::class])
+            ->columns([
+                'p.title as post_title',
+                'p.id as post_id',
+                'p.slug as post_slug',
+                'c.id as category_id',
+                'c.name as category_name',
+                'c.slug as category_slug',
+                'u.id as user_id',
+                'u.login as user_login',
+                'u.name as user_name',
+            ])
+            ->join(CategoryEntity::class, 'c.id = p.categoryId', 'c')
+            ->join(UserEntity::class, 'u.id = p.userId', 'u')
+            ->where('p.deleted = 0')
+            ->orderBy('p.createdAt DESC')
+            ->groupBy('p.id')
+            ->limit($limit)
+            ->getQuery()
+            ->execute();
     }
 }

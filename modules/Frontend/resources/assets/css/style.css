@@ -1241,16 +1241,31 @@ footer h5 {
     padding-right: 15px;
 }
 
-footer p{
+footer p {
     color: #84a2ba;
     font-size: 14px;
     font-family: 'Titillium Web', sans-serif;
+    line-height: 1.4;
+}
+
+footer p .footer-author a,
+footer p > a {
+   color: #84a2ba;
+}
+
+footer p .footer-author a:focus,
+footer p .footer-author a:hover,
+footer p .footer-author a:active,
+footer p > a:focus,
+footer p > a:hover,
+footer p > a:active {
+    color: #84a2ba;
+    text-decoration: underline;
 }
 
 footer p span,
 footer p span a {
     color: #fff;
-    line-height: 1.4;
     text-decoration: none;
 }
 

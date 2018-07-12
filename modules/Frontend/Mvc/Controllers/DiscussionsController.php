@@ -38,6 +38,7 @@ class DiscussionsController extends Controller
             'posts' => $this->postService->getPopularPosts(),
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
+            'last_threads' => $this->postService->getLatestThreads(),
         ]);
     }
 
@@ -55,6 +56,7 @@ class DiscussionsController extends Controller
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
+            'last_threads' => $this->postService->getLatestThreads(),
         ]);
     }
 
@@ -71,6 +73,7 @@ class DiscussionsController extends Controller
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
+            'last_threads' => $this->postService->getLatestThreads(),
         ]);
     }
 
@@ -88,6 +91,7 @@ class DiscussionsController extends Controller
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
+            'last_threads' => $this->postService->getLatestThreads(),
         ]);
     }
 
@@ -104,6 +108,7 @@ class DiscussionsController extends Controller
             'posts' => $this->postService->getPopularPosts(), // todo
             'categories' => $this->categoryService->getOrderedList(),
             'pager' => $this->createPager($offset),
+            'last_threads' => $this->postService->getLatestThreads(),
         ]);
     }
 
