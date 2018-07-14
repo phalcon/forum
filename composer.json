@@ -1,10 +1,7 @@
 {
   "name": "phalcon/forum",
-  "description": "Open-sourced engine for building flexible, clear and fast forums.",
   "type": "project",
-  "license": "BSD-3-Clause",
-  "homepage": "https://forum.phalconphp.com/",
-
+  "description": "Open-sourced engine for building flexible, clear and fast forums.",
   "keywords": [
     "forum",
     "phalcon",
@@ -13,7 +10,8 @@
     "answer",
     "qa"
   ],
-
+  "homepage": "https://forum.phalconphp.com/",
+  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Phalcon Team",
@@ -25,14 +23,6 @@
       "homepage": "https://github.com/phalcon/forum/graphs/contributors"
     }
   ],
-
-  "support": {
-    "source": "https://github.com/phalcon/forum",
-    "issues": "https://github.com/phalcon/forum/issues",
-    "wiki": "https://github.com/phalcon/forum/wiki",
-    "forum": "https://forum.phalconphp.com"
-  },
-
   "require": {
     "php": ">= 7.1",
     "ext-curl": "*",
@@ -48,27 +38,29 @@
     "phalcon/incubator": "3.4.*",
     "phalcon/platform": "^0.0.2"
   },
-
   "require-dev": {
     "phpstan/phpstan": "0.9.*",
     "squizlabs/php_codesniffer": "3.3.*"
   },
-
   "suggest": {
-    "ext-yaml": "*",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "ext-yaml": "*"
   },
-
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
   "autoload": {
     "psr-4": {
       "Phosphorum\\": "modules/",
       "Phosphorum\\Domain\\": "domain/"
     }
   },
-
-  "config": {
-    "preferred-install": "dist",
-    "sort-packages": true,
-    "optimize-autoloader": true
+  "support": {
+    "issues": "https://github.com/phalcon/forum/issues",
+    "forum": "https://forum.phalconphp.com",
+    "wiki": "https://github.com/phalcon/forum/wiki",
+    "source": "https://github.com/phalcon/forum"
   }
 }
