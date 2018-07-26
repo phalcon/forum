@@ -92,6 +92,17 @@ class AssetsService
                 ->addJs($this->getPagedownPath('Markdown.Editor.js'), true)
                 ->join(true)
                 ->addFilter(new NoneFilter());
+
+            $this->manager
+                ->collection('autocompleteJs')
+                ->setTargetPath($this->getPath('public') . 'assets/autocomplete.js')
+                ->setTargetUri('assets/autocomplete.js')
+                ->addJs($this->getPath('public') . 'js/lodash.min.js', true, false)
+                ->addJs($this->getPath('public') . 'js/jquery.elastic.js', true)
+                ->addJs($this->getPath('public') . 'js/jquery.events.input.js', true, false)
+                ->addJs($this->getPath('public') . 'js/jquery.mentionsInput.js', true, false)
+                ->join(true)
+                ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {
             $this->di->get('logger')->error($e->getMessage());
         }
@@ -125,6 +136,14 @@ class AssetsService
                 ->setTargetPath($this->getPath('public') . 'assets/editor.css')
                 ->setTargetUri('assets/editor.css')
                 ->addCss($this->getPath('public') . 'css/editor.min.css', true, false)
+                ->join(true)
+                ->addFilter(new NoneFilter());
+
+            $this->manager
+                ->collection('autocompleteCss')
+                ->setTargetPath($this->getPath('public') . 'assets/autocomplete.css')
+                ->setTargetUri('assets/autocomplete.css')
+                ->addCss($this->getPath('public') . 'css/jquery.mentionsInput.css', true)
                 ->join(true)
                 ->addFilter(new NoneFilter());
         } catch (RuntimeException $e) {

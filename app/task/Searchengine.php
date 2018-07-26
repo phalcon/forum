@@ -18,8 +18,10 @@
 namespace Phosphorum\Task;
 
 use Elasticsearch\Client;
+use Phosphorum\Model\Users;
 use Phosphorum\Model\Posts;
 use Phosphorum\Console\AbstractTask;
+use Phosphorum\Services\SearchUserService;
 
 /**
  * Phosphorum\Task\SearchEngine
@@ -50,6 +52,16 @@ class Searchengine extends AbstractTask
         $this->reIndex();
 
         $this->outputMessage('Done');
+    }
+
+    /**
+     * @Doc("Add users to search index")
+     */
+    public function addUsers()
+    {
+        $this->outputMessage('Start');
+        $this->addUsersToSearchEngine(0, (new SearchUserService()));
+        $this->outputMessage('Finish');
     }
 
     protected function deleteOldIndexes()
@@ -112,5 +124,38 @@ class Searchengine extends AbstractTask
 
             $this->client->index($params);
         }
+    }
+
+    /**
+     * @param int $id
+     * @param SearchUserService $searchUserService
+     */
+    private function addUsersToSearchEngine($id, $searchUserService)
+    {
+        $users = $this->getUser($id);
+        if (empty($users)) {
+            return;
+        }
+
+        foreach ($users as $user) {
+            if (!$searchUserService->addUserToIndex($user)) {
+                $this->outputError("User '{$user['id']}' hasn't been added to index");
+            }
+        }
+
+        $id = end($users)['id'];
+        $this->addUsersToSearchEngine($id, $searchUserService);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    private function getUser($id)
+    {
+        return Users::find([
+            "banned = 'N' AND id > {$id}",
+            'limit' => 300,
+        ])->toArray();
     }
 }

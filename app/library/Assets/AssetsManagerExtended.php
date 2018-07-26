@@ -34,10 +34,10 @@ class AssetsManagerExtended extends Manager
     /**
      * Prints the HTML for JS resources
      *
-     * @param string|null $collectionName the collection name
+     * @param string $collectionName the collection name
      * @return string the result of the collection
      **/
-    public function cachedOutputJs($collectionName = null)
+    public function cachedOutputJs($collectionName)
     {
         $collection = $this->getCollection($collectionName);
         $name = $this->getFileName($collection);
@@ -53,10 +53,10 @@ class AssetsManagerExtended extends Manager
     /**
      * Prints the HTML for CSS resources
      *
-     * @param string|null $collectionName the collection name
+     * @param string $collectionName the collection name
      * @return string the collection result
      **/
-    public function cachedOutputCss($collectionName = null)
+    public function cachedOutputCss($collectionName)
     {
         $collection = $this->getCollection($collectionName);
         $name = $this->getFileName($collection);

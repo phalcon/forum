@@ -4,7 +4,7 @@
  +------------------------------------------------------------------------+
  | Phosphorum                                                             |
  +------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Phalcon Team and contributors                  |
+ | Copyright (c) 2013-present Phalcon Team and contributors               |
  +------------------------------------------------------------------------+
  | This source file is subject to the New BSD License that is bundled     |
  | with this package in the file LICENSE.txt.                             |
@@ -399,5 +399,11 @@ $router->addGet('/503', 'Error::route503')
 
 $router->add('/', 'Discussions::index')
     ->setName('discussions-index');
+
+$router->add('/users/auto-complete/{name:[a-z0-9\-]+}', 'Users::autoComplete')
+    ->setName('user-autocomplete')
+    ->convert('slug', function($name) {
+        return str_replace(['-'], '', $name);
+    });
 
 return $router;

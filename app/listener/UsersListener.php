@@ -21,6 +21,7 @@ use Phalcon\Events\Event;
 use Phosphorum\Model\Users;
 use Phosphorum\Model\Karma;
 use Phosphorum\Model\Activities;
+use Phosphorum\Services\SearchUserService;
 
 /**
  * Phosphorum\Listener\UsersListener
@@ -78,5 +79,12 @@ class UsersListener
         $activity->users_id = $users->id;
         $activity->type     = 'U';
         $activity->save();
+
+        (new SearchUserService())->addUserToIndex([
+            'id' => $users->id,
+            'login' => $users->login,
+            'name' => $users->name,
+            'gravatar_id' => $users->gravatar_id,
+        ]);
     }
 }

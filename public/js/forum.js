@@ -717,6 +717,84 @@ var Forum = {
 	},
 
 	/**
+	 * Initializes pagedown
+	 */
+	initializePagedown: function () {
+		var converter = Markdown.getSanitizingConverter();
+		converter.hooks.chain("preBlockGamut", function (text, rbg) {
+			return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+				return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+			});
+		});
+		var editor = new Markdown.Editor(converter);
+		editor.run();
+	},
+
+	/**
+	 * Initializes modal pagedown
+	 */
+	initializeModalPagedown: function () {
+		var converter = new Markdown.Converter();
+		converter.hooks.chain("preConversion", function (text) {
+			return text.replace(/\b(a\w*)/gi, "*$1*");
+		});
+
+		converter.hooks.chain("plainLinkText", function (url) {
+			return "This is a link to " + url.replace(/^https?:\/\//, "");
+		});
+		var editor = new Markdown.Editor(converter, "-modal", options);
+
+		editor.run();
+	},
+
+	/**
+	 * Initializes edit pagedown
+	 */
+	initializeEditPagedown: function () {
+		var converter = new Markdown.Converter();
+		converter.hooks.chain("preConversion", function (text) {
+			return text.replace(/\b(a\w*)/gi, "*$1*");
+		});
+
+		converter.hooks.chain("plainLinkText", function (url) {
+			return "This is a link to " + url.replace(/^https?:\/\//, "");
+		});
+		var editor = new Markdown.Editor(converter, "-edit", options);
+
+		editor.run();
+	},
+
+	/**
+	 * Initializes user's autocomplete
+	 */
+	userAutocomplete: function (id) {
+		$(id).mentionsInput({
+			onDataRequest:function (mode, query, callback) {
+				if (!(new RegExp("^([a-zA-Z0-9\-\.]+)$")).test(query)) {
+					return;
+				}
+
+				$.ajax({
+					dataType: 'json',
+					url: Forum._uri + 'users/auto-complete/' + query.toLowerCase()
+				}).done(function(response) {
+					var data = [];
+					for (var i = 0; i < response.length; i++) {
+						data.push({
+							id: response[i]['uid'],
+							name: '@' + response[i]['login'],
+							display: response[i]['name'],
+							avatar: 'https://secure.gravatar.com/avatar/' + response[i]['gravatar_id'] + '?s=48&r=pg&d=identicon'
+						});
+					}
+
+					callback.call(this, data);
+				});
+			}
+		});
+	},
+
+	/**
 	 * Add callbacks to edit/delete buttons
 	 */
 	addCallbacks: function()
@@ -816,6 +894,14 @@ var Forum = {
 				$('#sticky-progress').html((number + 1) + ' / ' + total);
 	  		});
 	  	}
+
+		$('#wmd-input').change(
+			Forum.userAutocomplete('#wmd-input')
+		);
+		$('#wmd-input-modal').change(
+			Forum.userAutocomplete('#wmd-input-modal')
+		);
+		//todo add for '#wmd-input-edit
 	},
 
 	/**
@@ -825,53 +911,5 @@ var Forum = {
 	{
 		Forum._uri = uri;
 		Forum.addCallbacks();
-	},
-
-	/**
-	 * Initializes pagedown
-	 */
-	initializePagedown: function () {
-		var converter = Markdown.getSanitizingConverter();
-		converter.hooks.chain("preBlockGamut", function (text, rbg) {
-			return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-				return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-			});
-		});
-		var editor = new Markdown.Editor(converter);
-		editor.run();
-	},
-
-    /**
-     * Initializes modal pagedown
-     */
-    initializeModalPagedown: function () {
-        var converter = new Markdown.Converter();
-        converter.hooks.chain("preConversion", function (text) {
-            return text.replace(/\b(a\w*)/gi, "*$1*");
-        });
-
-        converter.hooks.chain("plainLinkText", function (url) {
-            return "This is a link to " + url.replace(/^https?:\/\//, "");
-        });
-        var editor = new Markdown.Editor(converter, "-modal", options);
-
-        editor.run();
-    },
-
-	/**
-	 * Initializes edit pagedown
-	 */
-	initializeEditPagedown: function () {
-		var converter = new Markdown.Converter();
-		converter.hooks.chain("preConversion", function (text) {
-			return text.replace(/\b(a\w*)/gi, "*$1*");
-		});
-
-		converter.hooks.chain("plainLinkText", function (url) {
-			return "This is a link to " + url.replace(/^https?:\/\//, "");
-		});
-		var editor = new Markdown.Editor(converter, "-edit", options);
-
-		editor.run();
 	}
 };
