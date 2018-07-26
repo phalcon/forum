@@ -4,7 +4,7 @@
   +------------------------------------------------------------------------+
   | Phosphorum                                                             |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2017 Phalcon Team and contributors                  |
+  | Copyright (c) 2013-present Phalcon Team and contributors               |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -22,6 +22,7 @@ use Phosphorum\Model\Posts;
 use Phosphorum\Model\Activities;
 use Phosphorum\Model\PostsReplies;
 use Phosphorum\Mvc\Traits\TokenTrait;
+use Phosphorum\Services\SearchUserService;
 
 /**
  * Class UsersController
@@ -152,5 +153,14 @@ class UsersController extends ControllerBase
             'numberPosts'   => Posts::count(['users_id = ?0 AND deleted = 0', 'bind' => [$user->id]]),
             'numberReplies' => PostsReplies::count(['users_id = ?0', 'bind' => [$user->id]]),
         ]);
+    }
+
+    public function autoCompleteAction($name)
+    {
+        $this->response->setStatusCode(200, 'OK');
+        $this->response->setContentType('application/json', 'UTF-8');
+        $this->response->setJsonContent((new SearchUserService())->getUserDataByPartOfUserName($name));
+
+        return $this->response->send();
     }
 }

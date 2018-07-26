@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added support of autocompletion on user mention [#374](https://github.com/phalcon/forum/issues/374)
+
 ## [3.5.1] - 2018-07-07
 ### Added
 - Added `Phosphorum\Assets\Filters\NoneFilter` to correct join unminified assets
