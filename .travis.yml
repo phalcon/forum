@@ -1,41 +1,62 @@
 language: php
 
-sudo: false
 dist: trusty
 
-# TODO: Add 7.2 after Phalcon 3.3.0 release
 php:
-  - 5.6
-  - 7.0
-  - 7.1.11
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  # phalcon/breadcrumbs v1.3.1 requires php >= 5.5 <7.2
+  # - '7.2'
 
 git:
   depth: 1
 
 cache:
   apt: true
-  ccache: true
-  timeout: 691200
+  timeout: 604800
   directories:
-    - vendor
     - $HOME/.composer/cache
-    - $HOME/cphalcon
-    - $HOME/ext
+
+env:
+  global:
+    - PHALCON_VERSION="3.4.3"
+    - COMPOSER_FLAGS="--prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
 
 before_install:
-  - export PHP_VERSION=$(php-config --version)
-  - export PHP_EXTENSION_DIR=$(php-config --extension-dir)
-  - phpenv config-rm xdebug.ini || true
-  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com $GH_TOKEN; fi;
-  - if [ ! -f "$HOME/cphalcon/tests/_ci/phalcon.ini" ]; then git clone -q --depth=1 https://github.com/phalcon/cphalcon.git $HOME/cphalcon >/dev/null 2>&1; fi;
+  - |
+      # general settings
+      set -e
+      stty cols 120
+
+      # disable xdebug
+      phpenv config-rm xdebug.ini || true
+
+      if [ -n "$GH_TOKEN" ]; then
+        composer config github-oauth.github.com ${GH_TOKEN}
+        printf "Add Github token\n"
+      fi
+
+      # turn the detached message off
+      git config --global advice.detachedHead false
 
 install:
-  - if [ ! -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cd $HOME/cphalcon/build && bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config) && mkdir -p $HOME/ext/$PHP_VERSION && cp $PHP_EXTENSION_DIR/phalcon.so $HOME/ext/$PHP_VERSION/phalcon.so; fi;
-  - if [ -f $HOME/ext/$PHP_VERSION/phalcon.so ]; then cp $HOME/ext/$PHP_VERSION/phalcon.so $PHP_EXTENSION_DIR/phalcon.so; fi;
-  - phpenv config-add $HOME/cphalcon/tests/_ci/phalcon.ini
-  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/memcached.ini
+  # install phalcon
+  - |
+      git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b v${PHALCON_VERSION} /tmp/phalcon
+      cd /tmp/phalcon/build
+      bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config)
+      echo extension=phalcon.so >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+      $(phpenv which php) --ri phalcon
+
+  # install memcached
   - cd $TRAVIS_BUILD_DIR
-  - travis_retry composer install --prefer-dist --no-interaction
+  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/memcached.ini
+  - $(phpenv which php) --ri memcached
+
+  # install project dependenices
+  - cd $TRAVIS_BUILD_DIR
+  - travis_retry composer install $COMPOSER_FLAGS
 
 before_script:
   - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
@@ -54,11 +75,7 @@ script:
   - vendor/bin/codecept run console
 
 notifications:
-  email:
-    recipients:
-      - build@phalconphp.com
-    on_success: change
-    on_failure: always
+  email: false
 
 addons:
   apt:
