@@ -6,7 +6,7 @@
 
 	<table width="90%" align="center" class="table table-striped">
 		{%- for activity in notifications -%}
-			{%- if activity.post and activity.userOrigin && activity.post.deleted != 1 -%}
+			{%- if activity.post and activity.userOrigin and activity.post.deleted != 1 -%}
 				<tr>
 					<td class="small hidden-xs" valign="top">
 						{{ image(gravatar(activity.userOrigin.email), 'class': 'img-rounded') }}
