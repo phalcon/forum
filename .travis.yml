@@ -21,7 +21,7 @@ cache:
 env:
   global:
     - PHALCON_VERSION="3.4.3"
-    - TRAVIS_FLAGS="--ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
+    - COMPOSER_FLAGS="--prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
 
 before_install:
   - |
@@ -56,7 +56,7 @@ install:
 
   # install project dependenices
   - cd $TRAVIS_BUILD_DIR
-  - travis_retry composer install $TRAVIS_FLAGS
+  - travis_retry composer install $COMPOSER_FLAGS
 
 before_script:
   - echo 'CREATE DATABASE phosphorum CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
@@ -75,11 +75,7 @@ script:
   - vendor/bin/codecept run console
 
 notifications:
-  email:
-    recipients:
-      - build@phalconphp.com
-    on_success: change
-    on_failure: always
+  email: false
 
 addons:
   apt:
