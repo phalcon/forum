@@ -331,7 +331,7 @@ class Posts extends Model
     {
         $users  = [$this->user->id => [$this->user->login, $this->user->email]];
         foreach ($this->getReplies(['order' => 'created_at DESC', 'limit' => 3]) as $reply) {
-            if (!isset($users[$reply->user->id])) {
+            if (!empty($reply->user) && !isset($users[$reply->user->id])) {
                 $users[$reply->user->id] = [$reply->user->login, $reply->user->email];
             }
         }
