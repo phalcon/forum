@@ -10,6 +10,12 @@ You can adapt it to your own needs or improve it if you want.
 
 Please write us if you have any feedback.
 
+## Composer installation
+
+```
+composer create-project phalcon/forum
+```
+
 ## NOTE
 
 The master branch will always contain the latest stable version. If you wish
