@@ -42,7 +42,6 @@
         "swiftmailer/swiftmailer": "^5.4",
         "phalcongelist/php-diff": "^2.0",
         "phalcon/incubator": "~3.0",
-        "phalcon/breadcrumbs": "^1.3",
         "league/flysystem-dropbox" : "^1.0",
         "egulias/email-validator": "^2.1",
         "google/recaptcha": "^1.1",
@@ -50,7 +49,8 @@
         "team-reflex/discord-php": "^4.0",
         "elasticsearch/elasticsearch": "^5.3",
         "erusev/parsedown-extra": "^0.7",
-        "erusev/parsedown": "^1.6"
+        "erusev/parsedown": "^1.6",
+        "sergeyklay/breadcrumbs": "1.4.*"
     },
     "require-dev": {
         "phpdocumentor/reflection-docblock": "^2.0",
