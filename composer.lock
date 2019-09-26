@@ -1,55 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "508513286b072ed5df3924416351fc53",
+    "content-hash": "3a33200f1bfc6bf098e91d6a0982c813",
     "packages": [
-        {
-            "name": "TrafficCophp/ByteBuffer",
-            "version": "v0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nesQuick/ByteBuffer.git",
-                "reference": "e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nesQuick/ByteBuffer/zipball/e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4",
-                "reference": "e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "TrafficCophp": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ole 'nesQuick' Michaelis",
-                    "email": "ole.michaelis@googlemail.com",
-                    "homepage": "http://www.codestars.eu"
-                }
-            ],
-            "description": "Node.js inspired byte stream buffer for PHP.",
-            "keywords": [
-                "Buffer",
-                "Bytehandling",
-                "Socket",
-                "binary data",
-                "library",
-                "pack",
-                "stream",
-                "wrapper"
-            ],
-            "time": "2016-01-13T22:50:58+00:00"
-        },
         {
             "name": "aws/aws-sdk-php",
             "version": "2.8.31",
@@ -156,7 +112,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "Common classes for PSR-6 adapters",
@@ -218,7 +174,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "A PSR-6 cache implementation using a php array. This implementation supports tags",
@@ -275,7 +231,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "A helper trait and interface to your PSR-6 cache to support hierarchical keys.",
@@ -333,7 +289,7 @@
                 {
                     "name": "Tobias Nyholm",
                     "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
+                    "homepage": "https://github.com/Nyholm"
                 }
             ],
             "description": "Add tag support to your PSR-6 cache implementation",
@@ -620,19 +576,20 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.6.4",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "fbe3fe878f4fe69048bb8a52783a09802004f548"
+                "reference": "6d893938171a817f4e9bc9e86f2da1e370b7bcd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/fbe3fe878f4fe69048bb8a52783a09802004f548",
-                "reference": "fbe3fe878f4fe69048bb8a52783a09802004f548",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/6d893938171a817f4e9bc9e86f2da1e370b7bcd7",
+                "reference": "6d893938171a817f4e9bc9e86f2da1e370b7bcd7",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -661,7 +618,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2017-11-14T20:44:03+00:00"
+            "time": "2019-03-17T18:48:37+00:00"
         },
         {
             "name": "erusev/parsedown-extra",
@@ -1646,60 +1603,6 @@
             "time": "2017-03-13T16:27:32+00:00"
         },
         {
-            "name": "phalcon/breadcrumbs",
-            "version": "v1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phalcon/breadcrumbs.git",
-                "reference": "e2e470195db782b0eafaeba296b646b90db12dc1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/breadcrumbs/zipball/e2e470195db782b0eafaeba296b646b90db12dc1",
-                "reference": "e2e470195db782b0eafaeba296b646b90db12dc1",
-                "shasum": ""
-            },
-            "require": {
-                "ext-phalcon": ">=2.0 <4.0",
-                "php": ">= 5.5 <7.2"
-            },
-            "require-dev": {
-                "codeception/codeception": "^2.2",
-                "codeception/specify": "^0.4",
-                "codeception/verify": "^0.3",
-                "squizlabs/php_codesniffer": "^2.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Phalcon\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Phalcon Team",
-                    "email": "team@phalconphp.com",
-                    "homepage": "https://phalconphp.com/en/team"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/phalcon/breadcrumbs/graphs/contributors"
-                }
-            ],
-            "description": "Powerful and flexible component for building site breadcrumbs in Phalcon 2+.",
-            "homepage": "https://github.com/phalcon/breadcrumbs",
-            "keywords": [
-                "breadcrumbs",
-                "crumbs",
-                "phalcon"
-            ],
-            "time": "2017-04-18T07:45:37+00:00"
-        },
-        {
             "name": "phalcon/incubator",
             "version": "v3.2.1",
             "source": {
@@ -2498,6 +2401,7 @@
             "keywords": [
                 "Socket"
             ],
+            "abandoned": "react/socket",
             "time": "2016-12-06T10:54:49+00:00"
         },
         {
@@ -2543,6 +2447,56 @@
                 "stream"
             ],
             "time": "2017-01-25T14:44:14+00:00"
+        },
+        {
+            "name": "sergeyklay/breadcrumbs",
+            "version": "v1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sergeyklay/breadcrumbs.git",
+                "reference": "a363319536bd23722d95bcc63a1db00562ff3ee5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sergeyklay/breadcrumbs/zipball/a363319536bd23722d95bcc63a1db00562ff3ee5",
+                "reference": "a363319536bd23722d95bcc63a1db00562ff3ee5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-phalcon": ">=2.0 <4.0",
+                "php": ">= 5.5 <8.0"
+            },
+            "conflict": {
+                "phalcon/breadcrumbs": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Serghei Iakovlev",
+                    "email": "serghei@phalcon.io"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/sergeyklay/breadcrumbs/graphs/contributors"
+                }
+            ],
+            "description": "Powerful and flexible component for building site breadcrumbs in Phalcon 2+.",
+            "homepage": "https://github.com/sergeyklay/breadcrumbs",
+            "keywords": [
+                "breadcrumbs",
+                "crumbs",
+                "phalcon"
+            ],
+            "time": "2019-09-26T15:12:16+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2902,6 +2856,50 @@
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
             "time": "2016-12-28T21:41:47+00:00"
+        },
+        {
+            "name": "trafficcophp/bytebuffer",
+            "version": "v0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nesQuick/ByteBuffer.git",
+                "reference": "e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nesQuick/ByteBuffer/zipball/e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4",
+                "reference": "e94e5c87c41bc79c0f738b0fa89bad11d27ae0b4",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "TrafficCophp": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ole 'nesQuick' Michaelis",
+                    "email": "ole.michaelis@googlemail.com",
+                    "homepage": "http://www.codestars.eu"
+                }
+            ],
+            "description": "Node.js inspired byte stream buffer for PHP.",
+            "keywords": [
+                "Buffer",
+                "Bytehandling",
+                "Socket",
+                "binary data",
+                "library",
+                "pack",
+                "stream",
+                "wrapper"
+            ],
+            "time": "2016-01-13T22:50:58+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -4160,6 +4158,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {
