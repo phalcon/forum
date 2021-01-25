@@ -1,6 +1,6 @@
 <div class="nav navbar-nav navbar-right navbar-login">
     <div class="btn-group">
-        <a class="btn btn-sm btn-default" href="https://phalcon.link/fund" target="_blank">
+        <a class="btn btn-sm btn-default" href="https://phalcon.io/fund" target="_blank">
             <span class="p-ico"></span>
             Support Us
         </a>
